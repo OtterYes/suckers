@@ -774,6 +774,9 @@ mark.hl{background:rgba(255,209,102,.34);color:inherit;border-radius:3px;padding
   .stage{min-height:330px}
 }
 @media (max-width:400px){.sparkchip{padding:5px 8px}.lvl{display:none}}
+.chip .sw{font-style:normal}
+@media (max-width:520px){.chip .sw,.chip .x{display:none}}
+@media (max-width:420px){#soundBtn{display:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
 /* ---------- The city ---------- */
@@ -3835,7 +3838,7 @@ function renderHUD(){
   var b=S.baseline.total,cb=$("climbBase");cb.style.left=(100*(clamp(b,320,1520)-320)/1200).toFixed(1)+"%";cb.title="Your "+S.baseline.label+": "+b;
   var si=seasonInfo(S,now());$("climbCap").textContent=p.total>=1520?"Perfect score":si.days!=null&&si.days>=0?(si.days===0?"Test day":si.days+" day"+(si.days===1?"":"s")+" to "+S.season.test):"Game estimate · "+fmtInt(1520-p.total)+" to go";
   var cap=10+10*S.up.combo+relicSum(S,"combo"),m=1+0.1*Math.min(S.streak,cap),sc=$("streakChip");
-  sc.innerHTML=ICON.flame+"<span>Streak "+S.streak+'</span><span class="x">×'+TRIM(Math.round(m*10)/10)+"</span>";sc.className="chip"+(S.streak>=25?" fire":S.streak>=5?" hot":"");
+  sc.innerHTML=ICON.flame+'<span><i class="sw">Streak </i>'+S.streak+'</span><span class="x">×'+TRIM(Math.round(m*10)/10)+"</span>";sc.className="chip"+(S.streak>=25?" fire":S.streak>=5?" hot":"");
   var t=now(),ds=dayStreakShown(S,t),today=S.today.date===dayKey(t)?S.today.correct:0,dc=$("dayChip");
   dc.innerHTML=ICON.cal+"<span>Day "+ds+'</span><span class="x">'+Math.min(10,today)+"/10"+(S.days.frz?" · "+S.days.frz+" freeze"+(S.days.frz>1?"s":""):"")+"</span>";dc.className="chip day"+(today>=10?" hot":"");dc.title="Daily streak: get 10 right each day. Streak freezes cover missed days: you get one a week and can bank "+FRZ_MAX+".";
   $("soundBtn").innerHTML=S.settings.sound?ICON.soundOn:ICON.soundOff;$("soundBtn").setAttribute("aria-label",S.settings.sound?"Sound is on":"Sound is off");
@@ -6006,7 +6009,7 @@ var W3={st:"",err:"",ready:false,loading:null,cv:null,ren:null,scene:null,cam:nu
 var W3_ORDER=["ii","cs","eoi","sec","alg","adv","psda","geo"];
 /* Sizes are in meters, roughly: a resident is about 1.8 tall. */
 var W3_R0=58,W3_PLAZA=30,W3_EDGE=118,W3_TRAIN={r:43.5,y:8.2};
-function w3Q(){var q=S.settings.q3d||"auto";if(q==="auto")q=isMobile()||(navigator.hardwareConcurrency||8)<=4?"low":"high";return q;}
+function w3Q(){var q=S.settings.q3d||"auto";if(q==="auto")q=W3.slow||isMobile()||(navigator.hardwareConcurrency||8)<=4?"low":"high";return q;}
 function w3Shown(){return worldView()==="3d";}
 function w3On(){return W3.ready&&W3.w>0&&w3Shown()&&document.visibilityState==="visible";}
 function w3H(st,lv){var H=CITY_H[st]||[40,10];return(H[0]+H[1]*(Math.max(1,lv)-1))*0.11;}
@@ -6583,7 +6586,7 @@ function w3Adopt(host){if(!host)return;["cityHud","ctip"].forEach(function(id){v
 function w3Msg(k){var el=$("w3Msg");if(!el)return;if(!k){el.hidden=true;el.innerHTML="";return;}el.hidden=false;
   if(k==="load")el.innerHTML='<div class="w3-box"><div class="w3-spin"></div><b>Building your city in 3D…</b><p>First visit only: it loads a 3D engine (about 170 KB).</p></div>';
   else el.innerHTML='<div class="w3-box"><b>'+(k==="lost"||k==="bug"?"The 3D view stopped":"3D couldn’t start here")+"</b><p>"+(k==="bug"?"Something went wrong in the 3D city. Try again, or use the 2D city.":k==="lost"?"Your graphics driver reset it. Try again, or use the 2D city.":W3.err==="gl"?"This browser or device doesn’t allow WebGL, which the 3D city needs.":"It needs to load a 3D engine from cdn.jsdelivr.net. Check your connection, or use the 2D city.")+'</p><div class="w3-btns"><button type="button" class="btn primary sm" data-act="w3Retry">Try again</button><button type="button" class="btn line sm" data-act="view" data-v="city">Use the 2D city</button></div></div>';}
-function w3Show(){var ww=$("w3Wrap");w3Adopt(ww);CT.hudSig="";cityHudRender();cityNewsTick(true);
+function w3Show(){var ww=$("w3Wrap");w3Adopt(ww);W3.lastT=0;W3.p0=0;W3.shownAt=performance.now();CT.hudSig="";cityHudRender();cityNewsTick(true);
   if(W3.ready&&!W3.lost){W3.lastDraw=0;W3.lastIn=performance.now();w3Resize();w3Sync();w3Tod();w3Touch();w3HelpShow();if(W3.lookQ){var q=W3.lookQ;W3.lookQ=null;w3Look(q);}return;}
   if(W3.st==="loading")return;w3Msg("load");
   w3Load().then(function(){if(W3.ready)return;try{w3Init();W3.st="ok";w3Msg("");if(w3Shown())w3Show();}catch(e){W3.st="fail";W3.err=W3.err||"gl";try{console.warn(e);}catch(x){}w3Msg("fail");}},function(){W3.st="fail";if(w3Shown())w3Msg("fail");});}
@@ -6617,7 +6620,12 @@ function w3Frame(tms,dt){var T=T3;W3.t=tms/1000;var n=W3.tod?W3.tod.n:0;
 function w3Slow(){if(!W3.ready||W3.lost)return;try{var t=performance.now();w3Sync();w3Offset();w3Near();if(t-W3.radarAt>120){W3.radarAt=t;w3Radar();}if(t-W3.todAt>1000){W3.todAt=t;w3Tod();}}catch(e){w3Crash(e);}}
 /* A 3D bug must never stop the game: the 3D view steps aside and says so. */
 function w3Crash(e){W3.lost=true;W3.err="bug";try{console.error(e);}catch(x){}w3Msg("bug");}
-function w3Tick(t,dt){try{w3Frame(t,dt);}catch(e){w3Crash(e);}}
+function w3Tick(t,dt){try{w3Frame(t,dt);}catch(e){w3Crash(e);return;}w3Pace(t);}
+/* On Auto, a device that draws High slower than about 24 frames a second switches to Low, once. */
+function w3Pace(t){if(W3.q!=="high"||(S.settings.q3d||"auto")!=="auto"||modalOpen()||document.visibilityState!=="visible"||t-W3.shownAt<2500){W3.lastT=0;W3.p0=0;return;}
+  if(!W3.p0){W3.p0=W3.lastT=t;W3.fs=W3.fn=0;return;}var gap=t-W3.lastT;W3.lastT=t;if(gap>0&&gap<2000){W3.fs+=gap;W3.fn++;}if(t-W3.p0<4000&&W3.fn<150)return;
+  var avg=W3.fn?W3.fs/W3.fn:0,n=W3.fn;W3.p0=0;if(n<4||avg<=42)return;
+  W3.slow=true;W3.lastT=0;w3Teardown();w3Show();toast("3D set to Low","This device was drawing the city slowly, so 3D switched to Low quality. You can change it in the City tab under Stats.","",null,6000);}
 
 /* ---------- events ---------- */
 document.addEventListener("click",function(e){
