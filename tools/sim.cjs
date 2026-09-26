@@ -138,6 +138,23 @@ function simulate(opts) {
     if (dk !== spinDay) { spinDay = dk; E.wheelSpin(S, 0, t, rnd); }
     if (E.expCanDescend(S)) { E.expDescend(S, Math.floor(rnd() * 1e9)); mark("depth:" + X.depth, `day ${Math.floor((t - start) / DAY) + 1} q${answered}`); }
   }
+  // Zones: expand whenever learning allows, buy the cheapest tree node while it costs under a quarter of the
+  // sparks, launch fuel at x4, empty the vault when it's nearly full, and spend talent points on keystones first.
+  function zones() {
+    if (!E.zBuy) return;
+    E.DKEYS.forEach((d) => { const R = E.zExpReq(S, d); if (R && R.ok && S.sparks >= R.cost * 1.5 && E.zExpand(S, d)) mark("zone:" + d + ":" + R.t, `day ${Math.floor((now - start) / DAY) + 1} q${answered}`); });
+    for (let guard = 0; guard < 300; guard++) {
+      let best = null;
+      E.DKEYS.forEach((d) => E.ZNODES.forEach((N) => { if (!E.zNodeCan(S, d, N.id)) return; const c = E.zNodeCost(S, d, N.id); if (!best || c < best.c) best = { d, id: N.id, c }; }));
+      if (!best || best.c > S.sparks * 0.25) break;
+      E.zBuy(S, best.d, best.id);
+    }
+    if (S.zone.adv.fuel >= 4) E.zLaunch(S);
+    if (S.zone.psda.vault >= E.zVaultCap(S) * 0.95) E.zWithdraw(S);
+    E.DKEYS.forEach((d) => { E.keyBuy(S, d, 1); E.keyBuy(S, d, 2); });
+    ["xp", "luck", "combo", "offline", "hearts", "arcade"].forEach((id) => { while (E.talBuy(S, id)); });
+    E.roadClaimAll(S);
+  }
   function gauntlet(t) {
     const p = E.proj(S), sec = p.rw <= p.m ? "rw" : "m";
     E.gauntStart(S, sec, t, rnd);
@@ -180,6 +197,7 @@ function simulate(opts) {
       if (E.claimQuest) S.quests.list.forEach((qq, k) => { if (qq.done && !qq.claimed) E.claimQuest(S, k); });
       if (E.claimWeekly) E.claimWeekly(S);
       if (E.pickCard && S.pick && !S.pick.done) while (!S.pick.done) E.pickCard(S, S.pick.got.length ? (S.pick.got[0] + 1) % 3 : Math.floor(rnd() * 3));
+      if (E.zoneFresh) zones();
       ["l", "e", "r", "c"].forEach((r) => { while (S.chests[r] > 0) E.openChest(S, r, rnd); });
       if (E.evoCheck) E.evoCheck(S, t);
       shop();
@@ -188,7 +206,7 @@ function simulate(opts) {
       E.GENS.forEach((G) => { if (E.genUnlocked(S, G)) mark("unlock:" + G.id, `day ${day + 1} q${answered}`); });
       if (E.conn) { const st = S.evo ? S.evo.stage : 0; mark("evo:" + st, `day ${day + 1} q${answered} (${E.conn(S)} conn)`); }
       // Once a day, halfway through, the student runs a Gauntlet on their weaker section.
-      if (i === Math.floor(opts.perDay / 2) && E.isOpen && E.isOpen(S, "arena")) gauntlet(t);
+      if (i === Math.floor(opts.perDay / 2) && E.isOpen && E.isOpen(S, E.UNLOCK.gaunt != null ? "gaunt" : "arena")) gauntlet(t);
       if (opts.ascend && E.insightGain(S) >= Math.max(opts.ascend, Math.ceil(S.insight * 0.5))) {
         const g = E.insightGain(S);
         if (E.doSleep(S)) { ascends++; mark("ascend:" + ascends, `day ${day + 1} q${answered} (+${g} insight)`); }

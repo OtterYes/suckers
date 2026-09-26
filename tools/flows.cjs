@@ -46,13 +46,25 @@ async function answerAny(page) {
   await page.waitForTimeout(250);
   for (let j = 0; j < 4; j++) { const m = page.locator('#modal:not([hidden]) [data-act="modalClose"]'); if (await m.count()) { await m.first().click(); await page.waitForTimeout(80); } }
 }
+async function answerRight(page) {
+  const q = await page.evaluate(() => { const c = window.__g1520.cur(); return { spr: c.spr ? String(c.spr.vals[0]) : null, a: c.correct }; });
+  if (q.spr != null) await page.locator("#sprIn").fill(q.spr); else await page.click(`#conBody [data-act="pick"][data-i="${q.a}"]`);
+  await page.click("#checkBtn");
+  await page.waitForTimeout(250);
+  for (let j = 0; j < 4; j++) { const m = page.locator('#modal:not([hidden]) [data-act="modalClose"]'); if (await m.count()) { await m.first().click(); await page.waitForTimeout(80); } }
+}
+// A zone at tier 1 with nothing bought and its meters at zero.
+function zoneReset(S, d) { S.zone[d].t = 1; S.zone[d].up = {}; }
 
 const TESTS = {
   async "buy a hub, a pathway, and an upgrade"(b) {
-    const page = await open(b, save((S) => { S.sparks = 5e6; Object.keys(S.hub).forEach((d) => { S.hub[d] = 0; }); }));
+    const page = await open(b, save((S) => { S.sparks = 1e13; Object.keys(S.hub).forEach((d) => { S.hub[d] = 0; }); }));
     const s0 = await state(page);
-    await page.click('[data-act="tab"][data-v="evolution"]');
+    // Hubs live in each zone now; pathways and upgrades stay in Evolution.
+    await page.click('[data-act="tab"][data-v="zones"]');
+    await page.click('#panel [data-act="zoneOpen"][data-v="alg"]');
     await page.click('#panel [data-act="buyHub"].can');
+    await page.click('#decknav [data-v="evolution"]');
     await page.click('#panel [data-act="buyGen"].can');
     await page.click('#panel [data-act="buyUp"].can');
     const s1 = await state(page);
@@ -245,9 +257,16 @@ const TESTS = {
   async "locked tabs stay locked on a new game"(b) {
     const page = await open(b, null);
     await page.click('[data-act="welcomeGo"]');
-    await page.click('#decknav [data-v="arena"]');
-    if (await page.isVisible("#panelWrap")) throw new Error("arena opened at stage 0");
+    await page.click('#decknav [data-v="city"]');
+    if (await page.isVisible("#panelWrap")) throw new Error("city opened at stage 0");
     if (!/locked/i.test(await page.textContent("#toasts"))) throw new Error("no lock toast");
+    // Things to do and buy are open from the first answer: the Arcade and the zones. Bosses wait for stage 1.
+    await page.click('#decknav [data-v="arena"]');
+    if (!(await page.isVisible("#panelWrap"))) throw new Error("the Arena is closed on a new game");
+    if (!(await page.locator('#panel [data-act="arcPlay"]').count())) throw new Error("no Arcade games on a new game");
+    if (await page.locator('#panel [data-act="bossGo"]').count()) throw new Error("bosses open at stage 0");
+    await page.click('#decknav [data-v="zones"]');
+    if ((await page.locator('#panel [data-act="zoneOpen"]').count()) < 8) throw new Error("zones closed on a new game");
     return page;
   },
   async "phone plan tab fits"(b) {
@@ -707,6 +726,67 @@ const TESTS = {
     if ((await state(page)).city.name !== "Filetown") throw new Error("the save file did not load");
     await page.keyboard.press("Control+s");
     await page.waitForTimeout(200);
+    return page;
+  },
+  async "expand a zone and buy from its tree"(b) {
+    const page = await open(b, save((S) => { S.sparks = 1e9; zoneReset(S, "alg"); ENG.DOMAINS.alg.skills.forEach((sk) => { const k = "alg|" + sk; S.sk[k] = Object.assign(S.sk[k] || { n: 0 }, { c: Math.max(12, (S.sk[k] || {}).c || 0), n: Math.max(20, (S.sk[k] || {}).n || 0) }); }); }));
+    await page.click('[data-act="tab"][data-v="zones"]');
+    await page.click('#panel [data-act="zoneOpen"][data-v="alg"]');
+    if (!/Engine Works/i.test(await page.textContent("#panel h2"))) throw new Error("zone page did not open");
+    await page.click('#panel [data-act="zBuy"][data-v="alg:r1"]');
+    await page.click('#panel [data-act="zExpand"][data-v="alg"]');
+    const s = await state(page);
+    if (s.zone.alg.up.r1 !== 1) throw new Error("tree node not bought: " + JSON.stringify(s.zone.alg.up));
+    if (s.zone.alg.t !== 2) throw new Error("zone did not expand: tier " + s.zone.alg.t);
+    if (!(await page.locator('#panel [data-act="zBuy"][data-v="alg:ans"]').count())) throw new Error("row 2 of the tree did not open");
+    return page;
+  },
+  async "a right answer in Craft and Structure forges at full heat"(b) {
+    const page = await open(b, save((S) => { S.focus = "cs"; S.spots = []; S.rev = null; S.boss = null; S.ai = []; S.zone.cs.heat = 5; S.zone.cs.up = {}; S.stats.forged = 0; }));
+    if (!(await page.locator("#conBody .zstrip").count())) throw new Error("no zone strip under the question");
+    if (!/Word Forge/i.test(await page.textContent("#conBody .zstrip"))) throw new Error("strip is not the Word Forge: " + (await page.textContent("#conBody .zstrip")));
+    await answerRight(page);
+    const s = await state(page);
+    if (s.zone.cs.heat !== 0 || s.stats.forged !== 1) throw new Error("not forged: heat " + s.zone.cs.heat + ", forged " + s.stats.forged);
+    if (!/Forged/.test(await page.textContent("#conBody .fb-parts"))) throw new Error("no Forged line in the payout");
+    return page;
+  },
+  async "launch rocket fuel and withdraw the vault"(b) {
+    const page = await open(b, save((S) => { S.zone.adv.fuel = 4; S.zone.psda.vault = 5000; }));
+    await page.click('[data-act="tab"][data-v="zones"]');
+    await page.click('#panel [data-act="zoneOpen"][data-v="adv"]');
+    const s0 = await state(page);
+    await page.click('#panel [data-act="zLaunch"]');
+    const s1 = await state(page);
+    if (s1.zone.adv.fuel !== 1 || !(s1.sparks > s0.sparks)) throw new Error("launch did not pay: fuel " + s1.zone.adv.fuel);
+    await page.click('#panel [data-act="zoneOpen"][data-v=""]');
+    await page.click('#panel [data-act="zoneOpen"][data-v="psda"]');
+    await page.click('#panel [data-act="zWithdraw"]');
+    const s2 = await state(page);
+    if (s2.zone.psda.vault !== 0 || !(s2.sparks >= s1.sparks + 4999)) throw new Error("withdraw did not pay");
+    return page;
+  },
+  async "claim the Level Road, spend a talent point, and wear a title"(b) {
+    const page = await open(b, save((S) => { S.road = { c: {} }; S.tal = { g: {}, k: {} }; S.title = "new"; }));
+    const s0 = await state(page);
+    await page.click("#lvlChip");
+    await page.click('#modal [data-act="roadAll"]');
+    const s1 = await state(page);
+    const chests = (S) => S.chests.c + S.chests.r + S.chests.e + S.chests.l;
+    if (!Object.keys(s1.road.c).length || !(chests(s1) > chests(s0))) throw new Error("road rewards not claimed");
+    await page.click('#modal [data-act="talBuy"][data-v="xp"]');
+    await page.click('#modal [data-act="titleSet"][data-v="apprentice"]');
+    const s2 = await state(page);
+    if (s2.tal.g.xp !== 1) throw new Error("talent not bought");
+    if (s2.title !== "apprentice") throw new Error("title is " + s2.title);
+    return page;
+  },
+  async "phone zones fit"(b) {
+    const page = await open(b, save(), 390, 844);
+    await page.click('#decknav [data-v="zones"]');
+    await page.click('#panel [data-act="zoneOpen"][data-v="geo"]');
+    const over = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+    if (over) throw new Error("horizontal overflow on a zone page");
     return page;
   },
   async "walk the 3D city"(b) {
