@@ -73,6 +73,38 @@ const SCENES = [
     }
     await page.waitForTimeout(300);
   }],
+  ["arcade-lobby", 6, null, click('[data-act="tab"][data-v="arena"]')],
+  ["arc-comma", 6, null, async (page) => { await page.click('[data-act="tab"][data-v="arena"]'); await page.click('[data-act="arcPlay"][data-v="comma"]'); await page.waitForTimeout(300);
+    const it = await page.evaluate(() => window.__g1520.arc().item.gap); await page.click(`#conBody [data-act="arcWord"][data-i="${it}"]`); await page.waitForTimeout(200); }],
+  ["arc-rush", 6, null, async (page) => { await page.click('[data-act="tab"][data-v="arena"]'); await page.click('[data-act="arcPlay"][data-v="rush"]'); await page.waitForTimeout(300); }],
+  ["arc-line", 6, null, async (page) => { await page.click('[data-act="tab"][data-v="arena"]'); await page.click('[data-act="arcPlay"][data-v="line"]'); await page.waitForTimeout(300); await page.click('[data-act="arcLock"]'); await page.waitForTimeout(300); }],
+  ["arc-balance", 6, null, async (page) => { await page.click('[data-act="tab"][data-v="arena"]'); await page.click('[data-act="arcPlay"][data-v="balance"]'); await page.waitForTimeout(300); await page.click('[data-act="arcLock"]'); await page.waitForTimeout(1000); }],
+  ["arc-results", 6, null, async (page) => { await page.click('[data-act="tab"][data-v="arena"]'); await page.click('[data-act="arcPlay"][data-v="rush"]'); await page.waitForTimeout(200);
+    for (let k = 0; k < 4; k++) { const a = await page.evaluate(() => window.__g1520.arc().item.a); await page.keyboard.press(String(((a + (k === 2 ? 1 : 0)) % 4) + 1)); await page.waitForTimeout(k === 2 ? 2000 : 520); }
+    await page.evaluate(() => window.__g1520.arcEnd()); await page.waitForTimeout(400); }],
+  ["callit", 6, (S) => { S.focus = "cs"; S.rev = { date: "x", n: 0, p: 0, done: true }; S.ai = []; }, async (page) => { await page.click('#callIt [data-act="conf"][data-v="sure"]'); await page.locator("#callIt").scrollIntoViewIfNeeded(); }],
+  ["cards", 6, (S) => { S.set = { n: 9, c: 9, sp: 900, run: 9, best: 9, log: "111111111", conn0: 20, p0: 1080, r0: Object.values(S.r), t0: Date.now() - 6e5 }; S.pick = null; }, async (page) => {
+    const c = await page.evaluate(() => { const q = window.__g1520.cur(); return { spr: q.spr ? q.spr.vals[0] : null, correct: q.correct }; });
+    if (c.spr != null) await page.fill("#sprIn", String(c.spr)); else await page.click(`#conBody [data-act="pick"][data-i="${c.correct}"]`);
+    await page.click("#checkBtn"); await page.waitForTimeout(300);
+    for (let j = 0; j < 4; j++) { const m = page.locator('#modal:not([hidden]) [data-act="modalClose"]'); if (await m.count()) await m.first().click(); }
+    await page.click("#nextBtn"); await page.waitForTimeout(300); await page.keyboard.press("1"); await page.waitForTimeout(900); await page.locator("#cardsBox").scrollIntoViewIfNeeded(); }],
+  ["surge-orb", 6, null, async (page) => { await page.evaluate(() => window.__g1520.spawnSurge()); await page.waitForTimeout(700); }],
+  ["tools-draw", 6, (S) => { S.focus = "cs"; S.rev = { date: "x", n: 0, p: 0, done: true }; S.ai = []; }, async (page) => {
+    await page.evaluate(() => { const p = document.querySelector("#sheet .passage p"), w = document.createTreeWalker(p, NodeFilter.SHOW_TEXT); let t = w.nextNode(); while (t && t.length < 30) t = w.nextNode();
+      const r = document.createRange(); r.setStart(t, 4); r.setEnd(t, 28); const s = getSelection(); s.removeAllRanges(); s.addRange(r); document.dispatchEvent(new MouseEvent("mouseup")); });
+    await page.click('[data-act="drawToggle"]'); const b = await page.locator("#drawCv").boundingBox();
+    await page.mouse.move(b.x + 60, b.y + 150); await page.mouse.down(); for (let k = 0; k <= 12; k++) await page.mouse.move(b.x + 60 + k * 18, b.y + 150 + Math.sin(k / 2) * 14); await page.mouse.up(); }],
+  ["reference", 6, (S) => { S.focus = "geo"; S.rev = { date: "x", n: 0, p: 0, done: true }; S.ai = []; }, click('[data-act="refSheet"]')],
+  ["boss-finisher", 6, (S) => { S.boss = { d: "sec", tier: 3, hp: 22, max: 140, hearts: 2, t0: Date.now(), hits: 5 }; }, null],
+  ["tour-1", 6, (S) => { S.seenV5 = false; }, null],
+  ["tour-2", 6, (S) => { S.seenV5 = false; }, async (page) => { await page.keyboard.press("ArrowRight"); await page.click('#wnDemo [data-act="wnCall"][data-v="sure"]'); await page.waitForTimeout(300); }],
+  ["tour-3", 6, (S) => { S.seenV5 = false; }, async (page) => { for (let k = 0; k < 2; k++) await page.keyboard.press("ArrowRight"); await page.click('#wnDemo [data-act="wnCard"][data-i="1"]'); await page.waitForTimeout(700); }],
+  ["tour-6", 6, (S) => { S.seenV5 = false; }, async (page) => { for (let k = 0; k < 5; k++) await page.keyboard.press("ArrowRight"); await page.waitForTimeout(400); }],
+  ["tour-7", 6, (S) => { S.seenV5 = false; }, async (page) => { for (let k = 0; k < 6; k++) await page.keyboard.press("ArrowRight"); await page.waitForTimeout(400); }],
+  ["mobile-tour", 6, (S) => { S.seenV5 = false; }, null, 390, 844],
+  ["mobile-arc-line", 6, null, async (page) => { await page.click('#decknav [data-v="arena"]'); await page.click('[data-act="arcPlay"][data-v="line"]'); await page.waitForTimeout(300); }, 390, 844],
+  ["mobile-arc-comma", 6, null, async (page) => { await page.click('#decknav [data-v="arena"]'); await page.click('[data-act="arcPlay"][data-v="comma"]'); await page.waitForTimeout(300); }, 390, 844],
   ["mobile-network", 6, null, null, 390, 844],
   ["mobile-evolution", 6, null, click('[data-act="tab"][data-v="evolution"]'), 390, 844],
   ["mobile-plan", 6, null, click('[data-act="tab"][data-v="reviews"]'), 390, 844],

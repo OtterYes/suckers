@@ -29,7 +29,8 @@ top. Each of the eight domains grows up to its own score, so weak spots are the 
   spark bonus and a chest. Stage 5 turns the engine into a Reactor and stage 7 into a Universe;
   you can switch between unlocked forms.
 - **Unlocks.** Systems come online as the engine evolves, so the first hour is just questions:
-  upgrades and domain hubs at stage 1, pathways at stage 2, the Arena at stage 3, Ascend at stage 5.
+  upgrades, domain hubs, and the Arcade at stage 1, pathways at stage 2, bosses, the Gauntlet, and
+  the league at stage 3, Ascend at stage 5.
 - **Sparks.** Right answers earn sparks. Spend them on domain hubs (one generator per domain,
   capped by how many of its nodes you've lit), pathways (unlocked as your score climbs), and
   upgrades that make each answer worth more. Domains below your average pay up to ×1.5, and a
@@ -40,6 +41,33 @@ top. Each of the eight domains grows up to its own score, so weak spots are the 
   since the last one, starting at 440 and rising 20 each time. Scores, nodes, evolutions, levels,
   relics, and trophies stay.
 - **Sets.** Questions come in tens. Each set ends with a summary of what moved and a bonus.
+
+## Playing with it
+
+- **The Arcade.** Four quick games in the Arena, each drilling one skill. They pay sparks and XP
+  (full pay for the first 2 runs of each game a day) and never move a rating.
+  - *Comma Sniper* (60 seconds): tap the word where a sentence breaks, then pick the comma,
+    semicolon, or colon that belongs there.
+  - *Transition Rush* (60 seconds): tap the transition that fits two sentences. A miss costs 3 seconds.
+  - *Line Drawer* (5 rounds): drag two points on a grid until the line matches an equation in
+    slope-intercept, standard, or point-slope form. Fast answers score more.
+  - *Balance Point* (6 rounds): slide a fulcrum to the mean or median of a dot plot. The beam tips
+    to show why the mean is the balance point; later rounds add an outlier.
+- **Call it.** Before checking an answer, tap Sure, Think so, or Guess. Sure pays ×1.5 when right
+  and costs half the question's base value when wrong; a missed Guess is logged in the journal.
+  Plan shows how often each call is right.
+- **Pick a card.** Every finished set deals three face-down cards (sparks, a boost, or a chest).
+  Pick one, or two after a perfect set.
+- **Surge orbs.** On a streak of 3 or more, a right answer can spark a golden orb on the engine.
+  Catch it (or press O) within 12 seconds for sparks or a short Double Sparks.
+- **The core.** Tap it to pulse; press and hold to charge a shockwave.
+- **Question tools.** Select text in a passage to highlight it (tap a highlight to clear it), draw
+  on any question with the pen, and open the math reference sheet.
+- **Bosses.** A right answer inside PSAT pace is a quick strike (×1.5 damage). Under a quarter
+  health the next right answer is a finisher (×2). Bosses answer back after every hit and miss.
+- **Feel.** Phones vibrate on hits, misses, crits, and chests; Settings turns it off.
+- **What's new.** A seven-slide tour with live demos and Try it buttons. It opens once after an
+  update and anytime from Settings or Profile.
 
 ## Coming back
 
@@ -89,10 +117,15 @@ node tools/sim.cjs --days 21 --per-day 60   # balance sim: a modeled student pla
 export NODE_PATH=$(npm root -g)             # tools below use Playwright + Chromium
 node tools/smoke.cjs                        # boot, answer questions, fail on page errors
 node tools/flows.cjs                        # functional checks: buying, bosses, sets, gauntlet, Ascend,
-                                            # daily review, mistake tags, seasons, bulk import, unlocks
+                                            # daily review, mistake tags, seasons, bulk import, unlocks,
+                                            # all four Arcade games, Call it, cards, surge orbs, tools, tour
 node tools/shots.cjs out/                   # screenshots of the main screens from simulated saves
 ```
 
+When the page is opened from a local file, it exposes `window.__g1520` so the Playwright checks can
+read the current question and drive the Arcade. Published pages don't have it.
+
 Saves are versioned (`S.v`). Version 2 saves (from before the engine) migrate automatically, keep
 their ratings, skip placement, and catch up on the evolutions their history earned. Version 3 saves
-gain the season, review, league, and journal fields and see a one-time "what's new".
+gain the season, review, league, and journal fields. Saves from before version 5 see the
+What's New tour once.

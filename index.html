@@ -671,6 +671,7 @@ mark.hl{background:rgba(255,209,102,.34);color:inherit;border-radius:3px;padding
 .reff text.sm{font-style:normal;font-size:8px}
 .boss.fin{animation:finpulse 1.2s ease-in-out infinite}
 @keyframes finpulse{0%,100%{box-shadow:0 0 0 0 rgba(255,90,79,0)}50%{box-shadow:0 0 22px 2px rgba(255,90,79,.45)}}
+.boss-name span,.finb{white-space:nowrap}
 .finb{font-style:normal;font-family:var(--f-mono);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1A0503;background:var(--alert);border-radius:5px;padding:1px 6px;margin-left:8px;vertical-align:2px}
 .qs{position:relative;height:9px;margin-top:5px;border-radius:5px;background:#0E1B30;overflow:hidden;box-shadow:0 0 0 1px rgba(255,201,51,.25)}
 .qs i{position:absolute;inset:0 auto 0 0;width:100%;background:linear-gradient(90deg,#E09A00,var(--spark))}
@@ -3967,7 +3968,7 @@ function arcStart(g){
   var G=ARC[g],t=now();
   UI.arc={g:g,R:mulberry32((t^Math.floor(Math.random()*4294967295))>>>0),score:0,run:0,n:0,log:[],round:0,t0:t,ends:G.timed?t+G.timed*1000:0,res:null,item:null,phase:"",seen:{},timer:0};
   hideTip(true);UI.draw=false;if(UI.tab!=="network"){UI.tab="network";applyViews();}
-  arcNext();if(isMobile())window.scrollTo(0,0);SND.buy();vib(10);
+  arcNext();if(isMobile()){var cr=$("console").getBoundingClientRect();window.scrollBy({top:cr.top-64,behavior:"auto"});}SND.buy();vib(10);
 }
 function arcItem(A){for(var t=0;t<10;t++){var it=A.g==="comma"?arcComma(A.R):A.g==="rush"?arcRush(A.R):A.g==="line"?arcLine(A.R,A.round):arcBalance(A.R,A.round);if(!it.key||!A.seen[it.key]||t===9){if(it.key)A.seen[it.key]=1;return it;}}}
 function arcNext(){
@@ -3988,7 +3989,7 @@ function arcEnd(){
   saveAll();renderHUD();renderConsole();$("conBody").scrollTop=0;UI.railSig="";renderRail();
 }
 function arcLeave(quit){var A=UI.arc;if(!A)return;clearTimeout(A.timer);UI.arc=null;if(quit&&!A.res)toast("Run ended","Quit runs don’t pay. Your best stays on the board.","");renderConsole();renderFocus();if(!cur||!Q||Q.answered)nextQ();}
-function arcFloat(txt,cls){var el=$("arcScore");if(!el)return;var r=el.getBoundingClientRect();floatText(r.left+r.width/2,r.top+4,txt,cls||"");}
+function arcFloat(txt,cls){var el=$("arcScore");if(!el)return;var r=el.getBoundingClientRect();floatText(r.left+r.width/2-10,r.bottom+46,txt,cls||"");}
 /* Comma Sniper */
 function commaHTML(A){
   var it=A.item,h='<p class="arc-prompt">'+(A.phase==="spot"?"Where does the first part end? Tap the word right before the missing punctuation.":A.phase==="mark"?"Which mark goes after <b>"+esc(it.words[it.gap])+"</b>?":A.spotOk&&A.markOk?"Clean.":"Here’s the fix.")+'</p><div class="wline" role="group" aria-label="Sentence">';
@@ -4169,10 +4170,10 @@ function spawnSurge(){if(!ST.g||ST.surge)return false;var g=ST.g,x=g.L+70+Math.r
   ST.surge={x:x,y:y,t0:performance.now(),life:12000,cx:x,cy:y};liveSay("A surge orb appeared on your engine. Press O to catch it.");return true;}
 function drawSurge(c,tms){
   var O=ST.surge;if(!O)return;var k=(tms-O.t0)/O.life;if(k>=1){ST.surge=null;return;}if(k<0)k=0;
-  var a=Math.min(1,(tms-O.t0)/300)*(k>0.8?(1-k)/0.2:1),x=O.x+(reduced?0:Math.sin(tms/500)*7),y=O.y-(reduced?0:k*30),r=10+(reduced?0:2*Math.sin(tms/150));
-  c.globalCompositeOperation="lighter";dGlow(c,"#FFC933",x,y,r*3.4,0.85*a);c.globalCompositeOperation="source-over";
-  c.fillStyle=hexA("#FFF4C2",a);c.beginPath();c.arc(x,y,r*0.55,0,6.283);c.fill();
-  c.strokeStyle=hexA("#FFC933",0.9*a);c.lineWidth=2;c.beginPath();c.arc(x,y,r+7,-Math.PI/2,-Math.PI/2+6.283*(1-k));c.stroke();
+  var a=Math.min(1,(tms-O.t0)/300)*(k>0.8?(1-k)/0.2:1),x=O.x+(reduced?0:Math.sin(tms/500)*7),y=O.y-(reduced?0:k*30),r=13+(reduced?0:2.5*Math.sin(tms/150));
+  c.globalCompositeOperation="lighter";dGlow(c,"#FFC933",x,y,r*4.4,0.95*a);dGlow(c,"#FFF4C2",x,y,r*1.6,0.8*a);c.globalCompositeOperation="source-over";
+  c.fillStyle=hexA("#FFF4C2",a);c.beginPath();c.arc(x,y,r*0.6,0,6.283);c.fill();
+  c.strokeStyle=hexA("#FFC933",0.95*a);c.lineWidth=2.5;c.beginPath();c.arc(x,y,r+9,-Math.PI/2,-Math.PI/2+6.283*(1-k));c.stroke();
   O.cx=x;O.cy=y;ST.hits.push({type:"surge",x:x,y:y,r:30});
 }
 function catchSurge(){
@@ -4647,7 +4648,7 @@ function start(hot){
   try{if(window.claude&&window.claude.hot&&typeof window.claude.hot.snapshot==="function")window.claude.hot.snapshot(function(){return{S:S};});}catch(e){}
   requestAnimationFrame(loop);initCaps();
   /* Test hook for the local Playwright checks; published pages never see it. */
-  if(location.protocol==="file:")window.__g1520={S:function(){return S;},cur:function(){return cur;},Q:function(){return Q;},arc:function(){return UI.arc;},arcEnd:arcEnd,spawnSurge:spawnSurge,surge:function(){return ST.surge;}};
+  if(location.protocol==="file:")window.__g1520={S:function(){return S;},cur:function(){return cur;},Q:function(){return Q;},arc:function(){return UI.arc;},arcEnd:arcEnd,spawnSurge:spawnSurge,surge:function(){return ST.surge;},core:function(){return ST.g?{x:ST.g.cx,y:ST.g.coreY}:null;}};
 }
 try{var hot=window.claude&&window.claude.hot;if(hot&&typeof hot.ready==="function")hot.ready(start);else start(hot&&hot.data?hot.data:{});}catch(e){start({});}
 })();

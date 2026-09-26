@@ -243,6 +243,207 @@ const TESTS = {
     if (over) throw new Error("horizontal overflow on the Plan tab");
     return page;
   },
+  async "comma sniper scores and pays"(b) {
+    const page = await open(b, save());
+    await page.click('[data-act="tab"][data-v="arena"]');
+    await page.click('[data-act="arcPlay"][data-v="comma"]');
+    for (let k = 0; k < 3; k++) {
+      const it = await page.evaluate(() => { const A = window.__g1520.arc(); return { gap: A.item.gap, ok: A.item.ok[0] }; });
+      await page.click(`#conBody [data-act="arcWord"][data-i="${it.gap}"]`);
+      await page.click(`#conBody [data-act="arcMark"][data-v="${it.ok}"]`);
+      await page.waitForTimeout(1000);
+    }
+    const sc = await page.evaluate(() => window.__g1520.arc().score);
+    if (sc !== 7) throw new Error("score " + sc + " after 3 clean sentences (want 7 with the streak bonus)");
+    const s0 = await state(page);
+    await page.evaluate(() => window.__g1520.arcEnd());
+    await page.waitForTimeout(300);
+    const s1 = await state(page);
+    if (!s1.arc.comma || s1.arc.comma.runs !== 1 || s1.arc.comma.best !== 7) throw new Error("run not recorded: " + JSON.stringify(s1.arc));
+    if (!(s1.sparks > s0.sparks)) throw new Error("no sparks paid");
+    if (!(await page.locator(".arc-res").count())) throw new Error("no results screen");
+    await page.click('[data-act="arcDone"]');
+    if (!(await page.locator("#sheet").count())) throw new Error("did not return to training");
+    return page;
+  },
+  async "transition rush streak and penalty"(b) {
+    const page = await open(b, save());
+    await page.click('[data-act="tab"][data-v="arena"]');
+    await page.click('[data-act="arcPlay"][data-v="rush"]');
+    for (let k = 0; k < 5; k++) {
+      const a = await page.evaluate(() => window.__g1520.arc().item.a);
+      await page.keyboard.press(String(a + 1));
+      await page.waitForTimeout(520);
+    }
+    const r = await page.evaluate(() => { const A = window.__g1520.arc(); return { score: A.score, ends: A.ends, a: A.item.a }; });
+    if (r.score !== 7) throw new Error("score " + r.score + " after 5 right (want 7)");
+    await page.click(`#conBody [data-act="arcPick"][data-i="${(r.a + 1) % 4}"]`);
+    const ends = await page.evaluate(() => window.__g1520.arc().ends);
+    if (r.ends - ends !== 3000) throw new Error("miss did not cost 3 seconds");
+    if (!(await page.locator(".ropt.y").count())) throw new Error("right answer not shown after a miss");
+    return page;
+  },
+  async "line drawer takes a drag"(b) {
+    const page = await open(b, save());
+    await page.click('[data-act="tab"][data-v="arena"]');
+    await page.click('[data-act="arcPlay"][data-v="line"]');
+    const it = await page.evaluate(() => { const A = window.__g1520.arc(); return { p: A.item.p, q: A.item.q, b: A.item.b, P: A.P }; });
+    const T = [[0, it.b], Math.abs(it.b + it.p) <= 6 ? [it.q, it.b + it.p] : [-it.q, it.b - it.p]];
+    const r = await page.locator("#lsvg").boundingBox();
+    const px = (g) => [r.x + (g[0] + 7) / 14 * r.width, r.y + (7 - g[1]) / 14 * r.height];
+    const same = (a, c) => a[0] === c[0] && a[1] === c[1];
+    let order = [0, 1];
+    if (same(T[0], it.P[1])) order = [1, 0];
+    for (const j of order) {
+      const from = px((await page.evaluate(() => window.__g1520.arc().P))[j]), to = px(T[j]);
+      await page.mouse.move(from[0], from[1]); await page.mouse.down();
+      await page.mouse.move((from[0] + to[0]) / 2, (from[1] + to[1]) / 2); await page.mouse.move(to[0], to[1]); await page.mouse.up();
+    }
+    const P = await page.evaluate(() => window.__g1520.arc().P);
+    await page.click('[data-act="arcLock"]');
+    const A = await page.evaluate(() => { const A = window.__g1520.arc(); return { ok: A.ok, score: A.score }; });
+    if (!A.ok || A.score < 1) throw new Error("line not accepted: " + JSON.stringify({ it, P }));
+    await page.keyboard.press("Enter");
+    const round = await page.evaluate(() => window.__g1520.arc().round);
+    if (round !== 1) throw new Error("Enter did not advance the round");
+    return page;
+  },
+  async "balance point finds the center"(b) {
+    const page = await open(b, save());
+    await page.click('[data-act="tab"][data-v="arena"]');
+    await page.click('[data-act="arcPlay"][data-v="balance"]');
+    for (let k = 0; k < 2; k++) {
+      const truth = await page.evaluate(() => window.__g1520.arc().item.truth);
+      const r = await page.locator("#bsvg").boundingBox();
+      await page.mouse.click(r.x + (20 + truth * 20) / 440 * r.width, r.y + 150 / 176 * r.height);
+      await page.click('[data-act="arcLock"]');
+      await page.waitForTimeout(200);
+      const pts = await page.evaluate(() => window.__g1520.arc().pts);
+      if (pts !== 3) throw new Error("round " + k + " scored " + pts);
+      await page.click('[data-act="arcNextR"]');
+    }
+    return page;
+  },
+  async "call it: sure pays and costs"(b) {
+    const page = await open(b, save((S) => { S.rev = { date: "x", n: 0, p: 0, done: true }; S.spots = []; S.ai = []; }));
+    const c = await page.evaluate(() => { const q = window.__g1520.cur(); return { spr: q.spr ? q.spr.vals[0] : null, correct: q.correct }; });
+    await page.click('#callIt [data-act="conf"][data-v="sure"]');
+    if (c.spr != null) await page.fill("#sprIn", String(c.spr)); else await page.click(`#conBody [data-act="pick"][data-i="${c.correct}"]`);
+    await page.click("#checkBtn");
+    if (!(await page.locator(".fb .part.call").count())) throw new Error("no Called it bonus");
+    await page.click("#nextBtn"); await page.waitForTimeout(150);
+    for (let j = 0; j < 4; j++) { const m = page.locator('#modal:not([hidden]) [data-act="modalClose"]'); if (await m.count()) await m.first().click(); }
+    const c2 = await page.evaluate(() => { const q = window.__g1520.cur(); return { spr: q.spr ? 1 : 0, correct: q.correct }; });
+    const s0 = await state(page);
+    await page.click('#callIt [data-act="conf"][data-v="sure"]');
+    if (c2.spr) await page.fill("#sprIn", "-98765"); else await page.click(`#conBody [data-act="pick"][data-i="${(c2.correct + 1) % 4}"]`);
+    await page.click("#checkBtn");
+    const s1 = await state(page);
+    if (!(await page.locator(".fb .part.loss").count())) throw new Error("no loss shown");
+    if (!(s1.sparks < s0.sparks)) throw new Error("wrong Sure call cost nothing");
+    if (JSON.stringify(s1.calib.sure) !== "[2,1]") throw new Error("calibration " + JSON.stringify(s1.calib));
+    return page;
+  },
+  async "a finished set deals cards"(b) {
+    const page = await open(b, save((S) => { S.set = { n: 9, c: 6, sp: 900, run: 0, best: 3, log: "110110110", conn0: 20, p0: 1080, r0: Object.values(S.r), t0: Date.now() - 6e5 }; S.pick = null; }));
+    await answerAny(page);
+    await page.click("#nextBtn"); await page.waitForTimeout(250);
+    if ((await page.locator("#cardsBox .pcard").count()) !== 3) throw new Error("no cards dealt");
+    const s0 = await state(page);
+    await page.keyboard.press("2");
+    await page.waitForTimeout(700);
+    const s1 = await state(page);
+    if (!s1.pick.done || s1.pick.got[0] !== 1) throw new Error("pick not recorded: " + JSON.stringify(s1.pick));
+    const c = s1.pick.cards[1];
+    const gained = c.t === "sparks" ? s1.sparks > s0.sparks : c.t === "boost" ? s1.boosts[c.k] > s0.boosts[c.k] : s1.chests[c.r] > s0.chests[c.r];
+    if (!gained) throw new Error("reward not applied: " + JSON.stringify(c));
+    if ((await page.locator("#cardsBox .pcard.flip").count()) !== 3) throw new Error("other cards not revealed");
+    return page;
+  },
+  async "catch a surge orb and poke the core"(b) {
+    const page = await open(b, save());
+    await page.evaluate(() => window.__g1520.spawnSurge());
+    await page.waitForTimeout(150);
+    const o = await page.evaluate(() => { const O = window.__g1520.surge(); return { x: O.cx, y: O.cy }; });
+    const r = await page.locator("#engineCv").boundingBox();
+    await page.mouse.click(r.x + o.x, r.y + o.y);
+    await page.waitForTimeout(150);
+    const s = await state(page);
+    if (s.stats.surges !== 1) throw new Error("orb not caught");
+    const cpos = await page.evaluate(() => window.__g1520.core());
+    await page.mouse.move(r.x + cpos.x, r.y + cpos.y); await page.mouse.down(); await page.mouse.up();
+    await page.mouse.down(); await page.waitForTimeout(600); await page.mouse.up();
+    await page.waitForTimeout(100);
+    const s2 = await page.evaluate(() => window.__g1520.S().stats.pokes);
+    if (s2 !== 2) throw new Error("core pokes " + s2);
+    return page;
+  },
+  async "highlight a passage and draw on it"(b) {
+    const page = await open(b, save((S) => { S.focus = "cs"; S.rev = { date: "x", n: 0, p: 0, done: true }; S.ai = []; }));
+    await page.evaluate(() => {
+      const p = document.querySelector("#sheet .passage p"), w = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+      let t = w.nextNode(); while (t && t.length < 12) t = w.nextNode();
+      const r = document.createRange(); r.setStart(t, 0); r.setEnd(t, 10);
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r); document.dispatchEvent(new MouseEvent("mouseup"));
+    });
+    await page.waitForTimeout(100);
+    if ((await page.locator("#sheet mark.hl").count()) !== 1) throw new Error("no highlight");
+    await page.click('[data-act="drawToggle"]');
+    const box = await page.locator("#drawCv").boundingBox();
+    await page.mouse.move(box.x + 40, box.y + 40); await page.mouse.down(); await page.mouse.move(box.x + 120, box.y + 70); await page.mouse.move(box.x + 160, box.y + 50); await page.mouse.up();
+    const ink = await page.evaluate(() => window.__g1520.Q().ink.length);
+    if (ink !== 1) throw new Error("ink strokes " + ink);
+    await page.click('#drawBar [data-act="drawToggle"]');
+    if (!(await page.locator("#drawCv:not(.live)").count())) throw new Error("ink hidden after Done");
+    await answerAny(page);
+    if ((await page.locator("#sheet mark.hl").count()) !== 1) throw new Error("highlight lost after checking");
+    if (!(await page.locator("#drawCv").count())) throw new Error("ink lost after checking");
+    await page.click("#sheet mark.hl");
+    if (await page.locator("#sheet mark.hl").count()) throw new Error("highlight not cleared by a tap");
+    return page;
+  },
+  async "math reference sheet"(b) {
+    const page = await open(b, save((S) => { S.focus = "geo"; S.rev = { date: "x", n: 0, p: 0, done: true }; S.ai = []; }));
+    await page.click('[data-act="refSheet"]');
+    if ((await page.locator("#modal:not([hidden]) .refc").count()) < 10) throw new Error("reference sheet missing");
+    return page;
+  },
+  async "boss finisher lands"(b) {
+    const page = await open(b, save((S) => { S.boss = { d: "alg", tier: 1, hp: 20, max: 100, hearts: 3, t0: Date.now(), hits: 0 }; }));
+    if (!(await page.locator(".boss.fin .finb").count())) throw new Error("finisher not flagged");
+    const c = await page.evaluate(() => { const q = window.__g1520.cur(); return { spr: q.spr ? q.spr.vals[0] : null, correct: q.correct }; });
+    if (c.spr != null) await page.fill("#sprIn", String(c.spr)); else await page.click(`#conBody [data-act="pick"][data-i="${c.correct}"]`);
+    await page.click("#checkBtn");
+    await page.waitForTimeout(300);
+    const s = await state(page);
+    if (s.boss || s.stats.finishers !== 1) throw new Error("finisher did not finish: " + JSON.stringify({ boss: s.boss, fin: s.stats.finishers }));
+    return page;
+  },
+  async "what's new tour for returning players"(b) {
+    const page = await open(b, save((S) => { S.seenV5 = false; }));
+    if (!(await page.locator("#modal:not([hidden]) .wn").count())) throw new Error("tour did not open");
+    await page.keyboard.press("ArrowRight");
+    if (!/Call it/.test(await page.textContent(".wn h2"))) throw new Error("ArrowRight did not advance");
+    await page.click('#wnDemo [data-act="wnCall"][data-v="sure"]');
+    if (!/1\.5/.test(await page.textContent("#wnCallTxt"))) throw new Error("call demo silent");
+    await page.keyboard.press("ArrowLeft");
+    await page.click('#wnDemo [data-act="wnTry"][data-v="arc:rush"]');
+    if (await page.isVisible("#modal")) throw new Error("tour stayed open");
+    if (!/Transition Rush/.test(await page.textContent("#conHead"))) throw new Error("Try it did not start the game");
+    const s = await state(page);
+    if (s.seenV5 !== true) throw new Error("tour will show again");
+    return page;
+  },
+  async "phone arcade fits"(b) {
+    const page = await open(b, save(), 390, 844);
+    await page.click('#decknav [data-v="arena"]');
+    await page.click('[data-act="arcPlay"][data-v="line"]');
+    await page.waitForTimeout(200);
+    const over = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+    if (over) throw new Error("horizontal overflow in the arcade");
+    if (!(await page.isVisible("#lsvg"))) throw new Error("grid not visible");
+    return page;
+  },
   async "fresh game starts at 320 and climbs"(b) {
     const page = await open(b, null);
     await page.click('[data-act="welcomeGo"]');
