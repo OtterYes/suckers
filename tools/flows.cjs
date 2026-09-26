@@ -1,5 +1,5 @@
 // Functional checks: drives the real UI from simulated saves and asserts on the saved state.
-//   NODE_PATH=$(npm root -g) node tools/flows.cjs
+//   NODE_PATH=$(npm root -g) node tools/flows.cjs [name-filter]
 const path = require("path");
 const { chromium } = require("playwright");
 const { simulate } = require("./sim.cjs");
@@ -444,6 +444,102 @@ const TESTS = {
     if (!(await page.isVisible("#lsvg"))) throw new Error("grid not visible");
     return page;
   },
+  async "found a city and build on it"(b) {
+    const page = await open(b, save((S) => { S.city = { founded: 0, asked: false, name: "Sparkton", coins: 0, life: 0, b: {}, up: {}, w: {}, pol: "", polAt: 0, buffs: [], blimps: 0, buyN: 1, answers: 0, built: 0, bestRate: 0 }; }));
+    if (!(await page.locator("#modal:not([hidden]) #cityNameM").count())) throw new Error("founding prompt did not open");
+    await page.fill("#cityNameM", "Testville");
+    await page.click('#modal [data-act="cityFound"]');
+    await page.waitForTimeout(400);
+    const s1 = await state(page);
+    if (!s1.city.founded || s1.city.name !== "Testville") throw new Error("not founded: " + JSON.stringify({ f: s1.city.founded, n: s1.city.name }));
+    if (s1.settings.view !== "city") throw new Error("view did not switch to the city");
+    if ((await page.getAttribute("body", "data-tab")) !== "city") throw new Error("City tab not open");
+    if (!(await page.isVisible("#cityCv"))) throw new Error("city canvas hidden");
+    await page.click('#panel [data-act="cityBuy"].can');
+    await page.waitForTimeout(200);
+    const s2 = await state(page);
+    if (!(s2.city.built > s1.city.built)) throw new Error("nothing built");
+    if (!(s2.city.coins < s1.city.coins)) throw new Error("coins not spent");
+    return page;
+  },
+  async "tap a building on the skyline and build it"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "city"; }));
+    await page.waitForTimeout(300);
+    const lot = await page.evaluate(() => { const C = window.__g1520.city(), S = window.__g1520.S(); const L = C.hitLots.find((h) => S.city.b[h.id] > 0 && h.x0 > 20 && h.x1 < C.w - 20); return L ? { id: L.id, x: (L.x0 + L.x1) / 2, y: C.gy - 14 } : null; });
+    if (!lot) throw new Error("no built lot on screen");
+    const box = await page.locator("#cityCv").boundingBox();
+    await page.mouse.click(box.x + lot.x, box.y + lot.y);
+    await page.waitForTimeout(250);
+    if (!(await page.isVisible("#ctip"))) throw new Error("no tooltip for " + lot.id);
+    const n0 = (await state(page)).city.b[lot.id];
+    await page.click('#ctip [data-act="cityBuy"]');
+    await page.waitForTimeout(200);
+    const n1 = (await state(page)).city.b[lot.id];
+    if (!(n1 > n0)) throw new Error("tooltip build failed: " + n0 + " to " + n1);
+    return page;
+  },
+  async "catch a golden blimp"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "city"; }));
+    const s0 = await state(page);
+    await page.evaluate(() => window.__g1520.spawnBlimp(performance.now()));
+    await page.waitForTimeout(2600);
+    const pos = await page.evaluate(() => { const B = window.__g1520.city().blimp; return B && B.cx != null ? { x: B.cx, y: B.cy } : null; });
+    if (!pos) throw new Error("no blimp in the sky");
+    const box = await page.locator("#cityCv").boundingBox();
+    await page.mouse.click(box.x + pos.x, box.y + pos.y);
+    await page.waitForTimeout(250);
+    const s1 = await state(page);
+    if (s1.city.blimps !== s0.city.blimps + 1) throw new Error("blimp not caught");
+    return page;
+  },
+  async "pass a Town Hall policy"(b) {
+    const page = await open(b, save());
+    await page.click('#decknav [data-v="city"]');
+    await page.click('#panel [data-act="scrollTo"][data-v="cwHall"]');
+    await page.click('#panel [data-act="cityPol"][data-v="study"]');
+    const s = await state(page);
+    if (s.city.pol !== "study") throw new Error("policy is " + JSON.stringify(s.city.pol));
+    if (!(await page.locator('#panel .pol.on[data-v="study"]').count())) throw new Error("policy not shown as in effect");
+    if (!(await page.locator('#panel .pol[data-v="owl"]:disabled').count())) throw new Error("other policies not on cooldown");
+    return page;
+  },
+  async "switch the main screen between engine and city"(b) {
+    const page = await open(b, save());
+    await page.click('#viewSw [data-v="city"]');
+    await page.waitForTimeout(300);
+    if ((await page.getAttribute("body", "data-view")) !== "city") throw new Error("view is not the city");
+    if (!(await page.isVisible("#cityHud"))) throw new Error("city HUD hidden");
+    if ((await state(page)).settings.view !== "city") throw new Error("setting not saved");
+    await page.click('#viewSw [data-v="engine"]');
+    await page.waitForTimeout(200);
+    if ((await page.getAttribute("body", "data-view")) !== "engine") throw new Error("view did not go back to the engine");
+    if (await page.isVisible("#cityWrap")) throw new Error("city still showing");
+    return page;
+  },
+  async "phone city tab shows the skyline"(b) {
+    const page = await open(b, save(), 390, 844);
+    await page.click('#decknav [data-v="city"]');
+    await page.waitForTimeout(300);
+    const box = await page.locator("#cityCv").boundingBox();
+    if (!box || box.height < 250) throw new Error("city canvas too small: " + JSON.stringify(box));
+    if (!(await page.locator('#panel [data-act="cityBuy"]').count())) throw new Error("no build list");
+    const over = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+    if (over) throw new Error("horizontal overflow on the City tab");
+    return page;
+  },
+  async "city tour for returning players"(b) {
+    const page = await open(b, save((S) => { S.seenV6 = false; }));
+    if (!/Your city/.test(await page.textContent("#modal .wn h2"))) throw new Error("the city tour did not open");
+    await page.keyboard.press("ArrowRight");
+    if (!/Learn to build/.test(await page.textContent(".wn h2"))) throw new Error("ArrowRight did not advance");
+    await page.click("#wnLot");
+    await page.click("#wnLot");
+    if (!/Built/.test(await page.textContent("#wnLotTxt"))) throw new Error("the lot demo did not build");
+    await page.click('#modal [data-act="modalClose"]');
+    const s = await state(page);
+    if (s.seenV6 !== true) throw new Error("tour will show again");
+    return page;
+  },
   async "fresh game starts at 320 and climbs"(b) {
     const page = await open(b, null);
     await page.click('[data-act="welcomeGo"]');
@@ -459,7 +555,9 @@ const TESTS = {
 (async () => {
   const browser = await chromium.launch();
   let fails = 0;
+  const only = process.argv[2] || "";
   for (const [name, fn] of Object.entries(TESTS)) {
+    if (only && !name.includes(only)) continue;
     let page = null;
     try {
       page = await fn(browser);
