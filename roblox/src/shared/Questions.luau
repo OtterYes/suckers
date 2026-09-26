@@ -28,7 +28,7 @@ local function near(ans, spread)
 	while #list < 3 do
 		local d = rng:NextInteger(-spread, spread)
 		local v = ans + d
-		if not set[v] then
+		if not set[v] and not (ans >= 0 and v < 0) then
 			set[v] = true
 			table.insert(list, v)
 		end

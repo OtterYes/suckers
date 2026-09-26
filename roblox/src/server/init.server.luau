@@ -210,7 +210,7 @@ local function save(player)
 	end)
 end
 
-Players.PlayerAdded:Connect(function(player)
+local function onJoin(player)
 	local ls = Instance.new("Folder")
 	ls.Name = "leaderstats"
 	ls.Parent = player
@@ -244,7 +244,12 @@ Players.PlayerAdded:Connect(function(player)
 	end
 	drawPlot(player)
 	push(player)
-end)
+end
+Players.PlayerAdded:Connect(onJoin)
+-- In Studio the first player can arrive before this script connects.
+for _, player in ipairs(Players:GetPlayers()) do
+	task.spawn(onJoin, player)
+end
 
 Players.PlayerRemoving:Connect(function(player)
 	save(player)
