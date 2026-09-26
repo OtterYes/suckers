@@ -102,6 +102,31 @@ you've learned: 29 buildings in eight districts, one district per domain.
   tap a building to build or train it, and read the news ticker for headlines about what you've
   built.
 
+## Your city in 3D
+
+Pick **3D** on the main-screen switch (or in the City tab) to walk through your city.
+
+- **The layout.** The 29 buildings stand around a ring road, one district per domain in the
+  skyline's order, with signs where each district begins. Town Hall, the 1520 Tower, the Grand
+  Library, and the Launch Pad share the plaza in the middle.
+- **Every building is modeled.** Each one grows with its level, just like on the skyline: the Ferris
+  Wheel turns, the Mint's coin spins, the clock faces show the real time, the lighthouse sweeps its
+  beam at night, and the Newsroom's ticker scrolls. Empty lots have a fence, a see-through preview
+  of the building, and a BUILD or LEARN sign.
+- **Moving around.** W A S D or the arrow keys walk (Shift runs, Space jumps), and dragging looks
+  around; the scroll wheel or a pinch zooms. On a phone, use the stick in the corner and the Jump
+  button. Click or tap the ground to walk there.
+- **Buildings.** Click or tap one for its card, where you can build or train it. Walk up to one and
+  press E, or tap the prompt, to open the nearest. In the City tab, a building's thumbnail takes
+  you straight to it.
+- **Life.** The sky follows your clock (or the Sky setting), with lit windows, street lamps, and
+  stars at night. Cars stop at the Crossroads light, residents fill the sidewalks as the city grows,
+  the Linear Rail runs on an elevated loop, and golden blimps fly low enough to catch: click one
+  or press O.
+- **Quality.** The 3D view loads a 3D engine (Three.js) the first time you open it. **3D quality**
+  in the City tab's Stats picks shadows and sharpness; Auto uses Low on phones and on
+  computers with four or fewer processor cores. If the 3D engine can't load, the view says so and offers the 2D city.
+
 ## Units and stages
 
 The whole game is a ladder: Unit 1 has stages 1.1 to 1.5, Unit 2 has 2.1 to 2.5, and so on. The
@@ -200,13 +225,19 @@ node tools/flows.cjs                        # functional checks: buying, bosses,
                                             # daily review, mistake tags, seasons, bulk import, unlocks,
                                             # all four Arcade games, Call it, cards, surge orbs, tools,
                                             # founding and building a city, blimps, policies, stages,
-                                            # Advance, exploring, crew, the wheel, stakes, Guardians, tours
+                                            # Advance, exploring, crew, the wheel, stakes, Guardians, tours,
+                                            # and the 3D city (walking, cards, building, blimps, fallback)
 node tools/flows.cjs city                   # only the checks whose name contains "city"
 node tools/shots.cjs out/                   # screenshots of the main screens from simulated saves
 ```
 
 When the page is opened from a local file, it exposes `window.__g1520` so the Playwright checks can
-read the current question, drive the Arcade, and spawn a golden blimp. Published pages don't have it.
+read the current question, drive the Arcade, spawn a golden blimp, and move around the 3D city.
+Published pages don't have it.
+
+The 3D city loads Three.js r160 from cdn.jsdelivr.net only when it's opened. The checks block the
+network, so `tools/three.cjs` serves a local copy at the same URL. It fetches one with
+`npm pack three@0.160.0` into `tools/vendor/` (not committed) the first time it's needed.
 
 The balance sim plays the city too: it founds one at stage 2, buys the best building, upgrade, or
 wonder by gain per coin, and catches 40% of blimps. It also clears stages, Advances as soon as it

@@ -714,6 +714,21 @@ const TESTS = {
     if (!((await page.evaluate((id) => window.__g1520.w3().lots[id].lv, id)) >= 1)) throw new Error("the 3D lot did not rebuild");
     return page;
   },
+  async "catch a golden blimp in 3D"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; }));
+    await w3Ready(page);
+    const n0 = (await state(page)).city.blimps || 0;
+    await page.evaluate(() => window.__g1520.spawnBlimp(performance.now() - 4000));
+    await page.waitForFunction(() => { const W = window.__g1520.w3(); return W.blimp && W.blimp.visible; }, null, { timeout: 8000 });
+    await page.focus("#w3Cv");
+    await page.keyboard.press("o");
+    await page.waitForTimeout(400);
+    if (((await state(page)).city.blimps || 0) !== n0 + 1) throw new Error("the blimp was not caught");
+    if (await page.evaluate(() => window.__g1520.w3().blimp.visible)) throw new Error("the blimp is still flying");
+    await answerAny(page);
+    await page.waitForTimeout(300);
+    return page;
+  },
   async "switch between the 2D and 3D city"(b) {
     const page = await open(b, save((S) => { S.settings.w3new = true; }));
     await page.click('#viewSw [data-v="3d"]');
