@@ -19,7 +19,7 @@ function simulate(opts) {
   const E = loadEngine(opts.file);
   if (opts.patch) opts.patch(E);
   const DAY = 864e5;
-  let now = Date.UTC(2026, 8, 28, 20, 0, 0);
+  let now = opts.start || Date.UTC(2026, 8, 28, 20, 0, 0);
   const start = now;
   const S = E.newState(now);
   S.welcomed = true;
