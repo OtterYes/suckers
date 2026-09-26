@@ -38,6 +38,13 @@ top. Each of the eight domains grows up to its own score, so weak spots are the 
 Blind spots, daily quests, chests, relics, bosses, and the timed Gauntlet work as before. Click
 any node or domain on the engine to see its details, level its hub, or train just that skill.
 
+## Importing Question Bank items
+
+Press **Import** above the question and paste one question copied from the College Board SAT Suite
+Question Bank, including its "Correct Answer:" and "Rationale" lines. The domain, skill, and difficulty
+are read from the pasted text. Imported questions are stored only in your save and are mixed into
+practice, skill training, and blind spots like any other question. Grid-in math answers work too.
+
 ## Development
 
 The page stays a single hand-edited file. The DOM-free engine (everything above the

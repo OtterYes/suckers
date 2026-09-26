@@ -605,7 +605,7 @@ sup{font-size:.72em;line-height:0}
   </section>
   <aside class="console" id="console" aria-label="Question">
     <div class="con-head" id="conHead"></div>
-    <div class="con-tools" id="conTools"><label class="sr" for="focusSel">Practice focus</label><select id="focusSel" class="select"></select><button class="pill gold" id="packBtn" type="button" data-act="pack" hidden></button></div>
+    <div class="con-tools" id="conTools"><label class="sr" for="focusSel">Practice focus</label><select id="focusSel" class="select"></select><button class="pill gold" id="packBtn" type="button" data-act="pack" hidden></button><button class="pill" id="impBtn" type="button" data-act="impOpen">Import</button></div>
     <div class="con-body" id="conBody"></div>
     <div class="con-foot" id="conFoot"></div>
   </aside>
@@ -1747,7 +1747,7 @@ function newState(now){
     r:r,dx:dx,sk:{},seen:{},flagged:{},spots:[],streak:0,bestStreak:0,
     today:{date:"",correct:0,answered:0,sparks:0},days:{streak:0,best:0,last:""},cal:{},hist:[],ach:{},
     g:null,gb:{rw:0,m:0,runs:0,hard:0,flawless:0,last:null},
-    stats:{answered:0,correct:0,hard:0,timeMs:0,eurekas:0,spotsCleared:0,packs:0,asks:0,gained:0,sets:0,perfectSets:0},
+    stats:{answered:0,correct:0,hard:0,timeMs:0,eurekas:0,spotsCleared:0,packs:0,asks:0,gained:0,sets:0,perfectSets:0},imports:[],
     peak:320,ai:[],focus:"mix",settings:{sound:true},welcomed:false,buyN:1};
 }
 function migrate(S,now){
@@ -1757,6 +1757,7 @@ function migrate(S,now){
   ["up","gen","stats","gb","settings","days","today","pl","chests","boosts","hub","evo","baseline"].forEach(function(k){if(!S[k]||typeof S[k]!=="object")S[k]={};for(var j in base[k]){if(!(j in S[k]))S[k][j]=base[k][j];}});
   DKEYS.forEach(function(d){if(typeof S.r[d]!=="number")S.r[d]=SEED_SCORES[d];if(!S.dx[d])S.dx[d]={xp:0,n:0,c:0,rec:""};});
   if(S.v<3){S.v=3;DKEYS.forEach(function(d){S.dx[d].cal=true;});}
+  if(!Array.isArray(S.imports))S.imports=[];
   if(FORMS.every(function(f){return f.id!==S.form;}))S.form="network";
   if(!Array.isArray(S.spots))S.spots=[];if(!Array.isArray(S.ai))S.ai=[];if(!Array.isArray(S.hist))S.hist=[];
   return S;
@@ -1821,8 +1822,8 @@ function fromBank(S,item,rnd){
   return{key:"b:"+item.id,kind:"bank",ref:item.id,d:item.d,sk:item.sk,lv:item.lv,
     passage:item.p?fmtText(item.p):"",p2:item.p2?fmtText(item.p2):"",tb:item.tb||null,
     notes:item.n?item.n.map(esc):null,notesIntro:item.n?"While researching a topic, a student has taken the following notes:":"",
-    stem:stem,choices:order.map(function(i){return esc(item.c[i]);}),correct:order.indexOf(item.a),spr:null,
-    x:esc(item.x||""),t:esc(item.t||""),des:"",fresh:!(S.seen[item.id]>0),src:"Question bank"};
+    stem:stem,choices:item.spr?null:order.map(function(i){return esc(item.c[i]);}),correct:item.spr?null:order.indexOf(item.a),spr:item.spr||null,
+    x:esc(item.x||""),t:esc(item.t||""),des:"",fresh:!(S.seen[item.id]>0),src:item.imp?"Imported · College Board":"Question bank"};
 }
 function fromStatic(S,item,rnd){
   var order=shuffle([0,1,2,3],rnd);
@@ -1864,6 +1865,7 @@ function pickBank(S,d,lv,rnd,recent,skf){
 function buildFor(S,d,lv,rnd,recent){
   recent=recent||[];var q=null;
   if(DOMAINS[d].sec==="m"){
+    if(rnd()<0.35){var im=pickBank(S,d,lv,rnd,recent);if(im)return fromBank(S,im,rnd);}
     if(rnd()<0.1){var st=MATH_STATIC.filter(function(it){return it.d===d&&!S.flagged[it.id]&&recent.indexOf("s:"+it.id)<0;});if(st.length){var ex=st.filter(function(it){return it.lv===lv;});q=fromStatic(S,(ex.length?ex:st)[Math.floor(rnd()*(ex.length?ex:st).length)],rnd);}}
     return q||genFor(d,lv,rnd);
   }
@@ -1888,6 +1890,7 @@ function skFocus(f){
 function buildForSkill(S,d,sk,lv,rnd,recent){
   recent=recent||[];var t;
   if(DOMAINS[d].sec==="m"){
+    if(rnd()<0.4){var im2=pickBank(S,d,lv,rnd,recent,sk);if(im2)return fromBank(S,im2,rnd);}
     var gens=Object.keys(MGEN).filter(function(k){return MGEN[k].d===d&&MGEN[k].sk===sk;});
     var st=MATH_STATIC.filter(function(it){return it.d===d&&it.sk===sk&&!S.flagged[it.id]&&recent.indexOf("s:"+it.id)<0;});
     if(st.length&&(!gens.length||rnd()<0.2)){var ex=st.filter(function(it){return it.lv===lv;}),pool=ex.length?ex:st;return fromStatic(S,pool[Math.floor(rnd()*pool.length)],rnd);}
@@ -2357,6 +2360,29 @@ function setRecord(S,correct,res,now){
   return sum;
 }
 
+/* Imports: questions pasted from the College Board SAT Suite Question Bank, kept in the player's own save. */
+function impRegister(items){(items||[]).forEach(function(it){if(!RW_BANK.some(function(x){return x.id===it.id;}))RW_BANK.push(it);});}
+function impParse(text,fallbackD){
+  var t=String(text||"").replace(/\r/g,"").replace(/[ \t]+/g," ").trim();if(!t)return{error:"Paste a question first."};
+  var low=t.toLowerCase(),d=null,sk=null;
+  DKEYS.forEach(function(k){DOMAINS[k].skills.forEach(function(x){if(!sk&&low.indexOf(x.toLowerCase())>=0){sk=x;d=k;}});});
+  if(!d)DKEYS.forEach(function(k){if(!d&&low.indexOf(DOMAINS[k].name.toLowerCase())>=0)d=k;});
+  if(!d)d=fallbackD;if(!DOMAINS[d])return{error:"Pick the domain this question belongs to."};
+  if(!sk)sk=DOMAINS[d].skills[0];
+  var lv=/\bhard\b/i.test(t.slice(0,400))?3:/\beasy\b/i.test(t.slice(0,400))?1:2;
+  var ca=t.match(/correct answer:?\s*([^\n]+)/i);if(!ca)return{error:"I couldn’t find “Correct Answer”. Copy the question together with its answer and rationale."};
+  var head=t.slice(0,ca.index),rat=t.slice(ca.index+ca[0].length).replace(/^\s*rationale:?\s*/i,"").trim();
+  head=head.replace(/^[\s\S]*?\bdifficulty\b[^\n]*\n/i,"").replace(/^\s*(question id|id:)[^\n]*\n/gim,"").trim();
+  var lines=head.split("\n").map(function(x){return x.trim();}).filter(Boolean),ch={},body=[],cur=null;
+  lines.forEach(function(ln){var m=ln.match(/^([A-D])[.)]\s*(.*)$/);if(m){cur=m[1];ch[cur]=m[2];}else if(cur)ch[cur]+=" "+ln;else body.push(ln);});
+  if(!body.length)return{error:"I couldn’t find the question text."};
+  var q=body.pop(),p=body.join("\n"),ans=ca[1].trim();
+  var item={id:"im"+hashStr(q+ans).toString(36),imp:true,d:d,sk:sk,lv:lv,p:p,q:q,x:rat.slice(0,1500),t:""};
+  if(ch.A&&ch.B&&ch.C&&ch.D){var L=ans.charAt(0).toUpperCase();if("ABCD".indexOf(L)<0)return{error:"The correct answer should be A, B, C, or D."};item.c=[ch.A,ch.B,ch.C,ch.D];item.a="ABCD".indexOf(L);}
+  else{var vals=ans.split(/,|\bor\b/).map(function(v){return parseNum(v);}).filter(function(v){return isFinite(v);});if(!vals.length)return{error:"No A–D choices, and the answer isn’t a number I can check."};item.spr={vals:vals};}
+  if(!item.p&&!item.spr&&DOMAINS[d].sec==="rw")item.p=q,item.q=DEFAULT_Q[sk]||"Which choice best answers the question?";
+  return{item:item};
+}
 /* Which skill a blind spot belongs to (older saves did not store it). */
 function spotSkill(s){
   if(s.sk)return s.sk;var it=null;
@@ -2480,7 +2506,7 @@ function cloudPush(force){
   }).catch(function(e){var c=e&&e.code;if(c==="revoked"||c==="not_granted"||c==="invalid_argument"||c==="capability_disabled"||c==="capability_removed"){CAP.ref=null;CAP.cloud="off";}else CAP.cloud="error";})
   .then(function(){CAP.busy=false;renderSync();if(CAP.pending)scheduleCloud(4000);});
 }
-function adopt(obj,msg){S=migrate(obj,now());shownSparks=S.sparks;recent=[];UI.gResult=null;UI.setSum=null;UI.showSet=false;evoCheck(S,now());saveLocal();renderAll();nextQ();stageLayout();if(msg)toast("Synced",msg,"mint");maybeEvolveModal();}
+function adopt(obj,msg){S=migrate(obj,now());impRegister(S.imports);shownSparks=S.sparks;recent=[];UI.gResult=null;UI.setSum=null;UI.showSet=false;evoCheck(S,now());saveLocal();renderAll();nextQ();stageLayout();if(msg)toast("Synced",msg,"mint");maybeEvolveModal();}
 function remoteAheadToast(){toast("Newer progress found","Another device has more progress saved to your account.","",'<button type="button" class="btn primary sm" data-act="loadRemote">Load it</button>',12000);}
 function syncText(){if(CAP.cloud==="on")return CAP.cloudAt?"saved "+fmtDur(Math.max(60,(now()-CAP.cloudAt)/1000))+" ago":"on";if(CAP.cloud==="error")return"trouble saving, will retry";return"this browser only";}
 function renderSync(){var el=$("syncTxt");if(el)el.textContent=syncText();var e2=$("syncTxt2");if(e2)e2.textContent=syncText();}
@@ -3118,6 +3144,17 @@ function askClaude(){
   .then(function(){if(CAP.askCtl===ctl)CAP.askCtl=null;var b=$("askBtn");if(b)b.disabled=false;});
 }
 function weakestRW(){return RW_KEYS.slice().sort(function(a,b){return S.r[a]-S.r[b];})[0];}
+function showImportModal(msg){
+  modal('<h2>Import questions</h2><p>Paste one question from the College Board SAT Suite Question Bank (satsuitequestionbank.collegeboard.org): the passage or problem, the question, choices, and the Correct Answer and Rationale lines. It stays in your save only.</p>'+(msg?'<p class="imp-msg">'+esc(msg)+'</p>':'')+'<label for="impTxt">Question text</label><textarea id="impTxt" class="select" rows="10" style="width:100%;min-height:180px;font:inherit" data-autofocus></textarea><label for="impD">Domain if not detected</label><select id="impD" class="select">'+DKEYS.map(function(d){return'<option value="'+d+'">'+esc(DOMAINS[d].name)+"</option>";}).join("")+'</select><p>'+S.imports.length+' imported so far.</p><div class="mfoot"><button type="button" class="btn primary" data-act="impGo">Import</button>'+(S.imports.length?'<button type="button" class="btn line" data-act="impClear">Clear all</button>':'')+'<button type="button" class="btn line" data-act="modalClose">Close</button></div>');
+}
+function importGo(){
+  var t=$("impTxt"),d=$("impD");if(!t||!t.value.trim())return;
+  var r=impParse(t.value,d?d.value:"inf");
+  if(r.error){showImportModal("Couldn't import: "+r.error);$("impTxt").value=t.value;return;}
+  if(S.imports.some(function(x){return x.id===r.item.id;})){showImportModal("Already imported.");return;}
+  S.imports.push(r.item);impRegister([r.item]);saveAll();
+  showImportModal("Imported into "+DOMAINS[r.item.d].name+" · "+r.item.sk+". Paste the next one.");
+}
 function showPackModal(){
   if(!CAP.sample)return;var w=weakestRW();
   modal('<h2>Fresh pack</h2><p>Claude writes 5 brand-new Reading and Writing questions tuned to your level. It takes about 20 to 60 seconds and uses your Claude usage. Fresh questions pay +25% sparks.</p><label for="packD">Domain</label><select id="packD" class="select" data-autofocus><option value="auto">Weakest right now: '+esc(DOMAINS[w].name)+"</option>"+RW_KEYS.map(function(d){return'<option value="'+d+'">'+esc(DOMAINS[d].name)+" · "+Math.round(S.r[d])+"</option>";}).join("")+'</select><div class="mfoot"><button type="button" class="btn primary" data-act="packgo">Write my pack</button><button type="button" class="btn line" data-act="modalClose">Cancel</button></div>');
@@ -3463,7 +3500,7 @@ document.addEventListener("click",function(e){
    case"bossGo":closeModal();bossGo(v);break;case"bossFlee":bossFlee();break;
    case"focusD":S.focus=v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();if(isMobile())window.scrollTo(0,0);toast("Focus",v==="spots"?"Reviewing blind spots.":"Training "+DOMAINS[v].name+".","mint",null,2200);break;
    case"focusSk":var sf=skFocus("sk:"+v);if(sf){S.focus="sk:"+v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();if(isMobile())window.scrollTo(0,0);toast("Focus","Training "+sf.sk+".","mint",null,2200);}break;
-   case"pack":showPackModal();break;case"packgo":openPack();break;
+   case"pack":showPackModal();break;case"impOpen":showImportModal();break;case"impGo":importGo();break;case"impClear":var ids={};S.imports.forEach(function(x){ids[x.id]=1;});for(var ri=RW_BANK.length-1;ri>=0;ri--)if(ids[RW_BANK[ri].id])RW_BANK.splice(ri,1);S.imports=[];saveAll();showImportModal("Cleared.");break;case"packgo":openPack();break;
    case"packstop":if(CAP.packCtl){try{CAP.packCtl.abort();}catch(x){}}break;
    case"modalClose":closeModal();break;
    case"welcomeGo":S.welcomed=true;S.seenV3=true;saveLocal();closeModal();SND.wake();break;
@@ -3527,6 +3564,7 @@ function start(hot){
   S.lastSeen=t;S.lastInteract=t;shownSparks=S.sparks;rollDay(S,t);
   if(S.g&&!S.g.pending&&t>=S.g.ends){var r=gauntFinishModule(S,t,rnd);if(r.stage==="done")UI.gResult=r;}
   if(S.g&&!S.g.pending)S.g.shownAt=t;
+  impRegister(S.imports);
   evoCheck(S,t);
   wireStage();renderAll();nextQ();saveLocal();stageLayout();
   if(fresh)showWelcome();
