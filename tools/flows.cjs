@@ -5,7 +5,8 @@ const { chromium } = require("playwright");
 const { simulate } = require("./sim.cjs");
 const { routeThree } = require("./three.cjs");
 
-const file = "file://" + path.resolve(__dirname, "..", "index.html");
+// GAME=dist/Grind-to-1520/grind-to-1520.html checks the PC edition instead.
+const file = "file://" + path.resolve(__dirname, "..", process.env.GAME || "index.html");
 const KEY = "grind1520.save.v1";
 const base = JSON.stringify(simulate({ days: 6, perDay: 60, learn: 0.25, seed: 3, ascend: 3 }).S);
 const ENG = require("./engine.cjs").loadEngine();
@@ -743,6 +744,8 @@ const TESTS = {
   },
   async "3D falls back to the 2D city when it cannot load"(b) {
     const page = await open(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; }), 1440, 900, { noThree: true });
+    // The PC edition carries its own Three.js, so with no network it should simply work.
+    if (await page.locator("#three-src").count()) { await w3Ready(page); return page; }
     await page.waitForSelector('#w3Msg:not([hidden]) [data-act="w3Retry"]', { timeout: 15000 });
     await page.click('#w3Msg [data-act="view"][data-v="city"]');
     await page.waitForTimeout(300);

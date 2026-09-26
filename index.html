@@ -6014,8 +6014,11 @@ function w3Shown(){return worldView()==="3d";}
 function w3On(){return W3.ready&&W3.w>0&&w3Shown()&&document.visibilityState==="visible";}
 function w3H(st,lv){var H=CITY_H[st]||[40,10];return(H[0]+H[1]*(Math.max(1,lv)-1))*0.11;}
 function mixHex(a,b,t){var A=hexRGB(a),B=hexRGB(b);return"#"+[0,1,2].map(function(i){return Math.round(A[i]+(B[i]-A[i])*t).toString(16).padStart(2,"0");}).join("");}
+/* The PC edition carries its own copy of Three.js in a #three-src block, so it works offline; otherwise it comes from the CDN. */
 function w3Load(){if(T3)return Promise.resolve(T3);if(W3.loading)return W3.loading;W3.st="loading";
-  W3.loading=import(THREE_URL).then(function(m){T3=m;return m;},function(e){W3.loading=null;W3.st="fail";W3.err="net";throw e;});return W3.loading;}
+  var el=document.getElementById("three-src"),own=null;if(el&&el.textContent.length>1000)try{own=URL.createObjectURL(new Blob([el.textContent],{type:"text/javascript"}));}catch(e){own=null;}
+  var p=own?import(own).catch(function(){return import(THREE_URL);}):import(THREE_URL);
+  W3.loading=p.then(function(m){T3=m;return m;},function(e){W3.loading=null;W3.st="fail";W3.err="net";throw e;});return W3.loading;}
 /* ---- textures ---- */
 function w3Canvas(w,h){var c=document.createElement("canvas");c.width=w;c.height=h;return c;}
 function w3Tex(cv,rep){var t=new T3.CanvasTexture(cv);t.colorSpace=T3.SRGBColorSpace;if(rep)t.wrapS=t.wrapT=T3.RepeatWrapping;if(W3.q==="high")t.anisotropy=Math.min(8,W3.ren.capabilities.getMaxAnisotropy());return t;}

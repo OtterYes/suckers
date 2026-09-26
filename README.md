@@ -229,6 +229,9 @@ node tools/flows.cjs                        # functional checks: buying, bosses,
                                             # and the 3D city (walking, cards, building, blimps, fallback)
 node tools/flows.cjs city                   # only the checks whose name contains "city"
 node tools/shots.cjs out/                   # screenshots of the main screens from simulated saves
+node tools/pc.cjs                           # the PC edition: dist/Grind-to-1520/ (game file, launcher,
+                                            # readme) and a .zip; Three.js and the fonts are built in
+GAME=dist/Grind-to-1520/grind-to-1520.html node tools/flows.cjs   # run any check against the PC edition
 ```
 
 When the page is opened from a local file, it exposes `window.__g1520` so the Playwright checks can

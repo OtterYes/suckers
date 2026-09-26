@@ -9,7 +9,8 @@ function arg(name, def) {
 }
 
 (async () => {
-  const file = "file://" + path.resolve(__dirname, "..", "index.html");
+  // GAME=dist/Grind-to-1520/grind-to-1520.html checks the PC edition instead.
+  const file = "file://" + path.resolve(__dirname, "..", process.env.GAME || "index.html");
   const browser = await chromium.launch();
   const errors = [];
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });

@@ -7,15 +7,17 @@ const cp = require("child_process");
 
 const URL = "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js";
 const LOCAL = path.join(__dirname, "vendor", "three.module.min.js");
+const LICENSE = path.join(__dirname, "vendor", "THREE-LICENSE.txt");
 
 function ensureThree() {
-  if (fs.existsSync(LOCAL)) return LOCAL;
+  if (fs.existsSync(LOCAL) && fs.existsSync(LICENSE)) return LOCAL;
   fs.mkdirSync(path.dirname(LOCAL), { recursive: true });
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "three-"));
   cp.execSync("npm pack three@0.160.0 --silent", { cwd: tmp, stdio: ["ignore", "pipe", "inherit"] });
   const tgz = fs.readdirSync(tmp).find((f) => f.endsWith(".tgz"));
-  cp.execSync(`tar -xzf ${tgz} package/build/three.module.min.js`, { cwd: tmp });
+  cp.execSync(`tar -xzf ${tgz} package/build/three.module.min.js package/LICENSE`, { cwd: tmp });
   fs.copyFileSync(path.join(tmp, "package", "build", "three.module.min.js"), LOCAL);
+  fs.copyFileSync(path.join(tmp, "package", "LICENSE"), LICENSE);
   return LOCAL;
 }
 
@@ -25,4 +27,4 @@ async function routeThree(page) {
   await page.route(URL, (r) => r.fulfill({ path: file, headers: { "content-type": "text/javascript", "access-control-allow-origin": "*" } }));
 }
 
-module.exports = { URL, LOCAL, ensureThree, routeThree };
+module.exports = { URL, LOCAL, LICENSE, ensureThree, routeThree };
