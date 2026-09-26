@@ -232,6 +232,8 @@ node tools/shots.cjs out/                   # screenshots of the main screens fr
 node tools/pc.cjs                           # the PC edition: dist/Grind-to-1520/ (game file, launcher,
                                             # readme) and a .zip; Three.js and the fonts are built in
 GAME=dist/Grind-to-1520/grind-to-1520.html node tools/flows.cjs   # run any check against the PC edition
+node tools/devsave.cjs                      # a maxed-out save to explore (dist/dev-save.txt): paste it
+                                            # into Settings → Backup code → Restore
 ```
 
 When the page is opened from a local file, it exposes `window.__g1520` so the Playwright checks can
