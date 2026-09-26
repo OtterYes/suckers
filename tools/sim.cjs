@@ -108,6 +108,7 @@ function simulate(opts) {
       T[q.d] = Math.min(760, T[q.d] + (opts.learn || 0));
       if (E.claimQuest) S.quests.list.forEach((qq, k) => { if (qq.done && !qq.claimed) E.claimQuest(S, k); });
       if (E.claimWeekly) E.claimWeekly(S);
+      if (E.pickCard && S.pick && !S.pick.done) while (!S.pick.done) E.pickCard(S, S.pick.got.length ? (S.pick.got[0] + 1) % 3 : Math.floor(rnd() * 3));
       ["l", "e", "r", "c"].forEach((r) => { while (S.chests[r] > 0) E.openChest(S, r, rnd); });
       if (E.evoCheck) E.evoCheck(S, t);
       shop();
