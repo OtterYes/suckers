@@ -1354,6 +1354,43 @@ DEF("psda.prob","psda","Probability",[1],function(R){
     t:"The denominator is the total number of marbles, not the number of other marbles."};
   return withMC(R,it,FO(num,T),[FO(bl,T),FO(num,T-num),FO(ask==="red"?g:r,T),FO(T-num,T)],true);
 });
+DEF("psda.infer","psda","Inference from sample statistics",[2,3],function(R,lv){
+  var kind=lv>=3?PK(R,["size","scope","moe"]):PK(R,["est","est","moe"]);
+  if(kind==="est"){
+    var act=PK(R,["walk to school","play a school sport","have a part-time job","take the bus to school","read for fun every week","volunteer in the community"]);
+    var n=PK(R,[40,50,60,80,100,120,150,200]),m=PK(R,[6,8,10,12,15,20,25]),pop=n*m,k=RI(R,Math.ceil(0.15*n),Math.floor(0.7*n)),ans=k*m;
+    var it={lv:2,stem:"A random sample of "+N(n)+" of the "+N(pop)+" students at a high school were asked whether they "+act+". Of the students surveyed, "+k+" said yes. Based on this sample, about how many students at the school "+act+"?",
+      x:"In the sample, "+k+" out of "+n+" said yes. Apply that rate to all "+N(pop)+" students: "+FR(k,n)+" × "+N(pop)+" = "+N(ans)+".",
+      t:k+" is only the count in the sample. A random sample’s proportion estimates the whole school’s proportion, so scale it up."};
+    if(R()<0.35){it.spr={vals:[ans]};return it;}
+    return withMC(R,it,NO(ans),[NO(k),NO(pop-ans),NO(Math.round(ans/2)),NO(n-k)],true,nearFill(R,ans));
+  }
+  if(kind==="moe"){
+    var P=PK(R,[["registered voters in a city","registered voters in the city","support a new bike-lane plan"],["adults in a county","adults in the county","say they get enough sleep"],["students at a large university","students at the university","live on campus"],["customers of a grocery chain","customers of the chain","use its mobile app"],["residents of a town","residents of the town","want a new public pool"]]);
+    var n2=PK(R,[300,400,500,600,800,1000,1200]),p=RI(R,28,72),mo=PK(R,[2,3,4,5,6]),lo=p-mo,hi=p+mo;
+    var inside=R()<0.5?lo+RI(R,0,mo-1):hi-RI(R,0,mo-1);
+    var it2={lv:lv>=3?3:2,stem:"A random sample of "+N(n2)+" "+P[0]+" found that "+p+"% "+P[2]+". The margin of error for this estimate is "+mo+" percentage points. Which of the following is a plausible value for the percent of all "+P[1]+" who "+P[2]+"?",
+      x:"A margin of error of "+mo+" points around "+p+"% gives a plausible range of "+lo+"% to "+hi+"%. Of the choices, only "+inside+"% falls in that range.",
+      t:"Values just outside the range are the trap. The plausible values stop at "+lo+"% and "+hi+"%."};
+    return withMC(R,it2,NO(inside,"%"),[NO(lo-RI(R,1,4),"%"),NO(hi+RI(R,1,4),"%"),NO(p+2*mo+RI(R,1,3),"%"),NO(p-2*mo-RI(R,1,3),"%")],true,function(i){return NO(hi+4+i,"%");});
+  }
+  if(kind==="size"){
+    var Q=PK(R,[["the mean height of the sunflowers in a large field","sunflowers"],["the mean commute time of workers in a city","workers"],["the mean number of hours of sleep of students at a large school","students"],["the mean weight of apples from an orchard","apples"]]);
+    var a=PK(R,[40,50,60,80,100]),b=a*PK(R,[4,5,6,8,10]),big=R()<0.5?"A":"B",small=big==="A"?"B":"A",nA=big==="A"?b:a,nB=big==="A"?a:b;
+    var it3={lv:3,stem:"Two researchers estimated "+Q[0]+". Researcher A measured a random sample of "+N(nA)+" "+Q[1]+", and Researcher B measured a random sample of "+N(nB)+" "+Q[1]+" from the same population, using the same method. Whose estimate is likely to have the smaller margin of error?",
+      x:"Larger random samples vary less from the population they come from, so the margin of error shrinks as the sample grows. Researcher "+big+" used the larger sample.",
+      t:"Both samples come from the same population, so the population can’t explain a difference. Sample size does."};
+    return withMC(R,it3,TO("Researcher "+big+"’s, because a larger random sample tends to give a smaller margin of error"),[TO("Researcher "+small+"’s, because a smaller sample is easier to measure carefully"),TO("Both will have the same margin of error, because the samples came from the same population"),TO("It can’t be determined, because the margin of error depends only on the size of the population")],false);
+  }
+  var G=PK(R,[{s:"ninth graders at Ridgeview High School",all:"All ninth graders at Ridgeview High School",wide:"All high school students in the state",other:"All twelfth graders at Ridgeview High School",did:"use a paper planner"},
+    {s:"members of a city’s public library",all:"All members of the city’s public library",wide:"All residents of the city",other:"All members of public libraries in other cities",did:"borrowed an e-book last month"},
+    {s:"customers of a gym’s downtown location",all:"All customers of the gym’s downtown location",wide:"All adults in the city",other:"All customers of the gym’s suburban location",did:"work out before 8 a.m."}]);
+  var n3=PK(R,[60,80,120,150,200]),p3=RI(R,20,80);
+  var it4={lv:3,stem:"A researcher selected a random sample of "+n3+" "+G.s+" and found that "+p3+"% of them "+G.did+". To which group can the results of this survey most appropriately be generalized?",
+    x:"A random sample represents the population it was drawn from, and only that population. This sample was drawn from "+G.s+", so the results generalize to that whole group.",
+    t:"Random sampling lets you generalize beyond the "+n3+" people surveyed, but not to a wider or different group than the one sampled."};
+  return withMC(R,it4,TO(G.all),[TO(G.wide),TO(G.other),TO("Only the "+n3+" "+G.s+" who were surveyed")],false);
+});
 
 /* ---------------- GEOMETRY & TRIGONOMETRY ---------------- */
 var TRIPLES=[[3,4,5],[5,12,13],[8,15,17],[7,24,25],[20,21,29],[9,40,41]];
@@ -1545,19 +1582,22 @@ c:[V("b")+"<sub>1</sub> = "+FRH("2"+V("A"),V("h"))+" "+MINUS+" "+V("b")+"<sub>2<
 ;
 /* ===== Game engine (DOM-free) ===== */
 var DOMAINS={
- ii:{name:"Information & Ideas",short:"Info & Ideas",sec:"rw",w:0.26,color:"#6CB8FF",skills:["Central Ideas and Details","Command of Evidence: Textual","Command of Evidence: Quantitative","Inferences"]},
- cs:{name:"Craft & Structure",short:"Craft",sec:"rw",w:0.28,color:"#A993FF",skills:["Words in Context","Text Structure and Purpose","Cross-Text Connections"]},
- eoi:{name:"Expression of Ideas",short:"Expression",sec:"rw",w:0.20,color:"#4FD1D9",skills:["Transitions","Rhetorical Synthesis"]},
- sec:{name:"Standard English Conventions",short:"Conventions",sec:"rw",w:0.26,color:"#8FA2FF",skills:["Boundaries","Form, Structure, and Sense"]},
- alg:{name:"Algebra",short:"Algebra",sec:"m",w:0.35,color:"#FFB547",skills:["Linear equations in one variable","Linear functions","Linear equations in two variables","Systems of two linear equations","Linear inequalities"]},
- adv:{name:"Advanced Math",short:"Adv. Math",sec:"m",w:0.325,color:"#FF8F66",skills:["Nonlinear functions","Nonlinear equations","Equivalent expressions"]},
- psda:{name:"Problem-Solving & Data",short:"Data",sec:"m",w:0.20,color:"#EBD36C",skills:["Ratios, rates, proportions, and units","Percentages","One-variable data","Two-variable data","Probability","Inference from sample statistics"]},
- geo:{name:"Geometry & Trig",short:"Geo & Trig",sec:"m",w:0.125,color:"#B8DC7C",skills:["Area and volume","Lines, angles, and triangles","Right triangles and trigonometry","Circles"]}
+ ii:{name:"Information & Ideas",short:"Info & Ideas",sec:"rw",w:0.26,color:"#5C9DFF",skills:["Central Ideas and Details","Command of Evidence: Textual","Command of Evidence: Quantitative","Inferences"]},
+ cs:{name:"Craft & Structure",short:"Craft",sec:"rw",w:0.28,color:"#9D7CFF",skills:["Words in Context","Text Structure and Purpose","Cross-Text Connections"]},
+ eoi:{name:"Expression of Ideas",short:"Expression",sec:"rw",w:0.20,color:"#2FDDB9",skills:["Transitions","Rhetorical Synthesis"]},
+ sec:{name:"Standard English Conventions",short:"Conventions",sec:"rw",w:0.26,color:"#E57BFF",skills:["Boundaries","Form, Structure, and Sense"]},
+ alg:{name:"Algebra",short:"Algebra",sec:"m",w:0.35,color:"#FF9A3D",skills:["Linear equations in one variable","Linear functions","Linear equations in two variables","Systems of two linear equations","Linear inequalities"]},
+ adv:{name:"Advanced Math",short:"Adv. Math",sec:"m",w:0.325,color:"#FF6B8B",skills:["Nonlinear functions","Nonlinear equations","Equivalent expressions"]},
+ psda:{name:"Problem-Solving & Data",short:"Data",sec:"m",w:0.20,color:"#D2EE55",skills:["Ratios, rates, proportions, and units","Percentages","One-variable data","Two-variable data","Probability","Inference from sample statistics"]},
+ geo:{name:"Geometry & Trig",short:"Geo & Trig",sec:"m",w:0.125,color:"#5BE37D",skills:["Area and volume","Lines, angles, and triangles","Right triangles and trigonometry","Circles"]}
 };
 var DKEYS=["ii","cs","eoi","sec","alg","adv","psda","geo"],RW_KEYS=["ii","cs","eoi","sec"],M_KEYS=["alg","adv","psda","geo"];
 var PACE={rw:71,m:95};
-var QDIFF={1:450,2:560,3:670},SIGMA=70,K_FRESH=18,K_REPEAT=5;
-var SEED_SCORES={ii:515,cs:575,eoi:515,sec:575,alg:655,adv:580,psda:580,geo:580};
+var QDIFF={1:450,2:560,3:670},SIGMA=70,K_FRESH=18,K_REPEAT=5,PLACE_N=20,PLACE_MU=160,PLACE_SD=170,PLACE_POW=0.6;
+/* Every domain starts at the floor of the scale (160), so a new climb starts at 320. */
+var SEED_SCORES={ii:160,cs:160,eoi:160,sec:160,alg:160,adv:160,psda:160,geo:160};
+/* The Oct 2025 report this game was first seeded with. It now marks a milestone on the climb. */
+var BASELINE={total:1160,label:"Oct 2025 PSAT"};
 var XP_LV={1:10,2:15,3:25};
 var ECO={genCost:8,upCost:5,echo:5,sleepMin:5e6};
 var SPOT_INT=[10*60e3,24*3600e3,4*24*3600e3];
@@ -1569,8 +1609,8 @@ var DEFAULT_Q={
  "Boundaries":"Which choice completes the text so that it conforms to the conventions of Standard English?",
  "Form, Structure, and Sense":"Which choice completes the text so that it conforms to the conventions of Standard English?"
 };
-var TIERS={iron:{name:"Iron",color:"#9AA0AA"},bronze:{name:"Bronze",color:"#D0935F"},silver:{name:"Silver",color:"#CDD5E0"},gold:{name:"Gold",color:"#FFC933"},plat:{name:"Platinum",color:"#74E3D3"},diamond:{name:"Diamond",color:"#8EC5FF"},master:{name:"Master",color:"#C9A2FF"},gm:{name:"Grandmaster",color:"#FF9BB0"},perfect:{name:"Perfect",color:"#FFF1B8"}};
-var LADDER=[[320,"iron",""],[1000,"bronze","III"],[1040,"bronze","II"],[1080,"bronze","I"],[1120,"silver","III"],[1160,"silver","II"],[1200,"silver","I"],[1240,"gold","III"],[1270,"gold","II"],[1300,"gold","I"],[1330,"plat","III"],[1350,"plat","II"],[1370,"plat","I"],[1400,"diamond","III"],[1420,"diamond","II"],[1440,"diamond","I"],[1460,"master","II"],[1480,"master","I"],[1500,"gm","II"],[1510,"gm","I"],[1520,"perfect",""]];
+var TIERS={stone:{name:"Stone",color:"#9A968F"},copper:{name:"Copper",color:"#E0845E"},iron:{name:"Iron",color:"#A3B1C2"},bronze:{name:"Bronze",color:"#D0935F"},silver:{name:"Silver",color:"#CDD5E0"},gold:{name:"Gold",color:"#FFC933"},plat:{name:"Platinum",color:"#74E3D3"},diamond:{name:"Diamond",color:"#8EC5FF"},master:{name:"Master",color:"#C9A2FF"},gm:{name:"Grandmaster",color:"#FF9BB0"},perfect:{name:"Perfect",color:"#FFF1B8"}};
+var LADDER=[[320,"stone","III"],[400,"stone","II"],[480,"stone","I"],[560,"copper","III"],[640,"copper","II"],[720,"copper","I"],[800,"iron","III"],[870,"iron","II"],[940,"iron","I"],[1000,"bronze","III"],[1040,"bronze","II"],[1080,"bronze","I"],[1120,"silver","III"],[1160,"silver","II"],[1200,"silver","I"],[1240,"gold","III"],[1270,"gold","II"],[1300,"gold","I"],[1330,"plat","III"],[1350,"plat","II"],[1370,"plat","I"],[1400,"diamond","III"],[1420,"diamond","II"],[1440,"diamond","I"],[1460,"master","II"],[1480,"master","I"],[1500,"gm","II"],[1510,"gm","I"],[1520,"perfect",""]];
 var UPG={
  focus:{name:"Sharper Focus",desc:"+8 base sparks per correct answer",base:40,g:1.33,max:999},
  combo:{name:"Combo Engine",desc:"Streak bonus cap +10 (each streak step is +10%)",base:300,g:3.2,max:5},
@@ -1583,19 +1623,19 @@ var UPG={
 var UPG_ORDER=["focus","combo","eureka","pace","deep","mining","bounty"];
 var GENS=[
  {id:"neuron",name:"Neuron",base:5,rate:0.25,unlock:0,desc:"A single spark of understanding."},
- {id:"synapse",name:"Synapse",base:80,rate:2,unlock:0,desc:"Connections that fire together."},
- {id:"cortex",name:"Cortex Column",base:3600,rate:14,unlock:1200,desc:"Unlocks at Silver I (1200)."},
- {id:"palace",name:"Memory Palace",base:52000,rate:100,unlock:1240,desc:"Unlocks at Gold (1240)."},
- {id:"hyper",name:"Hyperfocus Engine",base:780000,rate:750,unlock:1330,desc:"Unlocks at Platinum (1330)."},
- {id:"galaxy",name:"Galaxy Brain",base:12.5e6,rate:6000,unlock:1400,desc:"Unlocks at Diamond (1400)."},
- {id:"perfect",name:"Perfect Mind",base:260e6,rate:55000,unlock:1500,desc:"Unlocks at Grandmaster (1500)."}
+ {id:"synapse",name:"Synapse",base:80,rate:2,unlock:480,desc:"Connections that fire together."},
+ {id:"cortex",name:"Cortex Column",base:3600,rate:14,unlock:1200,desc:"Stacks of practiced skill."},
+ {id:"palace",name:"Memory Palace",base:52000,rate:100,unlock:1240,desc:"Everything you know, filed where you can find it."},
+ {id:"hyper",name:"Hyperfocus Engine",base:780000,rate:750,unlock:1330,desc:"Attention that doesn\u2019t blink."},
+ {id:"galaxy",name:"Galaxy Brain",base:12.5e6,rate:6000,unlock:1400,desc:"Ideas at the scale of stars."},
+ {id:"perfect",name:"Perfect Mind",base:260e6,rate:55000,unlock:1500,desc:"Nothing left unanswered."}
 ];
 var GEN_BY={};GENS.forEach(function(g){GEN_BY[g.id]=g;});
 var PERKS=[
  {id:"lucid",at:3,name:"Lucid Dreams",desc:"Offline earnings rise from 10% to 25%, for up to 16 hours."},
  {id:"muscle",at:10,name:"Muscle Memory",desc:"Start every run with 10 Neurons and 5 Synapses."},
  {id:"golden",at:25,name:"Golden Eureka",desc:"Crits pay ×12 instead of ×7."},
- {id:"roots",at:50,name:"Deep Roots",desc:"Pathways cost 10% less."},
+ {id:"roots",at:50,name:"Deep Roots",desc:"Pathways and hubs cost 10% less."},
  {id:"flow",at:100,name:"Flow State",desc:"Pathways keep running for 10 minutes after you stop, not 3."},
  {id:"enlight",at:200,name:"Enlightened",desc:"All sparks ×1.5."}
 ];
@@ -1612,20 +1652,22 @@ function shuffle(arr,rnd){arr=arr.slice();for(var i=arr.length-1;i>0;i--){var j=
 
 function newState(now){
   var r={},dx={};DKEYS.forEach(function(d){r[d]=SEED_SCORES[d];dx[d]={xp:0,n:0,c:0,rec:""};});
-  return{v:2,pl:{lv:1,xp:0},chests:{c:0,r:1,e:0,l:0},relics:{},boosts:{dbl:0,crit:0,xp:0,shield:0},quests:null,weekly:null,bossT:{},boss:null,created:now,lastSeen:now,lastInteract:now,sparks:0,runSparks:0,lifeSparks:0,insight:0,insightEarned:0,sleeps:0,
+  return{v:3,pl:{lv:1,xp:0},hub:{ii:0,cs:0,eoi:0,sec:0,alg:0,adv:0,psda:0,geo:0},evo:{stage:0,seen:0},form:"network",set:null,baseline:{total:BASELINE.total,label:BASELINE.label},chests:{c:0,r:1,e:0,l:0},relics:{},boosts:{dbl:0,crit:0,xp:0,shield:0},quests:null,weekly:null,bossT:{},boss:null,created:now,lastSeen:now,lastInteract:now,sparks:0,runSparks:0,lifeSparks:0,insight:0,insightEarned:0,sleeps:0,
     up:{focus:0,combo:0,eureka:0,pace:0,deep:0,mining:0,bounty:0},gen:{neuron:0,synapse:0,cortex:0,palace:0,hyper:0,galaxy:0,perfect:0},
     r:r,dx:dx,sk:{},seen:{},flagged:{},spots:[],streak:0,bestStreak:0,
-    today:{date:"",correct:0,answered:0},days:{streak:0,best:0,last:""},cal:{},hist:[],ach:{},
+    today:{date:"",correct:0,answered:0,sparks:0},days:{streak:0,best:0,last:""},cal:{},hist:[],ach:{},
     g:null,gb:{rw:0,m:0,runs:0,hard:0,flawless:0,last:null},
-    stats:{answered:0,correct:0,hard:0,timeMs:0,eurekas:0,spotsCleared:0,packs:0,asks:0,gained:0},
-    peak:1160,ai:[],focus:"mix",settings:{sound:true},welcomed:false,buyN:1};
+    stats:{answered:0,correct:0,hard:0,timeMs:0,eurekas:0,spotsCleared:0,packs:0,asks:0,gained:0,sets:0,perfectSets:0},
+    peak:320,ai:[],focus:"mix",settings:{sound:true},welcomed:false,buyN:1};
 }
 function migrate(S,now){
   var base=newState(now);
   for(var k in base){if(!(k in S))S[k]=base[k];}
   if(!S.v||S.v<2){S.v=2;S.chests={c:0,r:1,e:0,l:0};}
-  ["up","gen","stats","gb","settings","days","today","pl","chests","boosts"].forEach(function(k){for(var j in base[k]){if(!(j in S[k]))S[k][j]=base[k][j];}});
+  ["up","gen","stats","gb","settings","days","today","pl","chests","boosts","hub","evo","baseline"].forEach(function(k){if(!S[k]||typeof S[k]!=="object")S[k]={};for(var j in base[k]){if(!(j in S[k]))S[k][j]=base[k][j];}});
   DKEYS.forEach(function(d){if(typeof S.r[d]!=="number")S.r[d]=SEED_SCORES[d];if(!S.dx[d])S.dx[d]={xp:0,n:0,c:0,rec:""};});
+  if(S.v<3){S.v=3;DKEYS.forEach(function(d){S.dx[d].cal=true;});}
+  if(FORMS.every(function(f){return f.id!==S.form;}))S.form="network";
   if(!Array.isArray(S.spots))S.spots=[];if(!Array.isArray(S.ai))S.ai=[];if(!Array.isArray(S.hist))S.hist=[];
   return S;
 }
@@ -1647,10 +1689,38 @@ function skillStars(S,d,sk){var s=S.sk[d+"|"+sk];if(!s)return 0;var th=[3,10,25,
 
 /* ---------- Rating ---------- */
 function pCorrect(r,lv,mc){var c=mc?0.25:0;var L=1/(1+Math.pow(10,(QDIFF[lv]-r)/SIGMA));return c+(1-c)*L;}
-function rateUpdate(S,d,lv,mc,correct,fresh){var r=S.r[d],p=pCorrect(r,lv,mc),K=fresh?K_FRESH:K_REPEAT;var nr=clamp(r+K*((correct?1:0)-p),160,760);S.r[d]=nr;return nr-r;}
+/* Placement: for a domain's first PLACE_N answers the rating is the most likely ability given every
+   answer so far, with a prior anchored at the bottom of the scale. Early answers climb gradually from
+   160; by the end of placement the answers outweigh the prior. After that, ordinary Elo takes over. */
+function placeLeft(S,d){var x=S.dx[d];return x.cal?0:Math.max(0,PLACE_N-x.n);}
+/* Posterior mean of ability on a 4-point grid (EAP scoring). Smoother than the single most likely value. */
+function placeEst(hist){
+  var lw=[],mx=-Infinity,r,i;
+  for(r=160;r<=760;r+=4){
+    var v=-(r-PLACE_MU)*(r-PLACE_MU)/(2*PLACE_SD*PLACE_SD);
+    for(i=0;i<hist.length;i++){var h=hist[i],p=clamp(pCorrect(r,h[0],h[1]===1),0.001,0.999);v+=h[2]?Math.log(p):Math.log(1-p);}
+    lw.push(v);if(v>mx)mx=v;
+  }
+  var sw=0,sr=0;for(i=0,r=160;r<=760;r+=4,i++){var w=Math.exp(lw[i]-mx);sw+=w;sr+=w*r;}
+  return sr/sw;
+}
+function rateUpdate(S,d,lv,mc,correct,fresh){
+  var r=S.r[d],x=S.dx[d],nr;
+  if(!x.cal&&x.n<=PLACE_N){
+    (x.pl||(x.pl=[])).push([lv,mc?1:0,correct?1:0]);
+    /* Rise toward the estimate as placement fills. A right answer never lowers the rating, a wrong one never raises it. */
+    var est=placeEst(x.pl),tgt=160+(est-160)*Math.pow(x.n/PLACE_N,PLACE_POW);
+    nr=correct?Math.max(r,tgt):Math.min(r,tgt);
+    if(x.n>=PLACE_N){x.cal=true;x.pl=null;}
+  }
+  else{var p=pCorrect(r,lv,mc),K=fresh?K_FRESH:K_REPEAT;nr=clamp(r+K*((correct?1:0)-p),160,760);}
+  S.r[d]=nr;return nr-r;
+}
 
 /* ---------- Selection ---------- */
 function diffWeights(r){var pe=clamp((600-r)/300,0.05,0.6),ph=clamp((r-500)/250,0.05,0.7),pm=Math.max(0.2,1-pe-ph),s=pe+pm+ph;return[pe/s,pm/s,ph/s];}
+/* Difficulty follows the rating, nudged up while recent answers in the domain are mostly right. */
+function lvRating(S,d){var r=S.r[d],rec=S.dx[d].rec.slice(-6);if(rec.length>=3){var acc=(rec.split("1").length-1)/rec.length;r+=Math.max(0,acc-0.6)*225;}return r;}
 function pickLv(r,rnd){var w=diffWeights(r),x=rnd();return x<w[0]?1:x<w[0]+w[1]?2:3;}
 function domainWeight(S,d){return DOMAINS[d].w*Math.pow(1+(760-S.r[d])/150,1.6);}
 function pickDomain(S,rnd,keys){keys=keys||DKEYS;return wpick(keys,keys.map(function(d){return domainWeight(S,d);}),rnd);}
@@ -1690,11 +1760,15 @@ function genFor(d,lv,rnd){
   for(var t=0;t<12;t++){var id=ids[Math.floor(rnd()*ids.length)];var q=fromGen(id,lv,1+Math.floor(rnd()*2147483646));if(q)return q;}
   return null;
 }
-function pickBank(S,d,lv,rnd,recent){
-  var pool=RW_BANK.filter(function(it){return it.d===d&&!S.flagged[it.id]&&recent.indexOf("b:"+it.id)<0;});
-  if(!pool.length)pool=RW_BANK.filter(function(it){return it.d===d&&!S.flagged[it.id];});
+function pickBank(S,d,lv,rnd,recent,skf){
+  var pool=RW_BANK.filter(function(it){return it.d===d&&(!skf||it.sk===skf)&&!S.flagged[it.id]&&recent.indexOf("b:"+it.id)<0;});
+  if(!pool.length)pool=RW_BANK.filter(function(it){return it.d===d&&(!skf||it.sk===skf)&&!S.flagged[it.id];});
   if(!pool.length)return null;
-  var ex=pool.filter(function(it){return it.lv===lv;});if(ex.length>=2)pool=ex;
+  /* Unseen questions first: at the asked level, then one step harder, then one step easier. */
+  var at=function(L){return pool.filter(function(it){return it.lv===L;});},unseen=function(a){return a.filter(function(it){return!(S.seen[it.id]>0);});};
+  var tries=[at(lv),at(lv+1),at(lv-1)];
+  for(var i=0;i<tries.length;i++){var f=unseen(tries[i]);if(f.length)return f[Math.floor(rnd()*f.length)];}
+  var ex=at(lv);if(ex.length>=2)pool=ex;
   return wpick(pool,pool.map(function(it){return 1/(1+3*(S.seen[it.id]||0));}),rnd);
 }
 function buildFor(S,d,lv,rnd,recent){
@@ -1717,13 +1791,33 @@ function fromSpot(S,s,rnd){
   if(!q){S.spots=S.spots.filter(function(x){return x!==s;});return null;}
   q.key=s.k;q.review=true;q.fresh=false;q.src="Blind spot review";return q;
 }
+function skFocus(f){
+  if(typeof f!=="string"||f.indexOf("sk:")!==0)return null;var i=f.indexOf("|");if(i<0)return null;
+  var d=f.slice(3,i),sk=f.slice(i+1);return DOMAINS[d]&&DOMAINS[d].skills.indexOf(sk)>=0?{d:d,sk:sk}:null;
+}
+function buildForSkill(S,d,sk,lv,rnd,recent){
+  recent=recent||[];var t;
+  if(DOMAINS[d].sec==="m"){
+    var gens=Object.keys(MGEN).filter(function(k){return MGEN[k].d===d&&MGEN[k].sk===sk;});
+    var st=MATH_STATIC.filter(function(it){return it.d===d&&it.sk===sk&&!S.flagged[it.id]&&recent.indexOf("s:"+it.id)<0;});
+    if(st.length&&(!gens.length||rnd()<0.2)){var ex=st.filter(function(it){return it.lv===lv;}),pool=ex.length?ex:st;return fromStatic(S,pool[Math.floor(rnd()*pool.length)],rnd);}
+    var fit=gens.filter(function(k){return MGEN[k].lvs.indexOf(lv)>=0;}),ids=fit.length?fit:gens;
+    for(t=0;t<12&&ids.length;t++){var id=ids[Math.floor(rnd()*ids.length)],L=MGEN[id].lvs.indexOf(lv)>=0?lv:MGEN[id].lvs[Math.floor(rnd()*MGEN[id].lvs.length)];
+      var q=fromGen(id,L,1+Math.floor(rnd()*2147483646));if(q)return q;}
+    return null;
+  }
+  if(sk==="Boundaries"&&rnd()<0.7){for(t=0;t<6;t++){var qb=fromGen("sec.bound",lv,1+Math.floor(rnd()*2147483646));if(qb)return qb;}}
+  var b=pickBank(S,d,lv,rnd,recent,sk);return b?fromBank(S,b,rnd):null;
+}
 function nextQuestion(S,now,rnd,recent){
   if(S.ai.length&&(S.focus==="mix"||S.focus==="fresh"||S.focus==="rw"||S.focus===S.ai[0].d)){return fromAI(S,S.ai.shift(),rnd);}
+  var sf=skFocus(S.focus);
+  if(sf){var sq0=buildForSkill(S,sf.d,sf.sk,pickLv(lvRating(S,sf.d),rnd),rnd,recent);if(sq0)return sq0;}
   var due=dueSpots(S,now);
   if(due.length&&(S.focus==="spots"||rnd()<0.3)){for(var i=0;i<due.length;i++){var sq=fromSpot(S,due[i],rnd);if(sq)return sq;}}
   var keys=S.focus==="rw"?RW_KEYS:S.focus==="m"?M_KEYS:null;
-  var d=DOMAINS[S.focus]?S.focus:pickDomain(S,rnd,keys);
-  var lv=pickLv(S.r[d],rnd);
+  var d=DOMAINS[S.focus]?S.focus:sf?sf.d:pickDomain(S,rnd,keys);
+  var lv=pickLv(lvRating(S,d),rnd);
   return buildFor(S,d,lv,rnd,recent);
 }
 
@@ -1746,8 +1840,9 @@ function sprDisplay(q){var v=q.spr.vals[0];if(Number.isInteger(v))return N(v);fo
 /* ---------- Economy ---------- */
 function achCount(S){return Object.keys(S.ach).length;}
 function hasPerk(S,id){return S.insight>=PERK_BY[id].at;}
-function globalMult(S){return(1+0.1*S.insight)*(1+0.02*achCount(S))*(hasPerk(S,"enlight")?1.5:1)*(1+relicSum(S,"spark"));}
-function rawRate(S){var t=0;GENS.forEach(function(g){t+=S.gen[g.id]*g.rate;});return t;}
+function globalMult(S){return(1+0.1*S.insight)*(1+0.02*achCount(S))*(hasPerk(S,"enlight")?1.5:1)*(1+relicSum(S,"spark"))*evoMult(S);}
+function pathRate(S){var t=0;GENS.forEach(function(g){t+=S.gen[g.id]*g.rate;});return t;}
+function rawRate(S){return pathRate(S)+hubRate(S);}
 function idleRate(S){return rawRate(S)*globalMult(S)*(1+relicSum(S,"rate"));}
 function activeWindow(S){return hasPerk(S,"flow")?600e3:180e3;}
 function upCost(id,lvl){var U=UPG[id];return Math.ceil(U.base*ECO.upCost*Math.pow(U.g,lvl));}
@@ -1756,14 +1851,14 @@ function genMax(S,id){var n=0;while(n<5000&&genCost(S,id,n+1)<=S.sparks)n++;retu
 function genUnlocked(S,G){return S.peak>=G.unlock;}
 function buyUp(S,id){var U=UPG[id],l=S.up[id];if(l>=U.max)return false;var c=upCost(id,l);if(S.sparks<c)return false;S.sparks-=c;S.up[id]++;return true;}
 function buyGen(S,id,n){var G=GEN_BY[id];if(!genUnlocked(S,G))return 0;if(n==="max")n=genMax(S,id);if(!n)return 0;var c=genCost(S,id,n);if(S.sparks<c)return 0;S.sparks-=c;S.gen[id]+=n;return n;}
-function addSparks(S,x){if(!(x>0))return;S.sparks+=x;S.runSparks+=x;S.lifeSparks+=x;}
+function addSparks(S,x){if(!(x>0))return;S.sparks+=x;S.runSparks+=x;S.lifeSparks+=x;S.today.sparks=(S.today.sparks||0)+x;}
 function tick(S,dtSec,active){if(active&&dtSec>0){var g=idleRate(S)*dtSec;addSparks(S,g);return g;}return 0;}
 function offlineGain(S,now){var el=(now-S.lastSeen)/1000;if(el<120)return null;var cap=hasPerk(S,"lucid")?16*3600:8*3600,pct=(hasPerk(S,"lucid")?0.25:0.10)+relicSum(S,"offline");var used=Math.min(el,cap);var g=idleRate(S)*used*pct;return g>0?{sec:el,gain:g,pct:pct,capped:el>cap}:null;}
 var SLEEP_MIN=1e6;
 function insightTotal(life){return Math.floor(3*Math.sqrt(life/ECO.sleepMin));}
 function insightGain(S){if(S.runSparks<ECO.sleepMin)return 0;return Math.max(0,insightTotal(S.lifeSparks)-S.insightEarned);}
 function doSleep(S){var g=insightGain(S);if(g<1)return 0;S.insight+=g;S.insightEarned+=g;S.sleeps++;S.sparks=0;S.runSparks=0;
-  for(var k in S.up)S.up[k]=0;for(var j in S.gen)S.gen[j]=0;if(hasPerk(S,"muscle")){S.gen.neuron=10;S.gen.synapse=5;}return g;}
+  for(var k in S.up)S.up[k]=0;for(var j in S.gen)S.gen[j]=0;for(var h in S.hub)S.hub[h]=0;if(hasPerk(S,"muscle")){S.gen.neuron=10;S.gen.synapse=5;}return g;}
 
 /* ---------- Blind spots ---------- */
 function updateSpots(S,q,correct,now){
@@ -1771,7 +1866,7 @@ function updateSpots(S,q,correct,now){
   if(!correct){
     if(i>=0){var s=S.spots[i];s.box=0;s.due=now+SPOT_INT[0];s.miss++;return"reset";}
     var ref=q.kind==="ai"?q.aiItem:q.ref;
-    S.spots.push({k:q.key,kind:q.kind,ref:ref,d:q.d,box:0,due:now+SPOT_INT[0],miss:1,added:now});
+    S.spots.push({k:q.key,kind:q.kind,ref:ref,d:q.d,sk:q.sk,box:0,due:now+SPOT_INT[0],miss:1,added:now});
     if(S.spots.length>300)S.spots.splice(0,S.spots.length-300);
     return"added";
   }
@@ -1781,7 +1876,7 @@ function updateSpots(S,q,correct,now){
 }
 
 /* ---------- Days & history ---------- */
-function rollDay(S,now){var k=dayKey(now);if(S.today.date!==k)S.today={date:k,correct:0,answered:0};}
+function rollDay(S,now){var k=dayKey(now);if(S.today.date!==k)S.today={date:k,correct:0,answered:0,sparks:0};}
 function dayStreakShown(S,now){var k=dayKey(now),y=dayOff(now,-1);return(S.days.last===k||S.days.last===y)?S.days.streak:0;}
 function recordDay(S,now,correct){
   var k=dayKey(now);var c=S.cal[k]||(S.cal[k]=[0,0]);c[0]++;if(correct)c[1]++;
@@ -1848,7 +1943,8 @@ function applyAnswer(S,q,correct,info){
   rollDay(S,now);S.today.answered++;S.stats.answered++;if(correct)S.stats.correct++;
   S.stats.timeMs+=Math.min(info.ms||0,300000);
   var dx=S.dx[d];dx.n++;if(correct)dx.c++;dx.rec=(dx.rec+(correct?"1":"0")).slice(-20);
-  var skk=d+"|"+q.sk,sk=S.sk[skk]||(S.sk[skk]={n:0,c:0});sk.n++;if(correct)sk.c++;
+  var skk=d+"|"+q.sk,starsB=skillStars(S,d,q.sk),sk=S.sk[skk]||(S.sk[skk]={n:0,c:0});sk.n++;if(correct)sk.c++;
+  var starsA=skillStars(S,d,q.sk);if(starsA>starsB)res.star={d:d,sk:q.sk,stars:starsA};
   if(q.kind==="bank")S.seen[q.ref]=(S.seen[q.ref]||0)+1;
   if(q.kind==="static")S.seen["s:"+q.ref]=(S.seen["s:"+q.ref]||0)+1;
   res.dr=rateUpdate(S,d,q.lv,!q.spr,correct,q.fresh);
@@ -1879,6 +1975,8 @@ function applyAnswer(S,q,correct,info){
   res.projBefore=before;res.projAfter=after;
   S.lastInteract=now;
   lootAfterAnswer(S,q,correct,info,res);
+  res.evolved=evoCheck(S,now);
+  if(info.mode==="train"&&!info.boss)res.set=setRecord(S,correct,res,now);
   res.newAch=checkAch(S,now);
   return res;
 }
@@ -2092,6 +2190,110 @@ ACH.push(
  ["bs8","Clean Sweep","Beat all 8 bosses at least once.",function(S){return DKEYS.every(function(d){return bossTier(S,d)>=2;});}],
  ["bs5t","Boss Farmer","Beat any boss at tier 5.",function(S){return DKEYS.some(function(d){return bossTier(S,d)>=6;});}],
  ["q10","Quest Log","Claim 10 daily quests.",function(S){return(S.stats.quests||0)>=10;}]
+);
+
+;
+/* ===== Growth layer: connections, evolution, hubs, sets (DOM-free) ===== */
+/* Connections: each star a skill earns lights one node in the engine (29 skills × 5 stars). */
+var STAR_AT=[3,10,25,50,100];
+function connD(S,d){var t=0,sks=DOMAINS[d].skills;for(var i=0;i<sks.length;i++)t+=skillStars(S,d,sks[i]);return t;}
+function connMaxD(d){return 5*DOMAINS[d].skills.length;}
+function conn(S){var t=0;for(var i=0;i<DKEYS.length;i++)t+=connD(S,DKEYS[i]);return t;}
+var CONN_MAX=DKEYS.reduce(function(a,d){return a+connMaxD(d);},0);
+function skillCorrect(S,d,sk){var s=S.sk[d+"|"+sk];return s?s.c:0;}
+function nextStarAt(c){for(var i=0;i<STAR_AT.length;i++)if(c<STAR_AT[i])return STAR_AT[i];return null;}
+
+/* Evolution is permanent: connections carry the engine through stages, and some stages unlock a new form. */
+var FORMS=[
+ {id:"network",name:"Neural Engine",short:"Network",at:0,verb:"Send pulse",title:"Power the network"},
+ {id:"reactor",name:"Reactor",short:"Reactor",at:5,verb:"Charge",title:"Charge the reactor"},
+ {id:"universe",name:"Universe",short:"Universe",at:7,verb:"Ignite",title:"Fuel your star"}
+];
+var EVO=[
+ {at:0,name:"Seed",chest:null,line:"One spark at the bottom of the scale. Everything grows from here."},
+ {at:3,name:"Spark",chest:"r",line:"Your first skill nodes are firing. Domain hubs are online."},
+ {at:8,name:"Circuit",chest:"r",line:"Nodes are wiring into circuits."},
+ {at:14,name:"Network",chest:"r",line:"Every domain is connected to the core."},
+ {at:22,name:"Cortex",chest:"e",line:"Dense clusters of practiced skill."},
+ {at:30,name:"Reactor",chest:"e",line:"The core ignites. Your engine becomes a reactor."},
+ {at:40,name:"Fusion",chest:"e",line:"Domains fuse. The reactor runs hotter."},
+ {at:52,name:"Star",chest:"l",line:"The reactor collapses into a star. Your engine becomes a universe."},
+ {at:66,name:"Constellation",chest:"e",line:"Your skills form constellations."},
+ {at:85,name:"Galaxy",chest:"l",line:"A galaxy of connected skills."},
+ {at:110,name:"Singularity",chest:"l",line:"Almost nothing left unlit."}
+];
+var EVO_STEP=0.05;
+function evoMult(S){return 1+EVO_STEP*((S.evo&&S.evo.stage)||0);}
+function evoTarget(S){var c=conn(S),i=0;while(i<EVO.length-1&&c>=EVO[i+1].at)i++;return i;}
+function formAt(stage){for(var i=1;i<FORMS.length;i++)if(FORMS[i].at===stage)return FORMS[i];return null;}
+function formOpen(S,id){for(var i=0;i<FORMS.length;i++)if(FORMS[i].id===id)return S.evo.stage>=FORMS[i].at;return false;}
+function formOf(S){for(var i=0;i<FORMS.length;i++)if(FORMS[i].id===S.form&&S.evo.stage>=FORMS[i].at)return FORMS[i];return FORMS[0];}
+function evoCheck(S,now){
+  var tgt=evoTarget(S),out=[];
+  while(S.evo.stage<tgt){S.evo.stage++;var E=EVO[S.evo.stage];if(E.chest)S.chests[E.chest]++;out.push(S.evo.stage);var f=formAt(S.evo.stage);if(f)S.form=f.id;}
+  return out;
+}
+
+/* Domain hubs: one generator per domain. Sparks buy levels, learning raises the cap,
+   and the domain's rating sets how hard each level works. */
+var HUB={rate:0.25,base:60,g:1.2,miles:[10,25,50],stage:1};
+function hubLv(S,d){return(S.hub&&S.hub[d])||0;}
+function hubCap(S,d){return 3+Math.round(47*connD(S,d)/connMaxD(d));}
+function hubMastery(S,d){return 0.2+1.4*Math.pow(Math.max(0,S.r[d]-160)/600,1.5);}
+function hubMile(L){var m=1;for(var i=0;i<HUB.miles.length;i++)if(L>=HUB.miles[i])m*=2;return m;}
+function hubOutAt(S,d,L){return L>0?HUB.rate*L*hubMile(L)*hubMastery(S,d):0;}
+function hubOut(S,d){return hubOutAt(S,d,hubLv(S,d));}
+function hubGainNext(S,d){return hubOutAt(S,d,hubLv(S,d)+1)-hubOut(S,d);}
+function hubRate(S){var t=0;for(var i=0;i<DKEYS.length;i++)t+=hubOut(S,DKEYS[i]);return t;}
+function hubCost(S,d){return Math.ceil(HUB.base*Math.pow(HUB.g,hubLv(S,d))*(hasPerk(S,"roots")?0.9:1));}
+function hubsOpen(S){return S.evo.stage>=HUB.stage;}
+function hubCanBuy(S,d){return hubsOpen(S)&&hubLv(S,d)<hubCap(S,d);}
+function buyHub(S,d){if(!hubCanBuy(S,d))return false;var c=hubCost(S,d);if(S.sparks<c)return false;S.sparks-=c;S.hub[d]=hubLv(S,d)+1;S.stats.hubBuys=(S.stats.hubBuys||0)+1;return true;}
+
+/* Sets: questions come in tens. Each finished set pays a bonus and reports what grew. */
+var SET_N=10,SET_BONUS=0.5;
+function setFresh(S,now){return{n:0,c:0,sp:0,run:0,best:0,conn0:conn(S),p0:proj(S).total,r0:DKEYS.map(function(d){return S.r[d];}),t0:now};}
+function setRecord(S,correct,res,now){
+  if(!S.set||typeof S.set.n!=="number")S.set=setFresh(S,now);
+  var st=S.set;st.n++;st.sp+=res.gain;if(correct){st.c++;st.run++;if(st.run>st.best)st.best=st.run;}else st.run=0;
+  if(st.n<SET_N)return null;
+  var sum={n:st.n,c:st.c,sp:st.sp,best:st.best,conn:conn(S)-st.conn0,p0:st.p0,p1:proj(S).total,dr:[],ms:now-st.t0};
+  DKEYS.forEach(function(d,i){var dv=S.r[d]-st.r0[i];if(Math.abs(dv)>=0.5)sum.dr.push([d,dv]);});
+  sum.dr.sort(function(a,b){return b[1]-a[1];});
+  sum.bonus=sparkUnit(S)*st.c*SET_BONUS;addSparks(S,sum.bonus);
+  if(st.c===SET_N){S.chests.r++;sum.chest="r";S.stats.perfectSets=(S.stats.perfectSets||0)+1;}
+  S.stats.sets=(S.stats.sets||0)+1;
+  S.set=setFresh(S,now);
+  return sum;
+}
+
+/* Which skill a blind spot belongs to (older saves did not store it). */
+function spotSkill(s){
+  if(s.sk)return s.sk;var it=null;
+  if(s.kind==="bank")it=RW_BANK.find(function(x){return x.id===s.ref;});
+  else if(s.kind==="static")it=MATH_STATIC.find(function(x){return x.id===s.ref;});
+  else if(s.kind==="gen")it=s.ref&&MGEN[s.ref.t];
+  else if(s.kind==="ai")it=s.ref;
+  s.sk=(it&&it.sk)||null;return s.sk;
+}
+function spotsBySkill(S,now,dueOnly){var m={};S.spots.forEach(function(s){if(dueOnly&&s.due>now)return;var k=s.d+"|"+spotSkill(s);m[k]=(m[k]||0)+1;});return m;}
+
+ACH.push(
+ ["rcu","Copper","Climb to 560.",function(S){return S.peak>=560;}],
+ ["rir","Iron","Climb to 800.",function(S){return S.peak>=800;}],
+ ["rbr","Bronze","Climb to 1000.",function(S){return S.peak>=1000;}],
+ ["rsi","Silver","Climb to 1120.",function(S){return S.peak>=1120;}],
+ ["base","Back to Baseline","Climb past your last real PSAT score.",function(S){return S.peak>=((S.baseline&&S.baseline.total)||BASELINE.total);}],
+ ["ev1","First Light","Evolve your engine for the first time.",function(S){return S.evo.stage>=1;}],
+ ["ev5","Critical Mass","Evolve into the Reactor.",function(S){return S.evo.stage>=5;}],
+ ["ev7","Starborn","Evolve into the Universe.",function(S){return S.evo.stage>=7;}],
+ ["ev10","Singularity","Reach the final evolution.",function(S){return S.evo.stage>=EVO.length-1;}],
+ ["cn50","Wired","Light 50 skill nodes.",function(S){return conn(S)>=50;}],
+ ["cn100","Hardwired","Light 100 skill nodes.",function(S){return conn(S)>=100;}],
+ ["hb10","Hub Builder","Take a hub to level 10.",function(S){return DKEYS.some(function(d){return hubLv(S,d)>=10;});}],
+ ["hb8","Full Grid","Power all 8 hubs at once.",function(S){return DKEYS.every(function(d){return hubLv(S,d)>=1;});}],
+ ["set1","Set Complete","Finish a 10-question set.",function(S){return(S.stats.sets||0)>=1;}],
+ ["setp","Perfect Set","Go 10 for 10 in a set.",function(S){return(S.stats.perfectSets||0)>=1;}]
 );
 
 ;
