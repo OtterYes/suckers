@@ -1944,24 +1944,26 @@ function shuffle(arr,rnd){arr=arr.slice();for(var i=arr.length-1;i>0;i--){var j=
 
 function newState(now){
   var r={},dx={};DKEYS.forEach(function(d){r[d]=SEED_SCORES[d];dx[d]={xp:0,n:0,c:0,rec:""};});
-  return{v:5,pl:{lv:1,xp:0},hub:{ii:0,cs:0,eoi:0,sec:0,alg:0,adv:0,psda:0,geo:0},evo:{stage:0,seen:0},form:"network",set:null,baseline:{total:BASELINE.total,label:BASELINE.label},chests:{c:0,r:1,e:0,l:0},relics:{},boosts:{dbl:0,crit:0,xp:0,shield:0},quests:null,weekly:null,bossT:{},boss:null,created:now,lastSeen:now,lastInteract:now,sparks:0,runSparks:0,lifeSparks:0,insight:0,insightEarned:0,sleeps:0,
+  return{v:6,pl:{lv:1,xp:0},hub:{ii:0,cs:0,eoi:0,sec:0,alg:0,adv:0,psda:0,geo:0},evo:{stage:0,seen:0},form:"network",set:null,baseline:{total:BASELINE.total,label:BASELINE.label},chests:{c:0,r:1,e:0,l:0},relics:{},boosts:{dbl:0,crit:0,xp:0,shield:0},quests:null,weekly:null,bossT:{},boss:null,created:now,lastSeen:now,lastInteract:now,sparks:0,runSparks:0,lifeSparks:0,insight:0,insightEarned:0,sleeps:0,
     up:{focus:0,combo:0,eureka:0,pace:0,deep:0,mining:0,bounty:0},gen:{neuron:0,synapse:0,cortex:0,palace:0,hyper:0,galaxy:0,perfect:0},
     r:r,dx:dx,sk:{},seen:{},flagged:{},spots:[],streak:0,bestStreak:0,
     today:{date:"",correct:0,answered:0,sparks:0,ans:0},days:{streak:0,best:0,last:"",frz:0,frzWk:""},cal:{},hist:[],ach:{},
     g:null,gb:{rw:0,m:0,runs:0,hard:0,flawless:0,last:null,since:0},
-    rev:null,miss:[],lg:{wk:"",pts:0},wkc:{wk:"",done:false},seasons:[],season:{n:1,test:"PSAT/NMSQT",date:"",target:1520,start:now,p0:320,wk:"",wp:320,placed:""},seenV4:true,seenV5:true,visArena:false,arc:{},calib:{},pick:null,
+    rev:null,miss:[],lg:{wk:"",pts:0},wkc:{wk:"",done:false},seasons:[],season:{n:1,test:"PSAT/NMSQT",date:"",target:1520,start:now,p0:320,wk:"",wp:320,placed:""},seenV4:true,seenV5:true,seenV6:true,visArena:false,arc:{},calib:{},pick:null,city:cityFresh(),
     stats:{answered:0,correct:0,hard:0,timeMs:0,eurekas:0,spotsCleared:0,packs:0,asks:0,gained:0,sets:0,perfectSets:0},imports:[],
-    peak:320,ai:[],focus:"mix",settings:{sound:true,league:false,haptics:true,hl:true},welcomed:false,buyN:1};
+    peak:320,ai:[],focus:"mix",settings:{sound:true,league:false,haptics:true,hl:true,view:"engine",tod:"auto"},welcomed:false,buyN:1};
 }
 function migrate(S,now){
   var base=newState(now);
   for(var k in base){if(!(k in S))S[k]=base[k];}
   if(!S.v||S.v<2){S.v=2;S.chests={c:0,r:1,e:0,l:0};}
-  ["up","gen","stats","gb","settings","days","today","pl","chests","boosts","hub","evo","baseline","season","lg","wkc"].forEach(function(k){if(!S[k]||typeof S[k]!=="object")S[k]={};for(var j in base[k]){if(!(j in S[k]))S[k][j]=base[k][j];}});
+  ["up","gen","stats","gb","settings","days","today","pl","chests","boosts","hub","evo","baseline","season","lg","wkc","city"].forEach(function(k){if(!S[k]||typeof S[k]!=="object")S[k]={};for(var j in base[k]){if(!(j in S[k]))S[k][j]=base[k][j];}});
   DKEYS.forEach(function(d){if(typeof S.r[d]!=="number")S.r[d]=SEED_SCORES[d];if(!S.dx[d])S.dx[d]={xp:0,n:0,c:0,rec:""};});
   if(S.v<3){S.v=3;DKEYS.forEach(function(d){S.dx[d].cal=true;});}
   if(S.v<4){S.v=4;S.seenV4=false;S.season.start=now;S.season.p0=proj(S).total;S.season.wp=S.season.p0;}
   if(S.v<5){S.v=5;S.seenV5=false;}
+  if(S.v<6){S.v=6;S.seenV6=false;}
+  if(!S.city.b||typeof S.city.b!=="object")S.city.b={};if(!S.city.up||typeof S.city.up!=="object")S.city.up={};if(!S.city.w||typeof S.city.w!=="object")S.city.w={};if(!Array.isArray(S.city.buffs))S.city.buffs=[];
   if(!S.arc||typeof S.arc!=="object")S.arc={};if(!S.calib||typeof S.calib!=="object")S.calib={};
   if(!Array.isArray(S.imports))S.imports=[];if(!Array.isArray(S.miss))S.miss=[];if(!Array.isArray(S.seasons))S.seasons=[];
   if(FORMS.every(function(f){return f.id!==S.form;}))S.form="network";
@@ -2146,7 +2148,7 @@ function sprDisplay(q){var v=q.spr.vals[0];if(Number.isInteger(v))return N(v);fo
 /* ---------- Economy ---------- */
 function achCount(S){return Object.keys(S.ach).length;}
 function hasPerk(S,id){return S.insight>=PERK_BY[id].at;}
-function globalMult(S){return(1+0.1*S.insight)*(1+0.02*achCount(S))*(hasPerk(S,"enlight")?1.5:1)*(1+relicSum(S,"spark"))*evoMult(S)*(1+0.01*masteryPts(S));}
+function globalMult(S){return(1+0.1*S.insight)*(1+0.02*achCount(S))*(hasPerk(S,"enlight")?1.5:1)*(1+relicSum(S,"spark"))*evoMult(S)*(1+0.01*masteryPts(S))*citySparkMult(S);}
 function pathRate(S){var t=0;GENS.forEach(function(g){t+=S.gen[g.id]*g.rate;});return t;}
 function rawRate(S){return pathRate(S)+hubRate(S);}
 function idleRate(S){return rawRate(S)*globalMult(S)*(1+relicSum(S,"rate"));}
@@ -2310,6 +2312,7 @@ function applyAnswer(S,q,correct,info){
   lootAfterAnswer(S,q,correct,info,res);
   res.evolved=evoCheck(S,now);
   if(info.mode==="train"&&!info.boss)res.set=setRecord(S,correct,res,now,rnd);
+  res.coins=cityAnswer(S,q,correct,now,info.mode);if(res.coins>0)res.parts.push(["City","+"+fmt(res.coins)+" coins"]);
   res.newAch=checkAch(S,now);
   return res;
 }
@@ -2616,8 +2619,8 @@ function setRecord(S,correct,res,now,rnd){
 
 /* ===== Longevity layer: unlocks, weekly twists, mastery, daily review, mistakes, seasons, league (DOM-free) ===== */
 /* Systems come online as the engine evolves, so the first hour is just questions and growth. */
-var UNLOCK={upgrades:1,hubs:1,arcade:1,paths:2,arena:3,ascend:5};
-var UNLOCK_TXT={arcade:["Arcade","Four quick mini-games in the Arena, each drilling one skill."],upgrades:["Upgrades","Spend sparks to make every answer worth more."],hubs:["Domain hubs","One generator per domain. Light nodes to raise its cap."],paths:["Pathways","Generators that power the core while you study."],arena:["Arena","Boss fights, the timed Gauntlet, and the weekly league."],ascend:["Ascend","Trade a run for permanent Insight. Needs a Gauntlet score."]};
+var UNLOCK={upgrades:1,hubs:1,arcade:1,paths:2,city:2,arena:3,ascend:5};
+var UNLOCK_TXT={city:["City","Found a city where every skill you learn becomes a building."],arcade:["Arcade","Four quick mini-games in the Arena, each drilling one skill."],upgrades:["Upgrades","Spend sparks to make every answer worth more."],hubs:["Domain hubs","One generator per domain. Light nodes to raise its cap."],paths:["Pathways","Generators that power the core while you study."],arena:["Arena","Boss fights, the timed Gauntlet, and the weekly league."],ascend:["Ascend","Trade a run for permanent Insight. Needs a Gauntlet score."]};
 function isOpen(S,f){return((S.evo&&S.evo.stage)||0)>=UNLOCK[f];}
 function unlocksAt(stage){return Object.keys(UNLOCK).filter(function(k){return UNLOCK[k]===stage;});}
 
@@ -2928,6 +2931,143 @@ ACH.push(
  ["sg10","Storm Chaser","Catch 10 surge orbs.",function(S){return(S.stats.surges||0)>=10;}],
  ["fin1","Finisher","Land a boss finisher.",function(S){return(S.stats.finishers||0)>=1;}],
  ["pk50","Fidget","Poke your engine’s core 50 times.",function(S){return(S.stats.pokes||0)>=50;}]
+);
+
+;
+/* ===== City layer (DOM-free): every PSAT skill is a building in a city that grows as you learn ===== */
+/* Eight building classes, each 20× the price and 6× the output of the one before, so the big ones are long-term goals. */
+var CITY_CLASS=[null];[1,1,2,3,5,8,12,20].forEach(function(p,k){CITY_CLASS.push({c:15*Math.pow(20,k),r:0.1*Math.pow(6,k),p:p});});
+var DISTRICTS={ii:"Archive Quarter",cs:"Writers’ Row",eoi:"Harbor",sec:"Old Town",alg:"Engine Works",adv:"Tech Park",psda:"Market District",geo:"Monument Hill"};
+var CITY_B=[
+ {id:"library",d:"ii",sk:"Central Ideas and Details",name:"Library",cls:2,st:"library",w:80,line:"Finds the main idea in every book it shelves."},
+ {id:"stats",d:"ii",sk:"Command of Evidence: Quantitative",name:"Statistics Bureau",cls:7,st:"tower",w:64,line:"A chart on every floor, and a number behind every claim."},
+ {id:"detective",d:"ii",sk:"Inferences",name:"Detective Agency",cls:4,st:"detective",w:54,line:"Reads between the lines, but only what the text supports."},
+ {id:"courthouse",d:"ii",sk:"Command of Evidence: Textual",name:"Courthouse",cls:5,st:"courthouse",w:92,line:"Nothing gets in without evidence from the text."},
+ {id:"bookshop",d:"cs",sk:"Words in Context",name:"Bookshop",cls:1,st:"shop",w:54,line:"The right word for every shelf."},
+ {id:"studio",d:"cs",sk:"Text Structure and Purpose",name:"Architecture Studio",cls:6,st:"studio",w:70,line:"Asks what every beam is for."},
+ {id:"bridge",d:"cs",sk:"Cross-Text Connections",name:"Twin Bridge",cls:7,st:"bridge",w:190,line:"Connects two banks that don’t always agree."},
+ {id:"transit",d:"eoi",sk:"Transitions",name:"Transit Station",cls:3,st:"transit",w:94,line:"Gets you smoothly from one idea to the next."},
+ {id:"newsroom",d:"eoi",sk:"Rhetorical Synthesis",name:"Newsroom",cls:5,st:"newsroom",w:62,line:"Turns a pile of notes into one clear story."},
+ {id:"gatehouse",d:"sec",sk:"Boundaries",name:"Gatehouse",cls:1,st:"gate",w:70,line:"Knows exactly where one thing ends and the next begins."},
+ {id:"clock",d:"sec",sk:"Form, Structure, and Sense",name:"Clock Tower",cls:3,st:"clock",w:46,line:"Keeps every verb in the right tense."},
+ {id:"scale",d:"alg",sk:"Linear equations in one variable",name:"Scale Works",cls:1,st:"factory",w:68,line:"Balances both sides, all day long."},
+ {id:"cross",d:"alg",sk:"Linear equations in two variables",name:"Crossroads",cls:2,st:"crossroads",w:72,line:"Every x has its y."},
+ {id:"rail",d:"alg",sk:"Linear functions",name:"Linear Rail",cls:4,st:"railway",w:84,line:"Constant rate. Never late."},
+ {id:"zoning",d:"alg",sk:"Linear inequalities",name:"Zoning Office",cls:5,st:"zoning",w:60,line:"Shades in exactly where you’re allowed to build."},
+ {id:"grid",d:"alg",sk:"Systems of two linear equations",name:"Power Grid",cls:6,st:"grid",w:84,line:"Two lines meet here, and the lights come on."},
+ {id:"mint",d:"adv",sk:"Equivalent expressions",name:"Mint",cls:4,st:"mint",w:62,line:"Same value, different form."},
+ {id:"observatory",d:"adv",sk:"Nonlinear functions",name:"Observatory",cls:7,st:"observatory",w:76,line:"Tracks every curve in the sky."},
+ {id:"lab",d:"adv",sk:"Nonlinear equations",name:"Laboratory",cls:6,st:"lab",w:66,line:"Solves for x, even when x is squared."},
+ {id:"market",d:"psda",sk:"Ratios, rates, proportions, and units",name:"Market",cls:1,st:"market",w:74,line:"Three apples for a dollar? Check the units."},
+ {id:"census",d:"psda",sk:"One-variable data",name:"Census Office",cls:2,st:"census",w:56,line:"Knows the median resident personally."},
+ {id:"bank",d:"psda",sk:"Percentages",name:"Bank",cls:3,st:"bank",w:68,line:"Divides by the original. Every time."},
+ {id:"weather",d:"psda",sk:"Two-variable data",name:"Weather Station",cls:5,st:"weather",w:56,line:"Plots rain against umbrellas sold."},
+ {id:"carnival",d:"psda",sk:"Probability",name:"Carnival",cls:4,st:"carnival",w:94,line:"Every game has fair odds. Honest."},
+ {id:"polling",d:"psda",sk:"Inference from sample statistics",name:"Polling Station",cls:6,st:"polling",w:56,line:"Asks 500 people and predicts 50,000, within a margin of error."},
+ {id:"water",d:"geo",sk:"Area and volume",name:"Water Tower",cls:2,st:"water",w:52,line:"Holds exactly πr²h of water."},
+ {id:"pyramid",d:"geo",sk:"Lines, angles, and triangles",name:"Pyramid",cls:3,st:"pyramid",w:104,line:"Every angle adds up."},
+ {id:"lighthouse",d:"geo",sk:"Right triangles and trigonometry",name:"Lighthouse",cls:8,st:"lighthouse",w:54,line:"Finds any ship with SOH CAH TOA."},
+ {id:"ferris",d:"geo",sk:"Circles",name:"Ferris Wheel",cls:8,st:"ferris",w:126,line:"All the way around: 360 degrees, or 2π radians."}
+];
+var CITY_BY={};CITY_B.forEach(function(B){CITY_BY[B.id]=B;});
+function cityFresh(){return{founded:0,asked:false,name:"Sparkton",coins:0,life:0,b:{},up:{},w:{},pol:"",polAt:0,buffs:[],blimps:0,buyN:1,answers:0,built:0,bestRate:0};}
+function cityBuilt(S){return!!(S.city&&S.city.founded);}
+function cityN(S,id){return S.city.b[id]||0;}
+function cityLv(n){return n>=200?6:n>=100?5:n>=50?4:n>=25?3:n>=5?2:n>=1?1:0;}
+function cityCanBuild(S,B){return skillStars(S,B.d,B.sk)>=1;}
+/* Learning powers each building: a lit node lets you build it, each further node adds 50%, and mastery multiplies again. */
+function cityLearn(S,B){var s=skillStars(S,B.d,B.sk);if(!s)return 0;var sk=S.sk[B.d+"|"+B.sk],m=(sk&&sk.m)||0;return(1+0.5*(s-1))*[1,1.25,1.5,2][m];}
+function cityDistrictN(S,d){var n=0;CITY_B.forEach(function(B){if(B.d===d)n+=cityN(S,B.id);});return n;}
+function cityHas(S,id){return!!S.city.up[id];}
+function cityNight(now){var h=new Date(now).getHours();return h>=20||h<6;}
+function cityBuff(S,k,now){var L=S.city.buffs;for(var i=0;i<L.length;i++)if(L[i].k===k&&L[i].until>now)return L[i];return null;}
+function cityPrune(S,now){S.city.buffs=S.city.buffs.filter(function(b){return b.until>now;});}
+var CITY_TIERS=[[1,10,"Fresh Paint"],[5,100,"Night Shift"],[25,2000,"Skybridge"],[50,1e5,"Rooftop Garden"],[100,1e7,"Landmark Status"]];
+var CITY_DUP=[[10,5e4,"Pride"],[50,5e8,"Festival"],[150,5e12,"Renaissance"]];
+function cityBMult(S,B,now,raw){var m=1,k;for(k=0;k<CITY_TIERS.length;k++)if(S.city.up["t:"+B.id+":"+k])m*=2;for(k=0;k<CITY_DUP.length;k++)if(S.city.up["d:"+B.d+":"+k])m*=1.5;
+  if(!raw){var bf=cityBuff(S,"boom",now);if(bf&&bf.id===B.id)m*=10;}return m;}
+function cityGlobal(S,now,raw){var m=(1+0.1*(S.city.w.tower||0))*(1+0.05*(S.city.w.launch||0));if(cityHas(S,"hs"))m*=1+0.01*conn(S);
+  var p=S.city.pol;if(p==="study")m*=0.9;else if(p==="owl")m*=cityNight(now)?1.5:0.9;if(!raw&&cityBuff(S,"frenzy",now))m*=5;return m;}
+function cityRateOf(S,B,now,raw){var n=cityN(S,B.id);return n?n*CITY_CLASS[B.cls].r*cityLearn(S,B)*cityBMult(S,B,now,raw)*cityGlobal(S,now,raw):0;}
+function cityRate(S,now,raw){if(!cityBuilt(S))return 0;var t=0;for(var i=0;i<CITY_B.length;i++)t+=cityRateOf(S,CITY_B[i],now,raw);return t;}
+function cityDisc(S){return 1-0.05*((cityHas(S,"p1")?1:0)+(cityHas(S,"p2")?1:0)+(cityHas(S,"p3")?1:0));}
+function cityCost(S,id,n){var B=CITY_BY[id],r=1.15;n=n||1;return Math.ceil(CITY_CLASS[B.cls].c*Math.pow(r,cityN(S,id))*(Math.pow(r,n)-1)/(r-1)*cityDisc(S));}
+function cityMax(S,id){var n=0;while(n<1000&&cityCost(S,id,n+1)<=S.city.coins)n++;return n;}
+function cityBuy(S,id,n){var B=CITY_BY[id];if(!B||!cityBuilt(S)||!cityCanBuild(S,B))return null;if(n==="max")n=cityMax(S,id);if(!n)return null;var c=cityCost(S,id,n);if(S.city.coins<c)return null;
+  var lv0=cityLv(cityN(S,id));S.city.coins-=c;S.city.b[id]=cityN(S,id)+n;S.city.built+=n;return{n:n,cost:c,lv0:lv0,lv:cityLv(S.city.b[id])};}
+function cityPop(S){if(!cityBuilt(S))return 0;var p=0;for(var i=0;i<CITY_B.length;i++){var B=CITY_B[i];p+=cityN(S,B.id)*CITY_CLASS[B.cls].p;}return p;}
+var CITY_RANK=[[0,"Hamlet"],[50,"Village"],[250,"Town"],[1000,"City"],[5000,"Metropolis"],[25000,"Megacity"],[100000,"Capital"],[500000,"World City"]];
+function cityRank(pop){var i=CITY_RANK.length-1;while(i>0&&pop<CITY_RANK[i][0])i--;return{i:i,name:CITY_RANK[i][1],next:CITY_RANK[i+1]||null};}
+/* The city cheers you on: population lifts every spark you earn, with diminishing returns. */
+function citySparkMult(S){if(!cityBuilt(S))return 1;return 1+0.05*Math.log2(1+cityPop(S)/100)+0.02*(S.city.w.library||0);}
+function cityEarn(S,x){if(!(x>0))return;S.city.coins+=x;S.city.life+=x;}
+function cityIdlePct(S){return S.city.pol==="green"?0.4:0.2;}
+function cityTick(S,dt,active,now){if(!cityBuilt(S)||!(dt>0))return 0;var r=cityRate(S,now),g=r*dt*(active?1:cityIdlePct(S));cityEarn(S,g);if(r>S.city.bestRate)S.city.bestRate=r;return g;}
+function cityOffline(S,now){if(!cityBuilt(S))return null;var el=(now-S.lastSeen)/1000;if(el<120)return null;var g=cityRate(S,now,true)*Math.min(el,12*3600)*cityIdlePct(S);return g>0?{sec:el,gain:g}:null;}
+/* Every right answer is a click: it pays a few seconds of city output, scaled by difficulty. */
+function cityAnswerSecs(S){return 6+(cityHas(S,"tu1")?5:0)+(cityHas(S,"tu2")?10:0)+(cityHas(S,"tu3")?20:0);}
+function cityAnswer(S,q,correct,now,mode){if(!cityBuilt(S)||!correct)return 0;
+  var g=(3+cityRate(S,now,true)*cityAnswerSecs(S))*[0,1,1.5,2.5][q.lv]*(cityHas(S,"tu4")?2:1)*(S.city.pol==="study"?3:1)*(1+0.5*(S.city.w.library||0))*(cityBuff(S,"rush",now)?5:1)*(mode==="gaunt"?0.5:1);
+  cityEarn(S,g);S.city.answers++;return g;}
+/* Upgrades: ×2 per building at 1, 5, 25, 50, and 100 owned; district pride; tuition; blimps; planning. */
+var CITY_UP=[];
+CITY_B.forEach(function(B){CITY_TIERS.forEach(function(T,k){CITY_UP.push({id:"t:"+B.id+":"+k,kind:"b",b:B.id,d:B.d,name:B.name+": "+T[2],desc:B.name+" output ×2.",cost:CITY_CLASS[B.cls].c*T[1],req:function(S){return cityN(S,B.id)>=T[0];}});});});
+DKEYS.forEach(function(d){CITY_DUP.forEach(function(T,k){CITY_UP.push({id:"d:"+d+":"+k,kind:"d",d:d,name:DISTRICTS[d]+" "+T[2],desc:"Every "+DISTRICTS[d]+" building ×1.5. Needs "+T[0]+" buildings there.",cost:T[1],req:function(S){return cityDistrictN(S,d)>=T[0];}});});});
+[["tu1","Night School",300,"Right answers pay 5 more seconds of city output.",function(S){return S.city.life>=100;}],
+ ["tu2","Study Groups",3e4,"Right answers pay 10 more seconds of city output.",function(S){return S.city.life>=1e4;}],
+ ["tu3","Scholarships",3e7,"Right answers pay 20 more seconds of city output.",function(S){return S.city.life>=1e6;}],
+ ["tu4","Honor Roll",3e9,"Right answers pay twice the coins.",function(S){return S.city.life>=1e8;}],
+ ["g1","Blimp Spotters",5e3,"Golden blimps come 50% more often.",function(S){return S.city.blimps>=1;}],
+ ["g2","Long Parades",5e5,"Golden blimp effects last twice as long.",function(S){return S.city.blimps>=5;}],
+ ["g3","Golden Harbor",5e8,"Lucky blimps pay twice as much.",function(S){return S.city.blimps>=15;}],
+ ["p1","Zoning Reform",2e3,"Buildings cost 5% less.",function(S){return cityPop(S)>=100;}],
+ ["p2","Bulk Permits",2e6,"Buildings cost 5% less.",function(S){return cityPop(S)>=1000;}],
+ ["p3","Master Plan",2e10,"Buildings cost 5% less.",function(S){return cityPop(S)>=10000;}],
+ ["hs","Honor Society",1e7,"Every lit skill node adds 1% to city output.",function(S){return conn(S)>=30;}]
+].forEach(function(u){CITY_UP.push({id:u[0],kind:"x",name:u[1],cost:u[2],desc:u[3],req:u[4]});});
+var CITY_UP_BY={};CITY_UP.forEach(function(u){CITY_UP_BY[u.id]=u;});
+function cityUpCost(S,u){return Math.ceil(u.cost*(u.kind==="b"?cityDisc(S):1));}
+function cityUpsOpen(S){return CITY_UP.filter(function(u){return!S.city.up[u.id]&&u.req(S);}).sort(function(a,b){return cityUpCost(S,a)-cityUpCost(S,b);});}
+function cityBuyUp(S,id){var u=CITY_UP_BY[id];if(!u||S.city.up[id]||!u.req(S))return false;var c=cityUpCost(S,u);if(S.city.coins<c)return false;S.city.coins-=c;S.city.up[id]=1;return true;}
+/* Wonders: long projects with a landmark on the skyline. */
+var WONDERS=[
+ {id:"tower",name:"The 1520 Tower",stages:[1e5,1e8,1e11,1e14],pop:100,desc:"+10% city output per stage. Its height tracks your projected score."},
+ {id:"library",name:"Grand Library",stages:[1e7,1e10,1e13],pop:500,desc:"Per stage: right answers pay +50% coins, and all sparks +2%."},
+ {id:"launch",name:"Launch Pad",stages:[1e10,1e13,1e16],pop:2500,desc:"Per stage: golden blimps come 25% more often, and city output +5%."}
+];
+var WONDER_BY={};WONDERS.forEach(function(W){WONDER_BY[W.id]=W;});
+function wonderBuild(S,id){var W=WONDER_BY[id],st=S.city.w[id]||0;if(!W||st>=W.stages.length||cityPop(S)<W.pop)return false;var c=W.stages[st];if(S.city.coins<c)return false;S.city.coins-=c;S.city.w[id]=st+1;return true;}
+/* Town Hall policies: one at a time, switchable once an hour. */
+var POLICIES=[{id:"study",name:"Study City",desc:"Right answers pay ×3 coins. Buildings run at 90%."},{id:"owl",name:"Night Owls",desc:"×1.5 output from 8 pm to 6 am, 90% the rest of the day."},{id:"tour",name:"Tourism Board",desc:"Golden blimps come twice as often."},{id:"green",name:"Green Belt",desc:"While you’re idle or away, the city keeps 40% of its output instead of 20%."}];
+var POLICY_POP=50,POLICY_CD=3600e3;
+function policyWait(S,now){return S.city.pol?Math.max(0,S.city.polAt+POLICY_CD-now):0;}
+function policySet(S,id,now){if(cityPop(S)<POLICY_POP||S.city.pol===id||policyWait(S,now)>0)return false;if(!POLICIES.some(function(p){return p.id===id;}))return false;S.city.pol=id;S.city.polAt=now;return true;}
+/* Golden blimps: catch one for a lucky payout, a production frenzy, a study rush, or a building boom. */
+var BLIMP_T=[["lucky",0.55],["frenzy",0.2],["rush",0.15],["boom",0.1]],BLIMP_GAP=[240,480];
+function blimpFreq(S){return(cityHas(S,"g1")?1.5:1)*(S.city.pol==="tour"?2:1)*(1+0.25*(S.city.w.launch||0));}
+function blimpReward(S,rnd,now){
+  var k=wtab(BLIMP_T,rnd),dur=cityHas(S,"g2")?2:1,out={k:k};S.city.blimps++;cityPrune(S,now);
+  if(k==="boom"){var own=CITY_B.filter(function(B){return cityN(S,B.id)>0;});if(!own.length)k=out.k="lucky";else{var B=own[Math.floor(rnd()*own.length)];out.id=B.id;out.until=now+30000*dur;S.city.buffs.push({k:"boom",id:B.id,until:out.until});}}
+  if(k==="lucky"){var g=(Math.min(S.city.coins*0.1,cityRate(S,now,true)*300)+13)*(cityHas(S,"g3")?2:1);cityEarn(S,g);out.gain=g;}
+  else if(k==="frenzy"||k==="rush"){out.until=now+45000*dur;S.city.buffs.push({k:k,until:out.until});}
+  return out;
+}
+/* Founding: name the city; the most practiced lit skill in the first three classes gets a free building. */
+function cityCleanName(n){n=String(n||"").replace(/[<>&"]/g,"").replace(/\s+/g," ").trim().slice(0,24);return n||"Sparkton";}
+function cityFound(S,name,now){if(cityBuilt(S)||!isOpen(S,"city"))return null;var C=S.city,best=null,bc=-1;C.founded=now;C.asked=true;C.name=cityCleanName(name);cityEarn(S,50);
+  CITY_B.forEach(function(B){var sk=S.sk[B.d+"|"+B.sk],c=sk?sk.c:0;if(B.cls<=3&&cityCanBuild(S,B)&&c>bc){bc=c;best=B;}});
+  if(best){C.b[best.id]=1;C.built=1;}else cityEarn(S,150);return{free:best?best.id:null};}
+ACH.push(
+ ["cy1","Founder","Found your city.",function(S){return cityBuilt(S);}],
+ ["cy50","Village Green","Grow your city to 50 residents.",function(S){return cityPop(S)>=50;}],
+ ["cy1k","City Limits","Grow your city to 1,000 residents.",function(S){return cityPop(S)>=1000;}],
+ ["cy25k","Megacity","Grow your city to 25,000 residents.",function(S){return cityPop(S)>=25000;}],
+ ["cyall","Full Skyline","Build every one of the 29 buildings.",function(S){return cityBuilt(S)&&CITY_B.every(function(B){return cityN(S,B.id)>0;});}],
+ ["cyb1","Blimp Spotter","Catch a golden blimp.",function(S){return(S.city&&S.city.blimps||0)>=1;}],
+ ["cyb25","Blimp Hunter","Catch 25 golden blimps.",function(S){return(S.city&&S.city.blimps||0)>=25;}],
+ ["cyw","Wonder of the World","Finish a wonder.",function(S){return cityBuilt(S)&&WONDERS.some(function(W){return(S.city.w[W.id]||0)>=W.stages.length;});}],
+ ["cypol","Mayor","Pass a Town Hall policy.",function(S){return!!(S.city&&S.city.pol);}],
+ ["cy1m","Coin Collector","Earn a million coins in your city.",function(S){return(S.city&&S.city.life||0)>=1e6;}]
 );
 
 ;

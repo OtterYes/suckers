@@ -20,6 +20,7 @@ function simulate(opts) {
   if (opts.patch) opts.patch(E);
   const DAY = 864e5;
   let now = Date.UTC(2026, 8, 28, 20, 0, 0);
+  const start = now;
   const S = E.newState(now);
   S.welcomed = true;
   const rnd = E.mulberry32(opts.seed || 1);
@@ -72,6 +73,32 @@ function simulate(opts) {
     }
   }
 
+  // The city: found it when it unlocks, then buy whatever adds the most output per coin.
+  let blimpAt = 0;
+  function city(t, dt) {
+    if (!E.cityBuilt) return;
+    if (!E.cityBuilt(S)) { if (E.isOpen(S, "city")) { E.cityFound(S, "Simtown", t); mark("city:founded", `day ${Math.floor((t - start) / DAY) + 1} q${answered}`); } return; }
+    E.cityTick(S, dt, true, t);
+    // Blimps come every 4 to 8 minutes; the student has the city on screen about half the time.
+    if (!blimpAt) blimpAt = t + 360e3;
+    if (t >= blimpAt) { blimpAt = t + (240e3 + rnd() * 240e3) / E.blimpFreq(S); if (rnd() < 0.4) E.blimpReward(S, rnd, t); }
+    for (let guard = 0; guard < 200; guard++) {
+      const base = E.cityRate(S, t, true) || 1;
+      let best = null;
+      const consider = (gain, cost, buy) => { if (cost > 0 && gain > 0 && (!best || gain / cost > best.v)) best = { v: gain / cost, cost, buy }; };
+      E.CITY_B.forEach((B) => { if (!E.cityCanBuild(S, B)) return; const one = E.CITY_CLASS[B.cls].r * E.cityLearn(S, B) * E.cityBMult(S, B, t, true) * E.cityGlobal(S, t, true); consider(one, E.cityCost(S, B.id, 1), () => E.cityBuy(S, B.id, 1)); });
+      E.cityUpsOpen(S).forEach((u) => {
+        let gain = 0;
+        if (u.kind === "b") gain = E.cityRateOf(S, E.CITY_BY[u.b], t, true);
+        else if (u.kind === "d") gain = 0.5 * E.CITY_B.filter((B) => B.d === u.d).reduce((a, B) => a + E.cityRateOf(S, B, t, true), 0);
+        else gain = base * 0.05;
+        consider(gain, E.cityUpCost(S, u), () => E.cityBuyUp(S, u.id));
+      });
+      E.WONDERS.forEach((W) => { const st = S.city.w[W.id] || 0; if (st < W.stages.length && E.cityPop(S) >= W.pop) consider(base * 0.1, W.stages[st], () => E.wonderBuild(S, W.id)); });
+      if (!best || best.cost > S.city.coins) break;
+      best.buy();
+    }
+  }
   function gauntlet(t) {
     const p = E.proj(S), sec = p.rw <= p.m ? "rw" : "m";
     E.gauntStart(S, sec, t, rnd);
@@ -102,6 +129,7 @@ function simulate(opts) {
       const res = E.applyAnswer(S, q, ok, { now: t + ms, ms, rnd, mode: "train" });
       const dt = (ms + 14000) / 1000;
       E.tick(S, dt, true);
+      city(t + ms, dt);
       incomeEMA = incomeEMA ? incomeEMA * 0.9 + 0.1 * (res.gain / dt) : res.gain / dt;
       t += ms + 14000;
       answered++;
@@ -132,6 +160,7 @@ function simulate(opts) {
       lv: S.pl.lv, ins: S.insight,
       gens: E.GENS.map((G) => S.gen[G.id]).join("/"),
       hubs: S.hub ? E.DKEYS.map((d) => S.hub[d]).join(",") : "-",
+      city: S.city && S.city.founded ? E.fmt(S.city.coins) + " · " + E.fmt(E.cityRate(S, now, true)) + "/s · pop " + E.cityPop(S) + " · x" + E.citySparkMult(S).toFixed(2) : "-",
       r: E.DKEYS.map((d) => Math.round(S.r[d])).join(" "),
       truth: E.DKEYS.map((d) => Math.round(T[d])).join(" "),
     });
