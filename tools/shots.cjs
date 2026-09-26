@@ -15,6 +15,7 @@ function stateAfter(days, edit) {
   if (!cache[days]) cache[days] = JSON.stringify(simulate({ days, perDay: 60, learn: 0.25, seed: 3, ascend: 3 }).S);
   const S = JSON.parse(cache[days]);
   S.welcomed = true; S.seenV3 = true; S.seenV4 = true; S.evo.seen = S.evo.stage;
+  if (S.unit && S.unit.cleared.length) S.unit.at = {};
   S.lastSeen = S.lastInteract = Date.now();
   if (edit) edit(S);
   return JSON.stringify(S);
@@ -128,6 +129,18 @@ const SCENES = [
   ["mobile-city-tab", 21, (S) => { S.settings.tod = "dusk"; }, click('#decknav [data-v="city"]'), 390, 844],
   ["mobile-city-tour", 6, (S) => { S.seenV6 = false; }, null, 390, 844],
   ["laptop-city", 21, (S) => { S.settings.view = "city"; S.settings.tod = "night"; }, null, 1280, 760],
+  ["unit-card", 10, null, click('[data-act="tab"][data-v="city"]')],
+  ["unit-advance", 24, (S) => { S.unit.st = 5; S.unit.ready = true; S.unit.cleared = ["1.1", "1.2", "1.3", "1.4", "1.5"]; }, async (page) => { await page.click("#stageBtn"); await page.waitForTimeout(300); await page.click('#panel [data-act="advance"]'); }],
+  ["unit-ladder", 36, null, async (page) => { await page.click("#stageBtn"); await page.waitForTimeout(300); await page.click('#panel [data-act="ladder"]'); }],
+  ["exp-map", 36, (S) => { S.settings.view = "map"; }, null],
+  ["exp-panel", 36, null, click('[data-act="tab"][data-v="city"]')],
+  ["exp-crew", 36, null, async (page) => { await page.click('[data-act="tab"][data-v="city"]'); await page.click('[data-act="scrollTo"][data-v="xwCrew"]'); await page.waitForTimeout(600); }],
+  ["exp-wheel", 36, null, async (page) => { await page.click('[data-act="tab"][data-v="city"]'); await page.click('[data-act="scrollTo"][data-v="xwLuck"]'); await page.waitForTimeout(600); }],
+  ["exp-crate", 36, (S) => { S.settings.view = "map"; }, async (page) => { await page.evaluate(() => { const H = window.__g1520, S = H.S(); S.exp.sup = 1e9; const E = S.exp; for (let i = 0; i < E.ex.length; i++) if (E.ex[i] === "0" && E.ty[i] === "c" && [i - 1, i + 1, i - 13, i + 13].some((j) => E.ex[j] === "1")) { H.expExploreA(i); return; } }); await page.waitForTimeout(400); const b = page.locator("#crateBox"); if (await b.count()) { await b.click({ force: true }); await page.waitForTimeout(500); } }],
+  ["mobile-exp", 36, (S) => { S.settings.view = "map"; }, null, 390, 844],
+  ["mobile-world", 36, null, click('#decknav [data-v="city"]'), 390, 844],
+  ["units-tour-1", 6, (S) => { S.seenV7 = false; }, null],
+  ["units-tour-3", 6, (S) => { S.seenV7 = false; }, async (page) => { for (let k = 0; k < 2; k++) await page.keyboard.press("ArrowRight"); await page.click('#wnFog [data-i="8"]'); await page.click('#wnFog [data-i="9"]'); await page.waitForTimeout(300); }],
   ["new-game-locked", 0, null, click('[data-act="welcomeGo"]')],
   ["tablet", 6, null, null, 900, 1100],
   ["laptop-1280", 6, null, null, 1280, 760],

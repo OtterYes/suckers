@@ -79,6 +79,7 @@ function simulate(opts) {
     if (!E.cityBuilt) return;
     if (!E.cityBuilt(S)) { if (E.isOpen(S, "city")) { E.cityFound(S, "Simtown", t); mark("city:founded", `day ${Math.floor((t - start) / DAY) + 1} q${answered}`); } return; }
     E.cityTick(S, dt, true, t);
+    if (!S.city.pol && E.policySet) E.policySet(S, "study", t);
     // Blimps come every 4 to 8 minutes; the student has the city on screen about half the time.
     if (!blimpAt) blimpAt = t + 360e3;
     if (t >= blimpAt) { blimpAt = t + (240e3 + rnd() * 240e3) / E.blimpFreq(S); if (rnd() < 0.4) E.blimpReward(S, rnd, t); }
@@ -98,6 +99,44 @@ function simulate(opts) {
       if (!best || best.cost > S.city.coins) break;
       best.buy();
     }
+  }
+  // Units: advance as soon as a unit is done. The Expedition: explore toward the Guardians, hire and level
+  // a crew, station miners on deposits and the rest next to each other for the team bonus, take the free spin.
+  let spinDay = "";
+  function expedition(t, dt) {
+    if (E.unitCanAdvance && E.unitCanAdvance(S)) { E.unitAdvance(S, t, Math.floor(rnd() * 1e9)); mark("advance:" + S.unit.u, `day ${Math.floor((t - start) / DAY) + 1} q${answered}`); }
+    const X = S.exp;
+    if (!X) return;
+    E.expTick(S, dt, true);
+    const N = E.EXP_N, all = Array.from({ length: N }, (_, i) => i);
+    const gates = all.filter((i) => X.ty[i] === "g" && !E.expOpen(X, i));
+    const dist = (a, b) => { const p = E.expXY(a), q = E.expXY(b); return Math.abs(p.x - q.x) + Math.abs(p.y - q.y); };
+    if (!X.gate) { const g = gates.find((i) => E.expGateReady(S, i)); if (g != null) { E.expGateStart(S, g); S.focus = X.gate.d; } }
+    else S.focus = X.gate.d;
+    if (!X.gate && E.DOMAINS[S.focus]) S.focus = "mix";
+    for (let guard = 0; guard < 30; guard++) {
+      const fr = all.filter((i) => E.expFrontier(X, i) && X.ty[i] !== "g");
+      if (!fr.length || X.sup < E.expCost(S)) break;
+      fr.sort((a, b) => Math.min(...gates.map((g) => dist(a, g))) - Math.min(...gates.map((g) => dist(b, g))));
+      E.expExplore(S, fr[0], rnd);
+    }
+    const roles = ["porter", "miner", "scholar", "scout"];
+    while (X.crew.length < E.expSlots(S) && X.gems >= E.expHireCost(S) * 1.2) E.expHire(S, roles[X.crew.length % 4], rnd);
+    for (let guard = 0; guard < 40; guard++) {
+      const w = X.crew.slice().sort((a, b) => E.expLvCost(S, a) - E.expLvCost(S, b))[0];
+      if (!w || X.gems < E.expLvCost(S, w) * 1.5) break;
+      E.expLevel(S, w.id);
+    }
+    const taken = new Set(X.crew.filter((w) => w.at >= 0).map((w) => w.at));
+    X.crew.filter((w) => w.at < 0).forEach((w) => {
+      const open = all.filter((i) => E.expOpen(X, i) && !taken.has(i));
+      let pick = w.role === "miner" ? open.find((i) => X.ty[i] === "d") : null;
+      if (pick == null) pick = open.sort((a, b) => E.expNb(b).filter((j) => taken.has(j)).length - E.expNb(a).filter((j) => taken.has(j)).length)[0];
+      if (pick != null) { E.expStation(S, w.id, pick); taken.add(pick); }
+    });
+    const dk = E.dayKey(t);
+    if (dk !== spinDay) { spinDay = dk; E.wheelSpin(S, 0, t, rnd); }
+    if (E.expCanDescend(S)) { E.expDescend(S, Math.floor(rnd() * 1e9)); mark("depth:" + X.depth, `day ${Math.floor((t - start) / DAY) + 1} q${answered}`); }
   }
   function gauntlet(t) {
     const p = E.proj(S), sec = p.rw <= p.m ? "rw" : "m";
@@ -119,6 +158,8 @@ function simulate(opts) {
     // Coming back: offline earnings, quests, chests.
     const off = E.offlineGain(S, t);
     if (off) E.addSparks(S, off.gain);
+    if (E.cityOffline) { const co = E.cityOffline(S, t); if (co) E.cityEarn(S, co.gain); }
+    if (E.expOffline) E.expGain(S, E.expOffline(S, t));
     S.lastSeen = t; S.lastInteract = t;
     E.rollDay(S, t);
     for (let i = 0; i < opts.perDay; i++) {
@@ -130,6 +171,8 @@ function simulate(opts) {
       const dt = (ms + 14000) / 1000;
       E.tick(S, dt, true);
       city(t + ms, dt);
+      if (res.stages) res.stages.forEach((c) => mark("stage:" + c.key, `day ${day + 1} q${answered}`));
+      if (E.expTick) expedition(t + ms, dt);
       incomeEMA = incomeEMA ? incomeEMA * 0.9 + 0.1 * (res.gain / dt) : res.gain / dt;
       t += ms + 14000;
       answered++;
@@ -152,6 +195,7 @@ function simulate(opts) {
       }
     }
     S.lastSeen = t;
+    if (S.unit) Object.keys(S.unit.at).forEach((k) => mark("stage:" + k, `day ${1 + Math.floor((S.unit.at[k] - start) / DAY)}`));
     const p = E.proj(S);
     rows.push({
       day: day + 1, q: answered, proj: p.total, rank: E.rankOf(p.total).label,
@@ -161,6 +205,8 @@ function simulate(opts) {
       gens: E.GENS.map((G) => S.gen[G.id]).join("/"),
       hubs: S.hub ? E.DKEYS.map((d) => S.hub[d]).join(",") : "-",
       city: S.city && S.city.founded ? E.fmt(S.city.coins) + " · " + E.fmt(E.cityRate(S, now, true)) + "/s · pop " + E.cityPop(S) + " · x" + E.citySparkMult(S).toFixed(2) : "-",
+      unit: S.unit ? S.unit.u + "." + S.unit.st + (S.unit.ready ? "+" : "") : "-",
+      exp: S.exp ? `t${S.exp.explored} c${S.exp.crew.length} g${S.exp.gatesAll} d${S.exp.depth} ${E.fmt(S.exp.sup)}s ${E.fmt(S.exp.gems)}g` : "-",
       r: E.DKEYS.map((d) => Math.round(S.r[d])).join(" "),
       truth: E.DKEYS.map((d) => Math.round(T[d])).join(" "),
     });

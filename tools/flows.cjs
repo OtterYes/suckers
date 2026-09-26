@@ -7,6 +7,13 @@ const { simulate } = require("./sim.cjs");
 const file = "file://" + path.resolve(__dirname, "..", "index.html");
 const KEY = "grind1520.save.v1";
 const base = JSON.stringify(simulate({ days: 6, perDay: 60, learn: 0.25, seed: 3, ascend: 3 }).S);
+const ENG = require("./engine.cjs").loadEngine();
+// A save that has advanced to Unit 2, with a fresh Expedition map and a stockpile to spend.
+function unit2(S, edit) {
+  S.unit = { u: 2, st: 1, ready: false, cleared: ["1.1", "1.2", "1.3", "1.4", "1.5"], legacy: 1, at: {} };
+  S.exp = ENG.expFresh(4242, 1); S.exp.sup = 1e6; S.exp.gems = 5000;
+  if (edit) edit(S);
+}
 
 function save(edit) {
   const S = JSON.parse(base);
@@ -493,7 +500,7 @@ const TESTS = {
     return page;
   },
   async "pass a Town Hall policy"(b) {
-    const page = await open(b, save());
+    const page = await open(b, save((S) => { S.city.pol = ""; S.city.polAt = 0; }));
     await page.click('#decknav [data-v="city"]');
     await page.click('#panel [data-act="scrollTo"][data-v="cwHall"]');
     await page.click('#panel [data-act="cityPol"][data-v="study"]');
@@ -538,6 +545,110 @@ const TESTS = {
     await page.click('#modal [data-act="modalClose"]');
     const s = await state(page);
     if (s.seenV6 !== true) throw new Error("tour will show again");
+    return page;
+  },
+  async "stages clear and pay a chest"(b) {
+    const page = await open(b, save((S) => { S.unit = { u: 1, st: 1, ready: false, cleared: [], legacy: 0, at: {} }; }));
+    await page.waitForTimeout(1800);
+    const s = await state(page);
+    if (s.unit.cleared.indexOf("1.1") < 0) throw new Error("stage 1.1 not cleared: " + JSON.stringify(s.unit));
+    const badge = await page.textContent("#stageN");
+    if (badge !== s.unit.u + "." + s.unit.st) throw new Error("badge shows " + badge);
+    return page;
+  },
+  async "advance to unit 2"(b) {
+    const page = await open(b, save((S) => { S.unit = { u: 1, st: 5, ready: true, cleared: ["1.1", "1.2", "1.3", "1.4", "1.5"], legacy: 0, at: {} }; S.sparks = 5e6; }));
+    await page.click("#stageBtn");
+    await page.click('#panel [data-act="advance"]');
+    await page.click('#modal [data-act="advanceGo"]');
+    await page.waitForTimeout(400);
+    const s = await state(page);
+    if (s.unit.u !== 2 || s.unit.legacy !== 1 || !s.exp) throw new Error("did not advance: " + JSON.stringify(s.unit));
+    if (Object.keys(s.city.b).length || s.sparks > 1e5) throw new Error("the reset missed something");
+    if (!s.city.founded) throw new Error("the city was unfounded");
+    if ((await page.getAttribute("body", "data-view")) !== "map") throw new Error("the map is not showing");
+    return page;
+  },
+  async "explore the map, hire and level crew"(b) {
+    const page = await open(b, save((S) => unit2(S, (X) => { X.settings.view = "map"; })));
+    const t = await page.evaluate(() => { const H = window.__g1520, E = H.S().exp, M = H.map(); for (let i = 0; i < E.ex.length; i++) { if (E.ex[i] === "0" && E.ty[i] !== "g" && [i - 1, i + 1, i - 13, i + 13].some((j) => E.ex[j] === "1" && Math.abs((j % 13) - (i % 13)) <= 1)) { const p = H.tileXY(i); return { x: p.x + M.ts / 2, y: p.y + M.ts / 2 }; } } return null; });
+    const box = await page.locator("#mapCv").boundingBox();
+    await page.mouse.click(box.x + t.x, box.y + t.y);
+    await page.waitForTimeout(300);
+    for (let k = 0; k < 2; k++) { const m = page.locator('#modal:not([hidden]) #crateBox'); if (await m.count()) { await m.click({ force: true }); await page.click('#modal [data-act="modalClose"]'); } }
+    let s = await state(page);
+    if (s.exp.explored !== 2) throw new Error("explored " + s.exp.explored);
+    await page.click('#decknav [data-v="city"]');
+    await page.click('#panel [data-act="xHire"][data-v="miner"]');
+    await page.waitForTimeout(200);
+    s = await state(page);
+    if (s.exp.crew.length !== 1 || s.exp.crew[0].role !== "miner" || s.exp.crew[0].at < 0) throw new Error("hire failed " + JSON.stringify(s.exp.crew));
+    await page.click('#panel [data-act="xLevel"]');
+    s = await state(page);
+    if (s.exp.crew[0].lv !== 2) throw new Error("level up failed");
+    return page;
+  },
+  async "spin the fortune wheel"(b) {
+    const page = await open(b, save((S) => unit2(S)));
+    await page.click('#decknav [data-v="city"]');
+    await page.click('#panel [data-act="scrollTo"][data-v="xwLuck"]');
+    const g0 = (await state(page)).exp.gems;
+    await page.click('#panel [data-act="xSpin"][data-v="1"]');
+    await page.waitForTimeout(3900);
+    const s = await state(page);
+    if (s.exp.spins.n !== 1) throw new Error("spin not counted " + JSON.stringify(s.exp.spins));
+    if (s.exp.gems === g0 && !s.exp.crates) throw new Error("the wheel did nothing");
+    return page;
+  },
+  async "stake gems on an answer"(b) {
+    const page = await open(b, save((S) => unit2(S, (X) => { X.rev = { date: "x", n: 0, p: 0, done: true }; X.spots = []; X.ai = []; })));
+    await page.click("#stakeBtn");
+    if ((await state(page)).exp.stake !== 0.1) throw new Error("stake not set");
+    const g0 = (await state(page)).exp.gems;
+    const c = await page.evaluate(() => { const q = window.__g1520.cur(); return { spr: q.spr ? q.spr.vals[0] : null, correct: q.correct }; });
+    if (c.spr != null) await page.fill("#sprIn", String(c.spr)); else await page.click(`#conBody [data-act="pick"][data-i="${c.correct}"]`);
+    await page.click("#checkBtn");
+    await page.waitForTimeout(250);
+    const s = await state(page);
+    if (!(s.exp.gems > g0)) throw new Error("a right staked answer did not pay: " + g0 + " to " + s.exp.gems);
+    if (s.exp.stake !== 0) throw new Error("the stake did not reset");
+    return page;
+  },
+  async "challenge a Guardian"(b) {
+    const page = await open(b, save((S) => unit2(S, (X) => { const E = X.exp; E.ex = E.ty.split("").map((k) => (k === "g" ? "0" : "1")).join(""); E.explored = E.ex.split("1").length - 1; X.rev = { date: "x", n: 0, p: 0, done: true }; X.spots = []; X.ai = []; })));
+    await page.click('#decknav [data-v="city"]');
+    await page.click('#panel [data-act="xGate"]');
+    await page.waitForTimeout(300);
+    let s = await state(page);
+    if (!s.exp.gate || s.focus !== s.exp.gate.d) throw new Error("no fight or focus: " + JSON.stringify({ gate: s.exp.gate, focus: s.focus }));
+    for (let k = 0; k < 4; k++) { const m = page.locator('#modal:not([hidden]) [data-act="modalClose"]'); if (await m.count()) await m.first().click(); }
+    const c = await page.evaluate(() => { const q = window.__g1520.cur(); return { spr: q.spr ? q.spr.vals[0] : null, correct: q.correct, d: q.d }; });
+    if (c.spr != null) await page.fill("#sprIn", String(c.spr)); else await page.click(`#conBody [data-act="pick"][data-i="${c.correct}"]`);
+    await page.click("#checkBtn");
+    await page.waitForTimeout(250);
+    s = await state(page);
+    if (c.d === s.exp.gate.d && s.exp.gate.got !== 1) throw new Error("the fight did not move: " + JSON.stringify(s.exp.gate));
+    return page;
+  },
+  async "phone world tab fits"(b) {
+    const page = await open(b, save((S) => unit2(S)), 390, 844);
+    await page.click('#decknav [data-v="city"]');
+    await page.waitForTimeout(300);
+    const box = await page.locator("#mapCv").boundingBox();
+    if (!box || box.height < 250) throw new Error("map too small " + JSON.stringify(box));
+    const over = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+    if (over) throw new Error("horizontal overflow on the World tab");
+    return page;
+  },
+  async "units tour for returning players"(b) {
+    const page = await open(b, save((S) => { S.seenV7 = false; }));
+    if (!/Units and stages/.test(await page.textContent("#modal .wn h2"))) throw new Error("the units tour did not open");
+    await page.keyboard.press("ArrowRight");
+    await page.click('#wnDemo [data-act="wnAdv"]');
+    if (!/Legacy 1/.test(await page.textContent("#wnAdvTxt"))) throw new Error("advance demo silent");
+    await page.click('#modal [data-act="modalClose"]');
+    const s = await state(page);
+    if (s.seenV7 !== true) throw new Error("tour will show again");
     return page;
   },
   async "fresh game starts at 320 and climbs"(b) {

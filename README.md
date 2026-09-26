@@ -67,9 +67,9 @@ top. Each of the eight domains grows up to its own score, so weak spots are the 
 - **Bosses.** A right answer inside PSAT pace is a quick strike (×1.5 damage). Under a quarter
   health the next right answer is a finisher (×2). Bosses answer back after every hit and miss.
 - **Feel.** Phones vibrate on hits, misses, crits, and chests; Settings turns it off.
-- **What's new.** A five-slide tour of the city with live demos and Try it buttons. It opens once
-  after an update and anytime from Settings or Profile; the last slide replays the earlier
-  seven-slide tour of the Arcade and play features.
+- **What's new.** A tour of the latest update (units and the Expedition) with live demos and Try it
+  buttons. It opens once after an update and anytime from Settings or Profile; the last slide
+  replays the earlier tours of the city and of the Arcade and play features.
 
 ## Your city
 
@@ -101,6 +101,53 @@ you've learned: 29 buildings in eight districts, one district per domain.
   the sun or moon to pick day, dusk, or night. Drag, scroll, or use the arrow keys to look around,
   tap a building to build or train it, and read the news ticker for headlines about what you've
   built.
+
+## Units and stages
+
+The whole game is a ladder: Unit 1 has stages 1.1 to 1.5, Unit 2 has 2.1 to 2.5, and so on. The
+badge in the top bar shows where you are.
+
+- **Checklists.** Each stage asks for the unit's own goals (residents, buildings, tiles, crew,
+  Guardians) plus *study* goals that never reset: skill nodes lit, mastery medals, right answers,
+  Gauntlet runs, and days with 10+ right. Later stages also call back to earlier units; Unit 2
+  asks you to rebuild your city. Clearing a stage pays a chest and +2% sparks and coins for good.
+- **Advance.** Clear x.5 and you can Advance to the next unit. Sparks, upgrades, pathways, hubs,
+  and the whole city reset to square one, and a new mechanic opens. Scores, skill nodes, mastery,
+  evolutions, Insight, level, trophies, and chests stay. Each Advance adds **Legacy**: sparks ×1.25
+  and city coins ×2 per level, forever.
+- **Pacing.** In the balance sim, a student doing 60 questions a day clears Unit 1 in about four
+  weeks and Unit 2 about five weeks later; at 30 a day, seven to eight weeks each. After that the
+  Expedition's depths keep going, each a little slower than the last.
+
+## Unit 2: The Expedition
+
+A fogged 13 × 11 map in eight regions, one per domain, with a base camp in the middle.
+
+- **Supplies and exploring.** Right answers pay supplies (more for hard questions). Spend them to
+  reveal a tile next to one you have. Tiles hold gems (more in your weaker domains), gem deposits,
+  camps (+1 crew slot), caches, and mystery crates. Each tile costs a little more than the last.
+- **Guardians.** Each region's heart holds a Guardian. Once you've scouted enough of its region,
+  challenge it: the next 12 right answers in its domain beat it, and a miss there costs a step.
+  Each Guardian drops its domain's artifact. Beat all eight to **descend**: a new map where
+  exploring costs ×3, rewards pay ×2, and Guardians need 4 more answers. Depths never end.
+- **Crew.** Hire Scouts (cheaper exploring), Miners (gems, ×5 on a deposit), Porters (supplies
+  every second), and Scholars (more supplies for answers in their tile's domain). They work at 50%
+  to 150% of their rate depending on your last 20 answers in that domain, and three different
+  roles side by side make a **full team** (×1.5). Level them with gems. Crew work at 20% while
+  you're away, for up to 12 hours.
+- **Artifacts.** Sixteen, two per domain, kept forever: bonuses to supplies, gems, sparks, coins,
+  exploring, crew, or crate luck. A full pair adds a crew slot.
+- **Luck, with the odds on screen.** Everything here uses gems, which you only earn by playing.
+  Nothing is for sale.
+  - *Mystery crates:* Common 60%, Rare 28%, Epic 10%, Legendary 2% (crate luck shifts these).
+    An Epic or better is guaranteed within 10 crates.
+  - *Fortune Wheel:* one free spin and 12 paid spins a day. Bet 10%, 25%, or 50% of your gems. The
+    slices are drawn to the real odds: Bust 30%, ×0.5 20%, ×1.5 20%, ×2 15%, ×3 8%, Crate 5%,
+    ×10 1.5%, Jackpot (×25 and an Epic+ crate) 0.5%.
+  - *Stakes:* bet 10% or 25% of your gems on your next answer. Right pays +50% (easy), +90%
+    (medium), or +150% (hard); wrong loses the stake.
+- **Guild.** With the weekly league on, every member's right answers fill one shared bar (150
+  points per member). When it's full, everyone who added 40+ points claims an Epic chest.
 
 ## Coming back
 
@@ -152,7 +199,8 @@ node tools/smoke.cjs                        # boot, answer questions, fail on pa
 node tools/flows.cjs                        # functional checks: buying, bosses, sets, gauntlet, Ascend,
                                             # daily review, mistake tags, seasons, bulk import, unlocks,
                                             # all four Arcade games, Call it, cards, surge orbs, tools,
-                                            # founding and building a city, blimps, policies, tours
+                                            # founding and building a city, blimps, policies, stages,
+                                            # Advance, exploring, crew, the wheel, stakes, Guardians, tours
 node tools/flows.cjs city                   # only the checks whose name contains "city"
 node tools/shots.cjs out/                   # screenshots of the main screens from simulated saves
 ```
@@ -161,9 +209,13 @@ When the page is opened from a local file, it exposes `window.__g1520` so the Pl
 read the current question, drive the Arcade, and spawn a golden blimp. Published pages don't have it.
 
 The balance sim plays the city too: it founds one at stage 2, buys the best building, upgrade, or
-wonder by gain per coin, and catches 40% of blimps.
+wonder by gain per coin, and catches 40% of blimps. It also clears stages, Advances as soon as it
+can, and runs the Expedition: it explores toward the Guardians, fights them with its practice
+focus on their domain, hires and levels a crew, places miners on deposits and the rest side by
+side, takes the free spin, and descends.
 
 Saves are versioned (`S.v`). Version 2 saves (from before the engine) migrate automatically, keep
 their ratings, skip placement, and catch up on the evolutions their history earned. Version 3 saves
 gain the season, review, league, and journal fields. Saves from before version 5 see the
-What's New tour once, and saves from before version 6 see the city tour once.
+What's New tour once, and saves from before version 6 see the city tour once. Version 7 saves
+start at stage 1.1 and clear every stage their progress already meets, paying the chests.
