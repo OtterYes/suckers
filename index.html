@@ -751,6 +751,24 @@ mark.hl{background:rgba(255,209,102,.34);color:inherit;border-radius:3px;padding
 .wn-earlier ul{margin-top:8px}
 @media (max-width:560px){.acards{grid-template-columns:minmax(0,1fr)}.wn-arc{grid-template-columns:repeat(2,minmax(0,1fr))}.wline,.rush-s{font-size:16.5px}.pcard{height:104px}.wn-foot{justify-content:center}.leq{font-size:21px}}
 @media (max-width:1560px){.chip.day{display:none}.brand-sub{letter-spacing:.2em}}
+/* What's new v8 demos */
+.wn-zones{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%}
+.wn-zt{display:grid;gap:2px;padding:0 0 6px;text-align:center;background:var(--deck-2);border:1px solid var(--wire);border-top:2px solid var(--dc);border-radius:10px;overflow:hidden;cursor:pointer}
+.wn-zt b{font-size:11.5px;font-family:var(--f-disp);letter-spacing:.04em}
+.wn-zt small{font-size:10px;color:var(--dc)}
+.wn-zt.on{border-color:var(--dc);box-shadow:0 0 14px -4px var(--dc)}
+.wn-forge{display:flex;align-items:center;justify-content:center;gap:16px;padding:18px;border:1px dashed color-mix(in srgb,var(--dc) 50%,var(--wire));border-radius:12px;width:100%}
+.wn-forge .zg-pips i{width:16px;height:16px}
+.wn-grow{width:100%;border:1px solid var(--wire);border-radius:12px;overflow:hidden}
+.wn-slide{display:grid;gap:6px;width:100%;margin-top:10px;font-size:13px;color:var(--ink-2)}
+.wn-slide input{width:100%;accent-color:var(--dc,#FF9A3D)}
+.wn-road{justify-content:safe center;width:100%}
+.wn-road .rnode{flex-basis:96px}
+.wn-steps{list-style:none;margin:0;padding:0;display:grid;gap:6px;width:100%}
+.wn-steps li{display:flex;gap:12px;align-items:baseline;padding:8px 12px;border:1px solid var(--wire);border-radius:10px;background:var(--deck-2);font-size:13px}
+.wn-steps .rl{min-width:62px;color:var(--accent)}
+.zstrip.flash{animation:glow 1s ease-in-out 2}
+@media (max-width:560px){.wn-zones{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* Zones: a card per domain, a detail page with the rule, expansion, hub, and tree */
 .ztop{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 12px;border:1px solid var(--wire);border-radius:10px;background:var(--deck-2);margin-bottom:12px;font-size:13px;color:var(--ink-2)}
 .ztop span{display:inline-flex;align-items:center;gap:6px}
@@ -5533,20 +5551,34 @@ var WN5=[
  {k:"feel",t:"Feel it",p:"Tap your engine’s core to pulse it. Press and hold to charge a shockwave. On phones, hits and misses buzz (turn it off in Settings).",tryL:"Go poke my core",
   demo:function(){return'<div class="wn-coreBox"><button type="button" class="wn-core" id="wnCore" aria-label="Demo core: tap it, or press and hold"><span></span></button></div><p class="wn-note" id="wnCoreTxt">Tap it. Then press and hold.</p>';}}
 ];
-function wnList(){var v=UI.wn?UI.wn.v:7;return v===5?WN5:v===6?WN6:WN7;}
-function wnEarlier(v){if(v===7)return'<details class="wn-earlier"><summary>Earlier updates</summary><ul><li><b>Your city: 29 skill buildings, golden blimps, wonders, and Town Hall.</b> <button type="button" class="btn line sm" data-act="wnTour" data-v="6">Replay that tour</button></li><li><b>The Arcade, Call it, card picks, surge orbs, question tools, and bosses that hit back.</b> <button type="button" class="btn line sm" data-act="wnTour" data-v="5">Replay that tour</button></li></ul></details>';
+var WN8=[
+ {k:"zones",t:"Zones",p:"Every domain is now its own zone: a place with its own rule, an upgrade tree, and expansions that open as you learn it. Algebra is Engine Works, Geometry and Trigonometry is the Crystal Caves, and so on.",tryL:"Open Zones",
+  demo:function(){return'<div class="wn-zones">'+DKEYS.map(function(d){return'<button type="button" class="wn-zt" style="--dc:'+DOMAINS[d].color+'" data-act="wnZone" data-v="'+d+'">'+zoneArt(d,3,false)+"<b>"+esc(ZONES[d].short)+"</b><small>"+esc(ZONES[d].rule)+"</small></button>";}).join("")+'</div><p class="wn-note" id="wnZoneTxt">Tap a zone to see its rule.</p>';}},
+ {k:"rules",t:"Every zone has a rule",p:"A zone’s rule changes how that domain’s questions pay. In the Word Forge, each right answer in Craft and Structure heats the forge, and at full heat the next one is <b>Forged</b> for ×3. A strip under every question shows its zone’s meter.",tryL:"Show me on my question",
+  demo:function(){return'<div class="wn-forge" id="wnForge" style="--dc:'+DOMAINS.cs.color+'"><span class="zg-pips heat">'+[0,1,2,3,4].map(function(){return"<i></i>";}).join("")+'</span><button type="button" class="btn primary sm" data-act="wnHeat">Answer right</button></div><p class="wn-note" id="wnHeatTxt">Heat 0 of 5. Tap to answer right.</p>';}},
+ {k:"grow",t:"Trees and expansions",p:"Spend sparks on each zone’s tree. Light that domain’s skill nodes to <b>expand</b> the zone through five tiers: each one opens a new row of the tree and makes the hub and the domain pay more. Keystones at tiers 3 and 5 cost talent points.",tryL:"Open a zone",
+  demo:function(){return'<div class="wn-grow" id="wnGrow" style="--dc:'+DOMAINS.alg.color+'">'+zoneArt("alg",1,true)+'</div><label class="wn-slide"><span>Tier <b id="wnZtN">1</b>: <span id="wnZtName">'+esc(ZONES.alg.tiers[0])+'</span></span><input type="range" id="wnZt" min="1" max="5" step="1" value="1" aria-label="Engine Works tier"></label>';}},
+ {k:"road",t:"The Level Road",p:"Every level is now a <b>talent point</b> to spend on keystones and talents, and the road has something to claim at every level: chests, boosts, and titles you can wear. Past level 100, levels turn into prestige stars.",tryL:"Open my road",
+  demo:function(){return'<div class="road wn-road">'+[[12,"c","Common chest"],[13,"b","Crit Surge"],[15,"t","Title: Adept"]].map(function(x,i){return'<div class="rnode '+(i===2?"big ":"")+'ready"><span class="rl">'+x[0]+'</span><span class="ris">'+(x[1]==="c"?'<span class="ri">'+chestSVG("c")+"</span>":x[1]==="b"?'<span class="ri boost">'+ICON.bolt+"</span>":'<span class="ri ttl">'+ICON.trophy+"</span>")+"</span><small>"+x[2]+'</small><button type="button" class="claim" data-act="wnRoad" data-i="'+i+'">Claim</button></div>';}).join("")+'</div><p class="wn-note" id="wnRoadTxt">Claim them. These are just for show.</p>';}},
+ {k:"early",t:"Open from the start",p:"Upgrades, zones, hubs, and the Arcade are open from your very first answer, so there’s always something to spend sparks on. Bosses arrive at stage 1, and the Gauntlet and weekly league at stage 3.",tryL:"Got it",
+  demo:function(){return'<ol class="wn-steps">'+[["0","Upgrades · Zones · Hubs · Arcade"],["1","Bosses"],["2","Pathways · City"],["3","Gauntlet · League"],["5","Ascend"]].map(function(x){return'<li><span class="rl">Stage '+x[0]+"</span><span>"+x[1]+"</span></li>";}).join("")+"</ol>";}}
+];
+function wnList(){var v=UI.wn?UI.wn.v:8;return v===5?WN5:v===6?WN6:v===7?WN7:WN8;}
+function wnEarlier(v){if(v===8)return'<details class="wn-earlier"><summary>Earlier updates</summary><ul><li><b>Units and stages, Advance, and the Expedition: crew, crates, and the Fortune Wheel.</b> <button type="button" class="btn line sm" data-act="wnTour" data-v="7">Replay that tour</button></li><li><b>Your city: 29 skill buildings, golden blimps, wonders, and Town Hall.</b> <button type="button" class="btn line sm" data-act="wnTour" data-v="6">Replay that tour</button></li><li><b>The Arcade, Call it, card picks, surge orbs, question tools, and bosses that hit back.</b> <button type="button" class="btn line sm" data-act="wnTour" data-v="5">Replay that tour</button></li></ul></details>';
+  if(v===7)return'<details class="wn-earlier"><summary>Earlier updates</summary><ul><li><b>Your city: 29 skill buildings, golden blimps, wonders, and Town Hall.</b> <button type="button" class="btn line sm" data-act="wnTour" data-v="6">Replay that tour</button></li><li><b>The Arcade, Call it, card picks, surge orbs, question tools, and bosses that hit back.</b> <button type="button" class="btn line sm" data-act="wnTour" data-v="5">Replay that tour</button></li></ul></details>';
   if(v!==5)return'<details class="wn-earlier"><summary>Earlier updates</summary><ul><li><b>The Arcade, Call it, card picks, surge orbs, question tools, and bosses that hit back.</b> <button type="button" class="btn line sm" data-act="wnTour" data-v="5">Replay that tour</button></li><li>Daily review, seasons with a test-date countdown, weekly twists, mastery, the mistake journal, streak freezes, the weekly league, and bulk import.</li></ul></details>';
   return'<details class="wn-earlier"><summary>Earlier update: built for the long climb</summary><ul><li>Daily review of blind spots at 10 minutes, then 1, 3, and 7 days.</li><li>Seasons with a test-date countdown, weekly targets, and a test-day projection.</li><li>A weekly twist and a featured boss.</li><li>Bronze, Silver, and Gold mastery per skill.</li><li>A mistake journal, streak freezes, the weekly league, bulk import, and Math Fresh packs.</li></ul></details>';}
 function wnHTML(i){
-  var L=wnList(),s=L[i],n=L.length,v=UI.wn?UI.wn.v:6;
-  return'<div class="wn" id="wn"><div class="wn-top"><span class="lab">'+(v===5?"Earlier update":"What’s new")+" · "+(i+1)+" of "+n+'</span><button type="button" class="xbtn" data-act="modalClose" aria-label="Close">'+ICON.x+'</button></div><div class="wn-demo" id="wnDemo">'+s.demo()+'</div><h2>'+esc(s.t)+'</h2><p class="wn-p">'+s.p+"</p>"+(i===n-1?wnEarlier(v):"")+
+  var L=wnList(),s=L[i],n=L.length,v=UI.wn?UI.wn.v:8;
+  return'<div class="wn" id="wn"><div class="wn-top"><span class="lab">'+(v<8?"Earlier update":"What’s new")+" · "+(i+1)+" of "+n+'</span><button type="button" class="xbtn" data-act="modalClose" aria-label="Close">'+ICON.x+'</button></div><div class="wn-demo" id="wnDemo">'+s.demo()+'</div><h2>'+esc(s.t)+'</h2><p class="wn-p">'+s.p+"</p>"+(i===n-1?wnEarlier(v):"")+
    '<div class="wn-foot"><div class="wn-dots" role="tablist" aria-label="Slides">'+L.map(function(x,j){return'<button type="button" class="wn-dot'+(j===i?" on":"")+'" data-act="wnGo" data-i="'+j+'" aria-label="'+esc(x.t)+'"'+(j===i?' aria-current="step"':"")+"></button>";}).join("")+'</div><div class="wn-btns">'+(i>0?'<button type="button" class="btn line sm" data-act="wnGo" data-i="'+(i-1)+'">Back</button>':"")+'<button type="button" class="btn line sm" data-act="wnTry" data-v="'+s.k+'">'+esc(s.tryL)+"</button>"+(i<n-1?'<button type="button" class="btn primary sm" data-act="wnGo" data-i="'+(i+1)+'">Next'+ICON.arrow+"</button>":'<button type="button" class="btn primary sm" data-act="modalClose">Let’s go</button>')+"</div></div></div>";
 }
-function showTour(v,i){UI.wn={v:v===5?5:v===6?6:7,i:i||0};modal(wnHTML(UI.wn.i),false,true);$("modalCard").classList.add("wn-card");wireWN();}
+function showTour(v,i){UI.wn={v:[5,6,7,8].indexOf(v)>=0?v:8,i:i||0};modal(wnHTML(UI.wn.i),false,true);$("modalCard").classList.add("wn-card");wireWN();}
 function wnGo(i){if(!UI.wn)return;i=clamp(i,0,wnList().length-1);if(i===UI.wn.i)return;var dir=i>UI.wn.i?1:-1;UI.wn.i=i;var c=$("modalCard");c.innerHTML=wnHTML(i);c.scrollTop=0;var w=$("wn");if(w&&!reduced)w.classList.add(dir>0?"in-r":"in-l");wireWN();
   var f=c.querySelector('[data-act="wnGo"].primary')||c.querySelector('[data-act="modalClose"].primary');if(f)try{f.focus({preventScroll:true});}catch(e){}SND.tone(660+i*40,0.05,"triangle",0.03);}
 function wireWN(){
-  var w=$("wn");if(!w)return;var x0=null,tw=$("wnTwIn");
+  var w=$("wn");if(!w)return;var x0=null,tw=$("wnTwIn"),zt=$("wnZt");
+  if(zt)zt.addEventListener("input",function(){var t=+zt.value,g=$("wnGrow");if(g)g.innerHTML=zoneArt("alg",t,true);setTxt("wnZtN",String(t));setTxt("wnZtName",ZONES.alg.tiers[t-1]);SND.tone(330+t*90,0.06,"triangle",0.03);});
   if(tw){var twUp=function(){var v=+tw.value,bar=$("wnTw");if(bar)bar.style.setProperty("--h",(12+62*(v-320)/1200).toFixed(1)+"%");setTxt("wnTwN",String(v));};tw.addEventListener("input",function(){twUp();SND.tone(300+(+tw.value-320)/2,0.03,"sine",0.02);});twUp();}
   w.addEventListener("pointerdown",function(ev){x0=ev.pointerType==="touch"&&!(ev.target.closest&&ev.target.closest(".wn-demo"))?ev.clientX:null;});
   w.addEventListener("pointerup",function(ev){if(x0==null)return;var dx=ev.clientX-x0;x0=null;if(Math.abs(dx)>60)wnGo(UI.wn.i+(dx<0?1:-1));});
@@ -5558,12 +5590,24 @@ function wireWN(){
     core.addEventListener("pointerup",rel);core.addEventListener("pointerleave",function(){if(t0){t0=0;core.classList.remove("charging");}});
     core.addEventListener("keydown",function(ev){if(ev.key===" "||ev.key==="Enter"){ev.preventDefault();if(!t0){t0=performance.now()-(ev.shiftKey?600:0);}rel();}});}
 }
+function wnDemoZone(d){if(!ZONES[d])return;Array.prototype.forEach.call(document.querySelectorAll("#wnDemo .wn-zt"),function(x){x.classList.toggle("on",x.getAttribute("data-v")===d);});var tx=$("wnZoneTxt");if(tx)tx.innerHTML="<b>"+esc(ZONES[d].name)+" · "+esc(ZONES[d].rule)+".</b> "+esc(ZONES[d].line);SND.tone(620+DKEYS.indexOf(d)*40,0.05,"triangle",0.03);vib(6);}
+function wnDemoHeat(){var box=$("wnForge");if(!box)return;var n=+(box.getAttribute("data-h")||0),pips=box.querySelectorAll(".zg-pips i"),tx=$("wnHeatTxt");
+  if(n>=5){n=0;var r=box.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,22);floatText(r.left+r.width/2-30,r.top,"FORGED ×3","crit");SND.crit();vib([12,18,40]);if(tx)tx.textContent="Forged: ×3 sparks. The heat starts over.";}
+  else{n++;SND.tone(440+n*80,0.08,"triangle",0.04);vib(8);if(tx)tx.textContent=n>=5?"Full heat. The next right answer is Forged.":"Heat "+n+" of 5.";}
+  box.setAttribute("data-h",n);Array.prototype.forEach.call(pips,function(p,k){p.classList.toggle("on",k<n);});}
+function wnDemoRoad(i,b){var n=b&&b.closest(".rnode");if(!n||!n.classList.contains("ready"))return;n.classList.remove("ready");b.outerHTML='<span class="rck">✓</span>';var r=n.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,14);SND.node();vib(10);
+  var left=document.querySelectorAll("#wnDemo .rnode.ready").length,tx=$("wnRoadTxt");if(tx)tx.textContent=left?left+" left to claim.":"All claimed. Your real road is in your profile: tap your level.";}
 function wnDemoCard(i){var b=document.querySelector('#wnDemo .pcard[data-i="'+i+'"]');if(!b||b.classList.contains("flip"))return;var opts=[{t:"sparks",v:sparkUnit(S)*(3+Math.floor(Math.random()*6))},{t:"boost",k:["dbl","crit","xp","shield"][Math.floor(Math.random()*4)]},{t:"chest",r:["c","r","e"][Math.floor(Math.random()*3)]}],c=opts[Math.floor(Math.random()*3)];
   var f=b.querySelector(".pc-front");f.style.setProperty("--rc",cardColor(c));f.innerHTML=cardFace(c);b.classList.add("flip","got");SND.tone(659.25,0.2,"triangle",0.05);vib(10);}
 function wnDemoOrb(){var o=document.querySelector("#wnDemo .wn-orb");if(!o||o.classList.contains("caught"))return;var r=o.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,22);floatText(r.left+r.width/2,r.top,"SURGE!","crit");SND.crit();vib([12,18,40]);o.classList.add("caught");
   var tx=$("wnOrbTxt");if(tx)tx.textContent="Caught! Real orbs fade after 12 seconds.";setTimeout(function(){if(o.isConnected)o.classList.remove("caught");},1600);}
 function wnTry(k){
   if(k.indexOf("arc:")===0){closeModal();arcStart(k.slice(4));return;}
+  if(k==="zones"){closeModal();setTab("zones");return;}
+  if(k==="grow"){closeModal();zoneGo(cur?cur.d:"alg");return;}
+  if(k==="road"){closeModal();showProfile("road");return;}
+  if(k==="early"){closeModal();return;}
+  if(k==="rules"){closeModal();if(UI.tab!=="network"){UI.tab="network";applyViews();}var zs=$("conBody").querySelector(".zstrip");if(zs&&!UI.arc){zs.scrollIntoView({block:"center",behavior:reduced?"auto":"smooth"});zs.classList.remove("flash");void zs.offsetWidth;zs.classList.add("flash");}return;}
   if(["city","learn","coins","blimp","tower"].indexOf(k)>=0){closeModal();wnTryCity(k);return;}
   if(["stages","advance","map","crew"].indexOf(k)>=0){closeModal();wnTryUnits(k);return;}
   closeModal();
@@ -7243,7 +7287,8 @@ document.addEventListener("click",function(e){
    case"drawToggle":UI.draw=!UI.draw;mountDraw();refreshTools();break;
    case"drawPen":case"drawErase":UI.drawMode=act==="drawErase"?"erase":"pen";mountDraw();break;
    case"drawClear":if(Q)Q.ink=[];sizeDraw();break;
-   case"refSheet":showRef();break;case"whatsNew":showTour(7,0);break;case"wnTour":showTour(+v||7,0);break;
+   case"refSheet":showRef();break;case"whatsNew":showTour(8,0);break;case"wnTour":showTour(+v||8,0);break;
+   case"wnZone":wnDemoZone(v);break;case"wnHeat":wnDemoHeat();break;case"wnRoad":wnDemoRoad(i,b);break;
    case"wnLot":wnDemoLot();break;case"wnCoin":wnDemoCoin();break;case"wnBlimp":wnDemoBlimp();break;
    case"view":S.settings.view=v==="city"||v==="map"||v==="3d"?v:"engine";if(UI.tab==="city"&&v!=="map")UI.wv="city";saveLocal();syncView();if(UI.tab!=="network")renderPanel();setTimeout(function(){stageLayout();if(cityShown())cityLayout();if(w3Shown())w3Resize();},0);break;
    case"w3Retry":w3Retry();break;case"w3Act":w3Open();break;
@@ -7390,6 +7435,7 @@ function start(hot){
   wireStage();wireCity();wireMap();renderAll();nextQ();saveLocal();stageLayout();
   if(fresh)showWelcome();
   else if(!S.seenV3){S.seenV3=true;saveLocal();showWhatsNew();}
+  else if(!S.seenV8){S.seenV8=true;S.seenV7=true;S.seenV6=true;S.seenV5=true;S.seenV4=true;saveLocal();showTour(8,0);}
   else if(!S.seenV7){S.seenV7=true;S.seenV6=true;S.seenV5=true;S.seenV4=true;saveLocal();showTour(7,0);}
   else if(!S.seenV6){S.seenV6=true;S.seenV5=true;S.seenV4=true;saveLocal();showTour(6,0);}
   else if(!S.seenV5){S.seenV5=true;S.seenV4=true;saveLocal();showTour(5,0);}

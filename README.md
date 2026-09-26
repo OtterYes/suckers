@@ -28,9 +28,9 @@ top. Each of the eight domains grows up to its own score, so weak spots are the 
 - **Evolution.** Connections carry the engine through eleven permanent stages. Each stage adds a
   spark bonus and a chest. Stage 5 turns the engine into a Reactor and stage 7 into a Universe;
   you can switch between unlocked forms.
-- **Unlocks.** Systems come online as the engine evolves, so the first hour is just questions:
-  upgrades, domain hubs, and the Arcade at stage 1, pathways and the city at stage 2, bosses, the
-  Gauntlet, and the league at stage 3, Ascend at stage 5.
+- **Unlocks.** Upgrades, zones, domain hubs, and the Arcade are open from the first answer, so
+  there's always something to spend sparks on. Bosses open at stage 1, pathways and the city at
+  stage 2, the Gauntlet and the league at stage 3, and Ascend at stage 5.
 - **Sparks.** Right answers earn sparks. Spend them on domain hubs (one generator per domain,
   capped by how many of its nodes you've lit), pathways (unlocked as your score climbs), and
   upgrades that make each answer worth more. Domains below your average pay up to ×1.5, and a
@@ -41,6 +41,47 @@ top. Each of the eight domains grows up to its own score, so weak spots are the 
   since the last one, starting at 440 and rising 20 each time. Scores, nodes, evolutions, the city,
   levels, relics, and trophies stay.
 - **Sets.** Questions come in tens. Each set ends with a summary of what moved and a bonus.
+
+## Zones
+
+Every domain is its own zone, with a rule that changes how its questions pay, an upgrade tree, and
+five tiers of expansion. A strip under every question shows its zone's meter, and the Zones tab
+has a page for each one.
+
+| Zone | Domain | Rule |
+| --- | --- | --- |
+| The Archive | Information and Ideas | **Evidence Chain:** right answers in a row build links, +10% each. A miss here breaks the chain. |
+| The Word Forge | Craft and Structure | **Heat:** five right answers fill the forge, and the next one is Forged for ×3. A miss cools it by 2. |
+| The Bridgeworks | Expression of Ideas | **Bridges:** +15% for each other domain in your last 6 answers. |
+| The Clockworks | Standard English Conventions | **Perfect Tick:** double the pace bonus, and ×2 for a right answer in under half the pace time. |
+| Engine Works | Algebra | **Production Line:** every 5 right answers build a machine, +10% to the hub and +2% to Algebra. |
+| The Launch Lab | Advanced Math | **Rocket Fuel:** each right answer compounds fuel ×1.1. Launch it for sparks; a miss spills half. |
+| The Exchange | Problem-Solving and Data | **Interest Vault:** answers here deposit extra sparks that earn 1.5% per right answer. Withdraw any time. |
+| The Crystal Caves | Geometry and Trigonometry | **Facets:** right answers cut triangles, squares, pentagons, and hexagons. Hexagons leave gems (+1% sparks). |
+
+- **The tree.** Five rows, one per tier, bought with sparks: the zone's hub, its rule, its domain's
+  sparks, its Arcade game, its boss, XP, chests, and all sparks. Tree levels and rule meters reset
+  when you Ascend or Advance.
+- **Expansions.** Tiers 2 to 5 open as you light that domain's skill nodes (10%, 30%, 55%, and 80%
+  of them); tier 4 also needs a Bronze medal in the domain, and tier 5 a Silver. Each tier costs
+  sparks once, adds 50% to the hub and 10% to the domain's sparks, and opens a row of the tree.
+  Tiers stay for good, and tier 5 earns the zone's title.
+- **Keystones.** Two per zone, at tiers 3 and 5, bought with talent points. They bend the rule: the
+  Archive's chain can count Craft and Structure, the Launch Lab's launches can pay double, the
+  Exchange's vault can survive Ascend, and so on. Keystones stay for good.
+
+## Levels
+
+- **Talent points.** Every level is a talent point. Spend them on zone keystones and on six general
+  talents: more XP, more chests, a higher streak cap, more offline earnings, more full-pay Arcade
+  runs, and more hearts in boss fights. Reset them any time for free.
+- **The Level Road.** Open it from your level in the top bar. Each level still pays sparks and a
+  chest the moment you reach it, and the road adds one more reward to claim: a chest or a boost,
+  with a title and a bigger chest at the milestones.
+- **Titles.** Newcomer, Apprentice, Scholar, and on up to Legend at level 100, plus one for each
+  zone you expand to tier 5. Wear any title you've earned.
+- **Prestige.** Past level 100, levels turn into prestige stars (Mythic at ★5, Eternal at ★10).
+  XP needs grow faster past level 40, so the road stays long.
 
 ## Playing with it
 
@@ -67,9 +108,9 @@ top. Each of the eight domains grows up to its own score, so weak spots are the 
 - **Bosses.** A right answer inside PSAT pace is a quick strike (×1.5 damage). Under a quarter
   health the next right answer is a finisher (×2). Bosses answer back after every hit and miss.
 - **Feel.** Phones vibrate on hits, misses, crits, and chests; Settings turns it off.
-- **What's new.** A tour of the latest update (units and the Expedition) with live demos and Try it
-  buttons. It opens once after an update and anytime from Settings or Profile; the last slide
-  replays the earlier tours of the city and of the Arcade and play features.
+- **What's new.** A tour of the latest update (zones, the Level Road, and talents) with live demos
+  and Try it buttons. It opens once after an update and anytime from Settings or Profile; the last
+  slide replays the earlier tours of units and the Expedition, the city, and the Arcade.
 
 ## The question panel and saving
 
@@ -240,7 +281,8 @@ node tools/flows.cjs                        # functional checks: buying, bosses,
                                             # all four Arcade games, Call it, cards, surge orbs, tools,
                                             # founding and building a city, blimps, policies, stages,
                                             # Advance, exploring, crew, the wheel, stakes, Guardians, tours,
-                                            # and the 3D city (walking, cards, building, blimps, fallback)
+                                            # zones (trees, expansions, forging, launches, the vault), the
+                                            # Level Road, talents, titles, and the 3D city
 node tools/flows.cjs city                   # only the checks whose name contains "city"
 node tools/shots.cjs out/                   # screenshots of the main screens from simulated saves
 node tools/pc.cjs                           # the PC edition: dist/Grind-to-1520/ (game file, launcher,
@@ -258,7 +300,9 @@ The 3D city loads Three.js r160 from cdn.jsdelivr.net only when it's opened. The
 network, so `tools/three.cjs` serves a local copy at the same URL. It fetches one with
 `npm pack three@0.160.0` into `tools/vendor/` (not committed) the first time it's needed.
 
-The balance sim plays the city too: it founds one at stage 2, buys the best building, upgrade, or
+The balance sim plays the zones: it expands a zone as soon as learning allows, buys the cheapest
+tree node while it costs under a quarter of its sparks, launches fuel at ×4, empties the vault when
+it's nearly full, and spends talent points on keystones first. It also plays the city: it founds one at stage 2, buys the best building, upgrade, or
 wonder by gain per coin, and catches 40% of blimps. It also clears stages, Advances as soon as it
 can, and runs the Expedition: it explores toward the Guardians, fights them with its practice
 focus on their domain, hires and levels a crew, places miners on deposits and the rest side by
@@ -268,4 +312,6 @@ Saves are versioned (`S.v`). Version 2 saves (from before the engine) migrate au
 their ratings, skip placement, and catch up on the evolutions their history earned. Version 3 saves
 gain the season, review, league, and journal fields. Saves from before version 5 see the
 What's New tour once, and saves from before version 6 see the city tour once. Version 7 saves
-start at stage 1.1 and clear every stage their progress already meets, paying the chests.
+start at stage 1.1 and clear every stage their progress already meets, paying the chests. Version 8
+saves get the zones at tier 1, their level's talent points, and every Level Road reward up to
+their level to claim, and they see the zones tour once.

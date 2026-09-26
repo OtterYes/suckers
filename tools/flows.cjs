@@ -781,6 +781,21 @@ const TESTS = {
     if (s2.title !== "apprentice") throw new Error("title is " + s2.title);
     return page;
   },
+  async "zones tour for returning players"(b) {
+    const page = await open(b, save((S) => { S.seenV8 = false; }));
+    if (!(await page.locator("#modal:not([hidden]) .wn").count())) throw new Error("tour did not open");
+    if (!/Zones/.test(await page.textContent(".wn h2"))) throw new Error("tour did not start on Zones");
+    await page.click('#wnDemo [data-act="wnZone"][data-v="adv"]');
+    if (!/Rocket Fuel/.test(await page.textContent("#wnZoneTxt"))) throw new Error("zone demo silent");
+    await page.keyboard.press("ArrowRight");
+    for (let k = 0; k < 6; k++) await page.click('#wnDemo [data-act="wnHeat"]');
+    if (!/Forged/.test(await page.textContent("#wnHeatTxt"))) throw new Error("forge demo did not forge");
+    await page.click('#modal [data-act="wnTry"][data-v="rules"]');
+    if (await page.isVisible("#modal")) throw new Error("tour stayed open");
+    const s = await state(page);
+    if (s.seenV8 !== true) throw new Error("tour will show again");
+    return page;
+  },
   async "phone zones fit"(b) {
     const page = await open(b, save(), 390, 844);
     await page.click('#decknav [data-v="zones"]');

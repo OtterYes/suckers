@@ -1,6 +1,7 @@
 // A maxed-out save for exploring: every building at level 6, every wonder finished, a 1520
 // projected score, every skill lit with Gold mastery, the final evolution, Unit 2 cleared,
-// all 16 artifacts, and more coins, sparks, supplies, and gems than you can spend.
+// all 16 artifacts, every zone at tier 5, level 120, and more coins, sparks, supplies, and
+// gems than you can spend.
 //   node tools/devsave.cjs [out.txt]      (default: dist/dev-save.txt)
 // Paste the code into Settings → Backup code → Restore. It replaces the save in that browser.
 const fs = require("fs");
@@ -51,9 +52,21 @@ if (!S.exp) S.exp = ENG.expFresh(4242, 3);
 S.exp.sup = 1e12; S.exp.gems = 1e9;
 ENG.ARTS.forEach((A) => { S.arts[A.id] = now; });
 
+// Zones: every zone at tier 5 with its tree maxed and both keystones, every talent, and level 120
+// (100 and five prestige stars) with the Level Road left to claim.
+S.pl.lv = 120; S.pl.xp = 0;
+ENG.DKEYS.forEach((d) => {
+  S.zone[d].t = 5;
+  ENG.ZNODES.forEach((N) => { if (ENG.zNodeOn(d, N.id)) S.zone[d].up[N.id] = ENG.zNode(d, N.id).max; });
+  S.tal.k[d + "1"] = 1; S.tal.k[d + "2"] = 1;
+});
+ENG.TALENTS.forEach((T) => { S.tal.g[T.id] = T.max; });
+S.road = { c: {} }; S.title = "legend";
+S.zone.adv.fuel = 6; S.zone.psda.vault = 1e20; S.zone.geo.gems = 20; S.zone.alg.mach = 40;
+
 // Open straight into the 3D city, in daylight, with no tours in the way.
 Object.assign(S.settings, { view: "3d", tod: "day", w3new: true, w3seen: false });
-S.welcomed = true; S.seenV3 = S.seenV4 = S.seenV5 = S.seenV6 = S.seenV7 = true;
+S.welcomed = true; S.seenV3 = S.seenV4 = S.seenV5 = S.seenV6 = S.seenV7 = S.seenV8 = true;
 S.streak = 0; S.lastSeen = S.lastInteract = now;
 // Trim history the game doesn't need, to keep the code short.
 S.seen = {}; S.hist = (S.hist || []).slice(-60); S.ai = []; S.miss = (S.miss || []).slice(-20);
