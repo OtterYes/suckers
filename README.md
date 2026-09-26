@@ -71,6 +71,20 @@ top. Each of the eight domains grows up to its own score, so weak spots are the 
   buttons. It opens once after an update and anytime from Settings or Profile; the last slide
   replays the earlier tours of the city and of the Arcade and play features.
 
+## The question panel and saving
+
+- **Move the questions.** The layout button above the question opens the panel settings. Put
+  the panel on the right, the left, or along the bottom (the question on the left, the answers on
+  the right, and the engine or city above), make it narrow, normal, or wide, and pick small,
+  medium, or large text. The same rows are in Settings.
+- **Hide them.** Press **Q** to hide the panel and give the engine, the city, or the 3D city the
+  whole screen. Press Q again, or the Questions button, to bring it back where it was. Answer keys
+  do nothing while it's hidden.
+- **Saving.** The game saves by itself every 10 seconds, after everything you buy or answer, and
+  when you switch away. Settings shows when it last saved and has **Save now** (or press
+  **Ctrl+S**), **Download a save file** (a text file holding your backup code), and **Load a save
+  file**, which replaces the progress in this browser.
+
 ## Your city
 
 At stage 2 you found a city and name it. Every PSAT skill is a building, so the skyline shows what

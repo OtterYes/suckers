@@ -667,6 +667,48 @@ const TESTS = {
     if (!/Central Ideas and Details/.test(t) || /Wonder/.test(t)) throw new Error("wrong card: " + t.slice(0, 80));
     return page;
   },
+  async "move, hide, and resize the question panel"(b) {
+    const page = await open(b, save());
+    await page.click("#dockBtn");
+    await page.click('#modal [data-act="dockSet"][data-v="dock:left"]');
+    await page.click('#modal [data-act="dockSet"][data-v="qsize:l"]');
+    await page.click('#modal [data-act="modalClose"]');
+    await page.waitForTimeout(300);
+    const con = await page.locator("#console").boundingBox(), stg = await page.locator("#stage").boundingBox();
+    if (!(con.x < stg.x)) throw new Error("the panel is not on the left: " + JSON.stringify([con, stg]));
+    if ((await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector(".stem")).fontSize))) < 22) throw new Error("large text did not apply");
+    await page.keyboard.press("q");
+    await page.waitForTimeout(200);
+    if (await page.isVisible("#console")) throw new Error("Q did not hide the panel");
+    const q0 = await page.evaluate(() => window.__g1520.Q().answered);
+    await page.keyboard.press("a");
+    if ((await page.evaluate(() => window.__g1520.Q().answered)) !== q0) throw new Error("a hidden panel still took an answer");
+    await page.click("#qShow");
+    await page.waitForTimeout(200);
+    if (!(await page.isVisible("#console"))) throw new Error("the Questions button did not bring the panel back");
+    const s = await state(page);
+    if (s.settings.dock !== "left" || s.settings.qsize !== "l") throw new Error("layout not saved: " + JSON.stringify(s.settings));
+    return page;
+  },
+  async "save now, download a save file, and load one"(b) {
+    const page = await open(b, save());
+    await page.click("#gearBtn");
+    await page.click('#modal [data-act="saveNow"]');
+    if (!/Saved/.test(await page.textContent(".toasts"))) throw new Error("no saved message");
+    const [dl] = await Promise.all([page.waitForEvent("download"), page.click('#modal [data-act="saveFile"]')]);
+    const code = require("fs").readFileSync(await dl.path(), "utf8");
+    if (!/^G1520:/.test(code) || !/^grind-to-1520-save-\d{4}-\d{2}-\d{2}\.txt$/.test(dl.suggestedFilename())) throw new Error("bad save file: " + dl.suggestedFilename());
+    const S = JSON.parse(Buffer.from(code.slice(6), "base64").toString("utf8"));
+    S.city.name = "Filetown";
+    const f = require("path").join(require("os").tmpdir(), "g1520-load-test.txt");
+    require("fs").writeFileSync(f, "G1520:" + Buffer.from(JSON.stringify(S), "utf8").toString("base64"));
+    await page.setInputFiles("#loadFileIn", f);
+    await page.waitForTimeout(500);
+    if ((await state(page)).city.name !== "Filetown") throw new Error("the save file did not load");
+    await page.keyboard.press("Control+s");
+    await page.waitForTimeout(200);
+    return page;
+  },
   async "walk the 3D city"(b) {
     const page = await open(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; }));
     await w3Ready(page);
