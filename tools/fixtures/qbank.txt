@@ -1,0 +1,66 @@
+Question ID 0a2f1b7c
+Assessment Test Domain Skill Difficulty
+SAT Math Algebra Linear functions
+
+ID: 0a2f1b7c
+The function f is defined by f(x) = 3x + 7. What is the value of f(2)?
+A. 6
+B. 10
+C. 13
+D. 20
+
+ID: 0a2f1b7c Answer
+Correct Answer: C
+Rationale
+Choice C is correct. Substituting 2 for x gives 3(2) + 7 = 13.
+Question Difficulty: Easy
+Question ID 1b2c3d4e
+Assessment Test Domain Skill Difficulty
+SAT Reading and Writing Craft and Structure Words in Context
+ID: 1b2c3d4e
+The architect’s plans were so ______ that the builders needed no further guidance.
+Which choice completes the text with the most logical and precise word or phrase?
+A. vague
+B. thorough
+C. brief
+D. ornate
+ID: 1b2c3d4e Answer
+Correct Answer: B
+Rationale
+Choice B is the best answer because thorough plans need no further guidance.
+Question Difficulty: Hard
+Question ID 99aa88bb
+Assessment Test Domain Skill Difficulty
+SAT Math Advanced Math Nonlinear equations in one variable and systems of equations in two variables
+ID: 99aa88bb
+If x^2 = 49 and x > 0, what is the value of x?
+ID: 99aa88bb Answer
+Correct Answer: 7
+Rationale
+The positive square root of 49 is 7.
+Question Difficulty: Medium
+Question ID 77cc66dd
+Assessment Test Domain Skill Difficulty
+SAT Math Problem-Solving and Data Analysis Ratios, rates, proportional relationships, and units
+ID: 77cc66dd
+A car travels 150 miles in 3 hours. At this rate, how many miles does it travel in 5 hours?
+ID: 77cc66dd Answer
+Correct Answer: 250
+Rationale
+50 miles per hour times 5 hours.
+Question Difficulty: Easy
+Question ID 55ee44ff
+Assessment Test Domain Skill Difficulty
+SAT Reading and Writing Information and Ideas Command of Evidence
+ID: 55ee44ff
+The table shows rainfall by month. A student claims July was the wettest month.
+Which choice best describes data from the table that support the student’s claim?
+A. July had 9 cm.
+B. June had 4 cm.
+C. May had 3 cm.
+D. August had 5 cm.
+ID: 55ee44ff Answer
+Correct Answer: A
+Rationale
+July has the highest value.
+Question Difficulty: Medium

@@ -10,7 +10,7 @@ const base = JSON.stringify(simulate({ days: 6, perDay: 60, learn: 0.25, seed: 3
 
 function save(edit) {
   const S = JSON.parse(base);
-  S.welcomed = true; S.seenV3 = true; S.evo.seen = S.evo.stage; S.lastSeen = S.lastInteract = Date.now();
+  S.welcomed = true; S.seenV3 = true; S.seenV4 = true; S.evo.seen = S.evo.stage; S.lastSeen = S.lastInteract = Date.now();
   if (edit) edit(S);
   return JSON.stringify(S);
 }
@@ -102,7 +102,12 @@ const TESTS = {
     return page;
   },
   async "ascend resets the run and keeps the climb"(b) {
-    const page = await open(b, save((S) => { S.runSparks = 6e7; S.lifeSparks = 6e8; S.hub.alg = 7; }));
+    const gated = await open(b, save((S) => { S.runSparks = 6e7; S.lifeSparks = 6e8; S.gb.since = 0; }));
+    await gated.click('[data-act="tab"][data-v="ascend"]');
+    const blocked = await gated.locator('#panel [data-act="sleep"][disabled]').count();
+    await gated.close();
+    if (!blocked) throw new Error("ascend not gated on a Gauntlet score");
+    const page = await open(b, save((S) => { S.runSparks = 6e7; S.lifeSparks = 6e8; S.hub.alg = 7; S.gb.since = 760; }));
     const s0 = await state(page);
     await page.click('[data-act="tab"][data-v="ascend"]');
     await page.click('#panel [data-act="sleep"]');
@@ -164,6 +169,78 @@ const TESTS = {
     if (!(await page.isVisible("#panel")) || (await page.isVisible("#console"))) throw new Error("evolution tab layout wrong");
     await page.click('#decknav [data-v="network"]');
     if (!(await page.isVisible("#engineCv")) || !(await page.isVisible("#console"))) throw new Error("network tab layout wrong");
+    return page;
+  },
+  async "daily review comes first and pays a chest"(b) {
+    const past = Date.now() - 36e5;
+    const page = await open(b, save((S) => {
+      S.rev = null; S.focus = "mix"; S.ai = [];
+      S.spots = [0, 1, 2].map((i) => ({ k: "g:alg.lin1:" + (1000 + i) + ":1", kind: "gen", ref: { t: "alg.lin1", s: 1000 + i, lv: 1 }, d: "alg", sk: "Linear equations in one variable", box: 1, due: past, miss: 1, added: past }));
+    }));
+    const src = await page.textContent(".sheet-meta .src");
+    if (!/Daily review · 1 of 3/.test(src)) throw new Error("first question is not the daily review: " + src);
+    const c0 = (await state(page)).chests;
+    for (let i = 0; i < 3; i++) { await answerAny(page); await page.click("#nextBtn"); await page.waitForTimeout(150); }
+    const s1 = await state(page);
+    if (!s1.rev.done || s1.rev.p !== 3) throw new Error("review not finished: " + JSON.stringify(s1.rev));
+    if (s1.chests.r + s1.chests.e <= c0.r + c0.e - 1) throw new Error("no review chest");
+    return page;
+  },
+  async "tag why a miss happened"(b) {
+    const page = await open(b, save((S) => { S.rev = { date: "x", n: 0, p: 0, done: true }; }));
+    for (let i = 0; i < 8; i++) {
+      await answerAny(page);
+      if (await page.locator("#whyBox [data-act=why]").count()) {
+        await page.click('#whyBox [data-act="why"][data-v="trap"]');
+        if (!/Logged/.test(await page.textContent("#whyBox"))) throw new Error("tag not confirmed");
+        const s = await state(page);
+        if (!s.miss.length || s.miss[s.miss.length - 1][3] !== "trap") throw new Error("miss not logged");
+        await page.click('[data-act="tab"][data-v="reviews"]');
+        if (!/Fell for a trap/.test(await page.textContent("#plMiss"))) throw new Error("journal empty");
+        return page;
+      }
+      await page.click("#nextBtn"); await page.waitForTimeout(120);
+    }
+    throw new Error("never missed a question to tag");
+  },
+  async "set a season in Plan"(b) {
+    const page = await open(b, save((S) => { S.season.date = ""; }));
+    await page.click('[data-act="tab"][data-v="reviews"]');
+    const d = new Date(Date.now() + 30 * 864e5), ds = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    await page.fill("#snDate", ds);
+    await page.fill("#snTarget", "1300");
+    await page.click('[data-act="seasonSave"]');
+    const s = await state(page);
+    if (s.season.date !== ds || s.season.target !== 1300) throw new Error(JSON.stringify(s.season));
+    if (!/days left/.test(await page.textContent("#plSeason"))) throw new Error("no countdown");
+    if (!/to PSAT/.test(await page.textContent("#climbCap"))) throw new Error("HUD has no countdown");
+    return page;
+  },
+  async "bulk import from a Question Bank export"(b) {
+    const page = await open(b, save());
+    const txt = require("fs").readFileSync(require("path").join(__dirname, "fixtures", "qbank.txt"), "utf8");
+    await page.click("#impBtn");
+    await page.fill("#impTxt", txt);
+    await page.click('[data-act="impGo"]');
+    if (!/Imported 5 questions/.test(await page.textContent(".imp-msg"))) throw new Error(await page.textContent(".imp-msg"));
+    await page.click('[data-act="impGo"]');
+    const s = await state(page);
+    if (s.imports.length !== 5) throw new Error("imports " + s.imports.length);
+    return page;
+  },
+  async "locked tabs stay locked on a new game"(b) {
+    const page = await open(b, null);
+    await page.click('[data-act="welcomeGo"]');
+    await page.click('#decknav [data-v="arena"]');
+    if (await page.isVisible("#panelWrap")) throw new Error("arena opened at stage 0");
+    if (!/locked/i.test(await page.textContent("#toasts"))) throw new Error("no lock toast");
+    return page;
+  },
+  async "phone plan tab fits"(b) {
+    const page = await open(b, save(), 390, 844);
+    await page.click('#decknav [data-v="reviews"]');
+    const over = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+    if (over) throw new Error("horizontal overflow on the Plan tab");
     return page;
   },
   async "fresh game starts at 320 and climbs"(b) {

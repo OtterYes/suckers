@@ -28,22 +28,55 @@ top. Each of the eight domains grows up to its own score, so weak spots are the 
 - **Evolution.** Connections carry the engine through eleven permanent stages. Each stage adds a
   spark bonus and a chest. Stage 5 turns the engine into a Reactor and stage 7 into a Universe;
   you can switch between unlocked forms.
+- **Unlocks.** Systems come online as the engine evolves, so the first hour is just questions:
+  upgrades and domain hubs at stage 1, pathways at stage 2, the Arena at stage 3, Ascend at stage 5.
 - **Sparks.** Right answers earn sparks. Spend them on domain hubs (one generator per domain,
   capped by how many of its nodes you've lit), pathways (unlocked as your score climbs), and
-  upgrades that make each answer worth more.
-- **Ascend.** Trade a run for Insight, a permanent bonus. Scores, nodes, evolutions, levels,
+  upgrades that make each answer worth more. Domains below your average pay up to ×1.5, and a
+  question you've already seen pays less unless it's a review.
+- **Offline.** The engine earns while you're away, but never more than your answers earned on your
+  last day of practice.
+- **Ascend.** Trade a run for Insight, a permanent bonus. Each Ascend needs a Gauntlet section score
+  since the last one, starting at 440 and rising 20 each time. Scores, nodes, evolutions, levels,
   relics, and trophies stay.
 - **Sets.** Questions come in tens. Each set ends with a summary of what moved and a bonus.
+
+## Coming back
+
+- **Daily review.** Every miss becomes a blind spot that returns after 10 minutes, then 1, 3, and
+  7 days. The spots due each morning (up to 10) form the daily review, served before new
+  questions. Finishing it pays a chest.
+- **Seasons.** Set a test date and target under Plan. The climb becomes a season with a countdown,
+  a weekly target based on the gap, and a test-day projection from your trend since placement.
+  When the date passes, the season closes, your real score (if you enter it) becomes the baseline
+  marker, and a new season starts. Evolutions, relics, and levels carry over.
+- **This week.** Each week has a twist (Double Down, Speed Week, Streak Week, Hard Mode, or
+  Review Week) and a featured domain whose boss pays a better chest once.
+- **Mastery.** Past the five nodes, each skill has Bronze, Silver, and Gold mastery, earned on hard
+  questions: 4 right, then 10 right with 70% of the last 10, then 12 right at pace with 80%. Each
+  tier is +1% sparks forever and a chest. A hard drill serves only hard questions in one skill.
+- **Mistake journal.** After a miss, tap why: misread, didn't know it, fell for a trap, rushed, or
+  guessed. Plan shows the week's pattern and what to do about it.
+- **Streak freezes.** One a week, up to 2 banked. Each covers a missed day.
+- **Weekly league.** In the Arena. League points are 1, 2, or 3 per right answer by difficulty and
+  reset every Monday, so anyone can win a week. It's opt-in and runs on the published page for
+  people it's shared with; it shares points, level, and engine stage only.
+- **Share card.** From Profile, promotions, or evolutions: a PNG of your engine and your climb.
 
 Blind spots, daily quests, chests, relics, bosses, and the timed Gauntlet work as before. Click
 any node or domain on the engine to see its details, level its hub, or train just that skill.
 
 ## Importing Question Bank items
 
-Press **Import** above the question and paste one question copied from the College Board SAT Suite
-Question Bank, including its "Correct Answer:" and "Rationale" lines. The domain, skill, and difficulty
-are read from the pasted text. Imported questions are stored only in your save and are mixed into
+Press **Import** above the question and paste questions copied from the College Board SAT Suite
+Question Bank: one question, or a whole exported page (it splits on each "Question ID"). Include the
+"Correct Answer:" and rationale. The domain, skill, and difficulty are read from the text, using the
+Question Bank's own names. Imported questions are stored only in your save and are mixed into
 practice, skill training, and blind spots like any other question. Grid-in math answers work too.
+Questions built on a graph or picture don't copy as text.
+
+On the published page, **Fresh pack** asks Claude for 5 new questions in any domain, including Math
+with grid-ins. Plan shows how many unseen Reading and Writing questions are left in each domain.
 
 ## Development
 
@@ -55,9 +88,11 @@ node tools/sim.cjs --days 21 --per-day 60   # balance sim: a modeled student pla
 
 export NODE_PATH=$(npm root -g)             # tools below use Playwright + Chromium
 node tools/smoke.cjs                        # boot, answer questions, fail on page errors
-node tools/flows.cjs                        # functional checks: buying, bosses, sets, gauntlet, Ascend
+node tools/flows.cjs                        # functional checks: buying, bosses, sets, gauntlet, Ascend,
+                                            # daily review, mistake tags, seasons, bulk import, unlocks
 node tools/shots.cjs out/                   # screenshots of the main screens from simulated saves
 ```
 
 Saves are versioned (`S.v`). Version 2 saves (from before the engine) migrate automatically, keep
-their ratings, skip placement, and catch up on the evolutions their history earned.
+their ratings, skip placement, and catch up on the evolutions their history earned. Version 3 saves
+gain the season, review, league, and journal fields and see a one-time "what's new".

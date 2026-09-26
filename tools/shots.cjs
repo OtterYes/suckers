@@ -14,7 +14,7 @@ function stateAfter(days, edit) {
   if (!days) return null;
   if (!cache[days]) cache[days] = JSON.stringify(simulate({ days, perDay: 60, learn: 0.25, seed: 3, ascend: 3 }).S);
   const S = JSON.parse(cache[days]);
-  S.welcomed = true; S.seenV3 = true; S.evo.seen = S.evo.stage;
+  S.welcomed = true; S.seenV3 = true; S.seenV4 = true; S.evo.seen = S.evo.stage;
   S.lastSeen = S.lastInteract = Date.now();
   if (edit) edit(S);
   return JSON.stringify(S);
@@ -22,12 +22,25 @@ function stateAfter(days, edit) {
 const click = (sel) => async (page) => { await page.click(sel); await page.waitForTimeout(500); };
 
 const SCENES = [
-  ["day02-network", 2, null, null],
+  ["day02-network", 2, (S) => { S.season.date = new Date(Date.now() + 19 * 864e5).toISOString().slice(0, 10); }, null],
   ["day06-reactor", 6, (S) => { S.form = "reactor"; }, null],
   ["day14-universe", 14, (S) => { S.form = "universe"; }, null],
   ["day14-network", 14, (S) => { S.form = "network"; }, null],
   ["panel-evolution", 6, null, click('[data-act="tab"][data-v="evolution"]')],
-  ["panel-reviews", 6, null, click('[data-act="tab"][data-v="reviews"]')],
+  ["panel-plan", 6, (S) => { S.season.date = new Date(Date.now() + 40 * 864e5).toISOString().slice(0, 10); S.season.target = 1300; S.miss = [[Date.now() - 1e6, "cs", "Words in Context", "trap"], [Date.now() - 2e6, "alg", "Linear functions", "read"], [Date.now() - 3e6, "cs", "Words in Context", "trap"]]; }, click('[data-act="tab"][data-v="reviews"]')],
+  ["panel-plan-skills", 6, null, async (page) => { await page.click('[data-act="tab"][data-v="reviews"]'); await page.click('[data-act="scrollTo"][data-v="plSkills"]'); await page.waitForTimeout(600); }],
+  ["missed-why", 6, null, async (page) => {
+    for (let k = 0; k < 10; k++) {
+      const ch = page.locator('#conBody [data-act="pick"]');
+      if (await ch.count()) await ch.nth(k % 4).click(); else await page.locator("#sprIn").fill("-4321");
+      await page.click("#checkBtn"); await page.waitForTimeout(300);
+      for (let j = 0; j < 3; j++) { const m = page.locator('#modal:not([hidden]) [data-act="modalClose"]'); if (await m.count()) await m.first().click(); }
+      if (await page.locator("#whyBox").count()) { await page.locator("#whyBox").scrollIntoViewIfNeeded(); break; }
+      await page.click("#nextBtn"); await page.waitForTimeout(300);
+    }
+  }],
+  ["whats-new", 6, (S) => { S.seenV4 = false; }, null],
+  ["import", 6, null, click("#impBtn")],
   ["panel-arena", 6, null, click('[data-act="tab"][data-v="arena"]')],
   ["panel-ascend", 6, null, click('[data-act="tab"][data-v="ascend"]')],
   ["profile", 6, null, click("#rankBtn")],
@@ -62,6 +75,8 @@ const SCENES = [
   }],
   ["mobile-network", 6, null, null, 390, 844],
   ["mobile-evolution", 6, null, click('[data-act="tab"][data-v="evolution"]'), 390, 844],
+  ["mobile-plan", 6, null, click('[data-act="tab"][data-v="reviews"]'), 390, 844],
+  ["new-game-locked", 0, null, click('[data-act="welcomeGo"]')],
   ["tablet", 6, null, null, 900, 1100],
   ["laptop-1280", 6, null, null, 1280, 760],
 ];
