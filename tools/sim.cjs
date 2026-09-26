@@ -72,6 +72,21 @@ function simulate(opts) {
     }
   }
 
+  function gauntlet(t) {
+    const p = E.proj(S), sec = p.rw <= p.m ? "rw" : "m";
+    E.gauntStart(S, sec, t, rnd);
+    for (let mod = 0; mod < 2; mod++) {
+      const G = S.g;
+      G.qs.forEach((q, k) => {
+        const ok = rnd() < E.pCorrect(T[q.d], q.lv, !q.spr);
+        G.resp[k] = ok ? (q.spr ? String(q.spr.vals[0]) : q.correct) : (q.spr ? "-99999" : (q.correct + 1) % 4);
+        G.ms[k] = 60000;
+      });
+      const r = E.gauntFinishModule(S, t, rnd);
+      if (r.stage === "route") S.g.pending = false; else mark("gauntlet:" + E.ascendTarget(S), `score ${r.score}`);
+    }
+  }
+
   for (let day = 0; day < opts.days; day++) {
     let t = now;
     // Coming back: offline earnings, quests, chests.
@@ -100,9 +115,11 @@ function simulate(opts) {
       mark("rank:" + rk.label, `day ${day + 1} q${answered} (${p})`);
       E.GENS.forEach((G) => { if (E.genUnlocked(S, G)) mark("unlock:" + G.id, `day ${day + 1} q${answered}`); });
       if (E.conn) { const st = S.evo ? S.evo.stage : 0; mark("evo:" + st, `day ${day + 1} q${answered} (${E.conn(S)} conn)`); }
+      // Once a day, halfway through, the student runs a Gauntlet on their weaker section.
+      if (i === Math.floor(opts.perDay / 2) && E.isOpen && E.isOpen(S, "arena")) gauntlet(t);
       if (opts.ascend && E.insightGain(S) >= Math.max(opts.ascend, Math.ceil(S.insight * 0.5))) {
-        mark("ascend:" + (ascends + 1), `day ${day + 1} q${answered} (+${E.insightGain(S)} insight)`);
-        E.doSleep(S); ascends++;
+        const g = E.insightGain(S);
+        if (E.doSleep(S)) { ascends++; mark("ascend:" + ascends, `day ${day + 1} q${answered} (+${g} insight)`); }
       }
     }
     S.lastSeen = t;
