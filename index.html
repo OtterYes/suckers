@@ -2599,7 +2599,7 @@ function renderForms(){
 
 /* ---------- Engine stage: the climb from 320 at the bottom to 1520 at the top ---------- */
 var FORM_ACC={network:"#3FD8FF",reactor:"#46F0C8",universe:"#FFC24D"};
-var ST={cv:null,ctx:null,w:0,h:0,dpr:1,g:null,disp:{},paths:{},parts:[],pulses:[],fx:[],hits:[],hover:null,pin:null,sprites:{},bg:null,bgForm:"",flash:0,t:0,orb:null,gal:null,stars:null,spawn:0,prevForm:null,fade:1,tipKey:"",tipHide:0};
+var ST={cv:null,ctx:null,w:0,h:0,dpr:1,g:null,disp:{},paths:{},parts:[],pulses:[],fx:[],hits:[],hover:null,pin:null,sprites:{},bg:null,bgForm:"",flash:0,t:0,orb:null,gal:null,stars:null,spawn:0,prevForm:null,fade:1,tipKey:"",tipHide:0,lastDraw:0,hovering:false};
 function acc(){return FORM_ACC[formOf(S).id];}
 function glow(col){var s=ST.sprites[col];if(s)return s;var c=document.createElement("canvas");c.width=c.height=64;var x=c.getContext("2d"),g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,hexA(col,1));g.addColorStop(0.22,hexA(col,0.6));g.addColorStop(0.55,hexA(col,0.14));g.addColorStop(1,hexA(col,0));x.fillStyle=g;x.fillRect(0,0,64,64);ST.sprites[col]=c;return c;}
 function dGlow(c,col,x,y,r,a){if(a<=0.01||r<=0)return;c.globalAlpha=Math.min(1,a);c.drawImage(glow(col),x-r,y-r,2*r,2*r);c.globalAlpha=1;}
@@ -2913,8 +2913,9 @@ function showTip(hit,pin){
 function hideTip(force){if(ST.pin&&!force)return;ST.pin=null;ST.tipKey="";var el=$("etip");if(el)el.hidden=true;}
 function wireStage(){
   var cv=$("engineCv"),tip=$("etip");
-  cv.addEventListener("mousemove",function(ev){if(ST.pin)return;var hit=stageHit(ev);cv.classList.toggle("pointer",!!hit);if(hit)showTip(hit,false);else{clearTimeout(ST.tipHide);ST.tipHide=setTimeout(function(){if(!tip.matches(":hover"))hideTip();},160);}});
-  cv.addEventListener("mouseleave",function(){clearTimeout(ST.tipHide);ST.tipHide=setTimeout(function(){if(!tip.matches(":hover"))hideTip();},220);});
+  cv.addEventListener("mouseenter",function(){ST.hovering=true;});
+  cv.addEventListener("mousemove",function(ev){ST.hovering=true;if(ST.pin)return;var hit=stageHit(ev);cv.classList.toggle("pointer",!!hit);if(hit)showTip(hit,false);else{clearTimeout(ST.tipHide);ST.tipHide=setTimeout(function(){if(!tip.matches(":hover"))hideTip();},160);}});
+  cv.addEventListener("mouseleave",function(){ST.hovering=false;clearTimeout(ST.tipHide);ST.tipHide=setTimeout(function(){if(!tip.matches(":hover"))hideTip();},220);});
   tip.addEventListener("mouseleave",function(){if(!ST.pin)hideTip();});
   cv.addEventListener("click",function(ev){var hit=stageHit(ev);if(!hit){hideTip(true);return;}
     if(hit.h.type==="core"&&!isMobile()){setTab("evolution");return;}
@@ -3267,7 +3268,7 @@ function maybeEvolveModal(){
   for(i=from+1;i<=to;i++){var f=formAt(i);if(f)forms.push(f);if(EVO[i].chest)chests[EVO[i].chest]++;}
   S.evo.seen=to;saveAll();applyViews();renderHUD();
   var chestTxt=["l","e","r","c"].filter(function(r){return chests[r];}).map(function(r){return'<span class="reward">'+chests[r]+" "+RARITY[r].name+" chest"+(chests[r]>1?"s":"")+"</span>";}).join("");
-  var multi=to-from>1,best=["l","e","r","c"].filter(function(r){return chests[r];})[0];
+  var multi=to-from>1,best=["l","e","r","c"].filter(function(r){return chests[r]&&S.chests[r]>0;})[0];
   modal('<div class="evo-modal"><div class="evo-orb"></div><div class="stage-n">'+(multi?"Stages "+(from+1)+"–"+to:"Evolution · stage "+to+" of "+(EVO.length-1))+"</div><h2>"+esc(E.name)+"</h2><p>"+(multi?"Your study history lit "+conn(S)+" skill nodes. That powered "+(to-from)+" evolutions at once. "+esc(E.line):esc(E.line))+'</p><div class="rewards"><span class="reward a">All sparks ×'+TRIM(Math.round(evoMult(S)*100)/100)+"</span>"+forms.map(function(f){return'<span class="reward a">New form · '+esc(f.name)+"</span>";}).join("")+(from<HUB.stage&&to>=HUB.stage?'<span class="reward a">Domain hubs online</span>':"")+chestTxt+'</div><div class="mfoot" style="justify-content:center">'+(best?'<button type="button" class="btn primary" data-act="openChest" data-v="'+best+'">Open chest</button>':"")+'<button type="button" class="btn line" data-act="modalClose">Keep growing</button></div></div>');
 }
 
@@ -3431,7 +3432,11 @@ function loop(t){
   if(UI.confirm&&n-UI.confirmT>5000){var was=UI.confirm;UI.confirm=null;if(was==="sleep")renderPanel();else if(was==="gsubmit")renderConsole();}
   if(t-lastSlow>250){lastSlow=t;updateAfford();renderNav();renderRail();renderEvoBar();if(n-lastDay>30000){lastDay=n;rollDay(S,n);}}
   if(n-lastSave>10000){lastSave=n;saveLocal();}
-  if(stageOn())stageFrame(t,dt,active);
+  if(stageOn()){
+    /* Full frame rate only while something moves; the ambient engine is fine at 30fps, and at 10 behind a dialog. */
+    var busy=ST.pulses.length||ST.fx.length||ST.flash>0||ST.fade<1||ST.hovering,gap=modalOpen()?100:busy?0:33;
+    if(t-ST.lastDraw>=gap){stageFrame(t,Math.min(0.1,(t-(ST.lastDraw||t))/1000),active);ST.lastDraw=t;}
+  }
   requestAnimationFrame(loop);
 }
 
