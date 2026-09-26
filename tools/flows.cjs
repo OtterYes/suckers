@@ -3,6 +3,7 @@
 const path = require("path");
 const { chromium } = require("playwright");
 const { simulate } = require("./sim.cjs");
+const { routeThree } = require("./three.cjs");
 
 const file = "file://" + path.resolve(__dirname, "..", "index.html");
 const KEY = "grind1520.save.v1";
@@ -21,17 +22,22 @@ function save(edit) {
   if (edit) edit(S);
   return JSON.stringify(S);
 }
-async function open(browser, json, w, h) {
+async function open(browser, json, w, h, opts) {
   const page = await browser.newPage({ viewport: { width: w || 1440, height: h || 900 } });
   page.errors = [];
   page.on("pageerror", (e) => page.errors.push(e.message));
   await page.route(/^https?:\/\//, (r) => r.abort());
+  if (!(opts && opts.noThree)) await routeThree(page);
   if (json) await page.addInitScript((j) => { try { localStorage.setItem("grind1520.save.v1", j); } catch (e) {} }, json);
   await page.goto(file);
   await page.waitForTimeout(900);
   return page;
 }
 const state = (page) => page.evaluate((k) => JSON.parse(localStorage.getItem(k)), KEY);
+const w3Ready = (page) => page.waitForFunction(() => window.__g1520 && window.__g1520.w3().ready, null, { timeout: 30000 });
+const w3Pos = (page) => page.evaluate(() => { const P = window.__g1520.w3().pos; return [P.x, P.z]; });
+// Where a world point lands on the page, through the 3D camera.
+const w3At = (page, x, y, z) => page.evaluate(([x, y, z]) => { const W = window.__g1520.w3(), v = W.pos.clone().set(x, y, z).project(W.cam), r = W.cv.getBoundingClientRect(); return { x: r.left + (v.x + 1) / 2 * r.width, y: r.top + (1 - v.y) / 2 * r.height }; }, [x, y, z]);
 async function answerAny(page) {
   const ch = page.locator('#conBody [data-act="pick"]');
   if (await ch.count()) await ch.first().click(); else await page.locator("#sprIn").fill("5");
@@ -649,6 +655,97 @@ const TESTS = {
     await page.click('#modal [data-act="modalClose"]');
     const s = await state(page);
     if (s.seenV7 !== true) throw new Error("tour will show again");
+    return page;
+  },
+  async "the Library building shows its own card, not the wonder's"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "city"; S.city.b.library = S.city.b.library || 1; }));
+    await page.click('[data-act="tab"][data-v="city"]');
+    await page.click('#panel [data-act="cityLook"][data-v="library"]');
+    await page.waitForTimeout(400);
+    const t = await page.textContent("#ctip");
+    if (!/Central Ideas and Details/.test(t) || /Wonder/.test(t)) throw new Error("wrong card: " + t.slice(0, 80));
+    return page;
+  },
+  async "walk the 3D city"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; }));
+    await w3Ready(page);
+    if ((await page.getAttribute("body", "data-view")) !== "3d") throw new Error("the 3D view is not showing");
+    if ((await page.evaluate(() => document.getElementById("cityHud").parentNode.id)) !== "w3Wrap") throw new Error("the city HUD did not move into 3D");
+    const q0 = await page.evaluate(() => window.__g1520.Q().answered), p0 = await w3Pos(page);
+    await page.focus("#w3Cv");
+    await page.keyboard.down("w"); await page.keyboard.down("a"); await page.waitForTimeout(1500); await page.keyboard.up("a"); await page.keyboard.up("w");
+    const p1 = await w3Pos(page);
+    if (!(p1[1] < p0[1] - 0.3)) throw new Error("did not walk forward: " + JSON.stringify([p0, p1]));
+    if (!(p1[0] < p0[0] - 0.1)) throw new Error("did not step left: " + JSON.stringify([p0, p1]));
+    if ((await page.evaluate(() => window.__g1520.Q().answered)) !== q0) throw new Error("walking keys answered the question");
+    return page;
+  },
+  async "open a building in 3D by clicking it and with E"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; }));
+    await w3Ready(page);
+    await page.waitForTimeout(600);
+    const p = await w3At(page, 0, 3.5, 21);
+    await page.mouse.click(p.x, p.y);
+    await page.waitForFunction(() => { const t = document.getElementById("ctip"); return t && !t.hidden && t.style.visibility !== "hidden" && /Town Hall/.test(t.textContent); }, null, { timeout: 8000 });
+    await page.keyboard.press("Escape");
+    if (await page.isVisible("#ctip")) throw new Error("Escape did not close the card");
+    await page.evaluate(() => { const W = window.__g1520.w3(); W.pos.set(0, 0, 25.5); });
+    await page.waitForFunction(() => !document.getElementById("w3Act").hidden, null, { timeout: 8000 });
+    if (!/Town Hall/.test(await page.textContent("#w3Act"))) throw new Error("no prompt for the nearest building");
+    await page.focus("#w3Cv");
+    await page.keyboard.press("e");
+    await page.waitForFunction(() => { const t = document.getElementById("ctip"); return t && !t.hidden && /Town Hall/.test(t.textContent); }, null, { timeout: 8000 });
+    return page;
+  },
+  async "build from a 3D building card"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; S.city.coins = 1e15; }));
+    await w3Ready(page);
+    await page.click('[data-act="tab"][data-v="city"]');
+    await page.waitForTimeout(500);
+    if (!(await page.locator('#panel [data-act="wv"][data-v="3d"][aria-pressed="true"]').count())) throw new Error("the World tab is not on 3D");
+    const id = await page.getAttribute('#panel .cbrow [data-act="cityBuy"]', "data-v");
+    const n0 = (await state(page)).city.b[id] || 0;
+    await page.click('#panel [data-act="cityLook"][data-v="' + id + '"]');
+    await page.waitForFunction(() => { const t = document.getElementById("ctip"); return t && !t.hidden && t.style.visibility !== "hidden" && t.querySelector('[data-act="cityBuy"]'); }, null, { timeout: 10000 });
+    await page.click('#ctip [data-act="cityBuy"]');
+    await page.waitForTimeout(500);
+    const n1 = (await state(page)).city.b[id] || 0;
+    if (!(n1 > n0)) throw new Error("nothing was built: " + id);
+    if (!((await page.evaluate((id) => window.__g1520.w3().lots[id].lv, id)) >= 1)) throw new Error("the 3D lot did not rebuild");
+    return page;
+  },
+  async "switch between the 2D and 3D city"(b) {
+    const page = await open(b, save((S) => { S.settings.w3new = true; }));
+    await page.click('#viewSw [data-v="3d"]');
+    await w3Ready(page);
+    if ((await state(page)).settings.view !== "3d") throw new Error("3D not saved as the main screen");
+    await page.click('#viewSw [data-v="city"]');
+    await page.waitForTimeout(300);
+    if ((await page.getAttribute("body", "data-view")) !== "city") throw new Error("the 2D city is not back");
+    if ((await page.evaluate(() => document.getElementById("cityHud").parentNode.id)) !== "cityWrap") throw new Error("the HUD did not return to the 2D city");
+    if (!(await page.isVisible("#cityCv")) || await page.isVisible("#w3Wrap")) throw new Error("wrong canvas showing");
+    return page;
+  },
+  async "3D falls back to the 2D city when it cannot load"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; }), 1440, 900, { noThree: true });
+    await page.waitForSelector('#w3Msg:not([hidden]) [data-act="w3Retry"]', { timeout: 15000 });
+    await page.click('#w3Msg [data-act="view"][data-v="city"]');
+    await page.waitForTimeout(300);
+    if ((await page.getAttribute("body", "data-view")) !== "city") throw new Error("did not switch to the 2D city");
+    if ((await state(page)).settings.view !== "city") throw new Error("the 2D choice was not saved");
+    return page;
+  },
+  async "phone 3D fits"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; }), 390, 844);
+    await w3Ready(page);
+    const box = await page.locator("#w3Cv").boundingBox();
+    if (!box || box.width < 380 || box.height < 300) throw new Error("3D view too small: " + JSON.stringify(box));
+    await page.click('#decknav [data-v="city"]');
+    await page.waitForTimeout(500);
+    const b2 = await page.locator("#w3Cv").boundingBox();
+    if (!b2 || b2.height < 300) throw new Error("3D view too small on the World tab: " + JSON.stringify(b2));
+    const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (over > 1) throw new Error("page scrolls sideways by " + over + "px");
     return page;
   },
   async "fresh game starts at 320 and climbs"(b) {

@@ -4,6 +4,7 @@
 const path = require("path");
 const { chromium } = require("playwright");
 const { simulate } = require("./sim.cjs");
+const { routeThree } = require("./three.cjs");
 
 const out = process.argv[2] || ".";
 const only = process.argv[3] || "";
@@ -21,6 +22,7 @@ function stateAfter(days, edit) {
   return JSON.stringify(S);
 }
 const click = (sel) => async (page) => { await page.click(sel); await page.waitForTimeout(500); };
+const w3 = (then) => async (page) => { await page.waitForFunction(() => window.__g1520 && window.__g1520.w3().ready, null, { timeout: 30000 }); await page.waitForTimeout(1800); if (then) await then(page); };
 
 const SCENES = [
   ["day02-network", 2, (S) => { S.season.date = new Date(Date.now() + 19 * 864e5).toISOString().slice(0, 10); }, null],
@@ -142,6 +144,14 @@ const SCENES = [
   ["units-tour-1", 6, (S) => { S.seenV7 = false; }, null],
   ["units-tour-3", 6, (S) => { S.seenV7 = false; }, async (page) => { for (let k = 0; k < 2; k++) await page.keyboard.press("ArrowRight"); await page.click('#wnFog [data-i="8"]'); await page.click('#wnFog [data-i="9"]'); await page.waitForTimeout(300); }],
   ["new-game-locked", 0, null, click('[data-act="welcomeGo"]')],
+  ["city3d-day", 21, (S) => { S.settings.view = "3d"; S.settings.tod = "day"; S.settings.w3new = true; }, w3()],
+  ["city3d-dusk", 21, (S) => { S.settings.view = "3d"; S.settings.tod = "dusk"; S.settings.w3new = true; }, w3()],
+  ["city3d-night", 21, (S) => { S.settings.view = "3d"; S.settings.tod = "night"; S.settings.w3new = true; }, w3()],
+  ["city3d-above", 36, (S) => { S.settings.view = "3d"; S.settings.tod = "day"; S.settings.w3new = true; }, w3(async (page) => { await page.evaluate(() => { const W = window.__g1520.w3(); W.pos.set(0, 0, 70); W.pitch = 0.7; W.dist = 32; }); await page.waitForTimeout(1500); })],
+  ["city3d-tab", 21, (S) => { S.settings.view = "3d"; S.settings.tod = "day"; S.settings.w3new = true; }, w3(click('[data-act="tab"][data-v="city"]'))],
+  ["city3d-card", 21, (S) => { S.settings.view = "3d"; S.settings.tod = "dusk"; S.settings.w3new = true; }, w3(async (page) => { await page.evaluate(() => window.__g1520.w3Look("lighthouse")); await page.waitForTimeout(2500); })],
+  ["mobile-city3d", 21, (S) => { S.settings.view = "3d"; S.settings.tod = "day"; S.settings.w3new = true; }, w3(), 390, 844],
+  ["mobile-world3d", 21, (S) => { S.settings.view = "3d"; S.settings.tod = "day"; S.settings.w3new = true; }, w3(click('#decknav [data-v="city"]')), 390, 844],
   ["tablet", 6, null, null, 900, 1100],
   ["laptop-1280", 6, null, null, 1280, 760],
 ];
@@ -156,6 +166,7 @@ const SCENES = [
     const errors = [];
     page.on("pageerror", (e) => errors.push(e.message));
     await page.route(/^https?:\/\//, (r) => r.abort());
+    await routeThree(page);
     if (json) await page.addInitScript((j) => { try { localStorage.setItem("grind1520.save.v1", j); } catch (e) {} }, json);
     await page.goto(file);
     await page.waitForTimeout(1300);
