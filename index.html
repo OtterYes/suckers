@@ -872,8 +872,8 @@ body[data-tab="city"] .view-sw{display:none}
 .cfound label{display:block;font-weight:700;color:var(--ink);margin:14px 0 6px}
 .cnames{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
 .cnames .pill{padding:5px 9px;font-size:11.5px}
-.chero,.wn-city{display:flex;justify-content:center;align-items:flex-end;gap:0;height:84px;border-radius:12px;background:linear-gradient(180deg,#0B1A36,#243E68 72%,#34425A 72%,#34425A);border:1px solid var(--wire-2);overflow:hidden;padding:0 6px}
-.chero img,.wn-city img{width:66px;height:66px;margin:0 -4px}
+.chero,.wn-city{display:flex;justify-content:center;align-items:flex-end;gap:0;height:96px;border-radius:12px;background:linear-gradient(180deg,#0B1A36,#243E68 72%,#34425A 72%,#34425A);border:1px solid var(--wire-2);overflow:hidden;padding:0 6px}
+.chero img,.wn-city img{width:84px;height:84px;margin:0 -9px}
 @media (min-width:981px){
   body[data-tab="city"] .panel-wrap{justify-content:flex-end;background:linear-gradient(270deg,rgba(5,10,20,.55),rgba(5,10,20,.12) 55%,transparent)}
   body[data-tab="city"] .glass{width:min(450px,50%)}
@@ -881,32 +881,34 @@ body[data-tab="city"] .view-sw{display:none}
 }
 @media (max-width:1200px){.view-sw button span{display:none}.view-sw button{padding:6px 8px}}
 /* What's new: city demos */
-.wn-city img{width:74px;height:74px}
-.wn-city{height:96px}
-.wn-lot{position:relative;height:120px;border-radius:12px;background:linear-gradient(180deg,#0B1A36,#243E68 74%,#34425A 74%);border:1px solid var(--wire-2);overflow:hidden;display:grid;place-items:center}
-.wn-lot img{position:absolute;left:50%;bottom:-6px;width:96px;height:96px;transform:translate(-50%,100%);transition:transform .9s cubic-bezier(.2,1.3,.4,1)}
+.wn-city img{width:112px;height:112px;margin:0 -14px}
+.wn-city{width:100%;height:150px}
+.wn-lot{position:relative;width:100%;height:150px;border-radius:12px;background:linear-gradient(180deg,#0B1A36,#243E68 74%,#34425A 74%);border:1px solid var(--wire-2);overflow:hidden;display:grid;place-items:center}
+.wn-lot img{position:absolute;left:50%;bottom:-8px;width:132px;height:132px;transform:translate(-50%,100%);transition:transform .9s cubic-bezier(.2,1.3,.4,1)}
 .wn-lot img.up{transform:translate(-50%,0)}
 .wn-sign{position:relative;z-index:2;font-family:var(--f-disp);font-weight:700;font-size:15px;letter-spacing:.18em;color:#fff;background:#3A4658;border:2px solid #6D7E98;border-radius:8px;padding:8px 18px;cursor:pointer;transition:transform .3s,opacity .4s}
 .wn-sign.go{background:#1F7A55;border-color:#3FE09E;box-shadow:0 0 18px -4px #3FE09E}
 .wn-sign.done{opacity:0;transform:translateY(-30px);pointer-events:none}
-.wn-coinBox{display:flex;align-items:center;justify-content:center;gap:18px;height:120px;border-radius:12px;background:radial-gradient(260px 120px at 50% 100%,rgba(255,201,51,.16),transparent),var(--deck-2);border:1px solid var(--wire-2)}
+.wn-coinBox{width:100%;display:flex;align-items:center;justify-content:center;gap:18px;height:120px;border-radius:12px;background:radial-gradient(260px 120px at 50% 100%,rgba(255,201,51,.16),transparent),var(--deck-2);border:1px solid var(--wire-2)}
 .wn-coin{width:76px;height:76px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#FFF1B8,#FFC933 45%,#B8860B);color:#7A5200;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 30px -6px rgba(255,201,51,.8)}
 .wn-coin svg{width:40px;height:40px;fill:currentColor;stroke:none}
 .wn-coin.pop{animation:coinpop .3s ease-out}
 @keyframes coinpop{40%{transform:scale(.88)}}
 .wn-coinBox b{display:block;font-size:34px;color:var(--spark-2);line-height:1}
 .wn-coinBox span{font-size:12px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.16em;font-family:var(--f-disp)}
-.wn-sky2{position:relative;height:120px;border-radius:12px;background:linear-gradient(180deg,#0B1A36,#1F4E7C);border:1px solid var(--wire-2);overflow:hidden}
-.wn-blimp{position:absolute;top:34px;left:0;width:118px;height:46px;border:0;background:none;padding:0;cursor:pointer;animation:blimpfly 9s linear infinite}
+.wn-sky2{position:relative;width:100%;height:140px;border-radius:12px;background:linear-gradient(180deg,#0B1A36,#1F4E7C);border:1px solid var(--wire-2);overflow:hidden}
+.wn-blimp{position:absolute;top:42px;left:-130px;width:118px;height:46px;border:0;background:none;padding:0;cursor:pointer;animation:blimpfly 9s linear infinite}
 .wn-blimp i{position:absolute;left:14px;top:4px;width:78px;height:28px;border-radius:50%;background:linear-gradient(180deg,#FFF1B8,#FFC933 55%,#C98A00);box-shadow:0 0 26px -4px rgba(255,201,51,.9)}
 .wn-blimp i::after{content:"";position:absolute;right:-12px;top:6px;border:8px solid transparent;border-left:14px solid #E0A800}
 .wn-blimp span{position:absolute;left:24px;top:31px;font-family:var(--f-disp);font-weight:700;font-size:9.5px;letter-spacing:.14em;color:#6B4400;background:#FFF1B8;border-radius:3px;padding:1px 5px}
 .wn-blimp.caught{animation-play-state:paused;opacity:0;transition:opacity .3s}
-@keyframes blimpfly{0%{transform:translateX(-130px)}100%{transform:translateX(560px)}}
-.wn-tower{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
-.wt-sky{position:relative;height:130px;border-radius:12px;background:linear-gradient(180deg,#07122A,#1A2F55 85%,#34425A 85%);border:1px solid var(--wire-2);overflow:hidden}
-.wt-bar{position:absolute;left:50%;bottom:15%;width:46px;height:var(--h,50%);max-height:82%;transform:translateX(-50%);background:linear-gradient(90deg,#1B2B45,#2E4568 50%,#1B2B45);border:1.5px solid var(--accent);border-bottom:0;clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);transition:height .25s ease-out;display:grid;justify-items:center;align-content:start;padding-top:6px}
-.wt-bar span{font-family:var(--f-mono);font-size:11px;font-weight:700;color:var(--accent)}
+@keyframes blimpfly{0%{left:-130px}100%{left:100%}}
+.wn-tower{width:100%;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.wt-sky{position:relative;height:180px;border-radius:12px;background:radial-gradient(220px 120px at 50% 100%,color-mix(in srgb,var(--accent) 14%,transparent),transparent),linear-gradient(180deg,#07122A,#1A2F55 86%,#34425A 86%);border:1px solid var(--wire-2);overflow:hidden}
+.wt-bar{position:absolute;left:50%;bottom:14%;width:40px;height:var(--h,50%);transform:translateX(-50%);background:linear-gradient(90deg,#15233B,#2E4568 50%,#15233B);border:1.5px solid var(--accent);border-bottom:0;border-radius:3px 3px 0 0;transition:height .25s ease-out}
+.wt-bar::before{content:"";position:absolute;inset:18px 7px 3px;background:repeating-linear-gradient(0deg,rgba(255,210,122,.85) 0 3px,transparent 3px 8px);-webkit-mask:repeating-linear-gradient(90deg,#000 0 5px,transparent 5px 9px);mask:repeating-linear-gradient(90deg,#000 0 5px,transparent 5px 9px)}
+.wt-bar::after{content:"";position:absolute;left:50%;top:-24px;width:2px;height:24px;background:var(--accent);box-shadow:0 -4px 14px 3px var(--accent);transform:translateX(-50%)}
+.wt-bar span{position:absolute;left:0;right:0;top:3px;text-align:center;font-family:var(--f-mono);font-size:10.5px;font-weight:700;color:var(--accent)}
 .wn-tower input{width:100%;accent-color:var(--spark)}
 @media (max-width:980px){
   .city-hud{left:8px;top:8px;padding:7px 10px 8px;min-width:0;max-width:calc(100% - 96px)}
@@ -921,6 +923,8 @@ body[data-tab="city"] .view-sw{display:none}
   .pols{grid-template-columns:minmax(0,1fr)}
   .decknav{grid-template-columns:repeat(6,minmax(0,1fr))}
   .dn-tab b{font-size:9px;letter-spacing:.04em}
+  body[data-city="1"] .forms{left:8px;top:8px;transform:none}
+  body[data-city="1"] .forms button:not([aria-pressed="true"]) span{display:none}
 }
 </style>
 <div id="app">
@@ -3488,7 +3492,7 @@ function renderEvoBar(){
   el.setAttribute("aria-label","Next evolution "+nx.name+", "+c+" of "+nx.at+" connections. Open evolution.");
 }
 function renderForms(){
-  var h=FORMS.map(function(f){var open=formOpen(S,f.id);return'<button type="button" data-act="form" data-v="'+f.id+'" aria-pressed="'+(S.form===f.id)+'"'+(open?"":' disabled title="Unlocks at evolution stage '+f.at+' ('+EVO[f.at].name+')"')+">"+(open?ICON[FORM_ICON[f.id]]:ICON.lock)+"<span>"+esc(f.short)+"</span></button>";}).join("");
+  var h=FORMS.map(function(f){var open=formOpen(S,f.id);return'<button type="button" data-act="form" data-v="'+f.id+'" aria-label="'+esc(f.short)+'" aria-pressed="'+(S.form===f.id)+'"'+(open?"":' disabled title="Unlocks at evolution stage '+f.at+' ('+EVO[f.at].name+')"')+">"+(open?ICON[FORM_ICON[f.id]]:ICON.lock)+"<span>"+esc(f.short)+"</span></button>";}).join("");
   var el=$("formSwitch");if(el.innerHTML!==h)el.innerHTML=h;
   el.hidden=S.evo.stage<FORMS[1].at;
 }
@@ -3986,7 +3990,8 @@ function afterAnswer(res,ok,rect,q,peakB,plB){
   else{SND.bad();vib([25,40,25]);floatText(x,y,res.prevStreak>=3&&!res.shielded?"streak reset":(res.gain>0?"+"+fmt(res.gain):"miss"),"miss");if(res.wager)setTimeout(function(){floatText(x,y-24,MINUS+fmt(res.wager)+" called it","miss");},300);}
   if(res.coins>0){bump($("cityCoins"));if(cityOn())cityAnswerFx(res.coins,q);}
   if(res.star){setTimeout(function(){SND.node();},reduced?0:900);var PB=cityBuilt(S)?cityBOf(res.star.d,res.star.sk):null,permit=PB&&res.star.stars===1;
-    toast("New node · "+DOMAINS[res.star.d].short,res.star.sk+" "+starsTxt(res.star.stars)+(permit?". Permit granted: build the "+PB.name+" in "+S.city.name+".":PB&&cityN(S,PB.id)?". Your "+PB.name+" now earns ×"+TRIM(Math.round(cityLearn(S,PB)*100)/100)+".":""),"mint",permit?'<button type="button" class="btn primary sm" data-act="cityGo" data-v="'+PB.id+'">Build it</button>':null,permit?6500:0);}
+    toast("New node · "+DOMAINS[res.star.d].short,res.star.sk+" "+starsTxt(res.star.stars)+(permit?". Permit granted: build the "+PB.name+" in "+S.city.name+".":PB&&cityN(S,PB.id)?". Your "+PB.name+" now earns ×"+TRIM(Math.round(cityLearn(S,PB)*100)/100)+".":""),"mint",permit?'<button type="button" class="btn primary sm" data-act="cityGo" data-v="'+PB.id+'">Build it</button>':null,permit?6500:0);
+    if(PB&&cityOn()){var PL=cityLot(cityN(S,PB.id)?PB.id:"hall");if(PL)cityFireworks(PL.x+PL.w/2,cityTopY(PL)-10*CT.u,2);}}
   if(plB>0&&placeLeft(S,q.d)===0)toast(DOMAINS[q.d].name+" placed","Placement is done. It starts at "+Math.round(S.r[q.d])+", and from here every point is earned.","acc",null,6000);
   if(res.leveled)toast(DOMAINS[res.leveled.d].name+" Lv "+res.leveled.lv,"+2% sparks on "+DOMAINS[res.leveled.d].short+" questions.","mint");
   if(res.dayUp)toast("Day "+S.days.streak+" locked in",res.froze?"A streak freeze covered "+res.froze+" missed day"+(res.froze>1?"s":"")+". Come back tomorrow.":"10 right today. Come back tomorrow to keep the streak.",res.froze?"mint":"");
@@ -4576,7 +4581,7 @@ function wnGo(i){if(!UI.wn)return;i=clamp(i,0,wnList().length-1);if(i===UI.wn.i)
   var f=c.querySelector('[data-act="wnGo"].primary')||c.querySelector('[data-act="modalClose"].primary');if(f)try{f.focus({preventScroll:true});}catch(e){}SND.tone(660+i*40,0.05,"triangle",0.03);}
 function wireWN(){
   var w=$("wn");if(!w)return;var x0=null,tw=$("wnTwIn");
-  if(tw){var twUp=function(){var v=+tw.value,bar=$("wnTw");if(bar)bar.style.setProperty("--h",(14+68*(v-320)/1200).toFixed(1)+"%");setTxt("wnTwN",String(v));};tw.addEventListener("input",function(){twUp();SND.tone(300+(+tw.value-320)/2,0.03,"sine",0.02);});twUp();}
+  if(tw){var twUp=function(){var v=+tw.value,bar=$("wnTw");if(bar)bar.style.setProperty("--h",(12+62*(v-320)/1200).toFixed(1)+"%");setTxt("wnTwN",String(v));};tw.addEventListener("input",function(){twUp();SND.tone(300+(+tw.value-320)/2,0.03,"sine",0.02);});twUp();}
   w.addEventListener("pointerdown",function(ev){x0=ev.pointerType==="touch"&&!(ev.target.closest&&ev.target.closest(".wn-demo"))?ev.clientX:null;});
   w.addEventListener("pointerup",function(ev){if(x0==null)return;var dx=ev.clientX-x0;x0=null;if(Math.abs(dx)>60)wnGo(UI.wn.i+(dx<0?1:-1));});
   var core=$("wnCore");if(core){var t0=0,tm=0;
@@ -5030,6 +5035,9 @@ function drawSky(c,tod){
   if(tod.n>0.15){var a=tod.n;CT.stars.forEach(function(s){var tw=0.55+0.45*Math.sin(CT.t*1.3+s.p);c.globalAlpha=a*tw*0.8;c.fillStyle="#fff";c.fillRect(s.x*w,s.y*CT.gy,s.r,s.r);});c.globalAlpha=1;}
   var hh=tod.h,day=hh>=6&&hh<18,fr=day?(hh-6)/12:((hh>=18?hh-18:hh+6)/12),sx=w*(0.12+0.76*fr),sy=CT.gy*(0.62-0.46*Math.sin(fr*Math.PI));CT.sun={x:sx,y:sy,r:day?14:11};
   if(day){cGlow(c,"#FFE9A8",sx,sy,70,0.5);c.fillStyle="#FFF4D0";c.beginPath();c.arc(sx,sy,12,0,6.283);c.fill();}else{cGlow(c,"#CFE0FF",sx,sy,46,0.3);c.fillStyle="#E8EEF9";c.beginPath();c.arc(sx,sy,10,0,6.283);c.fill();c.fillStyle="rgba(10,20,40,.9)";c.beginPath();c.arc(sx+4,sy-3,9,0,6.283);c.fill();}
+  /* A flock of birds crosses by day; a shooting star now and then at night. */
+  if(tod.n<0.5&&!reduced){var bp=pmod(CT.t,40)/40;if(bp<0.5){var bk=bp/0.5,bx=w*(-0.1+1.25*bk),by=CT.gy*0.28+Math.sin(bk*6)*10;c.strokeStyle="rgba(18,28,46,"+(0.55*(1-tod.n*2))+")";c.lineWidth=1.2;for(var bi=0;bi<5;bi++){var ox=bx-bi*13-(bi%2)*6,oy=by+(bi%2?7:0)+bi*2,fl=Math.sin(CT.t*9+bi)*2.4;c.beginPath();c.moveTo(ox-4,oy-fl);c.lineTo(ox,oy);c.lineTo(ox+4,oy-fl);c.stroke();}}}
+  else if(tod.n>0.6&&!reduced){var sp=pmod(CT.t,23)/23;if(sp<0.06){var sk=sp/0.06,x1=w*0.72-150*sk,y1=CT.gy*0.1+66*sk,sg=c.createLinearGradient(x1,y1,x1+46,y1-20);sg.addColorStop(0,"rgba(255,255,255,"+(0.9*(1-sk)).toFixed(2)+")");sg.addColorStop(1,"rgba(255,255,255,0)");c.strokeStyle=sg;c.lineWidth=1.6;c.beginPath();c.moveTo(x1,y1);c.lineTo(x1+46,y1-20);c.stroke();}}
   CT.clouds.forEach(function(cl){cl.x+=cl.v/60;if(cl.x>1.3)cl.x=-0.3;var cx=(cl.x*w-CT.cam*0.08)%(w*1.6);if(cx<-w*0.3)cx+=w*1.6;var cy=cl.y*CT.gy,s=cl.s*40;c.fillStyle=tod.n>0.5?"rgba(90,110,150,.10)":"rgba(240,246,255,"+(0.13+0.12*(1-tod.n))+")";[[0,0,1],[0.8,0.15,0.75],[-0.8,0.2,0.7],[0.3,-0.35,0.7]].forEach(function(b){c.beginPath();c.ellipse(cx+b[0]*s,cy+b[1]*s,s*b[2],s*b[2]*0.45,0,0,6.283);c.fill();});});
 }
 function drawFar(c,tod,P){
@@ -5095,7 +5103,7 @@ function syncView(){
   document.body.setAttribute("data-view",on?"city":"engine");
   if(wrap.hidden===on){wrap.hidden=!on;if(on){CT.lastDraw=0;CT.lastIn=performance.now();cityLayout();cityHudRender();cityNewsTick(true);}else{ctipHide(true);CT.blimp=null;}}
   else if(on)cityVisRange();
-  var b=cityBuilt(S);vs.hidden=!b;
+  var b=cityBuilt(S);vs.hidden=!b;document.body.setAttribute("data-city",b?"1":"0");
   if(b){var f=formOf(S),sig=f.id+on;if(vs.dataset.sig!==sig){vs.dataset.sig=sig;vs.innerHTML=[["engine",ICON[FORM_ICON[f.id]],"Engine"],["city",ICON.city,"City"]].map(function(x){return'<button type="button" data-act="view" data-v="'+x[0]+'" aria-pressed="'+((x[0]==="city")===on)+'" aria-label="'+x[2]+'">'+x[1]+"<span>"+x[2]+"</span></button>";}).join("");}}
 }
 /* The minimap: one bar per lot, colored by district, with the camera's window on top. */
@@ -5272,7 +5280,7 @@ function cityGo(v){closeModal();if(!isOpen(S,"city")){setTab("city");return;}if(
   var tgt=v==="hall"?"cwHall":v==="wonders"?"cwWonders":"cb-"+v;setTimeout(function(){var el=$(tgt);if(el){el.scrollIntoView({block:"center",behavior:reduced?"auto":"smooth"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}if(CITY_BY[v])cityLook(v,true);},80);}
 /* A thumbnail of each building at its current level, drawn by the same painter as the skyline. */
 function cityThumb(id,lv){var key=id+":"+lv;if(THUMB[key]!=null)return THUMB[key];var B=CITY_BY[id];if(!B)return"";
-  var H0=CITY_H[B.st]||[40,10],hh=H0[0]+H0[1]*(lv-1),px=96,k=px/48,s=Math.min(42/(B.w+18),40/(hh+30)),cv=document.createElement("canvas");cv.width=cv.height=px;var c=cv.getContext("2d");
+  var H0=CITY_H[B.st]||[40,10],hh=H0[0]+H0[1]*(lv-1),px=144,k=px/48,s=Math.min(42/(B.w+18),40/(hh+30)),cv=document.createElement("canvas");cv.width=cv.height=px;var c=cv.getContext("2d");
   var su=CT.u,stt=CT.t,sry=CT.railY,sw=CT.w;CT.u=s*k;CT.t=12.3;CT.w=400;var g=px-5*k,w=B.w*CT.u,x=(px-w)/2,H=hh*CT.u;CT.railY=g-H-4*CT.u;
   try{var P=cityPal({n:0.62,dk:0});CSTY[B.st](c,x,g,w,H,lv,P,DOMAINS[B.d].color,hash2(id.length*97,id.charCodeAt(0)*131));c.globalAlpha=1;c.globalCompositeOperation="source-over";c.fillStyle="#34425A";c.fillRect(0,g,px,px-g);}catch(e){}
   CT.u=su;CT.t=stt;CT.railY=sry;CT.w=sw;var url="";try{url=cv.toDataURL("image/png");}catch(e){}THUMB[key]=url;return url;}
@@ -5319,7 +5327,7 @@ var WN6=[
  {k:"city",t:"Your city",p:"Every PSAT skill is now a building. Light a skill’s first node and you can build it: a Bookshop for Words in Context, a Bank for Percentages, a Lighthouse for trigonometry. Twenty-nine buildings in eight districts, one district per domain.",tryL:"Open my city",
   demo:function(){return'<div class="wn-city">'+["bookshop","library","clock","bank","lighthouse","ferris"].map(function(id,i){return'<img alt="" src="'+cityThumb(id,[2,3,2,3,2,3][i])+'">';}).join("")+"</div>";}},
  {k:"learn",t:"Learn to build",p:"Empty lots say what they need. <b>LEARN</b> means light that skill’s first node. <b>BUILD</b> means you can build it now. Every node you light after that, and every mastery tier, makes the building earn more.",tryL:"Show me a lot",
-  demo:function(){return'<div class="wn-lot"><img alt="" id="wnLotB" src="'+cityThumb("market",2)+'"><button type="button" class="wn-sign" data-act="wnLot" id="wnLot">LEARN</button></div><p class="wn-note" id="wnLotTxt">Tap the sign to light the node.</p>';}},
+  demo:function(){return'<div class="wn-lot"><img alt="" id="wnLotB" src="'+cityThumb("lighthouse",2)+'"><button type="button" class="wn-sign" data-act="wnLot" id="wnLot">LEARN</button></div><p class="wn-note" id="wnLotTxt">Tap the sign to light the node.</p>';}},
  {k:"coins",t:"Answers are clicks",p:"Every right answer pays coins, and hard questions pay the most. Buildings earn coins every second while you study. Prices rise 15% per copy, so grab the ×2 upgrades as they appear, and a bigger city lifts all your sparks.",tryL:"Answer a question",
   demo:function(){return'<div class="wn-coinBox"><button type="button" class="wn-coin" data-act="wnCoin" aria-label="Demo: a right answer">'+ICON.coin+'</button><div><b id="wnCoinN" class="num">0</b><span>coins</span></div></div><p class="wn-note">Tap the coin. Each tap is one right answer.</p>';}},
  {k:"blimp",t:"Golden blimps",p:"Every few minutes a golden blimp drifts across the sky. Catch it for a lucky payout, a Frenzy (×5 output), a Study Rush (×5 coins per answer), or a Building Boom. Press O to catch it from the keyboard.",tryL:"Watch the sky",
@@ -5329,7 +5337,7 @@ var WN6=[
 ];
 function wnDemoLot(){var b=$("wnLot"),img=$("wnLotB"),tx=$("wnLotTxt");if(!b)return;
   if(b.textContent==="LEARN"){b.textContent="BUILD";b.classList.add("go");SND.node();vib(10);if(tx)tx.textContent="Node lit! Now tap BUILD.";}
-  else if(!img.classList.contains("up")){img.classList.add("up");b.classList.add("done");SND.buy();vib([10,20,30]);var r=b.getBoundingClientRect();burst(r.left+r.width/2,r.top,14);if(tx)tx.textContent="Built. Your Market is open for business.";}}
+  else if(!img.classList.contains("up")){img.classList.add("up");b.classList.add("done");SND.buy();vib([10,20,30]);var r=b.getBoundingClientRect();burst(r.left+r.width/2,r.top,14);if(tx)tx.textContent="Built. Your Lighthouse is lit.";}}
 function wnDemoCoin(){var n=$("wnCoinN");if(!n)return;var add=[8,12,20][Math.floor(Math.random()*3)],v=(+n.textContent||0)+add;n.textContent=v;var b=document.querySelector("#wnDemo .wn-coin");if(b){var r=b.getBoundingClientRect();floatText(r.left+r.width/2,r.top,"+"+add);b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");}SND.tone(880+add*8,0.06,"triangle",0.035);vib(6);}
 function wnDemoBlimp(){var o=document.querySelector("#wnDemo .wn-blimp");if(!o||o.classList.contains("caught"))return;var r=o.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,22);floatText(r.left+r.width/2,r.top,"LUCKY!","crit");SND.crit();vib([12,18,40]);o.classList.add("caught");
   var tx=$("wnBlimpTxt");if(tx)tx.textContent="Caught! Real blimps cross your skyline every few minutes.";setTimeout(function(){if(o.isConnected)o.classList.remove("caught");},1800);}
@@ -5512,7 +5520,7 @@ function start(hot){
   try{if(window.claude&&window.claude.hot&&typeof window.claude.hot.snapshot==="function")window.claude.hot.snapshot(function(){return{S:S};});}catch(e){}
   requestAnimationFrame(loop);initCaps();
   /* Test hook for the local Playwright checks; published pages never see it. */
-  if(location.protocol==="file:")window.__g1520={S:function(){return S;},cur:function(){return cur;},Q:function(){return Q;},arc:function(){return UI.arc;},arcEnd:arcEnd,city:function(){return CT;},catchBlimp:catchBlimp,spawnBlimp:spawnBlimp,spawnSurge:spawnSurge,surge:function(){return ST.surge;},core:function(){return ST.g?{x:ST.g.cx,y:ST.g.coreY}:null;}};
+  if(location.protocol==="file:")window.__g1520={S:function(){return S;},cur:function(){return cur;},Q:function(){return Q;},arc:function(){return UI.arc;},arcEnd:arcEnd,city:function(){return CT;},cityFrame:function(t){cityFrame(t,0.033);},catchBlimp:catchBlimp,spawnBlimp:spawnBlimp,spawnSurge:spawnSurge,surge:function(){return ST.surge;},core:function(){return ST.g?{x:ST.g.cx,y:ST.g.coreY}:null;}};
 }
 try{var hot=window.claude&&window.claude.hot;if(hot&&typeof hot.ready==="function")hot.ready(start);else start(hot&&hot.data?hot.data:{});}catch(e){start({});}
 })();
