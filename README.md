@@ -6,6 +6,32 @@ Open `index.html` in a browser to play. Everything is in that one file: the ques
 generators, the game engine, and the UI. Progress saves to the browser. Published as a Claude
 artifact, it can also save to your Claude account and write fresh question packs with Claude.
 
+## Start here
+
+- **The intro.** A new game opens with a two-minute playable intro: answer a question, watch the
+  engine respond, pick a free first upgrade (Sharper Focus, a zone rule, or a domain hub), and meet
+  Today's Adventure. Every step can be skipped, and Settings → The intro → **Replay it** runs it
+  again (the free upgrade is paid once). Existing saves skip it and get a short list of what changed.
+- **Today's Adventure.** One guided session a day, in the bar above your questions. It plans, in
+  order: the blind spots that are due, the skill that needs it most (with the reason: your shakiest
+  accuracy, a domain below your average, a node about to light, or a landmark it repairs), a
+  challenge on that domain (a boss, or an Arcade game on Quick days), and something to put into your
+  world (restore a landmark, expand a zone, build or grow that skill's building, or upgrade its
+  zone). Pick **Quick** (Rare chest), **Standard** (Epic), or **Deep** (Epic and Rare, with a
+  Gauntlet added once it's open). The practice steps are required; the challenge and world steps are optional and can be
+  skipped. The reward is paid once per day, and only after the required steps are done; if you
+  finish them and forget to claim, the chest is paid when the next day's plan arrives.
+  - It's a layer over ordinary play: the steps use the normal question focus, so everything you
+    answer still counts for quests, reviews, and the rest. Picking your own focus pauses it (free
+    play); **Resume** picks up the same step. A practice step ends at its target of right answers,
+    or after twice that many tries, so a hard day never traps anyone.
+  - It lives in the save: reload, close the game, or come back later and it resumes where it was.
+    A started adventure survives midnight for 18 hours; an unstarted one is replanned each day.
+- **Where things are.** The tabs are grouped: study (Engine, Progress), challenge (Arena), and build
+  (Upgrades, Zones, City, Ascend). A locked tab says exactly what it needs ("Opens at Circuit: 5
+  more skill nodes"), and the bar under the engine shows the next evolution and what it opens. Dots
+  mean something to spend on; the only count is the daily review.
+
 ## The climb
 
 Progression spans the whole PSAT scale. A new game starts every domain at 160, so the total starts
@@ -72,9 +98,12 @@ has a page for each one.
 
 ## Levels
 
-- **Talent points.** Every level is a talent point. Spend them on zone keystones and on six general
-  talents: more XP, more chests, a higher streak cap, more offline earnings, more full-pay Arcade
-  runs, and more hearts in boss fights. Reset them any time for free.
+- **Talent points.** Every level is a talent point. Spend them on zone keystones and on ten talents
+  grouped by the way you like to play: **Reviewer** (Second Wind: comebacks pay 50% more; Spaced
+  Out: blind-spot reviews pay 20% more), **Explorer** (Pathfinder: +10% city coins and Expedition
+  supplies; Night Shift), **Challenger** (Boss Hunter: beaten bosses pay 50% more; Tough as Nails;
+  Arcade Regular; Combo Artist), and **All-rounder** (Quick Study, Lucky Find). Reset them any time
+  for free. Relics carry the same playstyle tags.
 - **The Level Road.** Open it from your level in the top bar. Each level still pays sparks and a
   chest the moment you reach it, and the road adds one more reward to claim: a chest or a boost,
   with a title and a bigger chest at the milestones.
@@ -97,7 +126,7 @@ has a page for each one.
 - **Call it.** Before checking an answer, tap Sure, Think so, or Guess. Sure pays ×1.5 when right
   and costs half the question's base value when wrong (Error Mining doesn't refund a lost Sure);
   a missed Guess is logged in the journal.
-  Plan shows how often each call is right.
+  Progress shows how often each call is right.
 - **Pick a card.** Every finished set deals three face-down cards (sparks, a boost, or a chest).
   Pick one, or two after a perfect set.
 - **Surge orbs.** On a streak of 3 or more, a right answer can spark a golden orb on the engine.
@@ -105,12 +134,26 @@ has a page for each one.
 - **The core.** Tap it to pulse; press and hold to charge a shockwave.
 - **Question tools.** Select text in a passage to highlight it (tap a highlight to clear it), draw
   on any question with the pen, and open the math reference sheet.
-- **Bosses.** A right answer inside PSAT pace is a quick strike (×1.5 damage). Under a quarter
-  health the next right answer is a finisher (×2). Bosses answer back after every hit and miss.
+- **Bosses.** Three bosses fight their own way; the questions stay ordinary practice questions.
+  - *The Linear Leviathan* (Algebra) is a machine with one part per Algebra skill (four, or five with
+    armor from tier 3). Tap a part to target it and its questions come from that skill; a right
+    answer shuts it down, or strips armor (two plates inside PSAT pace).
+  - *The Inference Hydra* (Information and Ideas) has three heads (four from tier 3). Each needs its
+    claim found (a Central Ideas or Inferences question), then backed with evidence (a Command of
+    Evidence question) to be cut.
+  - *The Comma Splicer* (Standard English Conventions) has spliced a page of sentences together.
+    Each right answer repairs one broken joint (two inside PSAT pace), and the repaired sentence
+    shows the mark that belongs there, with the rule.
+  - The other five take damage: a right answer inside PSAT pace is a quick strike (×1.5), and under a
+    quarter health the next right answer is a finisher (×2). Three misses end any fight, and every
+    boss answers back after every hit and miss.
 - **Feel.** Phones vibrate on hits, misses, crits, and chests; Settings turns it off.
-- **What's new.** A tour of the latest update (zones, the Level Road, and talents) with live demos
-  and Try it buttons. It opens once after an update and anytime from Settings or Profile; the last
-  slide replays the earlier tours of units and the Expedition, the city, and the Arcade.
+- **What's new.** A short list of what changed in the latest update, once after updating and anytime
+  from Settings or Profile. **Earlier updates** opens the tours with live demos: zones and the Level
+  Road, units and the Expedition, the city, and the Arcade.
+- **Fewer interruptions.** Level-ups, chests, quests, trophies, and adventure steps show as chips in
+  the answer's feedback instead of popups, with Open and Claim buttons right there. Rank tiers,
+  evolutions, and boss wins still get their moment.
 
 ## The question panel and saving
 
@@ -147,8 +190,15 @@ you've learned: 29 buildings in eight districts, one district per domain.
   Tap it (or press O) for a lucky payout, a Frenzy (×5 output), a Study Rush (×5 coins per answer),
   or a Building Boom (one building ×10).
 - **Wonders.** The Grand Library, the 1520 Tower, and a Launch Pad are long, multi-stage projects.
-  The Tower's height follows your projected score, and the Launch Pad sends up a rocket every 90
+  The Tower's height follows your game estimate, and the Launch Pad sends up a rocket every 90
   seconds.
+- **Landmarks: the Harbor Bridge.** A storm broke the bridge in the Harbor district, so nobody can
+  reach Lantern Isle and its lantern is dark. Get 10 Transitions questions right, with 7 of your last
+  10 right, and **Restore** it from the City tab's Landmarks (or from Today's Adventure). The bridge
+  is rebuilt with lamps lit, people cross it, the lantern shines, and it pays an Epic chest, once.
+  It stays restored for good (Advance doesn't undo it). Saves from before this update count their
+  history: until the skill has 10 recent results, the last 10 hard Transitions questions (or overall
+  accuracy in the skill) stand in for "your last 10".
 - **Town Hall.** From 50 residents, pass one policy at a time (switchable once an hour): Study City,
   Night Owls, Tourism Board, or Green Belt.
 - **The skyline.** Show it on the main screen instead of the engine, or open the City tab (on
@@ -174,6 +224,10 @@ Pick **3D** on the main-screen switch (or in the City tab) to walk through your 
 - **Buildings.** Click or tap one for its card, where you can build or train it. Walk up to one and
   press E, or tap the prompt, to open the nearest. In the City tab, a building's thumbnail takes
   you straight to it.
+- **The harbor.** Past the Harbor district a path leads to a lagoon, the Harbor Bridge, and Lantern
+  Isle. Until the bridge is restored its middle has fallen into the water, a CLOSED barrier blocks
+  it, and the water stops you. Once it's restored you can walk over the arched bridge to the isle
+  and its lit lighthouse.
 - **Life.** The sky follows your clock (or the Sky setting), with lit windows, street lamps, and
   stars at night. Cars stop at the Crossroads light, residents fill the sidewalks as the city grows,
   the Linear Rail runs on an elevated loop, and golden blimps fly low enough to catch: click one
@@ -234,7 +288,17 @@ A fogged 13 × 11 map in eight regions, one per domain, with a base camp in the 
 - **Daily review.** Every miss becomes a blind spot that returns after 10 minutes, then 1, 3, and
   7 days. The spots due each morning (up to 10) form the daily review, served before new
   questions. Finishing it pays a chest.
-- **Seasons.** Set a test date and target under Plan. The climb becomes a season with a countdown,
+- **Comebacks.** A miss shows one specific, encouraging line, the explanation, and **Try a fresh
+  one**: a new question in the same skill (new numbers in Math, another passage in Reading and
+  Writing). The missed question comes back as a blind spot. Winning that first rematch after the
+  wait is a **comeback** and pays a bonus (twice as much, a **full comeback**, if you also got the
+  fresh one right). It's paid once per question, ever, so there's nothing to farm.
+- **Learning evidence.** The Progress tab (formerly Plan) opens with what you've actually learned,
+  kept apart from game rewards: your accuracy on questions you hadn't seen before (last 20), skills
+  improved this week, blind spots erased, comebacks against misses, and your best timed Gauntlet
+  sections, plus a log of recent milestones. The score is always labeled a game estimate; 1520 is
+  the game's target (the top tier is Summit), not a "perfect" score.
+- **Seasons.** Set a test date and target under Progress. The climb becomes a season with a countdown,
   a weekly target based on the gap, and a test-day projection from your trend since placement.
   When the date passes, the season closes, your real score (if you enter it) becomes the baseline
   marker, and a new season starts. Evolutions, relics, and levels carry over.
@@ -244,7 +308,7 @@ A fogged 13 × 11 map in eight regions, one per domain, with a base camp in the 
   questions: 4 right, then 10 right with 70% of the last 10, then 12 right at pace with 80%. Each
   tier is +1% sparks forever and a chest. A hard drill serves only hard questions in one skill.
 - **Mistake journal.** After a miss, tap why: misread, didn't know it, fell for a trap, rushed, or
-  guessed. Plan shows the week's pattern and what to do about it.
+  guessed. Progress shows the week's pattern and what to do about it.
 - **Streak freezes.** One a week, up to 2 banked. Each covers a missed day.
 - **Weekly league.** In the Arena. League points are 1, 2, or 3 per right answer by difficulty and
   reset every Monday, so anyone can win a week. It's opt-in and runs on the published page for
@@ -264,7 +328,7 @@ practice, skill training, and blind spots like any other question. Grid-in math 
 Questions built on a graph or picture don't copy as text.
 
 On the published page, **Fresh pack** asks Claude for 5 new questions in any domain, including Math
-with grid-ins. Plan shows how many unseen Reading and Writing questions are left in each domain.
+with grid-ins. Progress shows how many unseen Reading and Writing questions are left in each domain.
 
 ## Development
 
@@ -273,6 +337,10 @@ The page stays a single hand-edited file. The DOM-free engine (everything above 
 
 ```sh
 node tools/sim.cjs --days 21 --per-day 60   # balance sim: a modeled student plays the real engine
+node tools/guide.cjs                        # engine checks for Today's Adventure (plan, resume, claim
+                                            # once), comebacks (paid once), the Harbor Bridge (retroactive,
+                                            # paid once), the three boss encounters, learning evidence,
+                                            # the intro's free upgrade, and the v8 → v9 migration
 
 export NODE_PATH=$(npm root -g)             # tools below use Playwright + Chromium
 node tools/smoke.cjs                        # boot, answer questions, fail on page errors
@@ -282,7 +350,11 @@ node tools/flows.cjs                        # functional checks: buying, bosses,
                                             # founding and building a city, blimps, policies, stages,
                                             # Advance, exploring, crew, the wheel, stakes, Guardians, tours,
                                             # zones (trees, expansions, forging, launches, the vault), the
-                                            # Level Road, talents, titles, and the 3D city
+                                            # Level Road, talents, titles, the 3D city, the intro and its
+                                            # replay, what's new, Today's Adventure (resume after reload,
+                                            # claim once), comebacks, the three boss encounters, restoring
+                                            # the Harbor Bridge, crossing it in 3D, learning evidence, and
+                                            # the top bar fitting at 1280 to 1920 wide
 node tools/flows.cjs city                   # only the checks whose name contains "city"
 node tools/shots.cjs out/                   # screenshots of the main screens from simulated saves
 node tools/pc.cjs                           # the PC edition: dist/Grind-to-1520/ (game file, launcher,
@@ -314,4 +386,7 @@ gain the season, review, league, and journal fields. Saves from before version 5
 What's New tour once, and saves from before version 6 see the city tour once. Version 7 saves
 start at stage 1.1 and clear every stage their progress already meets, paying the chests. Version 8
 saves get the zones at tier 1, their level's talent points, and every Level Road reward up to
-their level to claim, and they see the zones tour once.
+their level to claim, and they see the zones tour once. Version 9 adds the adventure, learning
+evidence, comebacks, and landmarks without touching ratings, skills, or blind spots: existing
+players skip the intro and see the short what's-new list once, their last Gauntlet seeds the timed
+results, and their Transitions history can already have earned the Harbor Bridge.

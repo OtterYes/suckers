@@ -29,7 +29,8 @@ async function open(browser, json, w, h, opts) {
   page.on("pageerror", (e) => page.errors.push(e.message));
   await page.route(/^https?:\/\//, (r) => r.abort());
   if (!(opts && opts.noThree)) await routeThree(page);
-  if (json) await page.addInitScript((j) => { try { localStorage.setItem("grind1520.save.v1", j); } catch (e) {} }, json);
+  // Seed the save once per tab, so a reload shows what the game saved rather than the starting save.
+  if (json) await page.addInitScript((j) => { try { if (!sessionStorage.getItem("seeded")) { localStorage.setItem("grind1520.save.v1", j); sessionStorage.setItem("seeded", "1"); } } catch (e) {} }, json);
   await page.goto(file);
   await page.waitForTimeout(900);
   return page;
@@ -55,6 +56,23 @@ async function answerRight(page) {
 }
 // A zone at tier 1 with nothing bought and its meters at zero.
 function zoneReset(S, d) { S.zone[d].t = 1; S.zone[d].up = {}; }
+async function answerWrong(page) {
+  const q = await page.evaluate(() => { const c = window.__g1520.cur(); return { spr: !!c.spr, a: c.correct }; });
+  if (q.spr) await page.locator("#sprIn").fill("-98765.4321"); else await page.click(`#conBody [data-act="pick"][data-i="${(q.a + 1) % 4}"]`);
+  await page.click("#checkBtn");
+  await page.waitForTimeout(250);
+}
+// The boosted late-game dev save, for checking unlocked features (not pacing).
+function lateSave(edit) {
+  const t = require("fs").readFileSync(path.join(__dirname, "..", "dist", "dev-save.txt"), "utf8").trim();
+  const S = JSON.parse(Buffer.from(t.slice(6), "base64").toString("utf8"));
+  S.lastSeen = S.lastInteract = Date.now(); S.seenV9 = true; S.settings.view = "engine";
+  if (edit) edit(S);
+  return JSON.stringify(S);
+}
+// A Transitions record that has earned the Harbor Bridge.
+function harborReady(S) { S.sk["eoi|Transitions"] = { n: 14, c: 12, rr: "1111111110" }; S.world = {}; }
+const pageFits = (page) => page.evaluate(() => { const r = []; if (document.documentElement.scrollWidth > innerWidth + 1) r.push("page " + document.documentElement.scrollWidth); const hud = document.querySelector(".hud-in"); if (hud.scrollWidth > hud.clientWidth + 1) r.push("top bar " + hud.scrollWidth + ">" + hud.clientWidth); if (document.getElementById("gearBtn").getBoundingClientRect().right > innerWidth) r.push("settings off-screen"); return r.join(", "); });
 
 const TESTS = {
   async "buy a hub, a pathway, and an upgrade"(b) {
@@ -373,7 +391,9 @@ const TESTS = {
     await page.click("#checkBtn");
     const s1 = await state(page);
     if (!(await page.locator(".fb .part.loss").count())) throw new Error("no loss shown");
-    if (!(s1.sparks < s0.sparks)) throw new Error("wrong Sure call cost nothing");
+    // Idle income keeps flowing between saves, so check the wager on the answer itself.
+    const wager = await page.evaluate(() => window.__g1520.Q().res.wager || 0);
+    if (!(wager > 0)) throw new Error("wrong Sure call cost nothing");
     if (JSON.stringify(s1.calib.sure) !== "[2,1]") throw new Error("calibration " + JSON.stringify(s1.calib));
     return page;
   },
@@ -903,9 +923,216 @@ const TESTS = {
     if (over > 1) throw new Error("page scrolls sideways by " + over + "px");
     return page;
   },
-  async "fresh game starts at 320 and climbs"(b) {
+  async "the intro: answer, the world responds, a free upgrade, then the next goal"(b) {
     const page = await open(b, null);
     await page.click('[data-act="welcomeGo"]');
+    await page.waitForSelector("#coach", { timeout: 5000 });
+    if (!/first question/i.test(await page.textContent("#coach"))) throw new Error("no prompt to answer");
+    await answerRight(page);
+    await page.waitForFunction(() => { const c = document.getElementById("coach"); return c && /engine grew/i.test(c.textContent) && c.style.visibility !== "hidden"; }, null, { timeout: 5000 });
+    await page.click('#coach [data-act="onbNext"]');
+    await answerAny(page); await page.click("#nextBtn");
+    await answerAny(page);
+    await page.waitForSelector('#modal:not([hidden]) [data-act="onbGift"]', { timeout: 5000 });
+    await page.click('#modal [data-act="onbGift"][data-v="focus"]');
+    await page.waitForFunction(() => { const c = document.getElementById("coach"); return c && /Adventure/.test(c.textContent) && c.style.visibility !== "hidden"; }, null, { timeout: 5000 });
+    const s1 = await state(page);
+    if (s1.up.focus !== 1 || s1.onb.gift !== "focus") throw new Error("the free upgrade was not installed");
+    await page.click('#coach [data-act="onbAdv"]');
+    await page.waitForFunction(() => { const c = document.getElementById("coach"); return c && /Everything else/.test(c.textContent); }, null, { timeout: 5000 });
+    await page.click('#coach [data-act="onbDone"]');
+    const s2 = await state(page);
+    if (!s2.onb.done) throw new Error("the intro did not finish");
+    if (!s2.adv || !s2.adv.started) throw new Error("the adventure did not start from the intro");
+    // Replaying the intro walks through it again, but the free upgrade is paid only once.
+    await page.click("#gearBtn"); await page.click('#modal [data-act="onbReplay"]');
+    await page.waitForSelector("#coach", { timeout: 5000 });
+    await answerAny(page); await page.waitForTimeout(800);
+    await page.click('#coach [data-act="onbNext"]');
+    await answerAny(page); await page.click("#nextBtn"); await answerAny(page);
+    await page.waitForFunction(() => { const c = document.getElementById("coach"); return c && /Adventure/.test(c.textContent); }, null, { timeout: 5000 });
+    if (await page.locator('#modal:not([hidden]) [data-act="onbGift"]').count()) throw new Error("the gift was offered twice");
+    if ((await state(page)).up.focus !== 1) throw new Error("the gift was paid twice");
+    return page;
+  },
+  async "skip the intro; existing players get what's new, not the intro"(b) {
+    const p1 = await open(b, null);
+    await p1.click('[data-act="welcomeSkip"]');
+    await p1.waitForTimeout(300);
+    if (await p1.locator("#coach").count()) throw new Error("coach marks after skipping");
+    if (!(await p1.locator('#conAdv [data-act="advStart"]').count())) throw new Error("no adventure bar after skipping");
+    if (!(await state(p1)).onb.done) throw new Error("the skip was not saved");
+    if (p1.errors.length) throw new Error("page errors: " + p1.errors.join(" | "));
+    await p1.close();
+    const page = await open(b, save((S) => { S.v = 8; delete S.seenV9; delete S.onb; delete S.adv; delete S.lrn; delete S.world; delete S.recov; delete S.gb.hist; }));
+    if (!(await page.locator('#modal:not([hidden]) [data-act="new9Go"]').count())) throw new Error("no what's new for a v8 save");
+    if (await page.locator("#coach").count()) throw new Error("an existing player got the beginner intro");
+    await page.click('#modal [data-act="new9Go"]');
+    await page.waitForSelector("#modal:not([hidden]) .advsteps", { timeout: 5000 });
+    const s = await state(page);
+    if (s.v !== 9 || !s.seenV9 || !s.onb.done) throw new Error("migration flags: " + JSON.stringify([s.v, s.seenV9, s.onb]));
+    if (!Array.isArray(s.gb.hist) || !s.lrn || !s.world) throw new Error("new fields missing after migration");
+    return page;
+  },
+  async "today's adventure: follow a step, resume after a reload, claim once"(b) {
+    const page = await open(b, save((S) => { S.adv = null; S.spots = []; S.onb = { step: 9, done: true }; }));
+    await page.click('#conAdv [data-act="advOpen"]');
+    await page.waitForSelector("#modal:not([hidden]) .advlen");
+    await page.click('#modal [data-act="advLen"][data-v="quick"]');
+    await page.click('#modal [data-act="advStart"]');
+    let s = await state(page);
+    if (!s.adv.started || s.adv.len !== "quick") throw new Error("did not start a quick adventure");
+    const st0 = s.adv.steps[s.adv.i];
+    const q = await page.evaluate(() => { const c = window.__g1520.cur(); return { d: c.d, sk: c.sk }; });
+    if (q.d !== st0.d || (st0.k === "skill" && q.sk !== st0.sk)) throw new Error("the question is off the plan: " + JSON.stringify([q, st0]));
+    for (let i = 0; i < 14; i++) { s = await state(page); if (s.adv.i > 0) break; await answerRight(page); await page.click("#nextBtn"); await page.waitForTimeout(120); }
+    if (s.adv.i < 1) throw new Error("the first step never finished");
+    await page.reload(); await page.waitForTimeout(900);
+    const s2 = await state(page);
+    if (s2.adv.i !== s.adv.i || !s2.adv.started || s2.adv.day !== s.adv.day) throw new Error("the adventure did not survive a reload");
+    if (!/Step 2/.test(await page.textContent("#conAdv"))) throw new Error("the bar lost its place: " + (await page.textContent("#conAdv")));
+    for (let k = 0; k < 4 && !(await state(page)).adv.done; k++) { await page.click('#conAdv [data-act="advOpen"]'); await page.click('#modal [data-act="advSkip"]'); await page.waitForTimeout(150); }
+    const c0 = (await state(page)).chests.r;
+    await page.click('#conAdv [data-act="advClaim"]');
+    await page.waitForTimeout(300);
+    const s3 = await state(page);
+    if (!s3.adv.claimed || s3.chests.r !== c0 + 1) throw new Error("claiming did not pay one Rare chest");
+    if (await page.evaluate(() => advClaim(window.__g1520.S(), Date.now())) !== null) throw new Error("the reward could be claimed twice");
+    await page.reload(); await page.waitForTimeout(900);
+    if (await page.locator('#conAdv [data-act="advClaim"]').count()) throw new Error("a claim button came back after a reload");
+    return page;
+  },
+  async "a miss offers a fresh try, and the rematch pays a comeback once"(b) {
+    const page = await open(b, save((S) => { S.spots = []; S.onb = { step: 9, done: true }; S.adv = null; }));
+    await answerWrong(page);
+    await page.waitForSelector('#conBody [data-act="cbTry"]');
+    const missed = await page.evaluate(() => window.__g1520.cur().key);
+    await page.click('#conBody [data-act="cbTry"]');
+    const c = await page.evaluate(() => { const q = window.__g1520.cur(); return { key: q.key, cb: q.cbFor, sk: q.sk }; });
+    if (c.cb !== missed || c.key === missed) throw new Error("the fresh try is not linked to the miss: " + JSON.stringify(c));
+    await answerRight(page);
+    if (!/Comeback in progress/.test(await page.textContent("#conBody"))) throw new Error("no follow-up after the fresh try");
+    await page.evaluate((k) => { const S = window.__g1520.S(); S.spots.find((x) => x.k === k).due = Date.now() - 1000; S.focus = "spots"; }, missed);
+    await page.click("#nextBtn"); await page.waitForTimeout(200);
+    if ((await page.evaluate(() => window.__g1520.cur().key)) !== missed) throw new Error("the rematch was not served");
+    const r0 = (await state(page)).stats.recovered || 0;
+    await answerRight(page);
+    if (!/Full comeback/.test(await page.textContent("#conBody"))) throw new Error("no full comeback");
+    const s1 = await state(page);
+    if ((s1.stats.recovered || 0) !== r0 + 1 || !s1.recov[missed]) throw new Error("the comeback was not recorded");
+    return page;
+  },
+  async "the Algebra machine: pick a part, shut it down"(b) {
+    const page = await open(b, save((S) => { S.bossT = {}; S.onb = { step: 9, done: true }; S.adv = null; }));
+    await page.click('#decknav [data-v="arena"]');
+    await page.click('#panel [data-act="bossGo"][data-v="alg"]');
+    await page.waitForSelector("#conBody .mparts");
+    await page.click('#conBody [data-act="bossTgt"][data-i="1"]');
+    if ((await page.evaluate(() => window.__g1520.cur().sk)) !== "Linear functions") throw new Error("targeting did not change the question");
+    await answerRight(page);
+    const s = await state(page);
+    if (s.boss.parts[1].hp !== 0) throw new Error("the Slope Drive is still running");
+    if (!/3 of 4 parts running/.test(await page.textContent("#bossBox"))) throw new Error("the banner does not count parts");
+    return page;
+  },
+  async "the Inference Hydra: claim first, then evidence"(b) {
+    const page = await open(b, save((S) => { S.bossT = {}; S.onb = { step: 9, done: true }; S.adv = null; }));
+    await page.click('#decknav [data-v="arena"]');
+    await page.click('#panel [data-act="bossGo"][data-v="ii"]');
+    await page.waitForSelector("#conBody .hheads");
+    const sk1 = await page.evaluate(() => window.__g1520.cur().sk);
+    if (!/Central Ideas|Inferences/.test(sk1)) throw new Error("the first question is not a claim question: " + sk1);
+    await answerRight(page); await page.click("#nextBtn"); await page.waitForTimeout(200);
+    const sk2 = await page.evaluate(() => window.__g1520.cur().sk);
+    if (!/Command of Evidence/.test(sk2)) throw new Error("the second question is not an evidence question: " + sk2);
+    await answerRight(page);
+    const s = await state(page);
+    if (s.boss.heads[0] !== 2) throw new Error("the head was not cut: " + JSON.stringify(s.boss.heads));
+    return page;
+  },
+  async "the Comma Splicer's manuscript mends joint by joint"(b) {
+    const page = await open(b, save((S) => { S.bossT = {}; S.onb = { step: 9, done: true }; S.adv = null; }));
+    await page.click('#decknav [data-v="arena"]');
+    await page.click('#panel [data-act="bossGo"][data-v="sec"]');
+    await page.waitForSelector("#conBody .mss");
+    if ((await page.locator("#conBody .mss .gap").count()) !== 4) throw new Error("the manuscript should start with 4 broken joints");
+    await answerRight(page);
+    const s = await state(page);
+    if (s.boss.joints.filter((j) => j.ok).length < 1) throw new Error("no joint was repaired");
+    await page.click("#nextBtn"); await page.waitForTimeout(200);
+    if ((await page.locator("#conBody .mss .fix").count()) < 1) throw new Error("the repaired joint does not show its mark");
+    return page;
+  },
+  async "restore the Harbor Bridge once, from the City"(b) {
+    const page = await open(b, save((S) => { harborReady(S); S.settings.view = "city"; S.onb = { step: 9, done: true }; }));
+    await page.click('#decknav [data-v="city"]');
+    await page.waitForSelector('#panel [data-act="restore"][data-v="harbor"]');
+    const e0 = (await state(page)).chests.e;
+    await page.click('#panel [data-act="restore"][data-v="harbor"]');
+    await page.waitForTimeout(600);
+    const s = await state(page);
+    if (!s.world.harbor || s.chests.e !== e0 + 1) throw new Error("restoring did not stick or did not pay");
+    if (await page.locator('[data-act="restore"][data-v="harbor"]').count()) throw new Error("restore is still offered");
+    if (await page.evaluate(() => restoreDo(window.__g1520.S(), "harbor", Date.now())) !== null) throw new Error("the bridge could be restored twice");
+    await page.reload(); await page.waitForTimeout(900);
+    const s2 = await state(page);
+    if (!s2.world.harbor || s2.chests.e !== e0 + 1) throw new Error("the restored bridge did not survive a reload");
+    return page;
+  },
+  async "the water stops you in 3D until the bridge is restored, then you can cross"(b) {
+    const page = await open(b, save((S) => { harborReady(S); S.settings.view = "3d"; S.settings.w3new = true; S.settings.w3seen = true; S.onb = { step: 9, done: true }; }));
+    await w3Ready(page);
+    const place = () => page.evaluate(() => { const W = window.__g1520.w3(), L = W.lots.harbor, c = Math.cos(L.ry), s = Math.sin(L.ry); W.pos.set(L.x + 17 * s, 0, L.z + 17 * c); W.vel.set(0, 0, 0); W.yaw = L.ry; W.yawTo = null; W.goal = null; });
+    const localZ = () => page.evaluate(() => { const W = window.__g1520.w3(), L = W.lots.harbor, dx = W.pos.x - L.x, dz = W.pos.z - L.z; return dx * Math.sin(L.ry) + dz * Math.cos(L.ry); });
+    await place();
+    await page.focus("#w3Cv");
+    await page.keyboard.down("w"); await page.waitForTimeout(2500); await page.keyboard.up("w");
+    const z0 = await localZ();
+    if (z0 < 14.5) throw new Error("walked onto the water before the bridge was restored: z=" + z0.toFixed(2));
+    await page.click('#decknav [data-v="city"]');
+    await page.waitForSelector('#panel [data-act="restore"][data-v="harbor"]');
+    await page.click('#panel [data-act="restore"][data-v="harbor"]');
+    await page.waitForTimeout(700);
+    await page.click('#decknav [data-v="city"]');
+    await page.waitForTimeout(300);
+    await place();
+    await page.focus("#w3Cv");
+    let top = 0;
+    await page.keyboard.down("w");
+    for (let i = 0; i < 12; i++) { await page.waitForTimeout(300); top = Math.max(top, await page.evaluate(() => window.__g1520.w3().pos.y)); }
+    await page.keyboard.up("w");
+    const z1 = await localZ();
+    if (z1 > -2) throw new Error("did not reach Lantern Isle: z=" + z1.toFixed(2));
+    if (top < 0.8) throw new Error("the walk did not go over the arch: top y=" + top.toFixed(2));
+    return page;
+  },
+  async "Progress shows learning evidence apart from game rewards"(b) {
+    const page = await open(b, save((S) => { S.onb = { step: 9, done: true }; S.adv = null; }));
+    for (let i = 0; i < 6; i++) { if (i % 3) await answerRight(page); else await answerWrong(page); await page.click("#nextBtn"); await page.waitForTimeout(120); }
+    await page.click('#decknav [data-v="reviews"]');
+    await page.waitForSelector("#panel #plLearn");
+    const t = await page.textContent("#plLearn");
+    if (!/fresh questions right/.test(t) || !/comebacks/.test(t) || !/best timed section/.test(t)) throw new Error("learning evidence is incomplete");
+    if (!/Progress/.test(await page.textContent("#panel .glass-h"))) throw new Error("the tab is not called Progress");
+    return page;
+  },
+  async "the top bar and page fit at common desktop sizes"(b) {
+    let last = null;
+    for (const [nm, json] of [["fresh", null], ["day 6", save((S) => { S.onb = { step: 9, done: true }; })], ["late", lateSave()]]) {
+      for (const [w, h] of [[1280, 720], [1366, 768], [1440, 900], [1920, 1080]]) {
+        if (last) await last.close();
+        last = await open(b, json, w, h);
+        if (!json) { await last.click('[data-act="welcomeSkip"]'); await last.waitForTimeout(200); }
+        const bad = await pageFits(last);
+        if (bad) throw new Error(nm + " at " + w + ": " + bad);
+        if (last.errors.length) throw new Error(nm + " at " + w + ": " + last.errors.join(" | "));
+      }
+    }
+    return last;
+  },
+  async "fresh game starts at 320 and climbs"(b) {
+    const page = await open(b, null);
+    await page.click('[data-act="welcomeSkip"]');
     const s0 = await state(page);
     if (Object.values(s0.r).some((r) => r !== 160)) throw new Error("fresh ratings are not all 160");
     for (let i = 0; i < 6; i++) { await answerAny(page); await page.click("#nextBtn"); await page.waitForTimeout(120); }

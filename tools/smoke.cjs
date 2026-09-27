@@ -21,7 +21,9 @@ function arg(name, def) {
   await page.goto(file);
   await page.waitForTimeout(600);
   // Dismiss the welcome dialog if it is showing.
-  const go = page.locator('[data-act="welcomeGo"]');
+  // Skip the playable intro: this check is about answering, not the tour.
+  let go = page.locator('[data-act="welcomeSkip"]');
+  if (!(await go.count())) go = page.locator('[data-act="welcomeGo"]');
   if (await go.count()) await go.first().click();
   const n = Number(arg("answers", 12));
   for (let i = 0; i < n; i++) {

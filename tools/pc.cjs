@@ -73,12 +73,19 @@ to play in a normal browser tab.
 
 Everything works offline, including the 3D city.
 
+GETTING STARTED
+A new game opens with a two-minute intro (you can skip it). After that, the bar above
+your questions shows Today's Adventure: a short guided session that reviews what's due,
+practices the skill that needs it most, then offers a challenge and a reward. Press Start,
+or just keep answering questions. Already playing? Your progress carries over, and a short
+list shows what changed.
+
 YOUR PROGRESS
-Your browser saves your progress on this computer. When you get a new version, save the
-new grind-to-1520.html over the old one in this folder, and keep playing in the same
-browser. For a backup, open Settings (the gear at the top right) and copy your Backup code.
-To bring progress over from another copy of the game, paste its Backup code there and
-press Restore.
+Your browser saves your progress on this computer, by itself every few seconds. When you
+get a new version, save the new grind-to-1520.html over the old one in this folder, and
+keep playing in the same browser. For a backup, open Settings (the gear at the top right)
+and press "Download a save file", or copy your Backup code. To bring progress over from
+another copy of the game, use "Load a save file", or paste a Backup code and press Restore.
 
 IF WINDOWS WARNS YOU
 Windows may ask before running the launcher, because it came from the internet. Choose
