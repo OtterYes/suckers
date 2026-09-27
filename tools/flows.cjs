@@ -39,6 +39,47 @@ async function open(browser, json, w, h, opts) {
   return page;
 }
 const state = (page) => page.evaluate((k) => JSON.parse(localStorage.getItem(k)), KEY);
+// Phones and tablets with a touch screen: taps and drags are touch events, and (pointer: coarse) applies.
+const DEVICES = { se: [375, 667, 2], small: [360, 740, 3], phone: [390, 844, 3], land: [844, 390, 3], tab1024: [1024, 768, 2], tab1180: [1180, 820, 2] };
+async function openTouch(browser, json, dev, opts) {
+  const [w, h, dpr] = DEVICES[dev];
+  const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: dpr, isMobile: !/^tab/.test(dev), hasTouch: true });
+  const page = await ctx.newPage(), close = page.close.bind(page);
+  page.close = async () => { await close(); await ctx.close(); };
+  page.errors = [];
+  page.on("pageerror", (e) => page.errors.push(e.message));
+  await page.route(/^https?:\/\//, (r) => r.abort());
+  await routeThree(page);
+  if (json) await page.addInitScript((j) => { try { var cur = localStorage.getItem("grind1520.save.v1"); if (cur === null || cur === j) localStorage.setItem("grind1520.save.v1", j); } catch (e) {} }, json);
+  if (opts && opts.init) await page.addInitScript(opts.init);
+  await page.goto(file);
+  await page.waitForTimeout(900);
+  return page;
+}
+async function touchDrag(page, x0, y0, x1, y1, steps) {
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: x0, y: y0 }] });
+  for (let i = 1; i <= steps; i++) { await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: x0 + (x1 - x0) * i / steps, y: y0 + (y1 - y0) * i / steps }] }); await page.waitForTimeout(16); }
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await cdp.detach();
+}
+async function tapAnswer(page, right) {
+  const q = await page.evaluate(() => { const c = window.__g1520.cur(); return { spr: c.spr ? String(c.spr.vals[0]) : null, a: c.correct }; });
+  if (q.spr != null) { await page.tap("#sprIn"); await page.fill("#sprIn", right ? q.spr : "-98765.4321"); } else await page.tap(`#conBody [data-act="pick"][data-i="${right ? q.a : (q.a + 1) % 4}"]`);
+  await page.tap("#checkBtn");
+  await page.waitForTimeout(250);
+}
+// On a touch screen: nothing wider than the screen, no place name spilling out of its tab, nothing too small for a finger,
+// and no text field small enough to make a phone zoom in when it gets focus.
+const touchFits = (page) => page.evaluate(() => {
+  const r = [], W = innerWidth, name = (el) => el.dataset.act || el.id || el.textContent.trim().slice(0, 24);
+  const vis = (el) => { if (el.closest("[hidden]")) return false; const s = getComputedStyle(el); if (s.display === "none" || s.visibility === "hidden") return false; const b = el.getBoundingClientRect(); return b.width > 0 && b.height > 0; };
+  if (document.documentElement.scrollWidth > W + 1) r.push("page " + document.documentElement.scrollWidth + ">" + W);
+  document.querySelectorAll("#decknav .dn-tab").forEach((t) => { if (t.scrollWidth > t.clientWidth + 2) r.push("tab " + t.dataset.v + " " + t.scrollWidth + ">" + t.clientWidth); });
+  document.querySelectorAll("button,a[href]").forEach((el) => { if (!vis(el)) return; const b = el.getBoundingClientRect(); if (b.right > W + 1 || b.left < -1) r.push("off-screen " + name(el)); if (Math.min(b.width, b.height) < 30) r.push("small " + name(el) + " " + Math.round(b.width) + "x" + Math.round(b.height)); });
+  document.querySelectorAll("input:not([type=range]):not([type=file]):not([type=checkbox]),select,textarea").forEach((el) => { if (vis(el) && parseFloat(getComputedStyle(el).fontSize) < 16) r.push("zooms " + (el.id || el.tagName)); });
+  return r.join(", ");
+});
 const w3Ready = (page) => page.waitForFunction(() => window.__g1520 && window.__g1520.w3().ready, null, { timeout: 30000 });
 const w3Pos = (page) => page.evaluate(() => { const P = window.__g1520.w3().pos; return [P.x, P.z]; });
 // Where a world point lands on the page, through the 3D camera.
@@ -75,7 +116,7 @@ function lateSave(edit) {
 }
 // A Transitions record that has earned the Harbor Bridge.
 function harborReady(S) { S.sk["eoi|Transitions"] = { n: 14, c: 12, rr: "1111111110" }; S.world = {}; }
-const pageFits = (page) => page.evaluate(() => { const r = []; if (document.documentElement.scrollWidth > innerWidth + 1) r.push("page " + document.documentElement.scrollWidth); const hud = document.querySelector(".hud-in"); if (hud.scrollWidth > hud.clientWidth + 1) r.push("top bar " + hud.scrollWidth + ">" + hud.clientWidth); if (document.getElementById("gearBtn").getBoundingClientRect().right > innerWidth) r.push("settings off-screen"); return r.join(", "); });
+const pageFits = (page) => page.evaluate(() => { const r = []; if (document.documentElement.scrollWidth > innerWidth + 1) r.push("page " + document.documentElement.scrollWidth); const hud = document.querySelector(".hud-in"); if (hud.scrollWidth > hud.clientWidth + 1) r.push("top bar " + hud.scrollWidth + ">" + hud.clientWidth); if (document.getElementById("gearBtn").getBoundingClientRect().right > innerWidth) r.push("settings off-screen"); document.querySelectorAll("#decknav .dn-tab").forEach((t) => { if (t.scrollWidth > t.clientWidth + 2) r.push("tab " + t.dataset.v + " " + t.scrollWidth + ">" + t.clientWidth); }); return r.join(", "); });
 
 const TESTS = {
   async "buy a hub, a pathway, and an upgrade"(b) {
@@ -1128,7 +1169,8 @@ const TESTS = {
     await page.focus("#w3Cv");
     let top = 0;
     await page.keyboard.down("w");
-    for (let i = 0; i < 12; i++) { await page.waitForTimeout(300); top = Math.max(top, await page.evaluate(() => window.__g1520.w3().pos.y)); }
+    // Walk until across (or about 9 seconds): headless 3D can run at a low frame rate, so time alone is not distance.
+    for (let i = 0; i < 30; i++) { await page.waitForTimeout(300); top = Math.max(top, await page.evaluate(() => window.__g1520.w3().pos.y)); if (i >= 11 && (await localZ()) < -3) break; }
     await page.keyboard.up("w");
     const z1 = await localZ();
     if (z1 > -2) throw new Error("did not reach Lantern Isle: z=" + z1.toFixed(2));
@@ -1319,6 +1361,137 @@ const TESTS = {
     await page.click('#decknav [data-v="city"]'); await page.waitForTimeout(400);
     if (!(await page.locator('#lmk-square [data-act="projectGo"]').count())) throw new Error("the late save cannot fund the square");
     if (!/Tools installed/.test((await page.click('#panel [data-act="cityPage"][data-v="stats"]'), await page.textContent("#panel")))) throw new Error("no tools stat");
+    return page;
+  },
+  // ---------- v11: phones and tablets, driven by touch ----------
+  async "touch: the intro on a small phone keeps its cards in the page, clear of the answers"(b) {
+    const page = await openTouch(b, null, "se");
+    await page.tap('[data-act="welcomeGo"]'); await page.waitForTimeout(800);
+    const c0 = await page.evaluate(() => { const c = document.getElementById("coach"); return c && { inline: c.classList.contains("inline"), next: c.nextElementSibling && c.nextElementSibling.id, top: Math.round(c.getBoundingClientRect().top) }; });
+    if (!c0 || !c0.inline || c0.next !== "conBody") throw new Error("the first card should sit just above the question: " + JSON.stringify(c0));
+    let bad = await touchFits(page); if (bad) throw new Error("intro step 1: " + bad);
+    // The answer under the finger is the answer, not a card.
+    const q = await page.evaluate(() => { const c = window.__g1520.cur(); return { spr: c.spr ? String(c.spr.vals[0]) : null, a: c.correct }; });
+    if (q.spr == null) {
+      const ch = page.locator(`#conBody [data-act="pick"][data-i="${q.a}"]`); await ch.scrollIntoViewIfNeeded(); const bb = await ch.boundingBox();
+      if (!(await page.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return !!(e && e.closest('[data-act="pick"]')); }, [bb.x + bb.width / 2, bb.y + bb.height / 2]))) throw new Error("something covers the answer");
+      await ch.tap();
+    } else { await page.tap("#sprIn"); await page.fill("#sprIn", q.spr); }
+    await page.tap("#checkBtn"); await page.waitForTimeout(1300);
+    const c1 = await page.evaluate(() => { const c = document.getElementById("coach"); if (!c) return null; const r = c.getBoundingClientRect(); return { inline: c.classList.contains("inline"), prev: c.previousElementSibling && c.previousElementSibling.id, next: c.nextElementSibling && c.nextElementSibling.id, seen: r.bottom > 0 && r.top < innerHeight }; });
+    if (!c1 || !c1.inline || c1.prev !== "conBody" || c1.next !== "conFoot" || !c1.seen) throw new Error("the second card should follow the feedback, in view: " + JSON.stringify(c1));
+    bad = await touchFits(page); if (bad) throw new Error("intro step 2: " + bad);
+    await page.tap("#nextBtn"); await page.waitForTimeout(400);
+    if (await page.locator("#coach").count()) throw new Error("the card should leave with the next question");
+    for (let i = 0; i < 2; i++) { await tapAnswer(page, true); if (i < 1) { await page.tap("#nextBtn"); await page.waitForTimeout(250); } }
+    await page.waitForTimeout(1300);
+    if (!(await page.locator('#modal:not([hidden]) [data-act="onbGift"]').count())) throw new Error("no free upgrade after three answers");
+    await page.tap('#modal [data-act="onbGift"][data-v="focus"]'); await page.waitForTimeout(900);
+    const c3 = await page.evaluate(() => { const c = document.getElementById("coach"); return c && { inline: c.classList.contains("inline"), prev: c.previousElementSibling && c.previousElementSibling.id }; });
+    if (!c3 || !c3.inline || c3.prev !== "conAdv") throw new Error("the Adventure card should sit under the Adventure bar: " + JSON.stringify(c3));
+    await page.tap('#coach [data-act="onbLater"]'); await page.waitForTimeout(400);
+    const c4 = await page.evaluate(() => { const c = document.getElementById("coach"); if (!c) return null; const r = c.getBoundingClientRect(), n = document.getElementById("decknav").getBoundingClientRect(); return { inline: c.classList.contains("inline"), top: r.top, bottom: r.bottom, nav: n.top }; });
+    if (!c4 || c4.inline || c4.top < 0 || c4.bottom > c4.nav + 1) throw new Error("the places card should float above the bar, on screen: " + JSON.stringify(c4));
+    await page.tap('#coach [data-act="onbDone"]'); await page.waitForTimeout(300);
+    const s = await state(page);
+    if (!s.onb.done || s.stats.correct < 3) throw new Error("intro state: " + JSON.stringify(s.onb) + " correct " + s.stats.correct);
+    return page;
+  },
+  async "touch: a building page on a phone; Show me returns to the town at the building; a round opens at its question"(b) {
+    const page = await openTouch(b, save((S) => { S.settings.view = "engine"; S.onb = { step: 9, done: true }; S.adv = null; S.rev = { date: "x", n: 0, p: 0, done: true }; S.round = null; S.intro = { town: 1, hall: 1, place: 1, tools: 1, project: 1 }; }), "phone");
+    await page.tap('#decknav [data-v="city"]'); await page.waitForTimeout(300);
+    await page.tap('#panel [data-act="cityPage"][data-v="build"]'); await page.waitForTimeout(300);
+    await page.tap('#panel .cthumb[data-v="market"]'); await page.waitForTimeout(400);
+    if ((await page.getAttribute("body", "data-tab")) !== "place" || !/Market/.test(await page.textContent("#panel h2"))) throw new Error("the Market's page did not open");
+    if ((await page.getAttribute("body", "data-view")) !== "engine" || (await page.isVisible("#cityCv")) || (await page.isVisible("#w3Wrap"))) throw new Error("nothing should draw behind a building's page on a phone");
+    let bad = await touchFits(page); if (bad) throw new Error("building page: " + bad);
+    await page.tap('#panel [data-act="cityLook"]'); await page.waitForTimeout(800);
+    if ((await page.getAttribute("body", "data-tab")) !== "network" || (await page.getAttribute("body", "data-view")) !== "city") throw new Error("Show me did not go to the town");
+    if ((await state(page)).settings.view !== "city") throw new Error("the main screen should now be the town");
+    const tip = await page.evaluate(() => { const t = document.getElementById("ctip"); return t && !t.hidden ? t.textContent : ""; });
+    if (!/Market/.test(tip)) throw new Error("the Market's card is not open: " + tip.slice(0, 80));
+    if ((await page.evaluate(() => scrollY)) > 2) throw new Error("the town is not in view");
+    await page.tap('#ctip [data-act="place"]'); await page.waitForTimeout(400);
+    if ((await page.getAttribute("body", "data-tab")) !== "place") throw new Error("the card's Open did not return to the page");
+    await page.tap('#panel [data-act="roundGo"]:not([data-hard])'); await page.waitForTimeout(500);
+    const at = await page.evaluate(() => [document.getElementById("console").getBoundingClientRect().top, document.querySelector(".hud").getBoundingClientRect().bottom]);
+    if (Math.abs(at[0] - at[1]) > 4) throw new Error("the round's first question is not in view: console at " + at[0] + ", top bar ends at " + at[1]);
+    for (let i = 0; i < 5; i++) { await tapAnswer(page, i !== 1); if (i < 4) { await page.tap("#nextBtn"); await page.waitForTimeout(150); } }
+    const s = await state(page);
+    if (!s.round || !s.round.done || s.round.c !== 4) throw new Error("round tally: " + JSON.stringify(s.round));
+    await page.tap("#nextBtn"); await page.waitForTimeout(400);
+    const sum = page.locator("#conBody .roundsum"); if (!(await sum.count())) throw new Error("no round summary");
+    const sb = await sum.boundingBox(); if (!sb || sb.y > 844 || sb.y + sb.height < 0) throw new Error("the round summary is off-screen");
+    bad = await touchFits(page); if (bad) throw new Error("round summary: " + bad);
+    return page;
+  },
+  async "touch: phones and tablets fit, with finger-sized controls and fields that don't zoom"(b) {
+    let last = null;
+    for (const dev of ["small", "se", "phone", "tab1024", "tab1180"]) {
+      for (const [nm, json] of [["day 6", save((S) => { S.settings.view = "city"; S.onb = { step: 9, done: true }; S.intro = { town: 1, hall: 1, place: 1, tools: 1, project: 1 }; })], ["late", lateSave((S) => { S.settings.view = "city"; S.seenV10 = true; })]]) {
+        if (last) await last.close();
+        last = await openTouch(b, json, dev);
+        for (let j = 0; j < 4; j++) { const m = last.locator('#modal:not([hidden]) [data-act="modalClose"]'); if (await m.count()) { await m.first().tap(); await last.waitForTimeout(120); } }
+        for (const t of ["network", "city", "reviews", "arena", "evolution", "zones"]) {
+          if (!(await last.locator(`#decknav [data-v="${t}"]:not(.locked)`).count())) continue;
+          await last.tap(`#decknav [data-v="${t}"]`); await last.waitForTimeout(350);
+          const bad = await touchFits(last); if (bad) throw new Error(`${dev} ${nm} ${t}: ${bad}`);
+          if (t === "city" && dev === "tab1024") { const w = await last.evaluate(() => document.getElementById("panel").getBoundingClientRect().width); if (w < 339) throw new Error("the Town Hall is too narrow at 1024: " + w); }
+        }
+        await last.tap("#gearBtn"); await last.waitForTimeout(300);
+        const bad = await touchFits(last); if (bad) throw new Error(`${dev} ${nm} settings: ${bad}`);
+        if (/Ctrl\+S/.test(await last.textContent("#modalCard"))) throw new Error("keyboard shortcut offered on a touch screen");
+        if (last.errors.length) throw new Error(`${dev} ${nm}: ` + last.errors.join(" | "));
+      }
+    }
+    return last;
+  },
+  async "touch: a landscape phone fits the world between the bars, and the joystick walks"(b) {
+    const page = await openTouch(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; S.onb = { step: 9, done: true }; S.adv = null; }), "land");
+    await w3Ready(page); await page.waitForTimeout(600);
+    const g = await page.evaluate(() => { const r = (id) => document.getElementById(id).getBoundingClientRect(); return { stage: r("stage").bottom, nav: r("decknav").top, joy: r("w3Joy").bottom, hud: document.querySelector(".hud").getBoundingClientRect().bottom, top: r("stage").top }; });
+    if (g.stage > g.nav + 1 || g.joy > g.nav || g.top < g.hud - 1) throw new Error("the bars cover the world: " + JSON.stringify(g));
+    const j = await page.locator("#w3Joy").boundingBox(), P0 = await w3Pos(page);
+    await touchDrag(page, j.x + j.width / 2, j.y + j.height / 2, j.x + j.width / 2, j.y - 10, 30);
+    const P1 = await w3Pos(page);
+    if (Math.hypot(P1[0] - P0[0], P1[1] - P0[1]) < 1) throw new Error("the joystick did not walk: " + P0 + " -> " + P1);
+    const bad = await touchFits(page); if (bad) throw new Error(bad);
+    await page.tap('#viewSw [data-v="city"]'); await page.waitForTimeout(500);
+    const g2 = await page.evaluate(() => [document.getElementById("stage").getBoundingClientRect().bottom, document.getElementById("decknav").getBoundingClientRect().top]);
+    if (g2[0] > g2[1] + 1) throw new Error("the bar covers the skyline: " + g2);
+    return page;
+  },
+  async "touch: a browser that won't keep the save says so once and offers the file"(b) {
+    const page = await openTouch(b, save((S) => { S.onb = { step: 9, done: true }; }), "phone", { init: () => { const set = Storage.prototype.setItem; Storage.prototype.setItem = function (k, v) { if (k === "grind1520.save.v1") throw new DOMException("The quota has been exceeded.", "QuotaExceededError"); return set.call(this, k, v); }; } });
+    await page.waitForSelector("#saveWarn", { timeout: 15000 });
+    const txt = await page.textContent("#saveWarn");
+    if (!/isn’t keeping your progress/.test(txt) || !(await page.locator('#saveWarn [data-act="saveFile"]').count())) throw new Error("the warning should explain and offer a save file: " + txt);
+    await page.tap('#saveWarn [data-act="saveWarnX"]'); await page.waitForTimeout(200);
+    if (await page.locator("#saveWarn").count()) throw new Error("Dismiss did not close the warning");
+    await tapAnswer(page, true); await page.waitForTimeout(300);
+    if (await page.locator("#saveWarn").count()) throw new Error("the warning came back after it was dismissed");
+    return page;
+  },
+  async "touch: where the page can't download files, Save file hands over the backup code"(b) {
+    // Inside the web viewer (window.claude exists) without the downloads permission, a page-started download is blocked.
+    const page = await openTouch(b, save((S) => { S.onb = { step: 9, done: true }; }), "phone", { init: () => { window.claude = {}; } });
+    await page.tap("#gearBtn"); await page.waitForTimeout(300);
+    await page.tap('#modal [data-act="saveFile"]'); await page.waitForTimeout(300);
+    const code = await page.evaluate(() => { const t = document.getElementById("exportTxt"); return t && !t.hidden ? t.value : ""; });
+    if (!/^G1520:/.test(code) || !(await page.locator('#modal [data-act="copy"]').count())) throw new Error("no backup code offered: " + code.slice(0, 20));
+    if (/downloaded/i.test(await page.textContent("#toasts"))) throw new Error("it claims a download that could not happen");
+    return page;
+  },
+  async "touch: the address bar hiding keeps a building's card open; turning the phone closes it"(b) {
+    const page = await openTouch(b, save((S) => { S.settings.view = "city"; S.onb = { step: 9, done: true }; S.adv = null; }), "phone");
+    const lot = await page.evaluate(() => { const C = window.__g1520.city(), L = C.lots.find((l) => l.id === "bank"); C.camTo = null; C.cam = Math.max(C.camMin, Math.min(C.camMax, L.x + L.w / 2 - (C.vis[0] + C.vis[1]) / 2)); window.__g1520.cityFrame(performance.now()); const r = document.getElementById("cityCv").getBoundingClientRect(); return { x: r.left + L.x + L.w / 2 - C.cam, y: r.top + C.gy - 20 }; });
+    await page.touchscreen.tap(lot.x, lot.y); await page.waitForTimeout(350);
+    const open = () => page.evaluate(() => { const t = document.getElementById("ctip"); return !!(t && !t.hidden && /Bank/.test(t.textContent)); });
+    if (!(await open())) throw new Error("tapping the Bank did not open its card");
+    await page.setViewportSize({ width: 390, height: 780 }); await page.waitForTimeout(400);
+    if (!(await open())) throw new Error("the card closed when only the address bar moved");
+    await page.setViewportSize({ width: 844, height: 390 }); await page.waitForTimeout(400);
+    if (await open()) throw new Error("the card should close when the phone turns");
     return page;
   },
 };

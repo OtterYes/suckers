@@ -111,7 +111,7 @@ function build() {
   html = html.slice(0, at) + '<script type="text/plain" id="three-src">' + three + "</script>\n" + html.slice(at);
   // claude.ai adds the page header when it publishes; a file opened from disk needs its own,
   // or the browser guesses the text encoding and renders in quirks mode.
-  if (!/^\s*<!doctype/i.test(html)) html = '<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n' + html;
+  if (!/^\s*<!doctype/i.test(html)) html = '<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n' + (/name="viewport"/.test(html.slice(0, 400)) ? "" : '<meta name="viewport" content="width=device-width, initial-scale=1">\n') + html;
 
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(path.join(OUT, "licenses"), { recursive: true });

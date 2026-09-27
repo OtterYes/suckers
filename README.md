@@ -198,6 +198,28 @@ has a page for each one.
   **Ctrl+S**), **Download a save file** (a text file holding your backup code), and **Load a save
   file**, which replaces the progress in this browser.
 
+## Phones and tablets
+
+- **Where to play.** Open the web version in Safari or Chrome on the phone or tablet. It lays itself
+  out for the screen: the town on top, the questions under it, and the places bar along the bottom.
+  Turn a phone sideways and the town fits between the top bar and the places bar. In 3D a stick and
+  a Jump button appear.
+- **Touch.** Tap a building to open its card, drag the skyline sideways to look along it, and in 3D
+  drag to look around or tap the ground to walk there. Where the places bar is tight, Town Hall
+  reads **Hall**. Small controls are finger-sized, and text fields are large enough that the phone
+  doesn't zoom in when you type.
+- **The page follows you.** Starting a round, a boss, or a focus scrolls the question into view. A
+  building's page fills a phone's screen, and its **Show me** takes you back to the town, looking at
+  that building. The intro's cards sit in the page next to what they talk about, never over the
+  answers. The Check/Next bar stays within reach while you scroll, and so does the top bar when the
+  phone is upright.
+- **Your progress is kept per browser.** A phone has its own save. To move progress between
+  devices, use Settings → **Download a save file** on one and **Load a save file** on the other (or
+  copy the backup code). On the web version, Cloud save keeps a copy in your Claude account. Safari
+  may clear a site's saved data if you don't open it for about a week, so download a save file now
+  and then. If a browser refuses to save at all (storage full, or blocked in some private windows),
+  the game says so and offers the file.
+
 ## Your town
 
 The town is there from the first minute, and you can rename it at the Town Hall. Every PSAT skill is a
@@ -397,6 +419,7 @@ node tools/flows.cjs                        # functional checks: buying, bosses,
                                             # reload), tool offers, the Town Square in 2D and 3D, back
                                             # paths, and the late dev save
 node tools/flows.cjs city                   # only the checks whose name contains "city"
+node tools/flows.cjs touch                  # phones and tablets, driven by real touch events
 node tools/shots.cjs out/                   # screenshots of the main screens from simulated saves
 node tools/pc.cjs                           # the PC edition: dist/To-1520/ (game file, launcher, readme)
                                             # and a .zip; Three.js and the fonts are built in

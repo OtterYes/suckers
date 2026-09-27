@@ -1,4 +1,5 @@
 <title>To 1520</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
@@ -919,7 +920,7 @@ mark.hl{background:rgba(255,209,102,.34);color:inherit;border-radius:3px;padding
   .dn-tab svg{width:22px;height:22px}
   .dn-tab b{font-size:10px;letter-spacing:.12em}
   .dn-tab small{display:none}
-  .dn-tab b .dot{position:absolute;top:6px;left:calc(50% + 8px)}
+  .dn-tab b .dot{position:absolute;top:4px;left:auto;right:max(2px,calc(50% - 34px))}
   .dn-tab::after{left:30%;right:30%;bottom:4px}
   .rail{display:none}
   .legend{display:none}
@@ -936,7 +937,7 @@ mark.hl{background:rgba(255,209,102,.34);color:inherit;border-radius:3px;padding
   .rank-score{display:none}
   .chip{font-size:13px}
   .iconbtn{width:34px;height:34px}
-  #gearBtn{display:none}
+  #soundBtn{display:none}
   .con-head,.con-tools,.con-body,.con-foot{padding-left:14px;padding-right:14px}
   .passage{font-size:16px;padding:12px 13px}
   .choice{font-size:15.5px}
@@ -1056,8 +1057,8 @@ body[data-tab="city"] .view-sw{display:none}
 .chero img,.wn-city img{width:84px;height:84px;margin:0 -9px}
 @media (min-width:981px){
   body[data-tab="city"] .panel-wrap{justify-content:flex-end;background:linear-gradient(270deg,rgba(5,10,20,.55),rgba(5,10,20,.12) 55%,transparent)}
-  body[data-tab="city"] .glass{width:min(450px,50%)}
-  body[data-tab="city"] .city-map,body[data-tab="city"] .city-news{right:calc(min(450px,50%) + 34px)}
+  body[data-tab="city"] .glass{width:var(--hall-w)}
+  body[data-tab="city"] .city-map,body[data-tab="city"] .city-news{right:calc(var(--hall-w) + 34px)}
 }
 @media (max-width:1200px){.view-sw button span{display:none}.view-sw button{padding:6px 8px}}
 /* ---------- The 3D city ---------- */
@@ -1087,9 +1088,9 @@ body[data-view="3d"] .core-read,body[data-view="3d"] .legend,body[data-view="3d"
 .w3-joy i{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:rgba(230,238,250,.78);box-shadow:0 4px 14px -4px #000;pointer-events:none}
 .w3-jump{position:absolute;right:18px;bottom:168px;width:62px;height:62px;z-index:4;border-radius:50%;border:1.5px solid rgba(255,201,51,.6);background:rgba(8,16,30,.72);color:var(--spark);font-family:var(--f-disp);font-weight:700;font-size:11px;letter-spacing:.12em;touch-action:none;cursor:pointer}
 @media (min-width:981px){
-  body[data-tab="city"] .w3-radar{right:calc(min(450px,50%) + 34px)}
-  body[data-tab="city"] .w3-act,body[data-tab="city"] .w3-help{left:calc((100% - min(450px,50%) - 20px)/2);max-width:calc(100% - min(450px,50%) - 300px)}
-  body[data-tab="city"] .w3-jump{right:calc(min(450px,50%) + 34px)}
+  body[data-tab="city"] .w3-radar{right:calc(var(--hall-w) + 34px)}
+  body[data-tab="city"] .w3-act,body[data-tab="city"] .w3-help{left:calc((100% - var(--hall-w) - 20px)/2);max-width:calc(100% - var(--hall-w) - 300px)}
+  body[data-tab="city"] .w3-jump{right:calc(var(--hall-w) + 34px)}
 }
 @media (max-width:980px){
   body[data-tab="city"] .stage>#w3Wrap:not([hidden]){display:block;position:relative;height:clamp(340px,56vh,500px)}
@@ -1534,7 +1535,7 @@ body[data-tab="city"] .map-hud{right:14px}
 .pd.ok{border-color:color-mix(in srgb,var(--dc) 65%,var(--wire));color:var(--dc)}.pd.ok small{color:var(--ink-3)}
 .pips10.five i{width:14px}
 .decknav{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
-body[data-view="city"] .toasts,body[data-view="3d"] .toasts,body[data-view="map"] .toasts{top:calc(env(safe-area-inset-top,0px) + var(--hud-h) + 66px)}
+@media (min-width:981px){body[data-view="city"] .toasts,body[data-view="3d"] .toasts,body[data-view="map"] .toasts{top:calc(env(safe-area-inset-top,0px) + var(--hud-h) + 66px)}}
 /* ---------- Title card: shown while the town loads, gone the moment the game is ready ---------- */
 .title{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:16px;background:radial-gradient(900px 600px at 50% 62%,#16243D,#07101F 72%);color:var(--ink);transition:opacity .5s ease}
 .title.out{opacity:0;pointer-events:none}
@@ -1555,6 +1556,100 @@ body[data-view="city"] .toasts,body[data-view="3d"] .toasts,body[data-view="map"
 .tl-fail .tl-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px}
 .title.failed .tl-bar,.title.failed .tl-msg{display:none}
 @media (prefers-reduced-motion:reduce){.tl-mark i,.tl-bar i{animation:none}.title{transition:none}}
+/* ---------- v11: phones, tablets, and touch ---------- */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{--hall-w:min(450px,50%);-webkit-tap-highlight-color:rgba(63,216,255,.16)}
+button,a,label,select,summary{touch-action:manipulation}
+canvas{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.glass .btn,.modal-card .btn,.coach .btn,.savewarn .btn{white-space:normal;text-wrap:balance}
+/* A short name for a place when the bar is tight (the full name stays in the page). */
+.dn-tab b[data-s]::before{content:attr(data-s);display:none}
+@media (max-width:560px),(min-width:981px) and (max-width:1100px){.dn-tab b[data-s] .nl{display:none}.dn-tab b[data-s]::before{display:inline}}
+/* Only when this browser refuses to keep the save. */
+.savewarn{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + var(--hud-h) + 10px);transform:translateX(-50%);z-index:75;width:min(560px,calc(100vw - 24px));display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 13px;border-radius:12px;border:1px solid rgba(255,90,79,.65);background:#2A1016;color:#FFD3D8;font-size:13px;line-height:1.45;box-shadow:0 14px 34px -12px #000}
+.savewarn b{color:#fff}
+.savewarn .row{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:560px){.savewarn{grid-template-columns:minmax(0,1fr)}.savewarn .row{justify-content:flex-start}}
+/* The intro's cards sit in the page on phones, next to what they talk about, instead of floating over it. */
+.coach.inline{position:relative;left:auto!important;top:auto!important;right:auto;width:auto;z-index:1;margin:12px 14px 2px;scroll-margin-top:calc(var(--hud-h) + 12px);scroll-margin-bottom:calc(var(--nav-h) + 96px)}
+.coach.inline i.arw,.coach.inline .cf [data-act="onbNext"]{display:none}
+.con-adv{scroll-margin-top:calc(var(--hud-h) + 8px)}
+/* Narrow desktops and landscape tablets: the places bar and the Town Hall make room. */
+@media (min-width:1101px) and (max-width:1280px){
+  .dn-tab{padding:0 10px;gap:8px}
+  .dn-tab::after{left:10px;right:10px}
+  .dn-tab svg{width:22px;height:22px}
+  .dn-tab b{font-size:12px;letter-spacing:.1em;gap:6px}
+}
+@media (min-width:981px) and (max-width:1100px){
+  body{--hall-w:clamp(340px,56%,450px)}
+  .dn-tab{padding:0 8px;gap:7px}
+  .dn-tab::after{left:8px;right:8px}
+  .dn-tab svg{width:21px;height:21px}
+  .dn-tab b{font-size:12px;letter-spacing:.06em;gap:5px}
+}
+@media (max-width:1100px){.wsw button{letter-spacing:.08em}}
+@media (max-width:980px){
+  /* The top bar and the question's footer stick while the page scrolls; the app still never scrolls sideways. */
+  #app{overflow:visible;overflow-x:clip}
+  /* On the Town tab a phone shows less sky, so the question starts sooner. */
+  body[data-tab="network"][data-view="city"] .stage{height:clamp(300px,46vh,440px);min-height:0}
+  .dn-tab b{white-space:nowrap}
+  .dn-tab b .dot:not(.mini){font-size:9px;min-width:15px;height:15px;padding:0 4px}
+  .modal-card{padding:20px 18px}
+}
+@media (max-width:560px){
+  .btn{letter-spacing:.1em}
+  .btn.sm{letter-spacing:.08em}
+  .modal{padding:10px}
+  .modal-card h2{font-size:24px}
+}
+@media (max-width:560px){body[data-tab="city"] .stage>#cityWrap{height:clamp(260px,40vh,400px)}}
+@media (max-width:980px){html{overscroll-behavior-y:none}body.kb .decknav{display:none}body.kb .deck{padding-bottom:0}body.kb .con-foot{bottom:0}}
+@media (max-width:430px){.rank-name{display:none}.rankbtn{padding:4px}}
+@media (max-width:400px){.dn-tab{padding:6px 0}.dn-tab b{font-size:8.5px;letter-spacing:0}}
+@media (max-width:340px){#streakChip{display:none}}
+/* Landscape phones: a slimmer HUD and bar, and the world fits between them. */
+@media (max-width:980px) and (max-height:500px) and (orientation:landscape){
+  :root{--hud-h:46px;--nav-h:50px}
+  .hud{position:relative}
+  .iconbtn{width:32px;height:32px}
+  .stagebtn .ring{width:26px;height:26px}
+  .emblem{width:26px;height:30px}
+  .dn-tab{flex-direction:row;gap:7px;padding:0 4px}
+  .dn-tab svg{width:18px;height:18px}
+  .dn-tab b{font-size:9.5px;gap:4px}
+  .dn-tab b .dot{position:static}
+  .dn-tab::after{bottom:3px}
+  .stage,body[data-tab="network"][data-view="city"] .stage{height:calc(100vh - var(--hud-h) - var(--nav-h) - 44px);height:calc(100svh - var(--hud-h) - var(--nav-h) - 44px);min-height:200px}
+  body[data-tab="city"] .stage>#cityWrap,body[data-tab="city"] .stage>#w3Wrap:not([hidden]),body[data-tab="city"] .stage>#mapWrap:not([hidden]){height:calc(100vh - var(--hud-h) - var(--nav-h) - 44px);height:calc(100svh - var(--hud-h) - var(--nav-h) - 44px);min-height:200px}
+  .con-foot{padding-top:8px;padding-bottom:8px}
+  .btn.big{padding:10px 20px}
+  .w3-joy{width:96px;height:96px;bottom:12px}
+  .w3-jump{right:10px;bottom:104px;width:54px;height:54px}
+  .w3-act{bottom:118px}
+  .w3-radar{bottom:12px;width:72px;height:72px}
+  /* Turned sideways, a notch or rounded corner sits on the left or right. */
+  #app,.decknav{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  .toasts{left:calc(12px + env(safe-area-inset-left,0px));right:calc(12px + env(safe-area-inset-right,0px));width:auto}
+  .qshow{right:calc(18px + env(safe-area-inset-right,0px))}
+}
+/* Fingers: no zoom when a field gets focus, bigger small controls, no keyboard hints. */
+@media (pointer:coarse){
+  .select,.modal-card textarea,.modal-card input[type=text],.modal-card input[type=number],.glass input[type=date],.glass input[type=number],.modal-card input[type=date]{font-size:16px}
+  .seg button{padding:9px 12px;min-height:36px;font-size:12px}
+  .linkbtn{padding:8px 4px;min-height:34px}
+  .qt{padding:8px 11px;min-height:34px}
+  .view-sw button{padding:8px 11px;min-height:34px}
+  .zs-n{padding:8px 0;min-height:32px}
+  .ch-name{min-height:32px}
+  .ren{padding:8px}
+  .whybtn{padding:8px 13px}
+  .desmos{display:inline-block;padding:8px 0}
+  .wtok{padding:6px;min-width:34px}
+  .wline{row-gap:2px}
+  .con-foot .hint{display:none}
+}
 </style>
 <div id="title" class="title" aria-live="polite"><div class="title-in"><div class="tl-mark" aria-hidden="true"><i></i><i></i><i></i></div><h1 class="tl-name">To <b>1520</b></h1><p class="tl-sub">A small town that grows as you learn.</p><div class="tl-bar" aria-hidden="true"><i></i></div><p class="tl-msg" id="titleMsg">Waking the town…</p><div class="tl-fail" id="titleFail" hidden></div></div></div>
 <script id="tl">
@@ -4643,6 +4738,9 @@ function emblem(rk){
 }
 function now(){return Date.now();}
 function isMobile(){return window.innerWidth<=980;}
+function isTouch(){try{return !!(window.matchMedia&&matchMedia("(pointer:coarse)").matches);}catch(e){return false;}}
+/* On a phone the questions sit below the town: whatever starts questions brings them into view. */
+function mobQ(){if(!isMobile())return;var c=$("console"),h=document.querySelector(".hud");if(!c||c.offsetParent===null)return;var hh=h&&getComputedStyle(h).position==="sticky"?h.offsetHeight:0;window.scrollTo(0,Math.max(0,c.getBoundingClientRect().top+window.scrollY-hh));}
 function fmtInt(n){return Math.round(n).toLocaleString("en-US");}
 function toPlain(h){var d=document.createElement("div");d.innerHTML=String(h||"").replace(/<span class="fr"><span>([\s\S]*?)<\/span><span>([\s\S]*?)<\/span><\/span>/g,"($1)/($2)").replace(/<sup>([\s\S]*?)<\/sup>/g,"^($1)").replace(/<br\s*\/?>/g,"\n").replace(/<u>([\s\S]*?)<\/u>/g,"[underlined: $1]");return d.textContent.replace(/−/g,"-").replace(/[ \t]+/g," ").trim();}
 function starsTxt(n){return"★★★★★".slice(0,n)+"☆☆☆☆☆".slice(0,5-n);}
@@ -4670,7 +4768,14 @@ var SND={ctx:null,
 /* ---------- storage & cloud ---------- */
 /* A stored save that can't be read is an error to show, never a reason to start over: the raw text stays put. */
 function loadLocal(){var raw=null;try{raw=localStorage.getItem(LS);}catch(e){}if(!raw||raw==="null")return null;var o;try{o=JSON.parse(raw);}catch(e){throw new Error("The progress saved in this browser couldn’t be read.");}if(!o||typeof o!=="object"||!o.r||!o.stats)throw new Error("The progress saved in this browser isn’t a To 1520 save.");return migrate(o,now());}
-function saveLocal(){if(!S)return;S.lastSeen=now();try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
+function saveLocal(){if(!S)return;S.lastSeen=now();try{localStorage.setItem(LS,JSON.stringify(S));if(SAVE_BAD)saveWarn(false);}catch(e){saveWarn(true);}}
+/* If this browser won't keep the save (storage full, or blocked as in some private windows), say so once and offer the file.
+   With cloud save on, progress is still kept in the account, so the warning stays away. */
+var SAVE_BAD=false,SAVE_WARNED=false;
+function saveWarn(bad){SAVE_BAD=bad;var el=$("saveWarn");if(!bad||CAP.ref&&CAP.cloud==="on"){if(el)el.remove();return;}if(SAVE_WARNED||el)return;SAVE_WARNED=true;
+  el=document.createElement("div");el.id="saveWarn";el.className="savewarn";el.setAttribute("role","alert");
+  el.innerHTML='<div><b>This browser isn’t keeping your progress.</b> Its storage is full or blocked, as in some private windows. Download a save file now and then so nothing is lost.</div><div class="row"><button type="button" class="btn primary sm" data-act="saveFile">Download a save file</button><button type="button" class="btn line sm" data-act="saveWarnX">Dismiss</button></div>';
+  document.body.appendChild(el);}
 function saveAll(){saveLocal();scheduleCloud();}
 function cloudBody(){var js=JSON.stringify(S);if(js.length>220000){var c=JSON.parse(js);c.spots=c.spots.filter(function(s){return s.kind!=="ai";}).slice(-200);c.ai=[];js=JSON.stringify(c);}return{json:js,answered:S.stats.answered,savedAt:now(),v:1};}
 function scheduleCloud(ms){if(!CAP.ref)return;clearTimeout(CAP.timer);CAP.timer=setTimeout(function(){cloudPush(false);},ms==null?15000:ms);}
@@ -4804,11 +4909,12 @@ function navInfo(){
   /* Only the next locked place shows, so the bar names one goal instead of the whole road. */
   var shownLock=false;return rows.filter(function(r){if(!r[5])return true;if(shownLock)return false;shownLock=true;return true;});
 }
+var NAV_SHORT={city:"Hall"};
 function renderNav(force){
   var info=navInfo(),sig=UI.tab+JSON.stringify(info);if(!force&&sig===UI.navSig)return;UI.navSig=sig;var h="",grp="";
   info.forEach(function(t,k){if(t[6]!==grp){if(grp)h+="</div>";grp=t[6];h+='<div class="dn-grp" role="group" aria-label="'+grp+'">';}
     var badge=t[3]==="•"?'<span class="dot mini" title="Something to spend on"></span>':t[3]?'<span class="dot'+(t[0]==="reviews"?" pink":"")+'">'+t[3]+"</span>":"";
-    h+='<button type="button" class="dn-tab'+(t[5]?" locked":"")+(k&&info[k-1][6]!==t[6]?" g1":"")+'" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(UI.tab===t[0]||UI.tab==="place"&&t[0]==="network")+'"'+(t[5]?' aria-label="'+esc(t[1]+", locked. "+t[2])+'"':"")+">"+(t[5]?ICON.lock:ICON[t[4]])+'<span class="t"><b>'+esc(t[1])+badge+"</b><small>"+esc(t[2])+"</small></span></button>";});
+    h+='<button type="button" class="dn-tab'+(t[5]?" locked":"")+(k&&info[k-1][6]!==t[6]?" g1":"")+'" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(UI.tab===t[0]||UI.tab==="place"&&t[0]==="network")+'"'+(t[5]?' aria-label="'+esc(t[1]+", locked. "+t[2])+'"':"")+">"+(t[5]?ICON.lock:ICON[t[4]])+'<span class="t"><b'+(NAV_SHORT[t[0]]?' data-s="'+NAV_SHORT[t[0]]+'"><span class="nl">'+esc(t[1])+"</span>":">"+esc(t[1]))+badge+"</b><small>"+esc(t[2])+"</small></span></button>";});
   $("decknav").innerHTML=h+(grp?"</div>":"");
 }
 
@@ -5242,7 +5348,7 @@ function choicesHTML(q,st,pre){
 }
 function sprHTML(q,st){
   if(st.answered)return'<div class="spr"><input id="sprIn" value="'+esc(st.resp)+'" disabled aria-label="Your answer"><span class="spr-hint">'+(st.ok?"":"Correct answer: <b>"+sprDisplay(q)+"</b>")+"</span></div>";
-  return'<div class="spr"><input id="sprIn" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer" placeholder="Answer" value="'+esc(st.spr||"")+'"><span class="spr-hint">A number, decimal, or fraction like 3/4. Use - for negatives.</span><span class="spr-err" id="sprErr" hidden></span></div>';
+  return'<div class="spr"><input id="sprIn" type="text" inputmode="text" enterkeyhint="go" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer" placeholder="Answer" value="'+esc(st.spr||"")+'"><span class="spr-hint">A number, decimal, or fraction like 3/4. Use - for negatives.</span><span class="spr-err" id="sprErr" hidden></span></div>';
 }
 function canCheck(){if(!cur||Q.answered)return false;if(cur.spr)return String(Q.spr||"").trim()!=="";return Q.sel!=null;}
 var PRAISE=["Correct","Nailed it","Clean","Got it","Locked in"];
@@ -5395,7 +5501,7 @@ function promo(rk,score){
   SND.rank();vib([20,30,20,30,80]);
 }
 function report(){if(!Q||!Q.answered||Q.reported)return;revertAnswer(S,cur,Q.res);Q.reported=true;toast("Reported","That answer won’t count against you, and the question is out of your rotation.","mint");renderHUD();saveAll();nextQ();}
-function advance(){if(UI.showRound){roundBackA();return;}if(UI.showSet){nextQ();return;}if(Q&&Q.answered){if(S.round&&S.round.done){UI.showRound=true;renderConsole();var rb=$("nextBtn");if(rb)try{rb.focus({preventScroll:true});}catch(e){}$("conBody").scrollTop=0;return;}if(UI.setSum){UI.showSet=true;renderConsole();var nb=$("nextBtn");if(nb)try{nb.focus({preventScroll:true});}catch(e){}$("conBody").scrollTop=0;return;}nextQ();}}
+function advance(){var ce=$("coach");if(COACH&&COACH.step===1&&ce&&ce.classList.contains("inline"))coachHide();if(UI.showRound){roundBackA();return;}if(UI.showSet){nextQ();return;}if(Q&&Q.answered){if(S.round&&S.round.done){UI.showRound=true;renderConsole();var rb=$("nextBtn");if(rb)try{rb.focus({preventScroll:true});}catch(e){}$("conBody").scrollTop=0;mobQ();return;}if(UI.setSum){UI.showSet=true;renderConsole();var nb=$("nextBtn");if(nb)try{nb.focus({preventScroll:true});}catch(e){}$("conBody").scrollTop=0;return;}nextQ();}}
 
 /* ---------- Claude: explain + fresh packs ---------- */
 function qPlain(q,withKey,resp,ok){
@@ -6084,7 +6190,7 @@ function qtoolsHTML(q){var hl=S.settings.hl!==false;
   return'<div class="qtools" id="qtools">'+(q.passage||q.p2?'<button type="button" class="qt'+(hl?" on":"")+'" data-act="hlToggle" aria-pressed="'+hl+'" title="Select text in the passage to highlight it. Tap a highlight to clear it.">'+ICON.hl+"Highlight</button>":"")+'<button type="button" class="qt'+(UI.draw?" on":"")+'" data-act="drawToggle" aria-pressed="'+!!UI.draw+'" title="Draw on the question">'+ICON.pencil+"Draw</button>"+(DOMAINS[q.d].sec==="m"?'<button type="button" class="qt" data-act="refSheet" title="Math reference sheet">'+ICON.book+"Reference</button>":"")+"</div>";}
 function hlWrap(box){var sel=window.getSelection();if(!box||!sel||sel.isCollapsed||!sel.rangeCount)return false;var r=sel.getRangeAt(0);if(!box.contains(r.startContainer)||!box.contains(r.endContainer)||!r.toString().trim())return false;
   var m=document.createElement("mark");m.className="hl";try{m.appendChild(r.extractContents());r.insertNode(m);}catch(e){return false;}sel.removeAllRanges();SND.tone(1174.66,0.04,"sine",0.02);return true;}
-function hlApply(){
+function hlApply(){if(!S)return;
   var wb=$("wnHl");if(wb&&modalOpen()){hlWrap(wb);return;}
   if(S.settings.hl===false||!cur||!Q||UI.arc||S.g||UI.draw||modalOpen())return;var pa=$("conBody").querySelector("#sheet .passage");if(pa&&hlWrap(pa))Q.hlHTML=pa.innerHTML;}
 function hlRemove(mk){var pa=mk.closest(".passage"),par=mk.parentNode;while(mk.firstChild)par.insertBefore(mk.firstChild,mk);par.removeChild(mk);if(pa&&pa.closest("#sheet")&&Q)Q.hlHTML=pa.innerHTML;}
@@ -6338,26 +6444,28 @@ function showOffline(off,coff,xoff){var h="<h2>Welcome back</h2>";if(off&&off.ga
   modal(h+'<div class="mfoot"><button type="button" class="btn primary" data-act="modalClose">Back to the grind</button></div>');}
 function showSettings(){
   var p=proj(S);
-  modal('<h2>Settings</h2><div class="kv"><span>Saving</span><b style="font-weight:400;color:var(--ink-3);font-size:13px">Automatic every 10 seconds · last '+new Date(S.lastSeen).toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"})+'</b></div><div class="mfoot" style="justify-content:flex-start;flex-wrap:wrap"><button type="button" class="btn primary sm" data-act="saveNow">Save now</button><button type="button" class="btn line sm" data-act="saveFile">Download a save file</button><button type="button" class="btn line sm" data-act="loadFileBtn">Load a save file</button><input type="file" id="loadFileIn" accept=".txt,text/plain" hidden></div><p class="pnote" style="margin:4px 0 0">Ctrl+S saves too. A save file keeps your progress safe even if this browser’s data is cleared.</p><hr><label style="font-weight:700;color:var(--ink)">Question panel</label>'+dockHTML()+'<hr><div class="kv"><span>Sound</span><button type="button" class="btn line sm" data-act="sound">'+(S.settings.sound?"On":"Off")+'</button></div>'+(CAP.db&&CAP.uid?'<div class="kv"><span>Weekly league</span><button type="button" class="btn line sm" data-act="leagueSet">'+(S.settings.league?"On":"Off")+"</button></div>":"")+'<div class="kv"><span>What’s new</span><button type="button" class="btn line sm" data-act="whatsNew">See the list</button></div><div class="kv"><span>The intro</span><button type="button" class="btn line sm" data-act="onbReplay">Replay it</button></div>'+("vibrate" in navigator?'<div class="kv"><span>Vibration</span><button type="button" class="btn line sm" data-act="hapt">'+(S.settings.haptics===false?"Off":"On")+"</button></div>":"")+'<div class="kv"><span>Season</span><button type="button" class="btn line sm" data-act="tab" data-v="reviews">'+(S.season.date?esc(S.season.test)+" · "+esc(S.season.date):"Set a test date")+"</button></div>"+'<div class="kv"><span>Cloud save</span><b id="syncTxt2">'+esc(syncText())+'</b></div><hr><label style="font-weight:700;color:var(--ink)">Your last real PSAT score</label><p style="font-size:13px">It shows as a marker on the climb. Pass it and you get a milestone.</p><div style="display:grid;grid-template-columns:1fr 1.4fr;gap:10px"><div><label for="baseScore">Total</label><input type="number" id="baseScore" min="320" max="1520" step="10" value="'+S.baseline.total+'"></div><div><label for="baseLabel">Label</label><input type="text" id="baseLabel" maxlength="30" value="'+esc(S.baseline.label)+'"></div></div><div class="mfoot"><button type="button" class="btn line sm" data-act="baseline">Save marker</button></div><hr><label style="font-weight:700;color:var(--ink)">Set your rating from a practice test</label><p style="font-size:13px">Took a full practice test? Enter your section scores and the game shifts your domain ratings to match. This also ends placement.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label for="recRW">Reading & Writing</label><input type="number" id="recRW" min="160" max="760" step="10" value="'+p.rw+'"></div><div><label for="recM">Math</label><input type="number" id="recM" min="160" max="760" step="10" value="'+p.m+'"></div></div><div class="mfoot"><button type="button" class="btn line sm" data-act="recal">Update rating</button></div><hr><label style="font-weight:700;color:var(--ink)">Backup code</label><p style="font-size:13px">Copy this somewhere safe. Paste it on any device to restore your progress.</p><div class="mfoot"><button type="button" class="btn line sm" data-act="export">Show my code</button></div><textarea id="exportTxt" readonly hidden aria-label="Your backup code"></textarea><div class="mfoot" id="copyRow" hidden><button type="button" class="btn line sm" data-act="copy">Copy code</button></div><label for="importTxt">Restore from a backup code</label><textarea id="importTxt" placeholder="Paste a code that starts with G1520:"></textarea><div class="mfoot"><button type="button" class="btn line sm" data-act="import">Restore</button></div><hr><label for="resetTxt">Type RESET to erase all progress and start again at 320</label><input type="text" id="resetTxt" autocomplete="off"><div class="mfoot"><button type="button" class="btn danger sm" data-act="reset">Erase progress</button></div><div class="mfoot"><button type="button" class="btn primary" data-act="modalClose">Done</button></div>');
+  modal('<h2>Settings</h2><div class="kv"><span>Saving</span><b style="font-weight:400;color:var(--ink-3);font-size:13px">Automatic every 10 seconds · last '+new Date(S.lastSeen).toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"})+'</b></div><div class="mfoot" style="justify-content:flex-start;flex-wrap:wrap"><button type="button" class="btn primary sm" data-act="saveNow">Save now</button><button type="button" class="btn line sm" data-act="saveFile">Download a save file</button><button type="button" class="btn line sm" data-act="loadFileBtn">Load a save file</button><input type="file" id="loadFileIn" accept=".txt,text/plain" hidden></div><p class="pnote" style="margin:4px 0 0">'+(isTouch()?"":"Ctrl+S saves too. ")+'A save file keeps your progress safe even if this browser’s data is cleared. It also moves your progress to another device, like a phone or the PC edition: download it here, then load it there.</p><hr><label style="font-weight:700;color:var(--ink)">Question panel</label>'+dockHTML()+'<hr><div class="kv"><span>Sound</span><button type="button" class="btn line sm" data-act="sound">'+(S.settings.sound?"On":"Off")+'</button></div>'+(CAP.db&&CAP.uid?'<div class="kv"><span>Weekly league</span><button type="button" class="btn line sm" data-act="leagueSet">'+(S.settings.league?"On":"Off")+"</button></div>":"")+'<div class="kv"><span>What’s new</span><button type="button" class="btn line sm" data-act="whatsNew">See the list</button></div><div class="kv"><span>The intro</span><button type="button" class="btn line sm" data-act="onbReplay">Replay it</button></div>'+("vibrate" in navigator?'<div class="kv"><span>Vibration</span><button type="button" class="btn line sm" data-act="hapt">'+(S.settings.haptics===false?"Off":"On")+"</button></div>":"")+'<div class="kv"><span>Season</span><button type="button" class="btn line sm" data-act="tab" data-v="reviews">'+(S.season.date?esc(S.season.test)+" · "+esc(S.season.date):"Set a test date")+"</button></div>"+'<div class="kv"><span>Cloud save</span><b id="syncTxt2">'+esc(syncText())+'</b></div><hr><label style="font-weight:700;color:var(--ink)">Your last real PSAT score</label><p style="font-size:13px">It shows as a marker on the climb. Pass it and you get a milestone.</p><div style="display:grid;grid-template-columns:1fr 1.4fr;gap:10px"><div><label for="baseScore">Total</label><input type="number" id="baseScore" min="320" max="1520" step="10" value="'+S.baseline.total+'"></div><div><label for="baseLabel">Label</label><input type="text" id="baseLabel" maxlength="30" value="'+esc(S.baseline.label)+'"></div></div><div class="mfoot"><button type="button" class="btn line sm" data-act="baseline">Save marker</button></div><hr><label style="font-weight:700;color:var(--ink)">Set your rating from a practice test</label><p style="font-size:13px">Took a full practice test? Enter your section scores and the game shifts your domain ratings to match. This also ends placement.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label for="recRW">Reading & Writing</label><input type="number" id="recRW" min="160" max="760" step="10" value="'+p.rw+'"></div><div><label for="recM">Math</label><input type="number" id="recM" min="160" max="760" step="10" value="'+p.m+'"></div></div><div class="mfoot"><button type="button" class="btn line sm" data-act="recal">Update rating</button></div><hr><label style="font-weight:700;color:var(--ink)">Backup code</label><p style="font-size:13px">Copy this somewhere safe. Paste it on any device to restore your progress.</p><div class="mfoot"><button type="button" class="btn line sm" data-act="export">Show my code</button></div><textarea id="exportTxt" readonly hidden aria-label="Your backup code"></textarea><div class="mfoot" id="copyRow" hidden><button type="button" class="btn line sm" data-act="copy">Copy code</button></div><label for="importTxt">Restore from a backup code</label><textarea id="importTxt" placeholder="Paste a code that starts with G1520:"></textarea><div class="mfoot"><button type="button" class="btn line sm" data-act="import">Restore</button></div><hr><label for="resetTxt">Type RESET to erase all progress and start again at 320</label><input type="text" id="resetTxt" autocomplete="off"><div class="mfoot"><button type="button" class="btn danger sm" data-act="reset">Erase progress</button></div><div class="mfoot"><button type="button" class="btn primary" data-act="modalClose">Done</button></div>');
 }
 /* ---------- The question panel's layout ---------- */
 var DOCK_ROWS=[["dock","Position","right",[["right","Right"],["left","Left"],["bottom","Bottom"],["hidden","Hidden"]]],["conw","Width","normal",[["narrow","Narrow"],["normal","Normal"],["wide","Wide"]]],["qsize","Text size","m",[["s","Small"],["m","Medium"],["l","Large"]]]];
 function dockHTML(){var s=S.settings;return DOCK_ROWS.map(function(R){var opts=R[3];if(R[0]==="dock"&&isMobile())opts=[["right","Shown"],["hidden","Hidden"]];if(R[0]==="conw"&&isMobile())return"";
   return'<div class="kv"><span>'+R[1]+'</span><div class="seg" role="group" aria-label="'+R[1]+'">'+opts.map(function(o){return'<button type="button" data-act="dockSet" data-v="'+R[0]+":"+o[0]+'" aria-pressed="'+((s[R[0]]||R[2])===o[0])+'">'+o[1]+"</button>";}).join("")+"</div></div>";}).join("");}
-function dockMenu(){modal('<h2>Question panel</h2><p class="pnote">Move it, resize it, or hide it. <b>Q</b> hides it and brings it back from anywhere.</p>'+dockHTML()+'<div class="mfoot"><button type="button" class="btn primary" data-act="modalClose">Done</button></div>');}
+function dockMenu(){modal('<h2>Question panel</h2><p class="pnote">'+(isMobile()?"Hide it, or pick a text size. ":"Move it, resize it, or hide it. ")+(isTouch()?"Hide it to give the town the whole screen; the Questions button brings it back.":"<b>Q</b> hides it and brings it back from anywhere.")+'</p>'+dockHTML()+'<div class="mfoot"><button type="button" class="btn primary" data-act="modalClose">Done</button></div>');}
 var dockSig="";
 function applyDock(){if(!S)return;var s=S.settings,d=s.dock||"right",sig=d+"|"+(s.conw||"normal")+"|"+(s.qsize||"m"),b=document.body;b.setAttribute("data-dock",d);b.setAttribute("data-conw",s.conw||"normal");b.setAttribute("data-qsize",s.qsize||"m");
   Array.prototype.forEach.call(document.querySelectorAll('[data-act="dockSet"]'),function(x){var kv=x.getAttribute("data-v").split(":"),R=DOCK_ROWS.filter(function(r){return r[0]===kv[0];})[0];x.setAttribute("aria-pressed",String((s[kv[0]]||R[2])===kv[1]));});
   if(sig!==dockSig){var first=!dockSig;dockSig=sig;if(!first)window.dispatchEvent(new Event("resize"));}}
 function dockSet(key,val){S.settings[key]=val;if(key==="dock"&&val!=="hidden")S.settings.dockLast=val;saveLocal();applyDock();}
 function dockToggle(){var s=S.settings,hid=(s.dock||"right")==="hidden";if(hid)s.dock=s.dockLast||"right";else{s.dockLast=s.dock||"right";s.dock="hidden";}saveLocal();applyDock();
-  if(!hid&&!s.dockHint){s.dockHint=true;saveLocal();toast("Questions hidden","Press Q, or the Questions button, to bring them back.","",null,3600);}}
+  if(!hid&&!s.dockHint){s.dockHint=true;saveLocal();toast("Questions hidden",(isTouch()?"Tap the Questions button to bring them back.":"Press Q, or the Questions button, to bring them back."),"",null,3600);}}
 /* ---------- Saving: automatic every 10 seconds, and by hand ---------- */
 function saveNow(){saveLocal();var cloud=!!CAP.ref;if(cloud)cloudPush(false);SND.tone(880,0.05,"triangle",0.03);
-  toast("Saved",(cloud?"Saved in this browser and to your Claude account":"Saved on this computer")+" at "+new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"})+".","mint",null,2600);}
+  toast("Saved",(cloud?"Saved in this browser and to your Claude account":"Saved on this device")+" at "+new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"})+".","mint",null,2600);}
 function saveFile(){saveLocal();var name="to-1520-save-"+dayKey(now())+".txt",blob=new Blob([exportCode()],{type:"text/plain"});
   var plain=function(){var a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},1500);toast("Save file downloaded",name+". Load it any time from Settings.","mint",null,4200);};
-  if(CAP.dl)CAP.dl.save({filename:name,data:blob}).then(function(){toast("Save file saved",name+". Load it any time from Settings.","mint",null,4200);}).catch(function(e){if(e&&e.code==="declined")return;plain();});else plain();}
+  /* Inside the web viewer a page can't start a download on its own; without the downloads permission, hand over the backup code instead. */
+  var code=function(){modal('<h2>Your backup code</h2><p>Files can’t be downloaded from this page here, so copy your backup code instead. Paste it into Settings → Restore from a backup code on any device, or keep it in a note.</p><textarea id="exportTxt" readonly aria-label="Your backup code"></textarea><div class="mfoot" id="copyRow"><button type="button" class="btn primary sm" data-act="copy">Copy code</button><button type="button" class="btn line sm" data-act="modalClose">Done</button></div>');var ta=$("exportTxt");if(ta){ta.value=exportCode();try{ta.select();}catch(e){}}};
+  if(CAP.dl)CAP.dl.save({filename:name,data:blob}).then(function(){toast("Save file saved",name+". Load it any time from Settings.","mint",null,4200);}).catch(function(e){if(e&&e.code==="declined")return;if(window.claude)code();else plain();});else if(window.claude)code();else plain();}
 function loadFile(input){var f=input.files&&input.files[0];if(!f)return;var rd=new FileReader();
   rd.onload=function(){try{var o=importCode(String(rd.result||""));closeModal();adopt(o,"Save file loaded.");scheduleCloud(1000);}catch(x){toast("That file didn’t work","Pick a To 1520 save file. Its text starts with G1520:","pink");}};rd.readAsText(f);input.value="";}
 function exportCode(){return"G1520:"+btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
@@ -6377,7 +6485,7 @@ function bossBannerHTML(){
   var fin=B.hp<=B.max*0.25;
   return'<div class="boss'+(fin?" fin":"")+'" id="bossBox" style="--dc:'+DOMAINS[B.d].color+'">'+sigilSVG(B.d)+'<div><div class="boss-name">'+esc(BOSSES[B.d].name)+"<span>Tier "+B.tier+"</span>"+(fin?'<em class="finb">Finisher ready</em>':"")+'</div><div class="boss-taunt" aria-live="polite">'+esc(UI.bossLine||BOSSES[B.d].taunt)+'</div><div class="hp"><i id="hpFill" style="width:'+lastHp.toFixed(1)+'%"></i><span>'+esc(bossHpTxt(B))+'</span></div><div class="qs" title="A right answer inside PSAT pace deals ×1.5 damage"><i id="qsFill"></i><span>Quick strike</span></div></div><div class="boss-side"><div class="hearts" role="img" aria-label="'+B.hearts+' lives left">'+hearts+'</div><button type="button" class="linkbtn dim" data-act="bossFlee">Flee</button></div></div>';
 }
-function bossGo(d){if(S.g){toast("Finish your Gauntlet first","One fight at a time.","pink");return;}if(UI.arc)arcLeave(true);UI.bossLine="";bossStart(S,d,now());saveAll();UI.tab="network";applyViews();nextQ();renderFocus();renderNav(true);if(isMobile())window.scrollTo(0,0);toast(BOSSES[d].name,S.boss&&S.boss.mech?BOSS_MECH_LINE[S.boss.mech]:BOSSES[d].taunt,"pink",null,S.boss&&S.boss.mech?7000:3500);SND.bad();}
+function bossGo(d){if(S.g){toast("Finish your Gauntlet first","One fight at a time.","pink");return;}if(UI.arc)arcLeave(true);UI.bossLine="";bossStart(S,d,now());saveAll();UI.tab="network";applyViews();nextQ();renderFocus();renderNav(true);mobQ();toast(BOSSES[d].name,S.boss&&S.boss.mech?BOSS_MECH_LINE[S.boss.mech]:BOSSES[d].taunt,"pink",null,S.boss&&S.boss.mech?7000:3500);SND.bad();}
 function bossFlee(){if(!S.boss)return;var n=BOSSES[S.boss.d].name;S.boss=null;saveAll();renderFocus();nextQ();renderNav(true);toast("You fled",n+" will be waiting. Same tier next time.","");}
 function bossFx(bh,rect){
   var box=$("bossBox"),br=box?box.getBoundingClientRect():rect,x=br.left+br.width/2,y=br.top+br.height/2;
@@ -6440,7 +6548,7 @@ var CITY_XW={glib:112,hall:100,tower:72,launch:96,harbor:240,square:150};
 /* Height of each style at level 1, and what each level adds (before the scale factor). */
 var CITY_H={shop:[30,10],library:[36,9],tower:[74,40],detective:[54,15],courthouse:[42,10],studio:[60,22],bridge:[84,12],transit:[38,9],newsroom:[62,20],gate:[36,8],clock:[84,18],factory:[38,10],crossroads:[26,6],railway:[34,7],zoning:[36,10],grid:[62,14],mint:[42,12],observatory:[50,14],lab:[54,16],market:[24,6],census:[46,16],bank:[50,18],weather:[52,16],carnival:[44,10],polling:[36,10],water:[62,14],pyramid:[42,16],lighthouse:[96,22],ferris:[74,18]};
 /* The city shows on the City tab, and on the main screen when the player picks it. */
-function worldView(){if(!S)return"engine";var v;if(UI.tab==="city")v=UI.wv==="exp"?"map":S.settings.view==="3d"?"3d":"city";else if(UI.tab==="place")v=S.settings.view==="3d"?"3d":"city";else if(UI.tab==="network"||!isMobile())v=S.settings.view||"engine";else return"none";if((v==="city"||v==="3d")&&!cityBuilt(S))v="engine";if(v==="map"&&!S.exp)v="engine";return v;}
+function worldView(){if(!S)return"engine";var v;if(UI.tab==="city")v=UI.wv==="exp"?"map":S.settings.view==="3d"?"3d":"city";else if(UI.tab==="place"){if(isMobile())return"none";v=S.settings.view==="3d"?"3d":"city";}else if(UI.tab==="network"||!isMobile())v=S.settings.view||"engine";else return"none";if((v==="city"||v==="3d")&&!cityBuilt(S))v="engine";if(v==="map"&&!S.exp)v="engine";return v;}
 function cityShown(){return worldView()==="city";}
 function cityOn(){return!!CT.ctx&&CT.w>0&&cityShown()&&document.visibilityState==="visible";}
 function clampCam(x){return clamp(x,CT.camMin,Math.max(CT.camMin,CT.camMax));}
@@ -6912,7 +7020,9 @@ function cityUpA(id,btn){var u=CITY_UP_BY[id];if(!u||!cityBuyUp(S,id))return;SND
 function cityWonderA(id,btn){var W=WONDER_BY[id];if(!W||!wonderBuild(S,id))return;var st=S.city.w[id];SND.evolve();fxBuy(btn);vib([20,30,60]);var L=cityLot(id==="library"?"glib":id);if(L&&cityShown()){cityCenterOn(L);cityFireworks(L.x+L.w/2,cityTopY(L)-20*CT.u,5);}
   w3Fx(id==="library"?"glib":id,5);toast(W.name+" · stage "+st,st>=W.stages.length?"Complete. A wonder of the world.":W.desc,"acc",null,6000);cityAfterBuy();}
 function cityPolA(id){var P=POLICIES.filter(function(p){return p.id===id;})[0];if(!P||!policySet(S,id,now()))return;SND.rank();vib(12);toast("Policy passed · "+P.name,P.desc+" You can change it again in an hour.","mint",null,5000);var L=cityLot("hall");if(L)cityFireworks(L.x+L.w/2,CT.gy-110*CT.u,2);w3Fx("hall",2);cityAfterBuy();}
-function cityLook(id,noScroll){if(w3Shown()){w3Look(id);if(isMobile()&&!noScroll)window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});return;}var L=cityLot(id);if(!L||!cityShown())return;cityCenterOn(L);if(CITY_BY[id]||id==="hall"||id==="glib"||id==="tower"||id==="launch"||id==="harbor"||id==="square")ctipShow(id,true);if(isMobile()&&!noScroll)window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});}
+function cityLook(id,noScroll){
+  if(isMobile()&&UI.tab==="place"&&cityBuilt(S)){var v0=S.settings.view==="3d"?"3d":"city";if(S.settings.view!==v0){S.settings.view=v0;saveLocal();}setTab("network");setTimeout(function(){cityLook(id,true);},80);return;}
+  if(w3Shown()){w3Look(id);if(isMobile()&&!noScroll)window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});return;}var L=cityLot(id);if(!L||!cityShown())return;cityCenterOn(L);if(CITY_BY[id]||id==="hall"||id==="glib"||id==="tower"||id==="launch"||id==="harbor"||id==="square")ctipShow(id,true);if(isMobile()&&!noScroll)window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});}
 function cityGo(v){closeModal();if(!isOpen(S,"city")){setTab("city");return;}UI.cityPage=v==="hall"||v==="projects"?"hall":"build";if(UI.tab!=="city")setTab("city");else renderPanel(true);
   var tgt=v==="hall"?"cwHall":v==="projects"?"cwLand":v==="wonders"?"cwWonders":"cb-"+v;setTimeout(function(){var el=$(tgt);if(el){el.scrollIntoView({block:"center",behavior:reduced?"auto":"smooth"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}if(CITY_BY[v])cityLook(v,true);},80);}
 /* A thumbnail of each building at its current level, drawn by the same painter as the skyline. */
@@ -8056,21 +8166,26 @@ function coachHide(keepSpot){var a=$("coach"),b=$("coachRing"),c=$("coachSpot");
 function coach(step,sel,side,title,body,btns){coachHide(true);var el=document.createElement("div");el.className="coach";el.id="coach";el.setAttribute("role","dialog");el.setAttribute("aria-label",title);
   el.innerHTML='<i class="arw" aria-hidden="true"></i><div class="ck">Getting started<span>'+(step+1)+" / 5</span></div><h4>"+esc(title)+"</h4><p>"+body+'</p><div class="cf"><button type="button" class="linkbtn dim" data-act="onbSkip">Skip intro</button>'+(btns||"")+"</div>";
   document.body.appendChild(el);var ring=document.createElement("div");ring.className="coach-ring";ring.id="coachRing";ring.setAttribute("aria-hidden","true");document.body.appendChild(ring);
-  COACH={sel:sel,side:side,step:step};coachPlace();var f=el.querySelector(".btn.primary");if(f)try{f.focus({preventScroll:true});}catch(e){}}
+  COACH={sel:sel,side:side,step:step};coachPlace();var f=el.querySelector(".btn.primary");if(f)try{f.focus({preventScroll:true});}catch(e){}
+  if(el.classList.contains("inline"))setTimeout(function(){if($("coach")===el)try{(step===3&&$("conAdv")||el).scrollIntoView({block:step===1?"nearest":"start",behavior:reduced?"auto":"smooth"});}catch(e){}},step===1?60:30);}
+/* Where a step's card sits in the page on a phone: above the question, or just after the feedback. */
+function coachSlot(step){if(!isMobile())return null;var cb=$("conBody");if(!cb||cb.offsetParent===null)return null;return step===0||step===3?cb:step===1?$("conFoot"):null;}
 function coachPlace(){if(!COACH)return;var el=$("coach"),ring=$("coachRing"),a=document.querySelector(COACH.sel);if(!el)return;
+  var slot=coachSlot(COACH.step);if(slot){if(el.nextSibling!==slot)slot.parentNode.insertBefore(el,slot);el.classList.add("inline");el.style.visibility="";el.style.left=el.style.top="";if(ring)ring.style.display="none";return;}
+  if(el.classList.contains("inline")){el.classList.remove("inline");document.body.appendChild(el);}
   if(!a||!a.getClientRects().length){el.style.visibility="hidden";if(ring)ring.style.display="none";return;}el.style.visibility="";
   var r=a.getBoundingClientRect(),W=window.innerWidth,H=window.innerHeight,w=el.offsetWidth,h=el.offsetHeight,side=COACH.side,x,y,pad=16,mid=r.top+Math.min(r.height/2,150);
   if(ring){ring.style.display="";ring.style.left=(r.left-4)+"px";ring.style.top=(r.top-4)+"px";ring.style.width=(r.width+8)+"px";ring.style.height=(r.height+8)+"px";}
   if(side==="left"&&r.left-w-pad<8)side=r.bottom+h+pad<H-8?"bottom":"top";if(side==="right"&&r.right+w+pad>W-8)side=r.bottom+h+pad<H-8?"bottom":"top";if(side==="top"&&r.top-h-pad<8)side="bottom";if(side==="bottom"&&r.bottom+h+pad>H-8)side="top";
   if(side==="left"){x=r.left-w-pad;y=clamp(mid-44,8,H-h-8);}else if(side==="right"){x=r.right+pad;y=clamp(mid-44,8,H-h-8);}
   else if(side==="top"){y=Math.max(8,r.top-h-pad);x=clamp(r.left+r.width/2-w/2,8,W-w-8);}else{y=Math.min(H-h-8,r.bottom+pad);x=clamp(r.left+r.width/2-w/2,8,W-w-8);}
-  el.dataset.side=side;el.style.left=Math.round(x)+"px";el.style.top=Math.round(y)+"px";
+  y=clamp(y,8,Math.max(8,H-h-8));el.dataset.side=side;el.style.left=Math.round(x)+"px";el.style.top=Math.round(y)+"px";
   if(side==="left"||side==="right")el.style.setProperty("--ay",clamp(mid-y-7,14,h-26)+"px");else el.style.setProperty("--ax",clamp(r.left+r.width/2-x-7,16,w-28)+"px");}
 /* An invisible anchor over the engine, where the answer just landed. */
 function coachSpotAt(d){var old=$("coachSpot");if(old)old.remove();if(!ST.g||!ST.cv||worldView()!=="engine")return false;var p=domPos(d),r=ST.cv.getBoundingClientRect();if(!p)return false;
   var el=document.createElement("div");el.id="coachSpot";el.style.cssText="position:fixed;pointer-events:none;left:"+(r.left+p.x-36)+"px;top:"+(r.top+p.y-36)+"px;width:72px;height:72px";document.body.appendChild(el);return true;}
 function onbShow(){var O=S.onb;if(!O||O.done||!S.welcomed){coachHide();return;}if(modalOpen()){queueModal(onbShow);return;}
-  if(O.step===0)coach(0,"#conBody","left","Answer your first question","Pick an answer, then press <b>"+esc(formOf(S).verb)+"</b> or Enter. There’s no timer pressure, and every answer comes with an explanation.","");
+  if(O.step===0)coach(0,"#conBody","left","Answer your first question","Pick an answer, then press <b>"+esc(formOf(S).verb)+"</b>"+(isTouch()?".":" or Enter.")+" There’s no timer pressure, and every answer comes with an explanation.","");
   else if(O.step===1&&worldView()!=="engine"&&cityBuilt(S)){var d1=O.d||(cur&&cur.d)||"alg",ok1=!!O.ok,PB=cityBOf(d1,O.sk||"");coach(1,"#cityHud","right",ok1?"The town noticed":"A miss becomes a rematch",(ok1?"That right answer paid <b>coins</b> to "+esc(S.city.name)+" and grew your <b>"+esc(DOMAINS[d1].name)+"</b> rating. Every 3rd, 10th, and 25th right answer in a skill lights a node"+(PB?", and the first one opens the <b>"+esc(PB.name)+"</b> in "+esc(DISTRICTS[d1]):"")+".":"Nothing is lost. The question comes back as a <b>blind spot</b> in 10 minutes so you can win it back, and you can try a fresh one right away.")+" Read the explanation, then keep going.",'<button type="button" class="btn primary sm" data-act="onbNext">Next question</button>');}
   else if(O.step===1){var d=O.d||(cur&&cur.d)||"alg",ok=!!O.ok,spot=coachSpotAt(d);coach(1,spot?"#coachSpot":"#engineCv",spot&&ST.g&&domPos(d).x>ST.g.cx?"left":"right",ok?"Your engine grew":"A miss becomes a rematch",
       (ok?"That right answer powered <b>"+esc(DOMAINS[d].name)+"</b>. Its pillar climbs toward 1520 as you get more right, and every 3rd, 10th, and 25th right answer in a skill lights a node.":"Nothing is lost. The question comes back as a <b>blind spot</b> in 10 minutes so you can win it back, and you can try a fresh one right away.")+" Read the explanation, then keep going.",'<button type="button" class="btn primary sm" data-act="onbNext">Next question</button>');}
@@ -8117,7 +8232,7 @@ function placeHTML(id){var B=CITY_BY[id];if(!B)return glassHead("Town","");var d
   h+='<div class="pl-hero"><img alt="" src="'+cityThumb(id,Math.max(1,lv))+'"><div><p class="cq">“'+esc(B.line)+'”</p><button type="button" class="linkbtn" data-act="cityLook" data-v="'+id+'">Show me</button></div></div>';
   h+='<div class="sec" id="plWork"><div class="sec-h"><h3>Work here</h3><small>'+(R?"round in progress · "+R.a+" of "+R.n:"rounds of "+ROUND_N)+"</small></div>";
   if(R)h+='<p class="pnote">A round is under way: '+R.a+" of "+R.n+" answered, "+R.c+' right so far.</p><div class="row2"><button type="button" class="btn primary sm" data-act="roundBack">Back to the questions</button><button type="button" class="btn line sm" data-act="roundFree">End the round</button></div>';
-  else h+='<div class="row2"><button type="button" class="btn primary sm" data-act="roundGo" data-v="'+id+'"'+(busy?" disabled":"")+">Practice "+esc(B.sk)+" · "+ROUND_N+' questions</button><button type="button" class="btn line sm" data-act="roundGo" data-v="'+id+'" data-hard="1"'+(busy?" disabled":"")+">Hard drill · "+ROUND_N+"</button></div>"+(busy?'<p class="pnote">Finish '+(S.boss?"the boss fight":S.g?"the Gauntlet":"the Arcade game")+" first.</p>":"");
+  else h+='<div class="row2"><button type="button" class="btn primary sm" data-act="roundGo" data-v="'+id+'"'+(busy?" disabled":"")+' aria-label="Practice '+esc(B.sk)+", "+ROUND_N+' questions">Practice here · '+ROUND_N+' questions</button><button type="button" class="btn line sm" data-act="roundGo" data-v="'+id+'" data-hard="1"'+(busy?" disabled":"")+">Hard drill · "+ROUND_N+"</button></div>"+(busy?'<p class="pnote">Finish '+(S.boss?"the boss fight":S.g?"the Gauntlet":"the Arcade game")+" first.</p>":"");
   h+='<div class="pl-learn"><div class="kv"><span>Skill nodes</span><b><span class="st">'+starsTxt(st)+"</span> "+(nx?(nx-c)+" more right to node "+(st+1):"all five lit")+"</b></div>";
   h+='<div class="kv"><span>Proficiency</span><b class="band b'+P.band+'">'+esc(P.name)+'</b></div><div class="meter prof"><i style="width:'+(100*clamp(P.p,0,1)).toFixed(0)+'%"></i></div><p class="pnote">'+esc(profHow(S,d,B.sk))+(P.n?" Based on your last "+P.n+" answer"+(P.n===1?"":"s")+" here.":" No answers here yet.")+"</p>";
   h+='<div class="kv"><span>Mastery</span><b>'+badgeHTML(sk.m)+esc(masteryLine(sk))+"</b></div></div></div>";
@@ -8142,7 +8257,7 @@ function placeHTML(id){var B=CITY_BY[id];if(!B)return glassHead("Town","");var d
   return h+"</div>";}
 /* ---- rounds ---- */
 function roundGo(id,hard){var B=CITY_BY[id];if(!B)return;if(S.g||UI.arc){toast("Finish what you’re in first","A round can start right after.","pink");return;}if(S.boss){toast("Finish the boss fight first","A round can start right after.","pink");return;}
-  var f="sk:"+B.d+"|"+B.sk+(hard?"|hard":"");advFree(f);roundStart(S,id,!!hard,now());closeM();UI.showRound=false;saveAll();UI.tab="network";applyViews();nextQ();renderFocus();renderNav(true);
+  var f="sk:"+B.d+"|"+B.sk+(hard?"|hard":"");advFree(f);roundStart(S,id,!!hard,now());closeM();UI.showRound=false;saveAll();UI.tab="network";applyViews();nextQ();renderFocus();renderNav(true);mobQ();
   toast("Round at the "+B.name,(hard?"Five hard ":"Five ")+B.sk+" questions. Every answer counts as usual; the round keeps the tally.","mint",null,3800);SND.tone(660,0.06,"triangle",0.03);SND.tone(880,0.08,"triangle",0.03,0.07);}
 function roundCancel(){if(!S.round||S.round.done)return;roundEnd(S);UI.showRound=false;renderNav(true);}
 /* After the last question: the tally, then back to the building. */
@@ -8154,7 +8269,7 @@ function roundSumHTML(R){var B=CITY_BY[R.id],pct=Math.round(100*R.c/Math.max(1,R
   return h+'<div class="row2"><button type="button" class="btn line sm" data-act="roundAgain">Another round</button><button type="button" class="btn line sm" data-act="roundFree">Keep going freely</button></div></div>';}
 function roundBackA(){var R=S.round;if(!R)return;
   if(R.done){var id=R.id;roundEnd(S);UI.showRound=false;saveAll();placeOpen(id);if(!cur||!Q||Q.answered)nextQ();else{renderConsole();renderFocus();}renderNav(true);return;}
-  UI.tab="network";applyViews();if(isMobile())window.scrollTo(0,0);}
+  UI.tab="network";applyViews();mobQ();}
 function roundAgainA(){var R=S.round;if(!R)return;var id=R.id,hard=R.hard;roundEnd(S);UI.showRound=false;roundGo(id,hard);}
 function roundFreeA(){var R=S.round;if(!R)return;roundEnd(S);UI.showRound=false;saveAll();renderFocus();renderNav(true);if(UI.tab==="place")renderPanel();if(!cur||!Q||Q.answered)nextQ();else renderConsole();toast("Round ended","Free play. Open any building to start another.","",null,2600);}
 /* ---- tools ---- */
@@ -8235,7 +8350,7 @@ function restoreA(id){var R=RESTORE_BY[id];if(!R)return;
   setTimeout(function(){cityLookLandmark(id);if(cityOn()){var L=cityLot(id);if(L){cityFireworks(L.x+L.w*0.5,CT.gy-90*CT.u,4);cityFireworks(L.x+L.w*0.84,CT.gy-120*CT.u,3);}}if(w3Shown()&&W3.ready){w3Sync();var L3=W3.lots[id];if(L3)w3Fire(L3.x,10,L3.z,3);}},120);
   toast(R.name+" restored",R.after+" +"+RARITY[r.chest].name+" chest.","mint",'<button type="button" class="btn primary sm" data-act="openChest" data-v="'+r.chest+'">Open chest</button>',9000);
   if(s0&&s0.k==="restore"&&s0.st==="done")setTimeout(function(){advStepDone(s0);},600);else advTick();}
-function cityLookLandmark(id){if(w3Shown()){w3Look(id);return;}var L=cityLot(id);if(L&&cityShown()){cityCenterOn(L);ctipShow(id,true);}}
+function cityLookLandmark(id){if(isMobile()&&(w3Shown()||cityShown()))window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});if(w3Shown()){w3Look(id);return;}var L=cityLot(id);if(L&&cityShown()){cityCenterOn(L);ctipShow(id,true);}}
 function landmarkHTML(id){var R=RESTORE_BY[id],P=restoreProg(S,R),done=P.done,ready=restoreReady(S,id),at=done?S.world[id].at:0,earned=restoreEarned(S,id)&&!P.ok;
   var h='<div class="lmk'+(done?" on":"")+'" id="lmk-'+id+'"><div class="lmk-h"><b>'+esc(R.name)+"</b><span>"+esc(DISTRICTS[R.d])+" · "+(done?"restored "+esc(agoTxt(now()-at)):ready?"ready to restore":"needs repair")+"</span></div>";
   h+='<div class="lmk-art"><figure'+(done?"":' class="cur"')+'><img alt="The broken '+esc(R.name)+'" src="'+harborThumb(false)+'"><figcaption>Before</figcaption></figure><figure'+(done?' class="cur"':"")+'><img alt="The restored '+esc(R.name)+' and Lantern Isle" src="'+harborThumb(true)+'"><figcaption>After</figcaption></figure></div>';
@@ -8412,13 +8527,13 @@ document.addEventListener("click",function(e){
    case"sound":S.settings.sound=!S.settings.sound;SND.wake();renderHUD();saveLocal();if(modalOpen()){var sb=$("modalCard").querySelector('[data-act="sound"]');if(sb)sb.textContent=S.settings.sound?"On":"Off";}break;
    case"settings":showSettings();break;
    case"dockMenu":dockMenu();break;case"dockToggle":dockToggle();break;case"dockSet":var dkv=String(v).split(":");dockSet(dkv[0],dkv[1]);break;
-   case"saveNow":saveNow();break;case"saveFile":saveFile();break;case"loadFileBtn":var lfi=$("loadFileIn");if(lfi)lfi.click();break;
+   case"saveNow":saveNow();break;case"saveWarnX":var swx=$("saveWarn");if(swx)swx.remove();break;case"saveFile":saveFile();break;case"loadFileBtn":var lfi=$("loadFileIn");if(lfi)lfi.click();break;
    case"chests":showChests();break;case"openChest":if(b.closest(".ev"))b.remove();openChestUI(v);break;
    case"claimQ":var cq=claimQuest(S,i);if(cq){if(b.closest(".ev"))b.remove();SND.buy();toast("Quest claimed","+Rare chest"+(cq.bonus?", plus an Epic chest for clearing all three.":"."),"mint");checkAch(S,now()).forEach(function(a){toast("Trophy · "+a[1],a[2]+" +2% sparks forever.","");});UI.railSig="";renderRail();renderLoot();saveAll();if(b.closest(".toast"))b.closest(".toast").remove();if(modalOpen()&&$("pfProj"))showProfile();}break;
    case"claimW":if(claimWeekly(S)){if(b.closest(".ev"))b.remove();SND.rank();toast("Weekly claimed","+Legendary chest.","mint");UI.railSig="";renderRail();renderLoot();saveAll();if(b.closest(".toast"))b.closest(".toast").remove();if(modalOpen()&&$("pfProj"))showProfile();}break;
    case"bossGo":closeModal();bossGo(v);break;case"bossFlee":bossFlee();break;
-   case"focusD":advFree(v);roundCancel();S.focus=v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();if(isMobile())window.scrollTo(0,0);toast("Focus",v==="spots"?"Reviewing blind spots.":"Training "+DOMAINS[v].name+".","mint",null,2200);break;
-   case"focusSk":var sf=skFocus("sk:"+v);if(sf){if(modalOpen())closeModal();advFree("sk:"+v);roundCancel();S.focus="sk:"+v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();if(isMobile())window.scrollTo(0,0);toast("Focus",(sf.hard?"Hard drill: ":"Training ")+sf.sk+".","mint",null,2200);}break;
+   case"focusD":advFree(v);roundCancel();S.focus=v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();mobQ();toast("Focus",v==="spots"?"Reviewing blind spots.":"Training "+DOMAINS[v].name+".","mint",null,2200);break;
+   case"focusSk":var sf=skFocus("sk:"+v);if(sf){if(modalOpen())closeModal();advFree("sk:"+v);roundCancel();S.focus="sk:"+v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();mobQ();toast("Focus",(sf.hard?"Hard drill: ":"Training ")+sf.sk+".","mint",null,2200);}break;
    case"pack":showPackModal();break;case"impOpen":showImportModal();break;case"impGo":importGo();break;case"impClear":var ids={};S.imports.forEach(function(x){ids[x.id]=1;});for(var ri=RW_BANK.length-1;ri>=0;ri--)if(ids[RW_BANK[ri].id])RW_BANK.splice(ri,1);S.imports=[];saveAll();showImportModal("Cleared.");break;case"packgo":openPack();break;
    case"packstop":if(CAP.packCtl){try{CAP.packCtl.abort();}catch(x){}}break;
    case"modalClose":closeModal();break;
@@ -8488,9 +8603,16 @@ document.addEventListener("visibilitychange",function(){
   else if(hiddenAt){var away=now()-hiddenAt;if(away>120000){var keep=S.lastSeen;S.lastSeen=hiddenAt;var off=offlineGain(S,now()),coff=cityOffline(S,now()),xoff=expOffline(S,now());S.lastSeen=keep;if(xoff)expGain(S,xoff);var g1=off&&off.gain>=1,g2=coff&&coff.gain>=1;if(g1)addSparks(S,off.gain);if(g2)cityEarn(S,coff.gain);
     if(g1||g2)toast("While you were away",((g1?"Your engine earned +"+fmt(off.gain)+" sparks at "+Math.round(off.pct*100)+"% speed. ":"")+(g2?S.city.name+" earned +"+fmt(coff.gain)+" coins.":"")).trim(),"");}hiddenAt=0;S.lastInteract=now();rollDay(S,now());renderHUD();renderFocus();}
 });
-var rzT=0;window.addEventListener("resize",function(){clearTimeout(rzT);rzT=setTimeout(function(){stageLayout();hideTip(true);sizeDraw();placeDrawBar();syncView();if(cityShown()){cityLayout();ctipHide(true);}if(mapShown()){mapLayout();mtipHide();}if(w3Shown()){w3Resize();ctipHide(true);}coachPlace();},80);});
+var rzT=0,rzW=window.innerWidth,rzH=window.innerHeight;window.addEventListener("resize",function(){clearTimeout(rzT);rzT=setTimeout(function(){if(!S)return;
+  var w=window.innerWidth,h=window.innerHeight,bar=isMobile()&&w===rzW&&Math.abs(h-rzH)<160;rzW=w;rzH=h;
+  stageLayout();if(!bar)hideTip(true);sizeDraw();placeDrawBar();syncView();if(cityShown()){cityLayout();if(!bar)ctipHide(true);}if(mapShown()){mapLayout();if(!bar)mtipHide();}if(w3Shown()){w3Resize();if(!bar)ctipHide(true);}coachPlace();},80);});
+var coachRaf=0;window.addEventListener("scroll",function(){if(COACH&&!coachRaf)coachRaf=requestAnimationFrame(function(){coachRaf=0;coachPlace();});},{passive:true});
 document.addEventListener("mouseup",function(){setTimeout(hlApply,0);});
 document.addEventListener("touchend",function(){setTimeout(hlApply,60);},{passive:true});
+/* Typing on a phone: the places bar steps aside while the keyboard is up, and the Check bar sits on the bottom edge. */
+var KB_SEL='input:not([type]),input[type=text],input[type=number],input[type=search],textarea';
+document.addEventListener("focusin",function(e){var t=e.target;if(isMobile()&&isTouch()&&t&&t.matches&&t.matches(KB_SEL))document.body.classList.add("kb");});
+document.addEventListener("focusout",function(){setTimeout(function(){var a=document.activeElement;if(!(a&&a.matches&&a.matches(KB_SEL)))document.body.classList.remove("kb");},60);});
 
 /* ---------- boot ---------- */
 /* If anything goes wrong before the first frame, the title card turns into a recovery screen and the save is left as it was. */
