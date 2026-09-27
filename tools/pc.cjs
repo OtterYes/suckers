@@ -1,5 +1,5 @@
-// Builds the PC edition: a folder you unzip anywhere and play offline, 3D city included.
-//   node tools/pc.cjs        -> dist/Grind-to-1520/ and dist/Grind-to-1520-PC.zip
+// Builds the PC edition: a folder you unzip anywhere and play offline, 3D town included.
+//   node tools/pc.cjs        -> dist/To-1520/ and dist/To-1520-PC.zip
 // The game file gets Three.js and the fonts built in, and a launcher opens it in its own
 // window. Fonts and licenses are downloaded once into tools/vendor/ (not committed).
 const fs = require("fs");
@@ -10,7 +10,7 @@ const { ensureThree, LICENSE } = require("./three.cjs");
 const ROOT = path.resolve(__dirname, "..");
 const VENDOR = path.join(__dirname, "vendor");
 const DIST = path.join(ROOT, "dist");
-const NAME = "Grind-to-1520";
+const NAME = "To-1520";
 const OUT = path.join(DIST, NAME);
 const FONT_CSS = "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap";
 const FONTS = { "Atkinson Hyperlegible": "atkinsonhyperlegible", "Chakra Petch": "chakrapetch", "JetBrains Mono": "jetbrainsmono" };
@@ -43,9 +43,9 @@ function fontCSS() {
 }
 
 const LAUNCHER = `@echo off
-rem Opens Grind to 1520 in its own window, like an app: Chrome if it's installed, otherwise Edge.
+rem Opens To 1520 in its own window, like an app: Chrome if it's installed, otherwise Edge.
 setlocal
-set "GAME=%~dp0grind-to-1520.html"
+set "GAME=%~dp0to-1520.html"
 set "URL=file:///%GAME:\\=/%"
 set "APP="
 reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe" >nul 2>&1
@@ -65,31 +65,35 @@ if defined APP (
 )
 `;
 
-const README = `GRIND TO 1520, PC EDITION
+const README = `TO 1520, PC EDITION
 
-To play, double-click "Play Grind to 1520". It opens the game in its own window, using
-Chrome if you have it and Edge if you don't. You can also double-click grind-to-1520.html
-to play in a normal browser tab.
+To play, double-click "Play To 1520". It opens the game in its own window, using Chrome if
+you have it and Edge if you don't. You can also double-click to-1520.html to play in a
+normal browser tab.
 
-Everything works offline, including the 3D city.
+Everything works offline, including the 3D town.
 
 GETTING STARTED
-A new game opens with a two-minute intro (you can skip it). After that, the bar above
-your questions shows Today's Adventure: a short guided session that reviews what's due,
-practices the skill that needs it most, then offers a challenge and a reward. Press Start,
-or just keep answering questions. Already playing? Your progress carries over, and a short
-list shows what changed.
+You arrive in a small town that grows as you learn. A new game opens with a two-minute
+intro (you can skip it). The main screen shows the town; the places bar at the bottom has
+Town Hall (plans, projects, building), Progress, Arena, Upgrades, Zones, and Ascend. Open
+any building from the skyline, or walk up to it in 3D and press E: its page has a round of
+five questions in its skill, what you've learned there, the tools your proficiency has
+opened, and building. The bar above your questions shows Today's Adventure whenever you
+want a guided session.
 
 YOUR PROGRESS
 Your browser saves your progress on this computer, by itself every few seconds. When you
-get a new version, save the new grind-to-1520.html over the old one in this folder, and
-keep playing in the same browser. For a backup, open Settings (the gear at the top right)
-and press "Download a save file", or copy your Backup code. To bring progress over from
-another copy of the game, use "Load a save file", or paste a Backup code and press Restore.
+get a new version, save the new to-1520.html into this folder (the old grind-to-1520.html
+can go) and keep playing in the same browser: the save carries over. For a backup, open
+Settings (the gear at the top right) and press "Download a save file", or copy your Backup
+code. To bring progress over from another copy of the game, use "Load a save file", or
+paste a Backup code and press Restore. If the game ever fails to start, the title screen
+offers "Try again" and "Download my save file"; your progress is never reset by itself.
 
 IF WINDOWS WARNS YOU
 Windows may ask before running the launcher, because it came from the internet. Choose
-"More info", then "Run anyway". Or just open grind-to-1520.html directly.
+"More info", then "Run anyway". Or just open to-1520.html directly.
 
 The licenses folder has the licenses for Three.js (the 3D engine) and the fonts.
 `;
@@ -111,8 +115,8 @@ function build() {
 
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(path.join(OUT, "licenses"), { recursive: true });
-  fs.writeFileSync(path.join(OUT, "grind-to-1520.html"), html);
-  fs.writeFileSync(path.join(OUT, "Play Grind to 1520.bat"), crlf(LAUNCHER));
+  fs.writeFileSync(path.join(OUT, "to-1520.html"), html);
+  fs.writeFileSync(path.join(OUT, "Play To 1520.bat"), crlf(LAUNCHER));
   fs.writeFileSync(path.join(OUT, "README.txt"), crlf(README));
   fs.copyFileSync(LICENSE, path.join(OUT, "licenses", "Three.js LICENSE.txt"));
   for (const [font, slug] of Object.entries(FONTS)) fs.copyFileSync(path.join(VENDOR, "fonts", slug + "-OFL.txt"), path.join(OUT, "licenses", font + " OFL.txt"));

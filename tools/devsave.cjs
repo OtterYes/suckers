@@ -1,7 +1,8 @@
 // A maxed-out save for exploring: every building at level 6, every wonder finished, a 1520
 // projected score, every skill lit with Gold mastery, the final evolution, Unit 2 cleared,
 // all 16 artifacts, every zone at tier 5, level 120, and more coins, sparks, supplies, and
-// gems than you can spend. Today's Adventure is planned fresh, and the Harbor Bridge is ready to restore.
+// gems than you can spend. Today's Adventure is planned fresh, the Harbor Bridge is ready to
+// restore, the Town Square's evidence is complete, and every building has a tool on offer.
 //   node tools/devsave.cjs [out.txt]      (default: dist/dev-save.txt)
 // Paste the code into Settings → Backup code → Restore. It replaces the save in that browser.
 const fs = require("fs");
@@ -65,11 +66,13 @@ ENG.TALENTS.forEach((T) => { while (ENG.talBuy(S, T.id)); });
 S.road = { c: {} }; S.title = "legend";
 S.zone.adv.fuel = 6; S.zone.psda.vault = 1e20; S.zone.geo.gems = 20; S.zone.alg.mach = 40;
 
-// Open straight into the 3D city, in daylight. Older tours are marked seen; the short v9 list of what
-// changed shows once. The Harbor Bridge is earned but not yet restored, so the restoration can be tried.
+// Open straight into the 3D town, in daylight. Older tours are marked seen; the short v10 list of what
+// changed shows once. The Harbor Bridge is earned but not yet restored, so the restoration can be tried,
+// and no tools are installed yet, so every offer can be. The engine seeds proficiency windows and offers on load.
 Object.assign(S.settings, { view: "3d", tod: "day", w3new: true, w3seen: false });
-S.welcomed = true; S.seenV3 = S.seenV4 = S.seenV5 = S.seenV6 = S.seenV7 = S.seenV8 = true; S.seenV9 = false;
-S.onb = { step: 9, done: true }; S.adv = null; S.world = {};
+S.welcomed = true; S.seenV3 = S.seenV4 = S.seenV5 = S.seenV6 = S.seenV7 = S.seenV8 = S.seenV9 = true; S.seenV10 = false;
+S.onb = { step: 9, done: true }; S.adv = null; S.world = {}; S.tools = {}; S.opps = {}; S.intro = { town: 1, hall: 1 }; S.round = null;
+ENG.townFix(S, now);
 S.streak = 0; S.lastSeen = S.lastInteract = now;
 // Trim history the game doesn't need, to keep the code short.
 S.seen = {}; S.hist = (S.hist || []).slice(-60); S.ai = []; S.miss = (S.miss || []).slice(-20);

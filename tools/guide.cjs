@@ -1,5 +1,5 @@
 // Engine checks for the guidance layer: Today's Adventure, comebacks, the Harbor Bridge, boss encounters,
-// learning evidence, onboarding gifts, and the v9 save migration. Runs in plain Node, no browser.
+// learning evidence, onboarding gifts, and the v8 to v10 save migration. Runs in plain Node, no browser.
 //   node tools/guide.cjs
 const fs = require("fs");
 const path = require("path");
@@ -21,7 +21,7 @@ function qIn(S, d, sk, now) { const q = sk ? E.buildForSkill(S, d, sk, 2, rnd, [
 
 section("fresh game", () => {
   const S = E.migrate(E.newState(T0), T0);
-  ok(S.v === 9, "fresh state is v9");
+  ok(S.v === 10, "fresh state is v10");
   ok(S.onb && S.onb.done === false && S.onb.step === 0, "fresh players get the intro");
   ok(S.adv === null && S.world && S.lrn && S.recov && Array.isArray(S.gb.hist), "new fields exist");
   const A = E.advEnsure(S, T0);
@@ -33,15 +33,18 @@ section("fresh game", () => {
   ok(!E.onbGift(S, "zone", "alg"), "and it's given once");
 });
 
-section("v8 dev save migrates to v9 without touching learning history", () => {
+section("v8 dev save migrates to v10 without touching learning history", () => {
   const t = fs.readFileSync(path.join(__dirname, "..", "dist", "dev-save.txt"), "utf8").trim();
   const raw = JSON.parse(Buffer.from(t.slice(6), "base64").toString("utf8"));
   raw.v = 8; delete raw.seenV9; delete raw.onb; delete raw.lrn; delete raw.world; delete raw.recov; delete raw.adv; if (raw.gb) delete raw.gb.hist;
-  const before = { r: JSON.stringify(raw.r), sk: JSON.stringify(raw.sk), spots: JSON.stringify(raw.spots), stats: raw.stats.answered };
+  const strip = (sk) => { const o = clone(sk); Object.keys(o).forEach((k) => { delete o[k].pr; delete o[k].pb; }); return o; };
+  const before = { r: JSON.stringify(raw.r), sk: JSON.stringify(strip(raw.sk)), spots: JSON.stringify(raw.spots), stats: raw.stats.answered };
   const S = E.migrate(clone(raw), T0);
-  ok(S.v === 9 && S.seenV9 === false, "v8 save is now v9 and will see What's New");
+  ok(S.v === 10 && S.seenV9 === false && S.seenV10 === false, "v8 save is now v10 and will see What's New");
   ok(S.onb.done === true, "existing players skip the beginner intro");
-  ok(JSON.stringify(S.r) === before.r && JSON.stringify(S.sk) === before.sk && JSON.stringify(S.spots) === before.spots && S.stats.answered === before.stats, "ratings, skills, and blind spots unchanged");
+  // v10 adds a proficiency window (pr) and band (pb) to each skill; everything else must be untouched.
+  const skNoProf = clone(S.sk); Object.keys(skNoProf).forEach((k) => { delete skNoProf[k].pr; delete skNoProf[k].pb; });
+  ok(JSON.stringify(S.r) === before.r && JSON.stringify(skNoProf) === before.sk && JSON.stringify(S.spots) === before.spots && S.stats.answered === before.stats, "ratings, skills, and blind spots unchanged");
   ok(E.restoreProg(S, E.RESTORE[0]).ok, "the late save has already earned the Harbor Bridge (retroactive)");
   ok(!E.restoreDone(S, "harbor"), "but it isn't restored until the player does it");
   const c0 = S.chests.e, r = E.restoreDo(S, "harbor", T0);
@@ -50,7 +53,7 @@ section("v8 dev save migrates to v9 without touching learning history", () => {
   const A = E.advEnsure(S, T0);
   ok(A.steps.length >= 3, "late saves get a full adventure");
   const S2 = E.migrate(JSON.parse(JSON.stringify(S)), T0 + 5);
-  ok(S2.world.harbor && S2.v === 9, "restored state survives a save round trip");
+  ok(S2.world.harbor && S2.v === 10, "restored state survives a save round trip");
   // an unwelcomed v8 save with no answers is effectively new, so it gets the intro
   const fresh8 = clone(E.newState(T0)); fresh8.v = 8; delete fresh8.onb; fresh8.welcomed = false;
   ok(E.migrate(fresh8, T0).onb.done === false, "a brand-new v8 save still gets the intro");
@@ -164,7 +167,7 @@ section("Comebacks: explanation, fresh related problem, rematch, paid once", () 
   const r6 = ask(S, E.fromSpot(S, E.spotOf(S, q.key), rnd), true, later + 864e5 * 2 + 11 * 60e3);
   ok(r5.spot === "reset" && !r6.recover, "recovery pays once per question, ever");
   // a plain comeback without the fresh try pays the smaller reward
-  const q2 = qIn(S, "cs", null, T0); ask(S, q2, false, T0 + 5);
+  let q2 = qIn(S, "cs", null, T0); for (let t = 0; t < 40 && (S.recov[q2.key] || E.spotOf(S, q2.key)); t++) q2 = qIn(S, "cs", null, T0); ask(S, q2, false, T0 + 5);
   const r7 = ask(S, E.fromSpot(S, E.spotOf(S, q2.key), rnd), true, T0 + 12 * 60e3);
   ok(r7.recover && !r7.recover.full, "rematch without the fresh try is a plain comeback");
   const L = E.lrnSummary(S, T0 + 13 * 60e3, 7);

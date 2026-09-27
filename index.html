@@ -1,9 +1,9 @@
-<title>Grind to 1520</title>
+<title>To 1520</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
-/* Grind to 1520 · one committed dark control-room theme. Colors live in tokens; the accent follows the engine's form. */
+/* To 1520 · one committed dark control-room theme. Colors live in tokens; the accent follows the engine's form. */
 :root{
   color-scheme:dark;
   --void:#050A14;--void-2:#081124;--deck:#0A1424;--deck-2:#0E1B30;--deck-3:#14243D;--glass:rgba(8,16,30,.9);
@@ -1140,7 +1140,7 @@ body[data-view="3d"] .core-read,body[data-view="3d"] .legend,body[data-view="3d"
   body[data-tab="city"] .stage>#cityWrap{display:block;position:relative;height:clamp(320px,50vh,460px)}
   .ctip{width:min(240px,calc(100% - 16px))}
   .pols{grid-template-columns:minmax(0,1fr)}
-  .decknav{grid-template-columns:repeat(7,minmax(0,1fr))}
+  .decknav{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
   .zgrid{gap:8px}
   .zc-b{padding:8px 10px 10px}
   .zc-n{font-size:13px}
@@ -1503,10 +1503,79 @@ body[data-tab="city"] .map-hud{right:14px}
 .evobar{width:min(380px,48%)}
 .evobar .t .tt{min-width:0;overflow:hidden;text-overflow:ellipsis}
 .evobar .t em{font-style:normal;color:var(--spark-2)}
+/* ---------- v10: places, rounds, tools, projects, intros ---------- */
+.crumb{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.xbtn.back svg{width:18px;height:18px}
+.intro{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;margin:0 0 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--accent) 45%,var(--wire));background:var(--accent-soft)}
+.intro p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.45}
+.pl-hero{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:center;margin:0 0 6px}
+.pl-hero img{width:72px;height:72px;border-radius:12px;border:1px solid var(--wire);background:linear-gradient(180deg,#132A4E,#0A1426 80%)}
+.pl-hero .cq{margin:0 0 4px;font-style:italic;color:var(--ink-2);font-size:13.5px}
+.pl-learn{margin-top:10px}
+.pl-learn .st{color:var(--spark);letter-spacing:.1em}
+.band{font-family:var(--f-disp);letter-spacing:.1em;text-transform:uppercase;font-size:12px}
+.band.b0{color:var(--ink-3)}.band.b1{color:var(--mint)}.band.b2{color:var(--accent)}.band.b3{color:var(--spark-2)}
+.meter.prof i{background:linear-gradient(90deg,var(--mint),var(--accent) 60%,var(--spark))}
+.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 10px}
+.tool{display:grid;gap:3px;padding:9px 10px;border-radius:10px;border:1px solid var(--wire);background:var(--deck-2);font-size:12px;color:var(--ink-3)}
+.tool b{font-size:12.5px;color:var(--ink-2)}
+.tool.on{border-color:color-mix(in srgb,var(--mint) 55%,var(--wire))}.tool.on b{color:var(--mint)}
+.tool.open{border-color:color-mix(in srgb,var(--spark) 60%,var(--wire));background:rgba(255,201,51,.07)}.tool.open b{color:var(--spark-2)}
+.opp{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--spark) 55%,var(--wire));background:linear-gradient(90deg,rgba(255,201,51,.1),transparent 70%)}
+.opp b{font-family:var(--f-disp);letter-spacing:.08em;text-transform:uppercase;font-size:13px;color:var(--spark-2)}
+.opp p{margin:3px 0 0;font-size:12.5px;color:var(--ink-2)}
+.tpips{display:inline-flex;gap:3px;vertical-align:middle}.tpips i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--ink-4)}.tpips i.on{background:var(--spark);border-color:var(--spark)}
+.pl-ups{margin-top:6px}
+.place .row2,.roundsum .row2,.proj .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.wsw.pages{margin:0 0 12px}
+.proj-doms{display:flex;flex-wrap:wrap;gap:6px}
+.pd{display:grid;justify-items:center;gap:1px;min-width:52px;padding:5px 7px;border-radius:9px;border:1px solid var(--wire);font-family:var(--f-disp);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.pd small{font-family:var(--f-mono);font-size:9.5px;letter-spacing:0;text-transform:none;color:var(--ink-4)}
+.pd.ok{border-color:color-mix(in srgb,var(--dc) 65%,var(--wire));color:var(--dc)}.pd.ok small{color:var(--ink-3)}
+.pips10.five i{width:14px}
+.decknav{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
+body[data-view="city"] .toasts,body[data-view="3d"] .toasts,body[data-view="map"] .toasts{top:calc(env(safe-area-inset-top,0px) + var(--hud-h) + 66px)}
+/* ---------- Title card: shown while the town loads, gone the moment the game is ready ---------- */
+.title{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:16px;background:radial-gradient(900px 600px at 50% 62%,#16243D,#07101F 72%);color:var(--ink);transition:opacity .5s ease}
+.title.out{opacity:0;pointer-events:none}
+.title-in{text-align:center;display:grid;gap:10px;justify-items:center;max-width:440px}
+.tl-mark{display:flex;align-items:flex-end;gap:6px;height:40px}
+.tl-mark i{width:14px;height:24px;border-radius:3px 3px 0 0;background:var(--accent);opacity:.85;animation:tlrise 1.6s ease-in-out infinite}
+.tl-mark i:nth-child(2){height:36px;animation-delay:.2s}.tl-mark i:nth-child(3){height:18px;animation-delay:.4s}
+@keyframes tlrise{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.tl-name{margin:6px 0 0;font-family:var(--f-disp);font-weight:700;font-size:44px;letter-spacing:.12em;text-transform:uppercase;line-height:1}
+.tl-name b{color:var(--accent)}
+.tl-sub{margin:0;color:var(--ink-2);font-size:15px}
+.tl-bar{width:220px;height:3px;border-radius:2px;background:var(--wire-2);overflow:hidden;margin-top:8px}
+.tl-bar i{display:block;height:100%;width:30%;background:var(--accent);animation:tlbar 1.2s ease-in-out infinite}
+@keyframes tlbar{0%{transform:translateX(-100%)}100%{transform:translateX(340%)}}
+.tl-msg{margin:0;font-size:12.5px;color:var(--ink-3);font-family:var(--f-mono)}
+.tl-fail{display:grid;gap:10px;justify-items:center;max-width:400px;margin-top:6px}
+.tl-fail p{margin:0;font-size:14px;color:var(--ink-2);line-height:1.45}
+.tl-fail .tl-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.title.failed .tl-bar,.title.failed .tl-msg{display:none}
+@media (prefers-reduced-motion:reduce){.tl-mark i,.tl-bar i{animation:none}.title{transition:none}}
 </style>
+<div id="title" class="title" aria-live="polite"><div class="title-in"><div class="tl-mark" aria-hidden="true"><i></i><i></i><i></i></div><h1 class="tl-name">To <b>1520</b></h1><p class="tl-sub">A small town that grows as you learn.</p><div class="tl-bar" aria-hidden="true"><i></i></div><p class="tl-msg" id="titleMsg">Waking the town…</p><div class="tl-fail" id="titleFail" hidden></div></div></div>
+<script id="tl">
+/* The title card stays only while the game really initializes. If the script fails before it starts, or nothing
+   reports ready within 15 seconds, the card becomes a recovery screen instead of an endless loader. Nothing here
+   touches the save. */
+(function(){var T=window.__title={ready:false,failed:false,t0:Date.now()};function $(i){return document.getElementById(i);}
+T.msg=function(t){var m=$("titleMsg");if(m)m.textContent=t;};
+T.done=function(){if(T.ready)return;T.ready=true;var el=$("title");if(!el)return;el.classList.add("out");setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},600);};
+T.fail=function(msg){if(T.ready||T.failed)return;T.failed=true;var el=$("title"),f=$("titleFail");if(!el||!f)return;el.classList.add("failed");f.hidden=false;
+  var m=String(msg||"Something went wrong while starting.").replace(/[<>&]/g,"").slice(0,300);
+  f.innerHTML='<p><b>The town didn’t finish loading.</b></p><p>'+m+'</p><p>Your saved progress is still stored in this browser and has not been changed. Try again, or download a copy of the save first.</p><div class="tl-btns"><button type="button" class="btn primary" id="tlRetry">Try again</button><button type="button" class="btn line" id="tlSave">Download my save file</button></div>';
+  $("tlRetry").onclick=function(){location.reload();};
+  $("tlSave").onclick=function(){try{var raw=localStorage.getItem("grind1520.save.v1");if(!raw){alert("No saved progress was found in this browser.");return;}var code="G1520:"+btoa(unescape(encodeURIComponent(raw))),a=document.createElement("a"),u=URL.createObjectURL(new Blob([code],{type:"text/plain"}));a.href=u;a.download="to-1520-save-recovered.txt";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},1500);}catch(e){alert("Couldn’t read the save: "+e.message);}};};
+window.addEventListener("error",function(e){if(!T.ready)T.fail(e&&e.message?e.message:"A script error stopped the game from starting.");});
+setTimeout(function(){if(!T.ready)T.fail("It took too long to start.");},15000);
+})();
+</script>
 <div id="app">
 <header class="hud"><div class="hud-in">
-  <div class="brand"><span class="brand-main">Grind to <b>1520</b></span><span class="brand-sub" id="formName">Neural Engine</span></div>
+  <div class="brand"><span class="brand-main">To <b>1520</b></span><span class="brand-sub" id="formName">Neural Engine</span></div>
   <span class="hsep" aria-hidden="true"></span>
   <button class="rankbtn" id="rankBtn" type="button" data-act="profile" aria-label="Your rank, game estimate, and profile"><span class="emblem" id="emblem"></span><span class="rank-txt"><span class="rank-name" id="rankName">Stone III</span><span class="rank-score" id="rankScore">Projected 320</span></span></button>
   <button class="stagebtn" id="stageBtn" type="button" data-act="stageGo" aria-label="Your unit and stage"><span class="ring"><b id="stageN">1.1</b></span><span class="st-t"><small id="stageU">Unit 1</small><span id="stageL">City</span></span></button>
@@ -1526,7 +1595,7 @@ body[data-tab="city"] .map-hud{right:14px}
   <section class="stage" id="stage" aria-label="Your engine">
     <canvas id="engineCv" role="img" aria-label="Your engine. The height of each domain is its score on the 320 to 1520 scale, and each lit node is a skill star."></canvas>
     <div class="city-wrap" id="cityWrap" hidden>
-      <canvas id="cityCv" tabindex="0" role="img" aria-label="Your city"></canvas>
+      <canvas id="cityCv" tabindex="0" role="img" aria-label="Your town"></canvas>
       <div class="city-hud" id="cityHud"></div>
       <div class="city-map" id="cityMap" aria-hidden="true"><div class="cm-in" id="cityMapIn"></div><i id="cityVp"></i></div>
       <div class="city-news" aria-hidden="true"><span class="nl">NEWS</span><span id="cityNews"></span></div>
@@ -2689,14 +2758,16 @@ function shuffle(arr,rnd){arr=arr.slice();for(var i=arr.length-1;i>0;i--){var j=
 
 function newState(now){
   var r={},dx={};DKEYS.forEach(function(d){r[d]=SEED_SCORES[d];dx[d]={xp:0,n:0,c:0,rec:""};});
-  return{v:9,pl:{lv:1,xp:0},hub:{ii:0,cs:0,eoi:0,sec:0,alg:0,adv:0,psda:0,geo:0},evo:{stage:0,seen:0},form:"network",set:null,baseline:{total:BASELINE.total,label:BASELINE.label},chests:{c:0,r:1,e:0,l:0},relics:{},boosts:{dbl:0,crit:0,xp:0,shield:0},quests:null,weekly:null,bossT:{},boss:null,created:now,lastSeen:now,lastInteract:now,sparks:0,runSparks:0,lifeSparks:0,insight:0,insightEarned:0,sleeps:0,
+  var N={v:10,pl:{lv:1,xp:0},hub:{ii:0,cs:0,eoi:0,sec:0,alg:0,adv:0,psda:0,geo:0},evo:{stage:0,seen:0},form:"network",set:null,baseline:{total:BASELINE.total,label:BASELINE.label},chests:{c:0,r:1,e:0,l:0},relics:{},boosts:{dbl:0,crit:0,xp:0,shield:0},quests:null,weekly:null,bossT:{},boss:null,created:now,lastSeen:now,lastInteract:now,sparks:0,runSparks:0,lifeSparks:0,insight:0,insightEarned:0,sleeps:0,
     up:{focus:0,combo:0,eureka:0,pace:0,deep:0,mining:0,bounty:0},gen:{neuron:0,synapse:0,cortex:0,palace:0,hyper:0,galaxy:0,perfect:0},
     r:r,dx:dx,sk:{},seen:{},flagged:{},spots:[],streak:0,bestStreak:0,
     today:{date:"",correct:0,answered:0,sparks:0,ans:0},days:{streak:0,best:0,last:"",frz:0,frzWk:""},cal:{},hist:[],ach:{},
     g:null,gb:{rw:0,m:0,runs:0,hard:0,flawless:0,last:null,since:0,hist:[]},
-    rev:null,miss:[],lg:{wk:"",pts:0},wkc:{wk:"",done:false},seasons:[],season:{n:1,test:"PSAT/NMSQT",date:"",target:1520,start:now,p0:320,wk:"",wp:320,placed:""},seenV4:true,seenV5:true,seenV6:true,seenV7:true,seenV8:true,seenV9:true,visArena:false,arc:{},calib:{},pick:null,city:cityFresh(),unit:unitFresh(),arts:{},exp:null,zone:zoneFresh(),zlast:"",tal:{g:{},k:{}},road:{c:{}},title:"new",onb:{step:0,done:false},adv:null,world:{},lrn:{fr:"",ev:[]},recov:{},
+    rev:null,miss:[],lg:{wk:"",pts:0},wkc:{wk:"",done:false},seasons:[],season:{n:1,test:"PSAT/NMSQT",date:"",target:1520,start:now,p0:320,wk:"",wp:320,placed:""},seenV4:true,seenV5:true,seenV6:true,seenV7:true,seenV8:true,seenV9:true,seenV10:true,visArena:false,arc:{},calib:{},pick:null,city:cityFresh(),unit:unitFresh(),arts:{},exp:null,zone:zoneFresh(),zlast:"",tal:{g:{},k:{}},road:{c:{}},title:"new",onb:{step:0,done:false},adv:null,world:{},lrn:{fr:"",ev:[]},recov:{},tools:{},opps:{},intro:{},round:null,
     stats:{answered:0,correct:0,hard:0,timeMs:0,eurekas:0,spotsCleared:0,packs:0,asks:0,gained:0,sets:0,perfectSets:0},imports:[],
-    peak:320,ai:[],focus:"mix",settings:{sound:true,league:false,haptics:true,hl:true,view:"engine",tod:"auto"},welcomed:false,buyN:1};
+    peak:320,ai:[],focus:"mix",settings:{sound:true,league:false,haptics:true,hl:true,view:"city",tod:"auto"},welcomed:false,buyN:1};
+  /* The town is there from the first minute: humble, unnamed by you yet, and yours to rename at the Town Hall. */
+  cityFound(N,"",now);return N;
 }
 function migrate(S,now){
   var base=newState(now);
@@ -2711,7 +2782,8 @@ function migrate(S,now){
   if(S.v<7){S.v=7;S.seenV7=false;}
   if(S.v<8){S.v=8;S.seenV8=false;}
   if(S.v<9){var old9=!!S.welcomed||S.stats.answered>0;S.v=9;S.seenV9=!old9;S.onb=old9?{step:9,done:true}:{step:0,done:false};}
-  zoneFix(S);guideFix(S,now);
+  if(S.v<10){var old10=!!S.welcomed||S.stats.answered>0;S.v=10;S.seenV10=!old10;if(old10){if(!S.intro||typeof S.intro!=="object")S.intro={};S.intro.town=1;S.intro.hall=1;}}
+  zoneFix(S);guideFix(S,now);townFix(S,now);
   if(!S.onb.done&&S.stats.answered>=10)S.onb.done=true;
   if(!Array.isArray(S.unit.cleared))S.unit.cleared=[];if(!S.unit.at||typeof S.unit.at!=="object")S.unit.at={};if(!S.arts||typeof S.arts!=="object")S.arts={};
   if(!S.city.b||typeof S.city.b!=="object")S.city.b={};if(!S.city.up||typeof S.city.up!=="object")S.city.up={};if(!S.city.w||typeof S.city.w!=="object")S.city.w={};if(!Array.isArray(S.city.buffs))S.city.buffs=[];
@@ -2960,10 +3032,10 @@ var ACH=[
  ["first","First Blood","Get your first question right.",function(S){return S.stats.correct>=1;}],
  ["c10","Warmed Up","10 correct answers.",function(S){return S.stats.correct>=10;}],
  ["c100","Century","100 correct answers.",function(S){return S.stats.correct>=100;}],
- ["c500","Grinder","500 correct answers.",function(S){return S.stats.correct>=500;}],
+ ["c500","Steady Hands","500 correct answers.",function(S){return S.stats.correct>=500;}],
  ["c1000","Four Digits","1,000 correct answers.",function(S){return S.stats.correct>=1000;}],
  ["c2500","Relentless","2,500 correct answers.",function(S){return S.stats.correct>=2500;}],
- ["c5000","The Grind Never Stops","5,000 correct answers.",function(S){return S.stats.correct>=5000;}],
+ ["c5000","Five Thousand","5,000 correct answers.",function(S){return S.stats.correct>=5000;}],
  ["s10","On a Roll","Hit a 10-answer streak.",function(S){return S.bestStreak>=10;}],
  ["s25","Unstoppable","Hit a 25-answer streak.",function(S){return S.bestStreak>=25;}],
  ["s50","Locked In","Hit a 50-answer streak.",function(S){return S.bestStreak>=50;}],
@@ -2977,7 +3049,7 @@ var ACH=[
  ["sp100","Eraser Shavings","Clear 100 blind spots.",function(S){return S.stats.spotsCleared>=100;}],
  ["d3","Habit","3-day streak.",function(S){return S.days.best>=3;}],
  ["d7","Week Warrior","7-day streak.",function(S){return S.days.best>=7;}],
- ["d30","Month of Grind","30-day streak.",function(S){return S.days.best>=30;}],
+ ["d30","A Month of Mornings","30-day streak.",function(S){return S.days.best>=30;}],
  ["g1","Enter the Gauntlet","Finish a Gauntlet run.",function(S){return S.gb.runs>=1;}],
  ["gh","The Harder Road","Earn the hard Module 2 in a Gauntlet.",function(S){return S.gb.hard>=1;}],
  ["gf","Flawless","Go 12 for 12 in a Gauntlet.",function(S){return S.gb.flawless>=1;}],
@@ -3076,6 +3148,7 @@ function applyAnswer(S,q,correct,info){
   res.exp=expAnswer(S,q,correct,now,info.mode);if(res.exp){if(res.exp.sup>0)res.parts.push(["Supplies","+"+fmt(res.exp.sup)]);if(res.exp.stake)res.parts.push([res.exp.stake>0?"Stake won":"Stake lost",(res.exp.stake>0?"+":MINUS)+fmt(Math.abs(res.exp.stake))+" gems"]);}
   res.stages=unitCheck(S,now);
   lrnAnswer(S,q,correct,now,info.mode,res);res.adv=advOnAnswer(S,q,correct,res,now,info.mode);
+  profLog(S,q,correct,info.mode);res.town=townAfter(S,now);res.round=roundOnAnswer(S,q,correct,res,info.mode);
   res.newAch=checkAch(S,now);
   return res;
 }
@@ -3386,8 +3459,8 @@ function setRecord(S,correct,res,now,rnd){
 
 /* ===== Longevity layer: unlocks, weekly twists, mastery, daily review, mistakes, seasons, league (DOM-free) ===== */
 /* Upgrades, zones, hubs, and the Arcade are open from the first answer; bigger systems come online as the engine evolves. */
-var UNLOCK={upgrades:0,zones:0,hubs:0,arcade:0,arena:1,paths:2,city:2,gaunt:3,ascend:5};
-var UNLOCK_TXT={zones:["Zones","Every domain is a zone with its own rule, upgrade tree, and expansions."],gaunt:["Gauntlet & league","The timed Gauntlet, like the real adaptive test, and the weekly league."],city:["City","Found a city where every skill you learn becomes a building."],arcade:["Arcade","Four quick mini-games in the Arena, each drilling one skill."],upgrades:["Upgrades","Spend sparks to make every answer worth more."],hubs:["Domain hubs","One generator per domain. Light nodes to raise its cap."],paths:["Pathways","Generators that power the core while you study."],arena:["Bosses","A boss for every domain, with a harder tier each time you win."],ascend:["Ascend","Trade a run for permanent Insight. Needs a Gauntlet score."]};
+var UNLOCK={upgrades:0,zones:0,hubs:0,arcade:0,city:0,arena:1,paths:2,gaunt:3,ascend:5};
+var UNLOCK_TXT={zones:["Zones","Every domain is a zone with its own rule, upgrade tree, and expansions."],gaunt:["Gauntlet & league","The timed Gauntlet, like the real adaptive test, and the weekly league."],city:["Town Hall","A town where every skill you learn becomes a building."],arcade:["Arcade","Four quick mini-games in the Arena, each drilling one skill."],upgrades:["Upgrades","Spend sparks to make every answer worth more."],hubs:["Domain hubs","One generator per domain. Light nodes to raise its cap."],paths:["Pathways","Generators that power the core while you study."],arena:["Bosses","A boss for every domain, with a harder tier each time you win."],ascend:["Ascend","Trade a run for permanent Insight. Needs a Gauntlet score."]};
 function isOpen(S,f){return((S.evo&&S.evo.stage)||0)>=UNLOCK[f];}
 function unlocksAt(stage){return Object.keys(UNLOCK).filter(function(k){return UNLOCK[k]===stage;});}
 
@@ -3753,9 +3826,9 @@ var CITY_TIERS=[[1,10,"Fresh Paint"],[5,100,"Night Shift"],[25,2000,"Skybridge"]
 var CITY_DUP=[[10,5e4,"Pride"],[50,5e8,"Festival"],[150,5e12,"Renaissance"]];
 function cityBMult(S,B,now,raw){var m=1,k;for(k=0;k<CITY_TIERS.length;k++)if(S.city.up["t:"+B.id+":"+k])m*=2;for(k=0;k<CITY_DUP.length;k++)if(S.city.up["d:"+B.d+":"+k])m*=1.5;
   if(!raw){var bf=cityBuff(S,"boom",now);if(bf&&bf.id===B.id)m*=10;}return m;}
-function cityGlobal(S,now,raw){var m=(1+0.1*(S.city.w.tower||0))*(1+0.05*(S.city.w.launch||0))*unitCoinMult(S)*(1+0.1*talLv(S,"path"));if(cityHas(S,"hs"))m*=1+0.01*conn(S);
+function cityGlobal(S,now,raw){var m=(1+0.1*(S.city.w.tower||0))*(1+0.05*(S.city.w.launch||0))*unitCoinMult(S)*(1+0.1*talLv(S,"path"))*projMult(S);if(cityHas(S,"hs"))m*=1+0.01*conn(S);
   var p=S.city.pol;if(p==="study")m*=0.9;else if(p==="owl")m*=cityNight(now)?1.5:0.9;if(!raw&&cityBuff(S,"frenzy",now))m*=5;return m;}
-function cityRateOf(S,B,now,raw){var n=cityN(S,B.id);return n?n*CITY_CLASS[B.cls].r*cityLearn(S,B)*cityBMult(S,B,now,raw)*cityGlobal(S,now,raw):0;}
+function cityRateOf(S,B,now,raw){var n=cityN(S,B.id);return n?n*CITY_CLASS[B.cls].r*cityLearn(S,B)*toolMult(S,B.id)*cityBMult(S,B,now,raw)*cityGlobal(S,now,raw):0;}
 function cityRate(S,now,raw){if(!cityBuilt(S))return 0;var t=0;for(var i=0;i<CITY_B.length;i++)t+=cityRateOf(S,CITY_B[i],now,raw);return t;}
 function cityDisc(S){return 1-0.05*((cityHas(S,"p1")?1:0)+(cityHas(S,"p2")?1:0)+(cityHas(S,"p3")?1:0));}
 function cityCost(S,id,n){var B=CITY_BY[id],r=1.15;n=n||1;return Math.ceil(CITY_CLASS[B.cls].c*Math.pow(r,cityN(S,id))*(Math.pow(r,n)-1)/(r-1)*cityDisc(S));}
@@ -3774,7 +3847,7 @@ function cityOffline(S,now){if(!cityBuilt(S))return null;var el=(now-S.lastSeen)
 /* Every right answer is a click: it pays a few seconds of city output, scaled by difficulty. */
 function cityAnswerSecs(S){return 6+(cityHas(S,"tu1")?5:0)+(cityHas(S,"tu2")?10:0)+(cityHas(S,"tu3")?20:0);}
 function cityAnswerPay(S,lv,now,mode){return(3+cityRate(S,now,true)*cityAnswerSecs(S))*([0,1,1.5,2.5][lv]||1.5)*(cityHas(S,"tu4")?2:1)*(S.city.pol==="study"?3:1)*(1+0.5*(S.city.w.library||0))*(cityBuff(S,"rush",now)?5:1)*(mode==="gaunt"?0.5:1);}
-function cityAnswer(S,q,correct,now,mode){if(!cityBuilt(S)||!correct)return 0;var g=cityAnswerPay(S,q.lv,now,mode);cityEarn(S,g);S.city.answers++;return g;}
+function cityAnswer(S,q,correct,now,mode){if(!cityBuilt(S)||!correct)return 0;var g=cityAnswerPay(S,q.lv,now,mode)*toolPay(S,q.d,q.sk);cityEarn(S,g);S.city.answers++;return g;}
 /* Upgrades: ×2 per building at 1, 5, 25, 50, and 100 owned; district pride; tuition; blimps; planning. */
 var CITY_UP=[];
 CITY_B.forEach(function(B){CITY_TIERS.forEach(function(T,k){CITY_UP.push({id:"t:"+B.id+":"+k,kind:"b",b:B.id,d:B.d,name:B.name+": "+T[2],desc:B.name+" output ×2.",cost:CITY_CLASS[B.cls].c*T[1],req:function(S){return cityN(S,B.id)>=T[0];}});});});
@@ -3824,16 +3897,16 @@ function cityFound(S,name,now){if(cityBuilt(S)||!isOpen(S,"city"))return null;va
   CITY_B.forEach(function(B){var sk=S.sk[B.d+"|"+B.sk],c=sk?sk.c:0;if(B.cls<=3&&cityCanBuild(S,B)&&c>bc){bc=c;best=B;}});
   if(best){C.b[best.id]=1;C.built=1;}else cityEarn(S,150);return{free:best?best.id:null};}
 ACH.push(
- ["cy1","Founder","Found your city.",function(S){return cityBuilt(S);}],
- ["cy50","Village Green","Grow your city to 50 residents.",function(S){return cityPop(S)>=50;}],
- ["cy1k","City Limits","Grow your city to 1,000 residents.",function(S){return cityPop(S)>=1000;}],
- ["cy25k","Megacity","Grow your city to 25,000 residents.",function(S){return cityPop(S)>=25000;}],
+ ["cy1","Founder","Have a town of your own.",function(S){return cityBuilt(S);}],
+ ["cy50","Village Green","Grow your town to 50 residents.",function(S){return cityPop(S)>=50;}],
+ ["cy1k","City Limits","Grow your town to 1,000 residents.",function(S){return cityPop(S)>=1000;}],
+ ["cy25k","Megacity","Grow your town to 25,000 residents.",function(S){return cityPop(S)>=25000;}],
  ["cyall","Full Skyline","Build every one of the 29 buildings.",function(S){return cityBuilt(S)&&CITY_B.every(function(B){return cityN(S,B.id)>0;});}],
  ["cyb1","Blimp Spotter","Catch a golden blimp.",function(S){return(S.city&&S.city.blimps||0)>=1;}],
  ["cyb25","Blimp Hunter","Catch 25 golden blimps.",function(S){return(S.city&&S.city.blimps||0)>=25;}],
  ["cyw","Wonder of the World","Finish a wonder.",function(S){return cityBuilt(S)&&WONDERS.some(function(W){return(S.city.w[W.id]||0)>=W.stages.length;});}],
  ["cypol","Mayor","Pass a Town Hall policy.",function(S){return!!(S.city&&S.city.pol);}],
- ["cy1m","Coin Collector","Earn a million coins in your city.",function(S){return(S.city&&S.city.life||0)>=1e6;}]
+ ["cy1m","Coin Collector","Earn a million coins in your town.",function(S){return(S.city&&S.city.life||0)>=1e6;}]
 );
 
 /* ===== Units: a ladder of stages (1.1 to 1.5, 2.1 to 2.5, ...). Each unit ends in Advance, a reset that opens a new mechanic ===== */
@@ -3842,9 +3915,9 @@ function studyDays(S){var n=0;for(var k in S.cal)if(S.cal[k][1]>=10)n++;return n
 function cityBuildingsN(S){if(!cityBuilt(S))return 0;var n=0;CITY_B.forEach(function(B){if(cityN(S,B.id))n++;});return n;}
 /* Requirement kinds. "learn" ones never reset, so every stage asks for real study as well as the unit's own goal. */
 var UREQ={
- found:{t:function(){return"Found your city";},v:function(S){return cityBuilt(S)?1:0;}},
- pop:{t:function(n){return fmt(n)+" residents in your city";},v:function(S){return cityPop(S);}},
- bld:{t:function(n){return n+" different buildings";},v:cityBuildingsN},
+ found:{t:function(){return"Found your town";},v:function(S){return cityBuilt(S)?1:0;}},
+ pop:{t:function(n){return fmt(n)+" residents in your town";},v:function(S){return cityPop(S);}},
+ bld:{t:function(n){return n===1?"Your first building":n+" different buildings";},v:cityBuildingsN},
  tower:{t:function(n){return"1520 Tower at stage "+n;},v:function(S){return S.city.w.tower||0;}},
  glib:{t:function(n){return"Grand Library at stage "+n;},v:function(S){return S.city.w.library||0;}},
  pol:{t:function(){return"Pass a Town Hall policy";},v:function(S){return S.city.pol?1:0;}},
@@ -3861,8 +3934,8 @@ var UREQ={
  depth:{t:function(n){return"Reach depth "+n;},v:function(S){return S.exp?S.exp.depth:0;}}
 };
 var UNITS=[
- {n:1,name:"The City",line:"Every skill you learn becomes a building.",stages:[
-  [["found",1],["pop",50],["conn",8]],
+ {n:1,name:"The Town",line:"Every skill you learn becomes a building.",stages:[
+  [["bld",1],["pop",50],["conn",8]],
   [["pop",300],["bld",8],["conn",18],["right",150]],
   [["pop",1000],["tower",1],["conn",28],["med",2],["right",350]],
   [["pop",4000],["bld",20],["pol",1],["conn",38],["med",5],["right",600],["gaunt",1]],
@@ -4165,7 +4238,7 @@ function zWithdraw(S){var Z=S.zone;if(!Z||!(Z.psda.vault>0))return 0;var x=Z.psd
 
 /* ===== Talents: every level is a talent point. Spend them on zone keystones and on the general talents; respec any time. ===== */
 /* Talents lean toward a way of playing: reviewing mistakes, exploring your world, or taking on challenges. Resets are free. */
-var TAL_GRP=[["review","Reviewer","Turn misses into comebacks."],["explore","Explorer","Grow your city and push the Expedition."],["challenge","Challenger","Bosses, the Arcade, and streaks."],["general","All-rounder","Helps whatever you do."]];
+var TAL_GRP=[["review","Reviewer","Turn misses into comebacks."],["explore","Explorer","Grow your town and push the Expedition."],["challenge","Challenger","Bosses, the Arcade, and streaks."],["general","All-rounder","Helps whatever you do."]];
 var TALENTS=[
  {id:"second",grp:"review",name:"Second Wind",desc:"Comebacks pay 50% more.",tp:2,max:2},
  {id:"spaced",grp:"review",name:"Spaced Out",desc:"Blind-spot reviews pay 20% more.",tp:2,max:3},
@@ -4246,7 +4319,7 @@ function lrnAnswer(S,q,correct,now,mode,res){
   if(res.spot==="cleared")lrnNote(S,"erase",q.d,q.sk,0,now);
   /* The moment practice earns a landmark, it's kept, and the answer says so. */
   RESTORE.forEach(function(R){if(R.d===q.d&&R.sk===q.sk&&!restoreEarned(S,R.id)&&!restoreDone(S,R.id)&&restoreProg(S,R).ok){S.world[R.id]={earned:now};res.earned=R.id;}});}
-function lrnSummary(S,now,days){var from=now-(days||7)*864e5,c={node:0,medal:0,miss:0,erase:0,recover:0,restore:0},sks={};
+function lrnSummary(S,now,days){var from=now-(days||7)*864e5,c={node:0,medal:0,miss:0,erase:0,recover:0,restore:0,tool:0,project:0},sks={};
   S.lrn.ev.forEach(function(e){if(e[0]<from)return;c[e[1]]=(c[e[1]]||0)+1;if(e[1]==="node"||e[1]==="medal"||e[1]==="recover")sks[e[2]+"|"+e[3]]=1;});
   var fr=S.lrn.fr,f20=fr.slice(-20);
   return{fresh20:f20.length>=5?cnt1(f20)/f20.length:null,freshN:f20.length,fresh50:fr.length>=10?cnt1(fr)/fr.length:null,freshAll:fr.length,
@@ -4329,7 +4402,7 @@ function advPick(S,now,avoid){
     var nx=nextStarAt(s.c||0);if(nx&&nx-(s.c||0)<=2)sc+=0.12;if(avoid&&avoid===key)sc-=0.35;
     if(!best||sc>best.sc)best={d:d,sk:sk,sc:sc,acc:acc,n:n,R:R,nx:nx,c:s.c||0,gap:gap};});});
   var b=best,why,R=b.R;
-  if(R){var P=restoreProg(S,R);why="It repairs the "+R.name+" in your city. "+(P.okRight?"It needs "+R.last+" of your last 10 right"+(P.recent!=null?", and you have "+P.recent:"")+".":"You have "+P.right+" of the "+R.right+" right answers it needs.");}
+  if(R){var P=restoreProg(S,R);why="It repairs the "+R.name+" in your town. "+(P.okRight?"It needs "+R.last+" of your last 10 right"+(P.recent!=null?", and you have "+P.recent:"")+".":"You have "+P.right+" of the "+R.right+" right answers it needs.");}
   else if(b.acc!=null&&b.acc<0.6)why="Your shakiest skill right now: "+Math.round(b.acc*100)+"% right over your last "+b.n+" tries.";
   else if(b.acc==null)why="You’ve barely practiced it"+(b.gap>0?", and "+DOMAINS[b.d].short+" is below your average.":". Time to find out where you stand.");
   else if(b.gap>0.1)why=DOMAINS[b.d].name+" is your lowest domain ("+Math.round(S.r[b.d])+"), and this is its weakest skill.";
@@ -4341,9 +4414,13 @@ function advChallenge(S,now,len,pick){var d=pick.d,M=BOSS_MECH[d];
   var g=ZONES[d].game;if(!ARC[g]){var gs=ARC_ORDER.filter(function(x){return DOMAINS[ARC[x].d].sec===DOMAINS[d].sec;});g=gs[0]||ARC_ORDER[0];}
   return{k:"arcade",g:g,t:"Play "+ARC[g].name,why:"A quick game that drills "+ARC[g].sk+". It pays sparks and XP and never changes your score.",opt:true};}
 function advWorld(S,now,pick){
-  if(isOpen(S,"city")&&!cityBuilt(S))return{k:"found",t:"Found your city",why:"Every skill you learn becomes a building in it.",opt:true};
+  if(isOpen(S,"city")&&!cityBuilt(S))return{k:"found",t:"Name your town",why:"Every skill you learn becomes a building in it.",opt:true};
   var rr=null;RESTORE.forEach(function(R){if(!rr&&restoreReady(S,R.id))rr=R;});
   if(rr&&cityBuilt(S))return{k:"restore",id:rr.id,t:"Restore the "+rr.name,why:"Your Transitions practice earned it. "+rr.after,opt:true};
+  var pj=null;PROJECTS.forEach(function(P){if(!pj&&cityBuilt(S)&&projReady(S,P.id)&&S.city.coins>=P.coins)pj=P;});
+  if(pj)return{k:"project",id:pj.id,t:"Restore the "+pj.name,why:pj.why+" You have the evidence and the coins.",opt:true};
+  var tl=null;if(cityBuilt(S))CITY_B.forEach(function(B){var o=oppOf(S,B.id);if(!tl&&o&&B.d===pick.d&&S.city.coins>=o.cost)tl={B:B,o:o};});
+  if(tl)return{k:"tool",id:tl.B.id,lv0:toolLv(S,tl.B.id),t:TOOLS.names[tl.o.lv]+" for the "+tl.B.name,why:"Your "+tl.B.sk+" proficiency opened it. "+toolLine(tl.o.lv),opt:true};
   var ex=null;DKEYS.forEach(function(d){var R=zExpReq(S,d);if(!ex&&R&&R.ok&&S.sparks>=R.cost)ex={d:d,t:zT(S,d)};});
   if(ex)return{k:"expand",d:ex.d,t0:ex.t,t:"Expand "+ZONES[ex.d].name.replace(/^The /,"the "),why:"You’ve learned enough "+DOMAINS[ex.d].short+" to open tier "+(ex.t+1)+": its hub earns more and a new row of its tree opens.",opt:true};
   if(cityBuilt(S)&&pick.sk){var B=cityBFor(pick.d,pick.sk);if(B&&cityCanBuild(S,B))return{k:"build",id:B.id,n0:cityN(S,B.id),t:(cityN(S,B.id)?"Grow":"Build")+" the "+B.name,why:"It’s your "+pick.sk+" building. The more of the skill you learn, the more it earns.",opt:true};}
@@ -4400,6 +4477,8 @@ function advCheck(S,now){var A=S.adv;if(!A||!A.started||A.done)return null;var s
   else if(s.k==="expand")ok=zT(S,s.d)>s.t0;
   else if(s.k==="build")ok=cityBuilt(S)&&cityN(S,s.id)>s.n0;
   else if(s.k==="zone")ok=zoneLevels(S,s.d)>s.n0;
+  else if(s.k==="project")ok=projDone(S,s.id);
+  else if(s.k==="tool")ok=toolLv(S,s.id)>s.lv0;
   if(ok){advFinish(S,s,now);return s;}return null;}
 /* The day's reward: paid once, only when every core step is done or the plan ran out. */
 /* Core steps (review, placement, practice) have to be done; the optional ones can be skipped. */
@@ -4413,13 +4492,89 @@ function onbGift(S,pick,d){if(!S.onb||S.onb.gift)return false;S.onb.gift=pick;
   if(pick==="focus")S.up.focus=Math.max(S.up.focus,1);else if(pick==="zone"&&ZONES[d])S.zone[d].up.r1=Math.max(zUp(S,d,"r1"),1);else if(pick==="hub"&&DOMAINS[d])S.hub[d]=Math.max(hubLv(S,d),1);else{S.onb.gift=false;return false;}return true;}
 
 ;
+/* ===== Town layer (DOM-free): proficiency, tools and their opportunities, town projects, practice rounds.
+   Proficiency is what your recent answers in a skill show. It reveals tool upgrades for that skill's building, and
+   town projects ask for it across subjects. Coins buy the upgrades; nothing here ever changes a rating or a score. ===== */
+/* All the tuning lives here. A band needs accuracy, enough evidence, and (higher up) hard questions. */
+var PROF={win:12,w:[0,0.5,1,1.5],rep:0.5,prior:3,drop:0.08,
+  bands:[{name:"Learning",p:0,e:0,hard:0},{name:"Working",p:0.55,e:4,hard:0},{name:"Skilled",p:0.7,e:8,hard:3},{name:"Expert",p:0.85,e:12,hard:5,medal:1}]};
+/* One answer is one hex digit: bit 0 right, bits 1 and 2 the difficulty, bit 3 fresh (neither a repeat nor a review). */
+function profCode(q,correct){return((correct?1:0)|((clamp(q.lv||2,1,3)-1)<<1)|(q.fresh&&!q.review?8:0)).toString(16);}
+/* Weighted accuracy over the window, shrunk toward the middle while evidence is thin. Easy answers weigh half, hard
+   ones half again more, and repeats half of that, so easy repeats can't stand in for mastery. */
+function profRaw(s){var pr=(s&&s.pr)||"",sw=0,sc=0,hard=0,i;
+  for(i=0;i<pr.length;i++){var v=parseInt(pr.charAt(i),16)||0,lv=((v>>1)&3)+1,w=(PROF.w[lv]||1)*((v&8)?1:PROF.rep);sw+=w;if(v&1)sc+=w;if(lv===3)hard++;}
+  var p=(sc+0.5*PROF.prior)/(sw+PROF.prior),band=0;
+  for(var b=1;b<PROF.bands.length;b++){var B=PROF.bands[b];if(p>=B.p&&sw>=B.e&&hard>=B.hard&&(!B.medal||((s&&s.m)||0)>=B.medal))band=b;else break;}
+  return{p:p,acc:sw?sc/sw:0,e:sw,n:pr.length,hard:hard,band:band};}
+/* The band you see holds until accuracy falls well under its bar: one bad day doesn't take it away. */
+function profOf(S,d,sk){var s=S.sk[d+"|"+sk]||{},R=profRaw(s),pb=s.pb||0;if(pb>R.band&&pb<PROF.bands.length&&R.p>=PROF.bands[pb].p-PROF.drop)R.band=pb;R.name=PROF.bands[R.band].name;R.next=PROF.bands[R.band+1]||null;return R;}
+function profLog(S,q,correct,mode){if(mode!=="train"&&mode!=="gaunt")return;var s=S.sk[q.d+"|"+q.sk];if(!s)return;s.pr=((s.pr||"")+profCode(q,correct)).slice(-PROF.win);s.pb=profOf(S,q.d,q.sk).band;}
+/* Older saves kept the last ten results and the hard-question record; they seed the window, counted as repeats. */
+function profSeed(s){if(!s||typeof s.pr==="string")return;var pr="";String(s.hr||"").split("").forEach(function(c){if(c==="0"||c==="1")pr+=((c==="1"?1:0)|4).toString(16);});String(s.rr||"").split("").forEach(function(c){if(c==="0"||c==="1")pr+=((c==="1"?1:0)|2).toString(16);});s.pr=pr.slice(-PROF.win);}
+/* What the next band takes, in plain words. */
+function profHow(S,d,sk){var R=profOf(S,d,sk),B=R.next,s=S.sk[d+"|"+sk]||{};if(!B)return"Expert is the top band. A hard drill now and then keeps it sharp.";var out=[],ne=Math.ceil(B.e-R.e);
+  if(R.e<B.e)out.push("answer about "+Math.max(1,ne)+" more question"+(ne===1?"":"s")+" here (medium and hard ones count most, repeats half)");
+  if(R.hard<B.hard)out.push("take on "+(B.hard-R.hard)+" more hard question"+(B.hard-R.hard===1?"":"s"));
+  if(R.p<B.p)out.push("get more of them right: "+Math.round(R.p*100)+"% weighted so far, "+Math.round(B.p*100)+"% needed");
+  if(B.medal&&((s.m||0)<B.medal))out.push("earn the Bronze medal here (4 hard questions right)");
+  return"For "+B.name+": "+(out.slice(0,2).join(", and ")||"keep going")+".";}
+
+/* ---- Tools: three upgrades per skill building, each revealed by a proficiency band and bought with coins from anywhere. ---- */
+var TOOLS={max:3,names:["","Better tools","Skilled hands","Master craft"],band:[0,1,2,3],out:0.6,pay:0.25,mult:[0,6,60,600],secs:[0,90,450,1800]};
+function toolLv(S,id){return(S.tools&&S.tools[id])||0;}
+function toolMult(S,id){return Math.pow(1+TOOLS.out,toolLv(S,id));}
+function toolPay(S,d,sk){var B=cityBFor(d,sk);return B?1+TOOLS.pay*toolLv(S,B.id):1;}
+function toolLine(lv){return(lv===1?"Sharper tools for the job":lv===2?"Practiced hands":"Master craft")+": this building makes "+Math.round(TOOLS.out*100)+"% more, and right answers in its skill pay "+Math.round(TOOLS.pay*100)+"% more coins.";}
+/* An opportunity's price is set from the building and the town's output the moment it appears, and never changes after. */
+function oppCost(S,B,lv,now){return Math.ceil(Math.max(CITY_CLASS[B.cls].c*TOOLS.mult[lv],cityRate(S,now,true)*TOOLS.secs[lv]));}
+function oppOf(S,id){var o=S.opps&&S.opps[id];return o&&o.lv===toolLv(S,id)+1&&o.cost>0?o:null;}
+function oppCheck(S,now){var out=[];if(!S.opps||typeof S.opps!=="object")S.opps={};CITY_B.forEach(function(B){var lv=toolLv(S,B.id)+1;if(lv>TOOLS.max)return;var o=S.opps[B.id];if(o&&o.lv===lv&&o.cost>0)return;if(o)delete S.opps[B.id];
+  if(profOf(S,B.d,B.sk).band>=TOOLS.band[lv]){S.opps[B.id]={lv:lv,cost:oppCost(S,B,lv,now),at:now};out.push(B.id);}});return out;}
+function toolBuy(S,id,now){var B=CITY_BY[id],o=oppOf(S,id);if(!B||!o||!cityBuilt(S)||!(S.city.coins>=o.cost))return null;S.city.coins-=o.cost;S.tools[id]=o.lv;delete S.opps[id];S.stats.tools=(S.stats.tools||0)+1;lrnNote(S,"tool",B.d,B.sk,o.lv,now);oppCheck(S,now);advCheck(S,now);return{id:id,lv:o.lv,cost:o.cost};}
+function oppCount(S){var n=0;for(var k in S.opps)if(oppOf(S,k))n++;return n;}
+function oppAfford(S){var n=0;if(!cityBuilt(S))return 0;for(var k in S.opps){var o=oppOf(S,k);if(o&&S.city.coins>=o.cost)n++;}return n;}
+
+/* ---- Town projects: the bigger restorations. They ask for proficiency across subjects, then coins, and change the town for good. ---- */
+var PROJECTS=[{id:"square",name:"Town Square",coins:1500,chest:"e",mult:1.15,rw:2,m:2,band:1,
+  before:"The fountain in the square has been dry for years, and the lanterns over it went dark long ago. People cross it, but nobody lingers.",
+  after:"The fountain runs again and the lanterns are lit. People gather in the square in the evenings, and the whole town works a little better for it.",
+  why:"A town square belongs to everyone, so restoring it takes a little of everything the town knows: reading, writing, and math.",
+  need:"Working proficiency in one skill from two Reading and Writing subjects and two Math subjects, then 1,500 coins."}];
+var PROJECT_BY={};PROJECTS.forEach(function(P){PROJECT_BY[P.id]=P;});
+function projBest(S,d){var b=0;DOMAINS[d].skills.forEach(function(sk){b=Math.max(b,profOf(S,d,sk).band);});return b;}
+function projProg(S,P){var rw=0,m=0,doms={};DKEYS.forEach(function(d){var b=projBest(S,d);doms[d]=b;if(b>=P.band){if(DOMAINS[d].sec==="rw")rw++;else m++;}});
+  return{rw:rw,m:m,doms:doms,okRW:rw>=P.rw,okM:m>=P.m,ok:rw>=P.rw&&m>=P.m,coins:cityBuilt(S)?S.city.coins:0,coinsOk:cityBuilt(S)&&S.city.coins>=P.coins,done:projDone(S,P.id)};}
+function projDone(S,id){return!!(S.world&&S.world[id]&&S.world[id].at);}
+function projEarned(S,id){return!!(S.world&&S.world[id]&&S.world[id].earned);}
+/* The evidence part is kept once it's there, like a landmark: a slow week never takes it back. */
+function projReady(S,id){var P=PROJECT_BY[id];if(!P||projDone(S,id))return false;return projEarned(S,id)||projProg(S,P).ok;}
+function projDo(S,id,now){var P=PROJECT_BY[id];if(!P||!cityBuilt(S)||!projReady(S,id)||!(S.city.coins>=P.coins))return null;S.city.coins-=P.coins;S.world[id]={at:now,earned:(S.world[id]&&S.world[id].earned)||now};S.chests[P.chest]++;S.stats.projects=(S.stats.projects||0)+1;lrnNote(S,"project","",P.name,0,now);advCheck(S,now);return{id:id,chest:P.chest,coins:P.coins};}
+function projMult(S){var m=1;for(var i=0;i<PROJECTS.length;i++)if(projDone(S,PROJECTS[i].id))m*=PROJECTS[i].mult;return m;}
+/* After every answer: reveal tools whose band is reached, and keep project evidence the moment it's complete. */
+function townAfter(S,now){var out={opps:oppCheck(S,now),proj:[]};PROJECTS.forEach(function(P){if(!projEarned(S,P.id)&&!projDone(S,P.id)&&projProg(S,P).ok){S.world[P.id]={earned:now};out.proj.push(P.id);}});return out;}
+/* Defaults and repairs for the town layer. Safe to run on every load. */
+function townFix(S,now){if(!S.tools||typeof S.tools!=="object")S.tools={};if(!S.opps||typeof S.opps!=="object")S.opps={};if(!S.intro||typeof S.intro!=="object")S.intro={};if(!S.round||typeof S.round!=="object"||typeof S.round.n!=="number")S.round=null;
+  for(var k in S.sk){var s=S.sk[k];if(!s||typeof s!=="object")continue;profSeed(s);if(typeof s.pr!=="string")s.pr="";var i=k.indexOf("|");if(typeof s.pb!=="number"&&i>0)s.pb=profOf(S,k.slice(0,i),k.slice(i+1)).band;}
+  for(var t in S.tools){var v=S.tools[t];if(!CITY_BY[t]||!(v>=1)){delete S.tools[t];continue;}S.tools[t]=Math.min(TOOLS.max,Math.floor(v));}
+  for(var o in S.opps){var O=S.opps[o];if(!CITY_BY[o]||!O||typeof O!=="object"||!(O.lv>=1&&O.lv<=TOOLS.max)||!isFinite(O.cost)||!(O.cost>0))delete S.opps[o];}
+  if(!cityBuilt(S)&&isOpen(S,"city"))cityFound(S,S.city&&S.city.name,now||0);
+  PROJECTS.forEach(function(P){if(!S.world[P.id]&&projProg(S,P).ok)S.world[P.id]={earned:now||0};});oppCheck(S,now||0);}
+
+/* ---- Practice rounds: a short set of questions in one building's skill. Nothing extra is paid; the round just keeps the tally. ---- */
+var ROUND_N=5;
+function roundStart(S,id,hard,now){var B=CITY_BY[id];if(!B)return null;S.round={id:id,d:B.d,sk:B.sk,n:ROUND_N,a:0,c:0,coins:0,sparks:0,node:0,hard:!!hard,pf:typeof S.focus==="string"&&S.focus.indexOf("sk:")!==0?S.focus:"mix",t0:now,done:false};S.focus="sk:"+B.d+"|"+B.sk+(hard?"|hard":"");return S.round;}
+function roundOnAnswer(S,q,correct,res,mode){var R=S.round;if(!R||R.done||mode!=="train"||q.d!==R.d||q.sk!==R.sk)return null;R.a++;if(correct)R.c++;R.coins+=res.coins||0;R.sparks+=res.gain||0;if(res.star)R.node++;if(res.town&&res.town.opps&&res.town.opps.indexOf(R.id)>=0)R.opp=1;if(R.a>=R.n){R.done=true;S.focus=R.pf||"mix";}return R;}
+function roundEnd(S){var R=S.round;if(!R)return null;if(!R.done)S.focus=R.pf||"mix";S.round=null;return R;}
+
+;
 /* ===== UI ===== */
 (function(){
 "use strict";
 var $=function(id){return document.getElementById(id);};
 var S=null,cur=null,Q=null,recent=[],rnd=Math.random,shownSparks=0;
 var LS="grind1520.save.v1";
-var UI={tab:"network",gResult:null,confirm:null,confirmT:0,tip:0,setSum:null,showSet:false,navSig:"",railSig:"",evoSig:""};
+var UI={tab:"network",gResult:null,confirm:null,confirmT:0,tip:0,setSum:null,showSet:false,navSig:"",railSig:"",evoSig:"",back:[],place:null,cityPage:"hall",showRound:false};
 var CAP={sample:null,ref:null,cloud:"off",cloudAt:0,busy:false,pending:false,timer:null,remote:null,askCtl:null,packCtl:null,db:null,user:null,uid:null,dl:null,lgSig:"",lgBusy:false,lgAt:0};
 var hiddenAt=0,reduced=false;
 try{reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){}
@@ -4445,6 +4600,10 @@ var ICON={
  gem:SV('<path d="M6 4h12l3 5-9 11L3 9z"/>',1),
  crate:SV('<rect x="3.5" y="8" width="17" height="12" rx="1.5"/><path d="M3.5 12h17M10.5 8v4M13.5 8v4M6 8l2-3.5h8L18 8"/>'),
  city:SV('<path d="M3 21h18"/><path d="M5 21V11l4-2.5V21"/><path d="M9 21V4.5h6V21"/><path d="M15 21v-8.5h4V21"/><path d="M11.5 8h1M11.5 11.5h1M11.5 15h1"/>'),
+ hall:SV('<path d="M3.5 20.5h17M5 9.5h14M12 3.5l8.5 4.5h-17z"/><path d="M6.5 9.5v11M10.2 9.5v11M13.8 9.5v11M17.5 9.5v11"/>'),
+ back:SV('<path d="M19 12H5M11 6l-6 6 6 6"/>'),
+ tool:SV('<path d="M14.5 6.5a4 4 0 0 0-5.3 5.3L3.5 17.5l3 3 5.7-5.7a4 4 0 0 0 5.3-5.3l-2.8 2.8-2-2z"/>'),
+ round:SV('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'),
  shield:SV('<path d="M12 3l7 3v5.5c0 4.3-3 7.7-7 9.5-4-1.8-7-5.2-7-9.5V6l7-3z"/><path d="M9 12l2 2 4-4"/>'),
  bolt:SV('<path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12L13 2z"/>'),
  trophy:SV('<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4.5a3 3 0 0 0 3 4M17 6h2.5a3 3 0 0 1-3 4"/>'),
@@ -4466,7 +4625,7 @@ var ICON={
  g_balance:SV('<path d="M3 11.5h18"/><path d="M12 11.5l-3.5 7h7z"/><circle cx="6" cy="8.5" r="1.4"/><circle cx="9.5" cy="8.5" r="1.4"/><circle cx="17" cy="8.5" r="1.4"/>')
 };
 var FORM_ICON={network:"network",reactor:"reactor",universe:"universe"};
-var TABS=[["network","Engine"],["reviews","Progress"],["arena","Arena"],["evolution","Upgrades"],["zones","Zones"],["city","City"],["ascend","Ascend"]];
+var TABS=[["network","Town"],["city","Town Hall"],["reviews","Progress"],["arena","Arena"],["evolution","Upgrades"],["zones","Zones"],["ascend","Ascend"]];
 var TAB_GATE={arena:"arcade",ascend:"ascend",city:"city"};
 var TOPICS=["deep-sea biology","jazz history","urban planning","volcanoes","the history of printing","bird migration","behavioral economics","ancient Mesopotamia","robotics","coral reefs","space telescopes","linguistics","architecture","food science","early aviation","soil and farming","sports science","museums","microbiology","exoplanets","the Silk Road","electric vehicles","wildlife photography","game theory","dinosaur fossils","printmaking","sleep science","ocean currents","glaciers","honeybees","public libraries","medieval castles","textile history","volunteer science","mapmaking","desert ecosystems","sound and acoustics","ancient mathematics","theater history","rivers and dams"];
 var PROMO={copper:"The climb is on. Every right answer grows your engine.",iron:"Iron. Your domains are finding their real level.",bronze:"Bronze. Four digits.",silver:"Silver. Keep stacking.",gold:"Gold. This is the realistic October range.",plat:"Platinum. A real jump past where you started.",diamond:"Diamond. National Merit territory starts around here.",master:"Master tier. Under 60 points from perfect.",gm:"Grandmaster. Every miss matters now."};
@@ -4487,7 +4646,10 @@ function isMobile(){return window.innerWidth<=980;}
 function fmtInt(n){return Math.round(n).toLocaleString("en-US");}
 function toPlain(h){var d=document.createElement("div");d.innerHTML=String(h||"").replace(/<span class="fr"><span>([\s\S]*?)<\/span><span>([\s\S]*?)<\/span><\/span>/g,"($1)/($2)").replace(/<sup>([\s\S]*?)<\/sup>/g,"^($1)").replace(/<br\s*\/?>/g,"\n").replace(/<u>([\s\S]*?)<\/u>/g,"[underlined: $1]");return d.textContent.replace(/−/g,"-").replace(/[ \t]+/g," ").trim();}
 function starsTxt(n){return"★★★★★".slice(0,n)+"☆☆☆☆☆".slice(0,5-n);}
-function glassHead(t,sub){return'<div class="glass-h"><div><h2>'+esc(t)+"</h2>"+(sub?"<p>"+sub+"</p>":"")+'</div><button type="button" class="xbtn" data-act="tab" data-v="network" aria-label="Close panel">'+ICON.x+"</button></div>";}
+/* Every page has the same head: where you are, what it's for, and a way back to where you came from. */
+function backLabel(){var b=UI.back[UI.back.length-1];if(!b)return"Back to the town";if(b.tab==="place"&&CITY_BY[b.place])return"Back to the "+CITY_BY[b.place].name;if(b.tab==="network")return"Back to the town";var T=TABS.filter(function(x){return x[0]===b.tab;})[0];return"Back to "+(T?T[1]:"the town");}
+function backBtn(){return'<button type="button" class="xbtn back" data-act="back" aria-label="'+esc(backLabel())+'" title="'+esc(backLabel())+'">'+ICON.back+"</button>";}
+function glassHead(t,sub,crumb){return'<div class="glass-h"><div>'+(crumb?'<span class="crumb">'+crumb+"</span>":"")+"<h2>"+esc(t)+"</h2>"+(sub?"<p>"+sub+"</p>":"")+"</div>"+backBtn()+"</div>";}
 function gmr(){return globalMult(S)*(1+relicSum(S,"rate"));}
 function dueMap(){return spotsBySkill(S,now(),true);}
 
@@ -4506,7 +4668,8 @@ var SND={ctx:null,
 };
 
 /* ---------- storage & cloud ---------- */
-function loadLocal(){try{var raw=localStorage.getItem(LS);if(raw){var o=JSON.parse(raw);if(o&&o.r&&o.stats)return migrate(o,now());}}catch(e){}return null;}
+/* A stored save that can't be read is an error to show, never a reason to start over: the raw text stays put. */
+function loadLocal(){var raw=null;try{raw=localStorage.getItem(LS);}catch(e){}if(!raw||raw==="null")return null;var o;try{o=JSON.parse(raw);}catch(e){throw new Error("The progress saved in this browser couldn’t be read.");}if(!o||typeof o!=="object"||!o.r||!o.stats)throw new Error("The progress saved in this browser isn’t a To 1520 save.");return migrate(o,now());}
 function saveLocal(){if(!S)return;S.lastSeen=now();try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
 function saveAll(){saveLocal();scheduleCloud();}
 function cloudBody(){var js=JSON.stringify(S);if(js.length>220000){var c=JSON.parse(js);c.spots=c.spots.filter(function(s){return s.kind!=="ai";}).slice(-200);c.ai=[];js=JSON.stringify(c);}return{json:js,answered:S.stats.answered,savedAt:now(),v:1};}
@@ -4567,7 +4730,7 @@ function shareCard(){
   var g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#081124");g.addColorStop(1,"#050A14");x.fillStyle=g;x.fillRect(0,0,W,H);
   var cv=ST.cv;if(cv&&cv.width>10&&cv.height>10){var sc=Math.min(1000/cv.width,760/cv.height),dw=cv.width*sc,dh=cv.height*sc;x.globalAlpha=0.95;x.drawImage(cv,(W-dw)/2,150+(760-dh)/2,dw,dh);x.globalAlpha=1;}
   var disp='"Chakra Petch","Arial Narrow",sans-serif',mono='"JetBrains Mono",Menlo,monospace';
-  x.fillStyle="#E6EEFA";x.font="700 44px "+disp;x.textAlign="left";x.fillText("GRIND TO 1520",60,96);
+  x.fillStyle="#E6EEFA";x.font="700 44px "+disp;x.textAlign="left";x.fillText("TO 1520",60,96);
   x.fillStyle="#A6B5CC";x.font="600 26px "+disp;x.textAlign="right";x.fillText(formOf(S).name.toUpperCase()+" · STAGE "+S.evo.stage+" "+EVO[S.evo.stage].name.toUpperCase(),W-60,96);
   x.textAlign="left";x.fillStyle=acc;x.font="700 150px "+mono;x.fillText(String(p.total),60,1080);
   x.fillStyle=rk.color;x.font="700 44px "+disp;x.fillText(rk.label.toUpperCase(),64,1140);
@@ -4577,9 +4740,9 @@ function shareCard(){
   x.fillStyle="#4A5B74";x.font="400 20px "+disp;x.textAlign="right";x.fillText("A game estimate, not an official score.",W-60,1326);
   c.toBlob(function(blob){
     if(!blob){toast("Couldn’t make the card","Try again in a moment.","pink");return;}
-    var fallback=function(){var url=URL.createObjectURL(blob);modal('<h2>Share card</h2><img src="'+url+'" alt="Your Grind to 1520 card: projected '+p.total+", "+esc(rk.label)+'" style="width:100%;border-radius:12px;border:1px solid var(--wire)"><p class="pnote" style="margin-top:8px">Right-click or long-press the image to save it.</p><div class="mfoot"><button type="button" class="btn primary" data-act="modalClose">Done</button></div>');};
+    var fallback=function(){var url=URL.createObjectURL(blob);modal('<h2>Share card</h2><img src="'+url+'" alt="Your To 1520 card: projected '+p.total+", "+esc(rk.label)+'" style="width:100%;border-radius:12px;border:1px solid var(--wire)"><p class="pnote" style="margin-top:8px">Right-click or long-press the image to save it.</p><div class="mfoot"><button type="button" class="btn primary" data-act="modalClose">Done</button></div>');};
     if(!CAP.dl){fallback();return;}
-    CAP.dl.save({filename:"grind-to-1520-"+p.total+".png",data:blob}).then(function(){toast("Card saved","Share it anywhere.","mint");}).catch(function(e){var cd=e&&e.code;if(cd==="declined")return;fallback();});
+    CAP.dl.save({filename:"to-1520-"+p.total+".png",data:blob}).then(function(){toast("Card saved","Share it anywhere.","mint");}).catch(function(e){var cd=e&&e.code;if(cd==="declined")return;fallback();});
   },"image/png");
 }
 
@@ -4598,9 +4761,16 @@ function bump(el){if(!el||reduced)return;el.classList.remove("bump");void el.off
 
 /* ---------- views ---------- */
 function lockLine(f){var st=UNLOCK[f],E=EVO[st],need=E.at-conn(S);return need>0?"Opens at "+E.name+": "+need+" more skill node"+(need===1?"":"s"):"Opens at stage "+st+" · "+E.name;}
+/* Where you are, so a page can send you back to it. */
+function here(){return{tab:UI.tab,place:UI.place,zone:UI.zone,wv:UI.wv,cp:UI.cityPage};}
+function pushBack(){var h=here(),top=UI.back[UI.back.length-1];UI.keepBack=true;if(top&&JSON.stringify(top)===JSON.stringify(h))return;UI.back.push(h);if(UI.back.length>12)UI.back.shift();}
+function goBack(){var b=UI.back.pop();hideTip(true);ctipHide(true);if(!b||b.tab===UI.tab&&b.place===UI.place&&b.zone===UI.zone){if(!b){UI.tab="network";applyViews();return;}}
+  UI.zone=b.zone||null;UI.zoneGo=true;UI.place=b.place||null;UI.cityPage=b.cp||"hall";if(b.wv)UI.wv=b.wv;UI.tab=b.tab||"network";UI.zoneGo=false;applyViews();if(isMobile())window.scrollTo(0,0);}
 function setTab(v){
   var gate=TAB_GATE[v];if(gate&&!isOpen(S,gate)){toast(UNLOCK_TXT[gate][0]+" is locked",lockLine(gate)+". "+UNLOCK_TXT[gate][1],"",null,4500);return;}
   if(!isMobile()&&v===UI.tab&&v!=="network")v="network";
+  /* A tap on the places bar starts fresh; a link inside a page keeps the way back. */
+  if(v!=="place"&&!UI.keepBack)UI.back=[];UI.keepBack=false;
   if(v==="arena"&&!S.visArena){S.visArena=true;saveLocal();}
   if(v==="zones"&&UI.tab!=="zones"&&!UI.zoneGo)UI.zone=null;UI.zoneGo=false;
   if(v==="city"&&UI.tab!=="city"){if(!UI.wv||UI.wv==="exp"&&!S.exp)UI.wv=S.exp?"exp":"city";if(cityBuilt(S)&&restoreReady(S,"harbor"))UI.wv="city";if(S.settings.league)setTimeout(lgFetch,50);}
@@ -4616,26 +4786,29 @@ function applyViews(){
 }
 function renderPanel(reset){
   var v=UI.tab,p=$("panel");if(v==="network"||$("panelWrap").hidden)return;
-  var st=reset?0:p.scrollTop,h=v==="zones"?zonesHTML():v==="evolution"?evolutionHTML():v==="city"?(UI.wv==="exp"&&S.exp?expPanelHTML():cityPanelHTML()):v==="reviews"?reviewsHTML():v==="arena"?arenaHTML():ascendHTML();
-  p.innerHTML=h;p.scrollTop=st;if(v==="evolution"||v==="zones")updateAfford();if(v==="city")cityAfford();
+  var st=reset?0:p.scrollTop,h=v==="zones"?zonesHTML():v==="evolution"?evolutionHTML():v==="city"?(UI.wv==="exp"&&S.exp?expPanelHTML():cityPanelHTML()):v==="place"?placeHTML(UI.place):v==="reviews"?reviewsHTML():v==="arena"?arenaHTML():ascendHTML();
+  p.innerHTML=h;p.scrollTop=st;if(v==="evolution"||v==="zones")updateAfford();if(v==="city"||v==="place")cityAfford();
 }
 function navInfo(){
   var t=now(),f=formOf(S),st=S.evo.stage,nx=EVO[st+1],ig=insightGain(S),afford=affordCount(),R=ensureReview(S,t),ar=isOpen(S,"arcade"),as=isOpen(S,"ascend"),cy=isOpen(S,"city"),A=advShown()?S.adv:null,zb=zonesBadge(),left=R.n&&!R.done?R.n-R.p:0;
-  var eng=!A?"Questions and today’s plan":A.claimed?"Adventure done · free play":A.done?"Adventure done · claim your chest":!A.started?"Today’s Adventure is ready":A.paused?"Adventure paused · free play":"Adventure · step "+(A.i+1)+" of "+A.steps.length;
-  return[
-   ["network","Engine",eng,A&&A.done&&!A.claimed?"•":0,FORM_ICON[f.id],false,"Study"],
+  var eng=S.round&&!S.round.done?"Round at the "+CITY_BY[S.round.id].name+" · "+S.round.a+" of "+S.round.n:!A?"Questions and today’s plan":A.claimed?"Adventure done · free play":A.done?"Adventure done · claim your chest":!A.started?"Today’s Adventure is ready":A.paused?"Adventure paused · free play":"Adventure · step "+(A.i+1)+" of "+A.steps.length;
+  var town=(S.settings.view||"engine")!=="engine"&&cityBuilt(S),pr=projReady(S,"square")&&cityBuilt(S)&&S.city.coins>=PROJECT_BY.square.coins,ta=oppAfford(S);
+  var rows=[
+   ["network",town?"Town":"Engine",eng,A&&A.done&&!A.claimed?"•":0,town?"city":FORM_ICON[f.id],false,"Town"],
+   ["city","Town Hall",!cy?lockLine("city"):S.unit.ready&&unitNext(S)?"Unit "+S.unit.u+" complete · Advance":pr?"The Town Square can be restored":restoreReady(S,"harbor")&&cityBuilt(S)?"The Harbor Bridge can be restored":ta?ta+" tool"+(ta===1?"":"s")+" you can afford":"Stage "+unitKey(S)+" · "+stageProgress().met+" of "+stageProgress().n+" goals",cy&&S.unit.ready&&unitNext(S)?"!":cy&&(pr||restoreReady(S,"harbor")&&cityBuilt(S))?"!":cy&&(ta||cityAffordCount())?"•":0,"hall",!cy,"Town"],
    ["reviews","Progress",left?"Daily review "+R.p+" of "+R.n:"Learning, reviews & skills",left,"reviews",false,"Study"],
-   ["arena","Arena",!ar?lockLine("arcade"):UI.arc?"Arcade run in progress":S.g?"Gauntlet in progress":S.boss?"Boss fight in progress":isOpen(S,"gaunt")?"Arcade, bosses & Gauntlet":isOpen(S,"arena")?"Arcade & bosses":"The Arcade is open",ar&&!S.visArena?"NEW":0,"arena",!ar,"Challenge"],
+   ["arena","Arena",!ar?lockLine("arcade"):UI.arc?"Arcade run in progress":S.g?"Gauntlet in progress":S.boss?"Boss fight in progress":isOpen(S,"gaunt")?"Arcade, bosses & Gauntlet":isOpen(S,"arena")?"Arcade & bosses":"The Arcade is open",ar&&!S.visArena?"NEW":0,"arena",!ar,"Study"],
    ["evolution","Upgrades",afford?afford+" you can afford":nx?"Next evolution: "+nx.name:"Spend sparks",afford?"•":0,"evolution",false,"Build"],
    ["zones","Zones",zTiers(S)+" of 40 tiers"+(talPts(S)>0?" · "+talPts(S)+" talent pts":""),zb==="!"?"!":zb?"•":0,"zones",false,"Build"],
-   ["city",S.unit.u>=2?"World":"City",!cy?lockLine("city"):S.unit.ready&&unitNext(S)?"Unit "+S.unit.u+" complete · Advance":!cityBuilt(S)&&S.unit.u===1?"Found your city":restoreReady(S,"harbor")&&cityBuilt(S)?"The Harbor Bridge can be restored":"Stage "+unitKey(S)+" · "+stageProgress().met+" of "+stageProgress().n+" goals",cy&&S.unit.ready&&unitNext(S)?"!":cy&&!cityBuilt(S)?"NEW":cy&&restoreReady(S,"harbor")&&cityBuilt(S)?"!":cy&&cityAffordCount()?"•":0,S.unit.u>=2?"compass":"city",!cy,"Build"],
    ["ascend","Ascend",!as?lockLine("ascend"):ig>0&&!ascendBlock(S)?"+"+fmt(ig)+" Insight ready":"Higher scores. New possibilities.",0,"ascend",!as,"Build"]];
+  /* Only the next locked place shows, so the bar names one goal instead of the whole road. */
+  var shownLock=false;return rows.filter(function(r){if(!r[5])return true;if(shownLock)return false;shownLock=true;return true;});
 }
 function renderNav(force){
   var info=navInfo(),sig=UI.tab+JSON.stringify(info);if(!force&&sig===UI.navSig)return;UI.navSig=sig;var h="",grp="";
   info.forEach(function(t,k){if(t[6]!==grp){if(grp)h+="</div>";grp=t[6];h+='<div class="dn-grp" role="group" aria-label="'+grp+'">';}
     var badge=t[3]==="•"?'<span class="dot mini" title="Something to spend on"></span>':t[3]?'<span class="dot'+(t[0]==="reviews"?" pink":"")+'">'+t[3]+"</span>":"";
-    h+='<button type="button" class="dn-tab'+(t[5]?" locked":"")+(k&&info[k-1][6]!==t[6]?" g1":"")+'" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(UI.tab===t[0])+'"'+(t[5]?' aria-label="'+esc(t[1]+", locked. "+t[2])+'"':"")+">"+(t[5]?ICON.lock:ICON[t[4]])+'<span class="t"><b>'+esc(t[1])+badge+"</b><small>"+esc(t[2])+"</small></span></button>";});
+    h+='<button type="button" class="dn-tab'+(t[5]?" locked":"")+(k&&info[k-1][6]!==t[6]?" g1":"")+'" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(UI.tab===t[0]||UI.tab==="place"&&t[0]==="network")+'"'+(t[5]?' aria-label="'+esc(t[1]+", locked. "+t[2])+'"':"")+">"+(t[5]?ICON.lock:ICON[t[4]])+'<span class="t"><b>'+esc(t[1])+badge+"</b><small>"+esc(t[2])+"</small></span></button>";});
   $("decknav").innerHTML=h+(grp?"</div>":"");
 }
 
@@ -5121,15 +5294,17 @@ function setSumHTML(s){
 function conHeadHTML(){
   var f=formOf(S);
   if(S.boss)return'<span class="ico" style="background:rgba(255,90,79,.14);color:var(--alert)">'+ICON.arena+'</span><h2 style="color:var(--alert)">Boss fight</h2><span class="q"><b>Tier '+S.boss.tier+"</b></span>";
+  var R=S.round;if(R){var rp="";for(var ri=0;ri<R.n;ri++)rp+='<i class="'+(ri<R.a?(ri<R.c?"y":"n"):ri===R.a&&!(Q&&Q.answered)?"c":"")+'"></i>';return'<span class="ico">'+ICON.round+"</span><h2>Round · "+esc(CITY_BY[R.id].name)+'</h2><span class="q"><b>'+(R.done?"Round done":Math.min(R.a+1,R.n)+" / "+R.n)+'</b><span class="pips10 five" aria-hidden="true">'+rp+"</span></span>";}
   var sum=UI.setSum,st=S.set||{n:0,log:""},log=sum?(sum.log||""):(st.log||""),n=sum?SET_N:(Q&&Q.answered?st.n:st.n+1),pips="";
   for(var i=0;i<SET_N;i++){var ch=log.charAt(i);pips+='<i class="'+(ch==="1"?"y":ch==="0"?"n":(!sum&&i===log.length&&!(Q&&Q.answered))?"c":"")+'"></i>';}
   return'<span class="ico">'+ICON[FORM_ICON[f.id]]+"</span><h2>"+esc(f.title)+'</h2><span class="q"><b>'+(UI.showSet?"Set complete":"Question "+clamp(n,1,SET_N)+" / "+SET_N)+'</b><span class="pips10" aria-hidden="true">'+pips+"</span></span>";
 }
 function conFootHTML(){
+  if(UI.showRound&&S.round)return'<button type="button" class="btn primary big" data-act="roundBack" id="nextBtn">Back to the '+esc(CITY_BY[S.round.id].name)+ICON.arrow+'</button><span class="hint">Enter</span>';
   if(UI.showSet)return'<button type="button" class="btn primary big" data-act="nextSet" id="nextBtn">Next set'+ICON.arrow+'</button><span class="hint">Enter</span>';
   if(!cur||!Q)return"";
   if(!Q.answered)return'<button type="button" class="btn primary big" data-act="check" id="checkBtn"'+(canCheck()?"":" disabled")+">"+esc(formOf(S).verb)+ICON.arrow+"</button>"+(DOMAINS[cur.d].sec==="m"?'<a class="desmos" href="https://www.desmos.com/calculator" target="_blank" rel="noopener">Desmos ↗</a>':"")+'<span class="hint">'+(cur.spr?"Enter to check":"A–D · Enter")+"</span>";
-  return'<button type="button" class="btn primary big" data-act="next" id="nextBtn">'+(UI.setSum?"Set results":"Next question")+ICON.arrow+'</button><span class="hint">Enter</span>';
+  return'<button type="button" class="btn primary big" data-act="next" id="nextBtn">'+(S.round&&S.round.done?"Round results":UI.setSum?"Set results":"Next question")+ICON.arrow+'</button><span class="hint">Enter</span>';
 }
 var lastHp=100;
 function renderConsole(){
@@ -5137,14 +5312,15 @@ function renderConsole(){
   if(S.g||UI.gResult){renderGauntConsole();return;}
   $("conTools").hidden=false;$("conHead").innerHTML=conHeadHTML();
   var h="";if(S.boss){h+=bossBannerHTML();if(S.boss.mech)h+=bossMechHTML(S.boss);}
-  if(UI.showSet&&UI.setSum)h+=setSumHTML(UI.setSum);
+  if(UI.showRound&&S.round)h+=roundSumHTML(S.round);
+  else if(UI.showSet&&UI.setSum)h+=setSumHTML(UI.setSum);
   else if(cur){
     var pace=PACE[DOMAINS[cur.d].sec]*1000;
     h+=nodeStripHTML(cur)+zoneStripHTML(cur.d)+'<article class="sheet" id="sheet" style="--dc:'+DOMAINS[cur.d].color+'"><div class="dchip">'+esc(DOMAINS[cur.d].name)+"<small>"+esc(cur.sk)+"</small></div>"+metaHTML(cur,'<span class="qtimer" id="qTimer" title="PSAT pace: about '+fmtTime(pace)+' per question">0:00 / '+fmtTime(pace)+"</span>")+qtoolsHTML(cur)+bodyHTML(cur)+(cur.spr?sprHTML(cur,Q):choicesHTML(cur,Q,""))+(Q.answered?feedbackHTML(cur,Q):callHTML())+"</article>";
   }
   $("conBody").innerHTML=h;$("conFoot").innerHTML=conFootHTML();renderAdv();
   var ob=$("drawBar");if(ob)ob.remove();
-  if(cur&&Q&&!UI.showSet&&(UI.draw||(Q.ink&&Q.ink.length)))mountDraw();
+  if(cur&&Q&&!UI.showSet&&!UI.showRound&&(UI.draw||(Q.ink&&Q.ink.length)))mountDraw();
   if(S.boss){var B=S.boss,pct=100*B.hp/B.max;requestAnimationFrame(function(){var f=$("hpFill");if(f)f.style.width=pct.toFixed(1)+"%";});lastHp=pct;}else lastHp=100;
   if(cur&&cur.spr&&!Q.answered&&!UI.showSet){var inp=$("sprIn");inp.addEventListener("input",function(){Q.spr=inp.value;var er=$("sprErr");if(er)er.hidden=true;var cb=$("checkBtn");if(cb)cb.disabled=!canCheck();});
     try{if(window.matchMedia("(pointer:fine)").matches)inp.focus({preventScroll:true});}catch(e){}}
@@ -5158,7 +5334,7 @@ function refreshChoices(){
 function nextQ(forced){
   if(CAP.askCtl){try{CAP.askCtl.abort();}catch(e){}CAP.askCtl=null;}if(COACH&&COACH.step===1)coachHide();
   if(UI.showSet)leaveSet();
-  UI.setSum=null;UI.showSet=false;UI.draw=false;UI.drawMode="pen";
+  UI.setSum=null;UI.showSet=false;UI.showRound=false;UI.draw=false;UI.drawMode="pen";
   var t=now();if(forced&&forced.stem)cur=forced;else if(S.boss)cur=bossQuestion(S,rnd,recent);else cur=nextQuestion(S,t,rnd,recent);
   if(!cur){S.focus="mix";cur=nextQuestion(S,t,rnd,recent);}
   if(cur.daily){var R=ensureReview(S,t);cur.src="Daily review · "+Math.min(R.n,R.p+1)+" of "+R.n;}
@@ -5185,6 +5361,7 @@ function check(){
   if(res.evolved&&res.evolved.length){stageEvolve();SND.evolve();vib([30,40,30,40,120]);setTimeout(maybeEvolveModal,reduced?60:1100);}
   var nb=$("nextBtn");if(nb)try{nb.focus({preventScroll:true});}catch(e){}
   showFeedback();
+  if(res.town&&(res.town.opps.length||res.town.proj.length))renderNav(true);
   if(res.adv&&res.adv.done){UI.advSig="";renderAdv();UI.railSig="";renderRail();renderNav(true);if(S.adv.done)advDoneNote();else if(res.adv.next&&advActLabel(res.adv.next))toast("Step done","Next: "+res.adv.next.t+".","mint",'<button type="button" class="btn primary sm" data-act="advDo">'+esc(advActLabel(res.adv.next))+"</button>",5200);SND.tone(1318.5,0.1,"triangle",0.04,0.1);}
   onbAfter(cur,ok);
 }
@@ -5218,7 +5395,7 @@ function promo(rk,score){
   SND.rank();vib([20,30,20,30,80]);
 }
 function report(){if(!Q||!Q.answered||Q.reported)return;revertAnswer(S,cur,Q.res);Q.reported=true;toast("Reported","That answer won’t count against you, and the question is out of your rotation.","mint");renderHUD();saveAll();nextQ();}
-function advance(){if(UI.showSet){nextQ();return;}if(Q&&Q.answered){if(UI.setSum){UI.showSet=true;renderConsole();var nb=$("nextBtn");if(nb)try{nb.focus({preventScroll:true});}catch(e){}$("conBody").scrollTop=0;return;}nextQ();}}
+function advance(){if(UI.showRound){roundBackA();return;}if(UI.showSet){nextQ();return;}if(Q&&Q.answered){if(S.round&&S.round.done){UI.showRound=true;renderConsole();var rb=$("nextBtn");if(rb)try{rb.focus({preventScroll:true});}catch(e){}$("conBody").scrollTop=0;return;}if(UI.setSum){UI.showSet=true;renderConsole();var nb=$("nextBtn");if(nb)try{nb.focus({preventScroll:true});}catch(e){}$("conBody").scrollTop=0;return;}nextQ();}}
 
 /* ---------- Claude: explain + fresh packs ---------- */
 function qPlain(q,withKey,resp,ok){
@@ -5492,7 +5669,7 @@ function zExpHTML(d){var R=zExpReq(S,d),Zd=ZONES[d],dom=DOMAINS[d];
   h+="</ul>"+(R.ok?'<button type="button" class="buy wide" data-act="zExpand" data-v="'+d+'" data-cost="'+R.cost+'" aria-label="Expand for '+fmt(R.cost)+' sparks">'+ICON.spark+"<span>Expand · "+fmt(R.cost)+'</span><i class="fill"></i></button>':'<p class="pnote">Keep practicing '+esc(dom.name)+": every node you light counts toward this.</p>");
   return h+'<p class="pnote">Each tier adds 50% to this hub and 10% to '+esc(dom.short)+" sparks, and opens the next row of the tree.</p></div>";}
 function zoneDetailHTML(d){var Zd=ZONES[d],dom=DOMAINS[d],t=zT(S,d),col=dom.color,G=ARC[Zd.game];
-  var h='<div class="zdet" style="--dc:'+col+'"><div class="glass-h"><div><button type="button" class="linkbtn zback" data-act="zoneOpen" data-v="">‹ All zones</button><h2 style="color:'+col+'">'+esc(Zd.name)+"</h2><p>"+esc(dom.name)+" · tier "+t+": "+esc(Zd.tiers[t-1])+'</p></div><button type="button" class="xbtn" data-act="tab" data-v="network" aria-label="Close panel">'+ICON.x+"</button></div>";
+  var h='<div class="zdet" style="--dc:'+col+'"><div class="glass-h"><div><button type="button" class="linkbtn zback" data-act="zoneOpen" data-v="">‹ All zones</button><h2 style="color:'+col+'">'+esc(Zd.name)+"</h2><p>"+esc(dom.name)+" · tier "+t+": "+esc(Zd.tiers[t-1])+'</p></div>'+backBtn()+"</div>";
   h+='<div class="zhero">'+zoneArt(d,t,true)+zPips(t)+"</div>";
   h+='<div class="sec"><div class="sec-h"><h3>'+esc(Zd.rule)+'</h3><small>this zone’s rule</small></div><p class="pnote">'+esc(Zd.line)+"</p>"+zMeterHTML(d)+"</div>";
   h+='<div class="sec"><div class="sec-h"><h3>Expansion</h3><small>tier '+t+" of 5</small></div>"+zExpHTML(d)+"</div>";
@@ -5509,7 +5686,8 @@ function zonesHTML(){
   h+='<div class="zgrid">'+DKEYS.map(zCardHTML).join("")+"</div>";
   h+='<div class="sec"><div class="sec-h"><h3>How zones grow</h3></div><p class="pnote">Tree upgrades cost sparks and reset when you Ascend or Advance, like pathways. Expansions and keystones are for good: expansions open as you light that domain’s skill nodes (tiers 4 and 5 also need a Bronze or Silver mastery medal there), and keystones cost talent points, one per player level.</p></div>';
   return h;}
-function zoneGo(d){if(!ZONES[d])return;UI.zone=d;if(UI.tab!=="zones")setTab("zones");else renderPanel(true);}
+/* Opening a zone from anywhere shows that zone, not the list. */
+function zoneGo(d){if(!ZONES[d])return;UI.zone=d;if(UI.tab!=="zones"){UI.zoneGo=true;setTab("zones");}else renderPanel(true);}
 function zBuyA(v,btn){var p=String(v).split(":");if(zBuy(S,p[0],p[1]))afterBuy(btn);}
 function zExpandA(d,btn){var t0=zT(S,d);if(!zExpand(S,d))return;var Zd=ZONES[d],t=zT(S,d);afterBuy(btn);SND.rank();vib([15,25,50]);
   toast(Zd.name+" · tier "+t,Zd.tiers[t-1]+". The hub earns more, "+DOMAINS[d].short+" pays more, and row "+t+" of the tree is open."+(t===5?" New title: "+Zd.title+".":""),"mint",null,5200);
@@ -6152,7 +6330,7 @@ function maybeSeasonEnd(){
   modal('<div class="evo-modal"><div class="evo-orb"></div><div class="stage-n">Season '+Z.n+" complete</div><h2>"+esc(Z.test)+'</h2><p>You started this season at <b>'+Z.p0+"</b> and finished at <b>"+si.p+"</b> ("+(si.gain>=0?"+":"")+si.gain+"). Your target was "+Z.target+". "+(si.p>=Z.target?"Target reached.":"The climb keeps going.")+'</p><div style="text-align:left"><label for="snReal">Got your real score? (optional)</label><input type="number" id="snReal" min="320" max="1520" step="10" placeholder="e.g. 1250"><p class="pnote" style="margin-top:6px">It becomes the baseline marker on your climb. Evolutions, relics, levels, and trophies carry into the next season.</p></div><div class="mfoot" style="justify-content:center"><button type="button" class="btn primary" data-act="seasonEnd">Start the next season</button><button type="button" class="btn line" data-act="seasonLater">Later</button></div></div>');
 }
 function showWhatsNew(){
-  modal('<h2>Your engine is online</h2><p>Grind to 1520 is now a game you grow. Everything you’ve done carried over: your scores, blind spots, levels, relics, and trophies.</p><ul><li><b>The engine</b> maps your score from 320 at the bottom to 1520 at the top. Each domain grows to its own height.</li><li><b>Skill nodes</b> light up as you get questions right. Your history already lit '+conn(S)+" of them.</li><li><b>Evolutions</b> are permanent spark bonuses. They also change your engine’s form.</li><li><b>Domain hubs</b> are new generators. Level them from the Upgrades tab or right on the engine.</li><li><b>Sets</b> of 10 questions end with a summary and a bonus.</li></ul><p style=\"font-size:13px\">New games now start at 320. Your save keeps its current ratings.</p><div class=\"mfoot\"><button type=\"button\" class=\"btn primary\" data-act=\"modalClose\">Show me</button></div>");
+  modal('<h2>Your engine is online</h2><p>To 1520 is now a game you grow. Everything you’ve done carried over: your scores, blind spots, levels, relics, and trophies.</p><ul><li><b>The engine</b> maps your score from 320 at the bottom to 1520 at the top. Each domain grows to its own height.</li><li><b>Skill nodes</b> light up as you get questions right. Your history already lit '+conn(S)+" of them.</li><li><b>Evolutions</b> are permanent spark bonuses. They also change your engine’s form.</li><li><b>Domain hubs</b> are new generators. Level them from the Upgrades tab or right on the engine.</li><li><b>Sets</b> of 10 questions end with a summary and a bonus.</li></ul><p style=\"font-size:13px\">New games now start at 320. Your save keeps its current ratings.</p><div class=\"mfoot\"><button type=\"button\" class=\"btn primary\" data-act=\"modalClose\">Show me</button></div>");
 }
 function showOffline(off,coff,xoff){var h="<h2>Welcome back</h2>";if(off&&off.gain>=1)h+="<p>While you were away for "+fmtDur(off.sec)+", your engine earned <b>+"+fmt(off.gain)+" sparks</b> at "+Math.round(off.pct*100)+"% speed"+(off.capped?" (capped at "+(hasPerk(S,"lucid")?16:8)+" hours)":"")+"."+(off.limited?" Offline earnings can’t pass what your answers earned on your last day of practice, so studying raises the ceiling.":"")+" It runs at full speed while you study.</p>";
   if(coff&&coff.gain>=1)h+="<p>"+esc(S.city.name)+" kept working too: <b>+"+fmt(coff.gain)+" coins</b> at "+Math.round(cityIdlePct(S)*100)+"% speed"+(coff.sec>12*3600?" (capped at 12 hours)":"")+".</p>";
@@ -6177,11 +6355,11 @@ function dockToggle(){var s=S.settings,hid=(s.dock||"right")==="hidden";if(hid)s
 /* ---------- Saving: automatic every 10 seconds, and by hand ---------- */
 function saveNow(){saveLocal();var cloud=!!CAP.ref;if(cloud)cloudPush(false);SND.tone(880,0.05,"triangle",0.03);
   toast("Saved",(cloud?"Saved in this browser and to your Claude account":"Saved on this computer")+" at "+new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"})+".","mint",null,2600);}
-function saveFile(){saveLocal();var name="grind-to-1520-save-"+dayKey(now())+".txt",blob=new Blob([exportCode()],{type:"text/plain"});
+function saveFile(){saveLocal();var name="to-1520-save-"+dayKey(now())+".txt",blob=new Blob([exportCode()],{type:"text/plain"});
   var plain=function(){var a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},1500);toast("Save file downloaded",name+". Load it any time from Settings.","mint",null,4200);};
   if(CAP.dl)CAP.dl.save({filename:name,data:blob}).then(function(){toast("Save file saved",name+". Load it any time from Settings.","mint",null,4200);}).catch(function(e){if(e&&e.code==="declined")return;plain();});else plain();}
 function loadFile(input){var f=input.files&&input.files[0];if(!f)return;var rd=new FileReader();
-  rd.onload=function(){try{var o=importCode(String(rd.result||""));closeModal();adopt(o,"Save file loaded.");scheduleCloud(1000);}catch(x){toast("That file didn’t work","Pick a Grind to 1520 save file. Its text starts with G1520:","pink");}};rd.readAsText(f);input.value="";}
+  rd.onload=function(){try{var o=importCode(String(rd.result||""));closeModal();adopt(o,"Save file loaded.");scheduleCloud(1000);}catch(x){toast("That file didn’t work","Pick a To 1520 save file. Its text starts with G1520:","pink");}};rd.readAsText(f);input.value="";}
 function exportCode(){return"G1520:"+btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
 function importCode(t){t=String(t||"").trim();if(t.indexOf("G1520:")===0)t=t.slice(6);var o=JSON.parse(decodeURIComponent(escape(atob(t))));if(!o||typeof o!=="object"||!o.r||!o.stats)throw new Error("bad");return o;}
 
@@ -6255,14 +6433,14 @@ function relicsHTML(){var found=Object.keys(S.relics).length,h='<div class="sec-
 
 /* ---------- The city: a living skyline where every skill is a building ---------- */
 var CT={cv:null,ctx:null,w:0,h:0,dpr:1,u:1,gy:0,cam:0,camTo:null,camMin:0,camMax:0,vis:[0,0],world:0,lots:[],dist:[],walk:[],cars:[],train:null,drag:null,pin:null,hover:null,lastIn:0,lastDraw:0,grow:{},fw:[],pops:[],blimp:null,onT:0,nextBlimp:0,newsAt:0,newsLast:"",stars:null,hills:null,far:null,clouds:null,t:0,railY:0,tourDir:1,sky:null,skyKey:"",hitLots:[],light:{x:0},sun:null,mapSig:"",tipKey:"",tipHide:0,tipW:0,tipH:0,hudSig:""};
-var CITY_LOTS={ii:["library","stats","detective","courthouse"],cs:["bookshop","studio","bridge"],eoi:["transit","newsroom","harbor"],sec:["gatehouse","clock"],center:["glib","hall","tower"],alg:["scale","cross","rail","zoning","grid"],adv:["mint","observatory","lab"],psda:["market","census","bank","weather","carnival","polling"],geo:["water","pyramid","lighthouse","ferris"],port:["launch"]};
+var CITY_LOTS={ii:["library","stats","detective","courthouse"],cs:["bookshop","studio","bridge"],eoi:["transit","newsroom","harbor"],sec:["gatehouse","clock"],center:["glib","hall","square","tower"],alg:["scale","cross","rail","zoning","grid"],adv:["mint","observatory","lab"],psda:["market","census","bank","weather","carnival","polling"],geo:["water","pyramid","lighthouse","ferris"],port:["launch"]};
 var CITY_SEQ=["ii","cs","eoi","sec","center","alg","adv","psda","geo","port"];
 /* Lot widths for the civic lots, which are not skill buildings. */
-var CITY_XW={glib:112,hall:100,tower:72,launch:96,harbor:240};
+var CITY_XW={glib:112,hall:100,tower:72,launch:96,harbor:240,square:150};
 /* Height of each style at level 1, and what each level adds (before the scale factor). */
 var CITY_H={shop:[30,10],library:[36,9],tower:[74,40],detective:[54,15],courthouse:[42,10],studio:[60,22],bridge:[84,12],transit:[38,9],newsroom:[62,20],gate:[36,8],clock:[84,18],factory:[38,10],crossroads:[26,6],railway:[34,7],zoning:[36,10],grid:[62,14],mint:[42,12],observatory:[50,14],lab:[54,16],market:[24,6],census:[46,16],bank:[50,18],weather:[52,16],carnival:[44,10],polling:[36,10],water:[62,14],pyramid:[42,16],lighthouse:[96,22],ferris:[74,18]};
 /* The city shows on the City tab, and on the main screen when the player picks it. */
-function worldView(){if(!S)return"engine";var v;if(UI.tab==="city")v=UI.wv==="exp"?"map":S.settings.view==="3d"?"3d":"city";else if(UI.tab==="network"||!isMobile())v=S.settings.view||"engine";else return"none";if((v==="city"||v==="3d")&&!cityBuilt(S))v="engine";if(v==="map"&&!S.exp)v="engine";return v;}
+function worldView(){if(!S)return"engine";var v;if(UI.tab==="city")v=UI.wv==="exp"?"map":S.settings.view==="3d"?"3d":"city";else if(UI.tab==="place")v=S.settings.view==="3d"?"3d":"city";else if(UI.tab==="network"||!isMobile())v=S.settings.view||"engine";else return"none";if((v==="city"||v==="3d")&&!cityBuilt(S))v="engine";if(v==="map"&&!S.exp)v="engine";return v;}
 function cityShown(){return worldView()==="city";}
 function cityOn(){return!!CT.ctx&&CT.w>0&&cityShown()&&document.visibilityState==="visible";}
 function clampCam(x){return clamp(x,CT.camMin,Math.max(CT.camMin,CT.camMax));}
@@ -6412,7 +6590,7 @@ var CSTY={
    c.fillStyle=P.light;c.beginPath();c.arc(cx,cy,3*u,0,6.283);c.fill();}
 };
 function cityTopY(L){var u=CT.u,g=CT.gy,B=CITY_BY[L.id];if(B){var n=cityN(S,B.id);return g-cityH(B.st,Math.max(1,cityLv(n)))-(n?12*u:36*u);}
-  if(L.id==="hall")return g-90*u;if(L.id==="tower")return g-((S.city.w.tower||0)?towerH()+36*u:52*u);if(L.id==="glib")return g-((S.city.w.library||0)?glibH()+22*u:52*u);if(L.id==="launch")return g-((S.city.w.launch||0)?140*u:52*u);if(L.id==="harbor")return g-90*u;return g-60*u;}
+  if(L.id==="hall")return g-90*u;if(L.id==="tower")return g-((S.city.w.tower||0)?towerH()+36*u:52*u);if(L.id==="glib")return g-((S.city.w.library||0)?glibH()+22*u:52*u);if(L.id==="launch")return g-((S.city.w.launch||0)?140*u:52*u);if(L.id==="harbor")return g-90*u;if(L.id==="square")return g-70*u;return g-60*u;}
 function towerH(){var st=S.city.w.tower||0,p=proj(S).total;return st?(70+250*(p-320)/1200)*(0.55+0.15*st)*CT.u:46*CT.u;}
 function drawLot(c,L,sx,P){
   var gy=CT.gy,u=CT.u;CT.hitLots.push({id:L.id,x0:sx,x1:sx+L.w,top:cityTopY(L)});
@@ -6421,6 +6599,7 @@ function drawLot(c,L,sx,P){
   if(L.id==="glib"){drawGLib(c,sx,gy,L.w,P);return;}
   if(L.id==="launch"){drawLaunch(c,sx,gy,L.w,P);return;}
   if(L.id==="harbor"){drawHarbor(c,sx,gy,L.w,P,restoreDone(S,"harbor"),restoreReady(S,"harbor"));return;}
+  if(L.id==="square"){drawSquare(c,sx,gy,L.w,P,projDone(S,"square"),projReady(S,"square"));return;}
   var B=CITY_BY[L.id],n=cityN(S,B.id),lv=cityLv(n),col=DOMAINS[B.d].color,sd=hash2(L.id.length*97,L.id.charCodeAt(0)*131),Gr=CT.grow[B.id],H;
   if(!lv){c.globalAlpha=0.13;CSTY[B.st](c,sx,gy,L.w,cityH(B.st,1),1,P,col,sd);c.globalAlpha=1;
     c.strokeStyle=hexA(col,0.5);c.setLineDash([3,3]);c.lineWidth=1;c.strokeRect(sx+2*u,gy-cityH(B.st,1),L.w-4*u,cityH(B.st,1));c.setLineDash([]);
@@ -6555,21 +6734,21 @@ function syncView(){
   if(mw.hidden===mo){mw.hidden=!mo;if(mo){MT.lastDraw=0;mapLayout();}else mtipHide();}else if(mo&&MT.cv)mapFit();
   if(w3&&ww.hidden){ww.hidden=false;w3Show();}else if(w3&&W3.ready)w3Offset();
   var b=cityBuilt(S)||!!S.exp;vs.hidden=!b;document.body.setAttribute("data-city",b?"1":"0");
-  if(b){var f=formOf(S),opts=[["engine",ICON[FORM_ICON[f.id]],"Engine"]];if(cityBuilt(S)){opts.push(["city",ICON.city,"City"]);opts.push(["3d",ICON.cube,"3D"]);}if(S.exp)opts.push(["map",ICON.compass,"Map"]);var cur=on?"city":mo?"map":w3?"3d":"engine",sig=f.id+cur+opts.length;
-    if(vs.dataset.sig!==sig){vs.dataset.sig=sig;vs.innerHTML=opts.map(function(x){return'<button type="button" data-act="view" data-v="'+x[0]+'" aria-pressed="'+(x[0]===cur)+'" aria-label="'+(x[0]==="3d"?"Walk your city in 3D":x[2])+'">'+x[1]+"<span>"+x[2]+"</span></button>";}).join("");}}
+  if(b){var f=formOf(S),opts=[["engine",ICON[FORM_ICON[f.id]],"Engine"]];if(cityBuilt(S)){opts.push(["city",ICON.city,"Town"]);opts.push(["3d",ICON.cube,"3D"]);}if(S.exp)opts.push(["map",ICON.compass,"Map"]);var cur=on?"city":mo?"map":w3?"3d":"engine",sig=f.id+cur+opts.length;
+    if(vs.dataset.sig!==sig){vs.dataset.sig=sig;vs.innerHTML=opts.map(function(x){return'<button type="button" data-act="view" data-v="'+x[0]+'" aria-pressed="'+(x[0]===cur)+'" aria-label="'+(x[0]==="3d"?"Walk your town in 3D":x[2])+'">'+x[1]+"<span>"+x[2]+"</span></button>";}).join("");}}
 }
 /* The minimap: one bar per lot, colored by district, with the camera's window on top. */
 function cityMapBuild(){
-  var el=$("cityMapIn");if(!el||!CT.world||!cityBuilt(S))return;var sig=CT.world+"|"+CT.lots.map(function(L){return CITY_BY[L.id]?cityLv(cityN(S,L.id)):L.id==="harbor"?(restoreDone(S,"harbor")?"h":"b"):(S.city.w[L.id==="glib"?"library":L.id]||0);}).join("");if(sig===CT.mapSig)return;CT.mapSig=sig;
+  var el=$("cityMapIn");if(!el||!CT.world||!cityBuilt(S))return;var sig=CT.world+"|"+CT.lots.map(function(L){return CITY_BY[L.id]?cityLv(cityN(S,L.id)):L.id==="harbor"?(restoreDone(S,"harbor")?"h":"b"):L.id==="square"?(projDone(S,"square")?"s":"d"):(S.city.w[L.id==="glib"?"library":L.id]||0);}).join("");if(sig===CT.mapSig)return;CT.mapSig=sig;
   var W=CT.world,h="";
   CT.dist.forEach(function(D){var col=D.d==="center"||D.d==="port"?"#FFC933":DOMAINS[D.d].color;h+='<span class="cm-d" style="left:'+(100*D.x0/W).toFixed(2)+"%;width:"+(100*(D.x1-D.x0)/W).toFixed(2)+"%;--dc:"+col+'"></span>';});
-  CT.lots.forEach(function(L){var B=CITY_BY[L.id],lv=B?cityLv(cityN(S,L.id)):L.id==="hall"?3:L.id==="harbor"?(restoreDone(S,"harbor")?2:0):(S.city.w[L.id==="glib"?"library":L.id]||0),col=B?DOMAINS[B.d].color:L.id==="harbor"?"#5FB4FF":"#FFC933";
+  CT.lots.forEach(function(L){var B=CITY_BY[L.id],lv=B?cityLv(cityN(S,L.id)):L.id==="hall"?3:L.id==="harbor"?(restoreDone(S,"harbor")?2:0):L.id==="square"?(projDone(S,"square")?2:1):(S.city.w[L.id==="glib"?"library":L.id]||0),col=B?DOMAINS[B.d].color:L.id==="harbor"?"#5FB4FF":L.id==="square"?"#5DD6A8":"#FFC933";
     h+='<i class="cm-b'+(lv?"":" ghost")+'" style="left:'+(100*L.x/W).toFixed(2)+"%;width:"+(100*L.w/W).toFixed(2)+"%;height:"+(lv?26+lv*12:30)+"%;--dc:"+col+'"></i>';});
   el.innerHTML=h;
 }
 function cityHudRender(){
   if(!S||!cityBuilt(S))return;var el=$("cityHud");if(!el)return;
-  if(!el.firstChild)el.innerHTML='<button type="button" class="ch-name" data-act="tab" data-v="city" aria-label="Open your city"><b id="chName"></b><span class="ch-rank" id="chRank"></span></button><div class="ch-coins"><span class="coin-i">'+ICON.coin+'</span><b id="cityCoins" class="num">0</b><span id="cityRate" class="num"></span></div><div class="ch-sub" id="chSub"></div><div class="ch-buffs" id="chBuffs"></div>';
+  if(!el.firstChild)el.innerHTML='<button type="button" class="ch-name" data-act="tab" data-v="city" aria-label="Open the Town Hall"><b id="chName"></b><span class="ch-rank" id="chRank"></span></button><div class="ch-coins"><span class="coin-i">'+ICON.coin+'</span><b id="cityCoins" class="num">0</b><span id="cityRate" class="num"></span></div><div class="ch-sub" id="chSub"></div><div class="ch-buffs" id="chBuffs"></div>';
   var t=now(),pop=cityPop(S),rk=cityRank(pop),r=cityRate(S,t),act=(t-S.lastInteract)<activeWindow(S);
   setTxt("chName",S.city.name);setTxt("chRank",rk.name);setTxt("cityRate","+"+fmt(act?r:r*cityIdlePct(S))+"/s"+(act?"":" idle"));
   setTxt("chSub",fmtInt(pop)+" residents · sparks ×"+TRIM(Math.round(citySparkMult(S)*100)/100));setTxt("cpRate","+"+fmt(r)+"/s");
@@ -6644,18 +6823,20 @@ function ctipHTML(id){
   if(id==="hall"){var pop=cityPop(S),rk=cityRank(pop),pol=POLICIES.filter(function(p){return p.id===S.city.pol;})[0];
     return"<h5>"+esc(S.city.name)+' Town Hall</h5><div><b class="num">'+fmtInt(pop)+'</b> <span class="k">residents · '+esc(rk.name)+"</span></div>"+(rk.next?'<div class="k">'+fmtInt(rk.next[0]-pop)+" more to "+esc(rk.next[1])+"</div>":"")+'<div class="k">All sparks ×'+TRIM(Math.round(citySparkMult(S)*100)/100)+" from your residents</div>"+(pol?"<div>Policy: <b>"+esc(pol.name)+"</b></div>":pop>=POLICY_POP?"<div>No policy yet. Pass one at the Town Hall.</div>":'<div class="k">Policies open at '+POLICY_POP+" residents.</div>")+'<div class="row2"><button type="button" class="btn line sm" data-act="cityGo" data-v="hall">Town Hall</button></div>';}
   if(id==="harbor")return harborTipHTML();
+  if(id==="square")return squareTipHTML();
   var W=id==="glib"?WONDER_BY.library:id==="tower"||id==="launch"?WONDER_BY[id]:null;
   if(W){var st=S.city.w[W.id]||0,n=W.stages.length,pop2=cityPop(S);
     return'<h5 style="color:#FFC933">'+esc(W.name)+'</h5><div class="k">Wonder · stage '+st+" of "+n+"</div><div>"+esc(W.desc)+"</div>"+(W.id==="tower"?'<div class="k">Projected '+fmtInt(proj(S).total)+". Climb and it climbs.</div>":"")+(st>=n?'<div class="ok">Complete</div>':pop2<W.pop?'<div class="k">Needs '+fmtInt(W.pop)+" residents. You have "+fmtInt(pop2)+".</div>":'<div class="row2"><button type="button" class="buy cbuy" data-act="cityWonder" data-v="'+W.id+'" data-cost="'+W.stages[st]+'">'+ICON.coin+"<span>Stage "+(st+1)+" · "+fmt(W.stages[st])+'</span><i class="fill"></i></button></div>')+'<div class="row2"><button type="button" class="btn line sm" data-act="cityGo" data-v="wonders">All wonders</button></div>';}
   var B=CITY_BY[id];if(!B)return"";
   var d=B.d,col=DOMAINS[d].color,n2=cityN(S,id),lv=cityLv(n2),can=cityCanBuild(S,B),h='<h5 style="color:'+col+'">'+esc(B.name)+'</h5><div class="k">'+esc(DISTRICTS[d])+" · "+esc(B.sk)+'</div><div class="cq">“'+esc(B.line)+"”</div>";
-  if(!can){var c=skillCorrect(S,d,B.sk),nx=nextStarAt(c)||STAR_AT[0];return h+"<div>Light your first <b>"+esc(B.sk)+"</b> node to build here: "+(nx-c)+" more right answer"+(nx-c===1?"":"s")+'.</div><div class="row2"><button type="button" class="btn primary sm" data-act="focusSk" data-v="'+esc(d+"|"+B.sk)+'">Learn it</button></div>';}
+  if(!can){var c=skillCorrect(S,d,B.sk),nx=nextStarAt(c)||STAR_AT[0];return h+"<div>Light your first <b>"+esc(B.sk)+"</b> node to build here: "+(nx-c)+" more right answer"+(nx-c===1?"":"s")+'.</div><div class="row2"><button type="button" class="btn primary sm" data-act="place" data-v="'+id+'">Open</button><button type="button" class="btn line sm" data-act="roundGo" data-v="'+id+'">Work here</button></div>';}
   var each=CITY_CLASS[B.cls].r*cityLearn(S,B)*cityBMult(S,B,t)*cityGlobal(S,t),st2=skillStars(S,d,B.sk),sk=S.sk[d+"|"+B.sk],m=(sk&&sk.m)||0,bf=cityBuff(S,"boom",t),nl=CITY_LV_AT.filter(function(x){return x>n2;})[0];
   h+='<div><b class="num">'+n2+'</b> <span class="k">owned'+(lv?" · Lv "+lv:"")+"</span>"+(n2?' · <span class="num">+'+fmt(each*n2)+"/s</span>":' · <span class="num">+'+fmt(each)+"/s each</span>")+"</div>";
   h+='<div class="k">Learning ×'+TRIM(Math.round(cityLearn(S,B)*100)/100)+" · "+st2+" node"+(st2===1?"":"s")+(m?" · "+["","Bronze","Silver","Gold"][m]:"")+"</div>";
   if(bf&&bf.id===id)h+='<div class="ok">Building Boom ×10</div>';
   if(nl)h+='<div class="k">'+(nl-n2)+" more to Lv "+cityLv(nl)+"</div>";
-  return h+'<div class="row2"><button type="button" class="buy cbuy" data-act="cityBuy" data-v="'+id+'">'+ICON.coin+'<span class="bc"></span><i class="fill"></i></button><button type="button" class="btn line sm" data-act="focusSk" data-v="'+esc(d+"|"+B.sk)+'">Train</button></div>';
+  var tl=toolLv(S,id),op=oppOf(S,id);if(tl||op)h+='<div class="k">Tools '+toolPips(tl)+(op?' · <span class="ok">'+esc(TOOLS.names[op.lv])+" available</span>":tl>=TOOLS.max?" · all installed":"")+"</div>";
+  return h+'<div class="row2"><button type="button" class="btn primary sm" data-act="place" data-v="'+id+'">Open</button><button type="button" class="buy cbuy" data-act="cityBuy" data-v="'+id+'">'+ICON.coin+'<span class="bc"></span><i class="fill"></i></button></div>';
 }
 function ctipShow(id,pin){var el=$("ctip");if(!el)return;if(id!==CT.tipKey||pin){el.innerHTML=ctipHTML(id);CT.tipKey=id;el.hidden=false;el.style.visibility="hidden";CT.tipW=el.offsetWidth;CT.tipH=el.offsetHeight;cityAfford();}else el.hidden=false;
   el.style.visibility="";CT.pin=pin?{id:id}:null;CT.hover=id;clearTimeout(CT.tipHide);ctipPlace();}
@@ -6718,7 +6899,7 @@ function cityAfford(){if(!S)return;
     else cost=+b.getAttribute("data-cost");
     var can=coins>=cost;b.classList.toggle("can",can);b.disabled=!can;var f=b.querySelector(".fill");if(f)f.style.width=Math.min(100,100*coins/cost).toFixed(1)+"%";});}
 function cityAffordCount(){if(!cityBuilt(S))return 0;var c=S.city.coins,n=0;CITY_B.forEach(function(B){if(cityCanBuild(S,B)&&c>=cityCost(S,B.id,1))n++;});cityUpsOpen(S).forEach(function(u){if(c>=cityUpCost(S,u))n++;});return n;}
-function cityAfterBuy(){checkAch(S,now()).forEach(function(a){toast("Trophy · "+a[1],a[2]+" +2% sparks forever.","");});cityMapBuild();if(UI.tab==="city")renderPanel();if(CT.pin){var id=CT.pin.id;CT.tipKey="";ctipShow(id,true);}cityHudRender();advTick();renderNav();saveAll();}
+function cityAfterBuy(){checkAch(S,now()).forEach(function(a){toast("Trophy · "+a[1],a[2]+" +2% sparks forever.","");});cityMapBuild();if(UI.tab==="city"||UI.tab==="place")renderPanel();if(CT.pin){var id=CT.pin.id;CT.tipKey="";ctipShow(id,true);}cityHudRender();advTick();renderNav();saveAll();}
 function cityBuyA(id,btn){var B=CITY_BY[id],n=S.city.buyN==="max"?"max":(+S.city.buyN||1),r=cityBuy(S,id,n);if(!r)return;
   SND.buy();fxBuy(btn);vib(8);var L=cityLot(id);if(w3Shown())w3Built(id,r);
   if(L){if(r.lv>r.lv0){CT.grow[id]={t0:performance.now(),lv0:r.lv0};cityFireworks(L.x+L.w/2,CT.gy-cityH(B.st,r.lv)-30*CT.u,r.lv0?2:3);}
@@ -6731,9 +6912,9 @@ function cityUpA(id,btn){var u=CITY_UP_BY[id];if(!u||!cityBuyUp(S,id))return;SND
 function cityWonderA(id,btn){var W=WONDER_BY[id];if(!W||!wonderBuild(S,id))return;var st=S.city.w[id];SND.evolve();fxBuy(btn);vib([20,30,60]);var L=cityLot(id==="library"?"glib":id);if(L&&cityShown()){cityCenterOn(L);cityFireworks(L.x+L.w/2,cityTopY(L)-20*CT.u,5);}
   w3Fx(id==="library"?"glib":id,5);toast(W.name+" · stage "+st,st>=W.stages.length?"Complete. A wonder of the world.":W.desc,"acc",null,6000);cityAfterBuy();}
 function cityPolA(id){var P=POLICIES.filter(function(p){return p.id===id;})[0];if(!P||!policySet(S,id,now()))return;SND.rank();vib(12);toast("Policy passed · "+P.name,P.desc+" You can change it again in an hour.","mint",null,5000);var L=cityLot("hall");if(L)cityFireworks(L.x+L.w/2,CT.gy-110*CT.u,2);w3Fx("hall",2);cityAfterBuy();}
-function cityLook(id,noScroll){if(w3Shown()){w3Look(id);if(isMobile()&&!noScroll)window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});return;}var L=cityLot(id);if(!L||!cityShown())return;cityCenterOn(L);if(CITY_BY[id]||id==="hall"||id==="glib"||id==="tower"||id==="launch"||id==="harbor")ctipShow(id,true);if(isMobile()&&!noScroll)window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});}
-function cityGo(v){closeModal();if(!isOpen(S,"city")){setTab("city");return;}if(UI.tab!=="city")setTab("city");
-  var tgt=v==="hall"?"cwHall":v==="wonders"?"cwWonders":"cb-"+v;setTimeout(function(){var el=$(tgt);if(el){el.scrollIntoView({block:"center",behavior:reduced?"auto":"smooth"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}if(CITY_BY[v])cityLook(v,true);},80);}
+function cityLook(id,noScroll){if(w3Shown()){w3Look(id);if(isMobile()&&!noScroll)window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});return;}var L=cityLot(id);if(!L||!cityShown())return;cityCenterOn(L);if(CITY_BY[id]||id==="hall"||id==="glib"||id==="tower"||id==="launch"||id==="harbor"||id==="square")ctipShow(id,true);if(isMobile()&&!noScroll)window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});}
+function cityGo(v){closeModal();if(!isOpen(S,"city")){setTab("city");return;}UI.cityPage=v==="hall"||v==="projects"?"hall":"build";if(UI.tab!=="city")setTab("city");else renderPanel(true);
+  var tgt=v==="hall"?"cwHall":v==="projects"?"cwLand":v==="wonders"?"cwWonders":"cb-"+v;setTimeout(function(){var el=$(tgt);if(el){el.scrollIntoView({block:"center",behavior:reduced?"auto":"smooth"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}if(CITY_BY[v])cityLook(v,true);},80);}
 /* A thumbnail of each building at its current level, drawn by the same painter as the skyline. */
 function cityThumb(id,lv){var key=id+":"+lv;if(THUMB[key]!=null)return THUMB[key];var B=CITY_BY[id];if(!B)return"";
   var H0=CITY_H[B.st]||[40,10],hh=H0[0]+H0[1]*(lv-1),px=144,k=px/48,s=Math.min(42/(B.w+18),40/(hh+30)),cv=document.createElement("canvas");cv.width=cv.height=px;var c=cv.getContext("2d");
@@ -6745,8 +6926,8 @@ var CITY_SUB=[["cwLand","Landmarks"],["cwBuild","Build"],["cwUps","Upgrades"],["
 function cityAnswerPreview(){return cityAnswerPay(S,2,now(),"");}
 function cityFoundForm(src){
   return'<div class="cfound"><div class="chero" aria-hidden="true">'+["bookshop","library","clock","bank","lighthouse","ferris"].map(function(id,i){return'<img alt="" src="'+cityThumb(id,[2,3,2,3,2,3][i])+'">';}).join("")+"</div><p>Every skill you learn becomes a building: a Bookshop for Words in Context, a Bank for Percentages, a Lighthouse for trigonometry. Right answers pay coins, buildings earn more every second, and a bigger city lifts every spark you earn.</p>"+
-    '<label for="cityName'+src+'">Name your city</label><input type="text" id="cityName'+src+'" maxlength="24" autocomplete="off" spellcheck="false" value="'+esc(S.city.name||"Sparkton")+'" data-autofocus><div class="cnames">'+CITY_NAMES.map(function(n){return'<button type="button" class="pill" data-act="cityPickName" data-v="'+esc(n)+'">'+esc(n)+"</button>";}).join("")+'</div><div class="mfoot"><button type="button" class="btn primary" data-act="cityFound" data-v="'+src+'">Found it</button>'+(src==="M"?'<button type="button" class="btn line" data-act="modalClose">Later</button>':"")+"</div></div>";}
-function showFoundModal(force){if(!S||!isOpen(S,"city")||cityBuilt(S)||(S.city.asked&&!force))return;if(modalOpen()){queueModal(function(){showFoundModal(force);});return;}S.city.asked=true;saveLocal();modal("<h2>Found your city</h2>"+cityFoundForm("M"));}
+    '<label for="cityName'+src+'">Name your town</label><input type="text" id="cityName'+src+'" maxlength="24" autocomplete="off" spellcheck="false" value="'+esc(S.city.name||"Sparkton")+'" data-autofocus><div class="cnames">'+CITY_NAMES.map(function(n){return'<button type="button" class="pill" data-act="cityPickName" data-v="'+esc(n)+'">'+esc(n)+"</button>";}).join("")+'</div><div class="mfoot"><button type="button" class="btn primary" data-act="cityFound" data-v="'+src+'">Found it</button>'+(src==="M"?'<button type="button" class="btn line" data-act="modalClose">Later</button>':"")+"</div></div>";}
+function showFoundModal(force){if(!S||!isOpen(S,"city")||cityBuilt(S)||(S.city.asked&&!force))return;if(modalOpen()){queueModal(function(){showFoundModal(force);});return;}S.city.asked=true;saveLocal();modal("<h2>Name your town</h2>"+cityFoundForm("M"));}
 function queueModal(f){if(!modalOpen()){f();return;}var prev=UI.afterModal;UI.afterModal=prev?function(){prev();queueModal(f);}:f;}
 function cityFoundA(src){var el=$("cityName"+(src||"P")),r=cityFound(S,el?el.value:"",now());if(!r)return;
   S.settings.view="city";if(modalOpen())closeModal();advTick();checkAch(S,now()).forEach(function(a){setTimeout(function(){toast("Trophy · "+a[1],a[2]+" +2% sparks forever.","");},1600);});saveAll();
@@ -6754,30 +6935,38 @@ function cityFoundA(src){var el=$("cityName"+(src||"P")),r=cityFound(S,el?el.val
   setTimeout(function(){var hall=cityLot("hall");if(hall){cityCenterOn(hall);cityFireworks(hall.x+hall.w/2,CT.gy-110*CT.u,4);}if(r.free)CT.grow[r.free]={t0:performance.now()+500,lv0:0};CT.nextBlimp=CT.onT+40;},60);
   toast("Welcome to "+S.city.name,r.free?"Your "+CITY_BY[r.free].name+" is open for business. Right answers pay coins: build more.":"Light a skill node to open your first building. Right answers pay coins meanwhile.","mint",null,7000);}
 function cityRowHTML(B){var t=now(),n=cityN(S,B.id),lv=cityLv(n),can=cityCanBuild(S,B),each=can?CITY_CLASS[B.cls].r*cityLearn(S,B)*cityBMult(S,B,t)*cityGlobal(S,t):0,nl=CITY_LV_AT.filter(function(x){return x>n;})[0];
-  return'<div class="cbrow'+(can?"":" locked")+'" id="cb-'+B.id+'"><button type="button" class="cthumb" data-act="cityLook" data-v="'+B.id+'" aria-label="Show the '+esc(B.name)+' on the skyline"><img alt="" src="'+cityThumb(B.id,Math.max(1,lv))+'"></button><div class="cinfo"><div class="rt1">'+esc(B.name)+' <span class="owned">'+n+"</span>"+(lv?'<span class="rlv">Lv '+lv+"</span>":"")+'</div><div class="rdesc">'+(can?fmt(each)+"/s each"+(n?" · "+fmt(each*n)+"/s total":"")+(nl?" · Lv "+cityLv(nl)+" at "+nl:""):"Light a <b>"+esc(B.sk)+"</b> node to build.")+"</div></div>"+
+  return'<div class="cbrow'+(can?"":" locked")+'" id="cb-'+B.id+'"><button type="button" class="cthumb" data-act="place" data-v="'+B.id+'" aria-label="Open the '+esc(B.name)+'"><img alt="" src="'+cityThumb(B.id,Math.max(1,lv))+'"></button><div class="cinfo"><div class="rt1">'+esc(B.name)+' <span class="owned">'+n+"</span>"+(lv?'<span class="rlv">Lv '+lv+"</span>":"")+'</div><div class="rdesc">'+(can?fmt(each)+"/s each"+(n?" · "+fmt(each*n)+"/s total":"")+(nl?" · Lv "+cityLv(nl)+" at "+nl:""):"Light a <b>"+esc(B.sk)+"</b> node to build.")+"</div></div>"+
     (can?'<button type="button" class="buy cbuy" data-act="cityBuy" data-v="'+B.id+'">'+ICON.coin+'<span class="bc"></span><i class="fill"></i></button>':'<button type="button" class="btn line sm" data-act="focusSk" data-v="'+esc(B.d+"|"+B.sk)+'">Learn</button>')+"</div>";}
 function wonderCardHTML(W){var st=S.city.w[W.id]||0,n=W.stages.length,pop=cityPop(S),done=st>=n,c=done?0:W.stages[st];
   return'<div class="wcard'+(done?" done":"")+'"><div class="wc-h"><b>'+esc(W.name)+"</b><span>stage "+st+" / "+n+'</span></div><div class="wc-pips">'+W.stages.map(function(x,i){return'<i class="'+(i<st?"on":"")+'"></i>';}).join("")+"</div><p>"+esc(W.desc)+"</p>"+
     (done?'<div class="ok">Complete</div>':pop<W.pop?'<p class="pnote locknote">'+ICON.lock+"Needs "+fmtInt(W.pop)+" residents. You have "+fmtInt(pop)+".</p>":'<button type="button" class="buy cbuy" data-act="cityWonder" data-v="'+W.id+'" data-cost="'+c+'" aria-label="Build stage '+(st+1)+" of "+esc(W.name)+" for "+fmt(c)+' coins">'+ICON.coin+"<span>Stage "+(st+1)+" · "+fmt(c)+'</span><i class="fill"></i></button>')+"</div>";}
+var CITY_PAGES=[["hall","Plans"],["build","Build"],["stats","Stats"]];
+/* The Town Hall has three pages, so each one is about one thing: plans and projects, building, or the numbers. */
 function cityPanelHTML(){
-  if(!isOpen(S,"city"))return glassHead("City",esc(UNLOCK_TXT.city[1]))+worldMid()+'<p class="pnote locknote">'+ICON.lock+esc(lockLine("city"))+".</p>";
-  if(!cityBuilt(S))return glassHead("Found your city","Every skill you learn becomes a building.")+worldMid()+cityFoundForm("P");
-  var t=now(),C=S.city,pop=cityPop(S),rk=cityRank(pop),wait=policyWait(S,t),ups=cityUpsOpen(S),shown=UI.cityAllUps?ups:ups.slice(0,8);
-  var h='<div class="glass-h"><div>'+(UI.cityRename?'<div class="crn"><label class="sr" for="cityNameIn">City name</label><input type="text" id="cityNameIn" maxlength="24" autocomplete="off" spellcheck="false" value="'+esc(C.name)+'"><button type="button" class="btn primary sm" data-act="cityRename">Save</button></div>':"<h2>"+esc(C.name)+' <button type="button" class="ren" data-act="cityRenameOpen" aria-label="Rename your city">'+ICON.pencil+"</button></h2>")+"<p>"+esc(rk.name)+" · "+fmtInt(pop)+" residents"+(rk.next?" · "+fmtInt(rk.next[0]-pop)+" to "+esc(rk.next[1]):"")+'</p></div><button type="button" class="xbtn" data-act="tab" data-v="network" aria-label="Close panel">'+ICON.x+"</button></div>";
-  h+=worldMid();
-  h+='<div class="cp-top"><div class="cp-coins">'+ICON.coin+'<b id="cpCoins" class="num">'+fmt(C.coins)+'</b><span class="num" id="cpRate">+'+fmt(cityRate(S,t))+'/s</span></div><div class="cp-sub">A medium question pays <b>'+fmt(cityAnswerPreview())+"</b> coins · your residents add ×"+TRIM(Math.round(citySparkMult(S)*100)/100)+" to all sparks</div></div>";
-  h+='<div class="subnav">'+CITY_SUB.map(function(x){return'<button type="button" data-act="scrollTo" data-v="'+x[0]+'">'+x[1]+"</button>";}).join("")+"</div>";
-  h+='<div class="sec" id="cwLand" style="margin-top:6px"><div class="sec-h"><h3>Landmarks</h3><small>restored by what you learn</small></div>'+landmarkHTML("harbor")+"</div>";
-  h+='<div class="sec" id="cwBuild" style="margin-top:6px"><div class="sec-h"><h3>Build</h3><div class="seg" role="group" aria-label="How many to build">'+[1,10,"max"].map(function(n){return'<button type="button" data-act="cityN" data-v="'+n+'" aria-pressed="'+(String(C.buyN)===String(n))+'">'+(n==="max"?"Max":"×"+n)+"</button>";}).join("")+'</div></div><p class="pnote">A building opens when you light the first node of its skill. Each node after that, and each mastery tier, makes it earn more. Prices rise 15% per copy.</p>';
-  DKEYS.forEach(function(d){var list=CITY_B.filter(function(B){return B.d===d;}).sort(function(a,b){return a.cls-b.cls;}),dn=cityDistrictN(S,d);
-    h+='<div class="cdist" style="--dc:'+DOMAINS[d].color+'"><div class="cdist-h"><b>'+esc(DISTRICTS[d])+"</b><span>"+esc(DOMAINS[d].name)+" · "+dn+" built</span></div>"+list.map(cityRowHTML).join("")+"</div>";});
-  h+='</div><div class="sec" id="cwUps"><div class="sec-h"><h3>Upgrades</h3><small>'+Object.keys(C.up).length+" of "+CITY_UP.length+" bought</small></div>";
-  h+=ups.length?shown.map(function(u){var c=cityUpCost(S,u);return'<div class="row"><div><div class="rt1">'+esc(u.name)+'</div><div class="rdesc">'+esc(u.desc)+'</div></div><button type="button" class="buy cbuy" data-act="cityUp" data-v="'+esc(u.id)+'" data-cost="'+c+'" aria-label="Buy '+esc(u.name)+" for "+fmt(c)+' coins">'+ICON.coin+"<span>"+fmt(c)+'</span><i class="fill"></i></button></div>';}).join("")+(ups.length>8?'<button type="button" class="btn line sm" data-act="cityAllUps" style="margin-top:8px">'+(UI.cityAllUps?"Show fewer":"Show all "+ups.length)+"</button>":""):'<p class="pnote">New upgrades appear as your city grows: the first ×2 for a building comes when you own one.</p>';
-  h+='</div><div class="sec" id="cwWonders"><div class="sec-h"><h3>Wonders</h3><small>landmarks with big bonuses</small></div>'+WONDERS.map(wonderCardHTML).join("")+"</div>";
-  h+='<div class="sec" id="cwHall"><div class="sec-h"><h3>Town Hall</h3><small>'+(pop<POLICY_POP?"opens at "+POLICY_POP+" residents":wait?"next change in "+fmtDur(wait/1000):"one policy at a time")+'</small></div><div class="pols">'+POLICIES.map(function(p){var on=C.pol===p.id,dis=pop<POLICY_POP||on||wait>0;return'<button type="button" class="pol'+(on?" on":"")+'" data-act="cityPol" data-v="'+p.id+'"'+(dis?" disabled":"")+' aria-pressed="'+on+'"><b>'+esc(p.name)+"</b><span>"+esc(p.desc)+"</span>"+(on?"<em>In effect</em>":"")+"</button>";}).join("")+"</div></div>";
-  h+='<div class="sec" id="cwStats"><div class="sec-h"><h3>Stats</h3><small>founded '+esc(new Date(C.founded).toLocaleDateString())+"</small></div>"+[["Coins earned",fmt(C.life)],["Buildings built",fmtInt(C.built)],["Paydays from right answers",fmtInt(C.answers)],["Golden blimps caught",fmtInt(C.blimps)],["Best output",fmt(C.bestRate)+"/s"],["Spark bonus from residents","×"+TRIM(Math.round(citySparkMult(S)*100)/100)]].map(function(r){return'<div class="kv"><span>'+r[0]+"</span><b>"+r[1]+"</b></div>";}).join("");
-  h+='<div class="kv"><span>Main screen shows</span><div class="seg" role="group" aria-label="Main screen">'+[["engine","Engine"],["city","City"],["3d","3D"]].map(function(x){return'<button type="button" data-act="view" data-v="'+x[0]+'" aria-pressed="'+(S.settings.view===x[0])+'">'+x[1]+"</button>";}).join("")+"</div></div>";
-  h+='<div class="kv"><span>Sky</span><div class="seg" role="group" aria-label="Sky">'+[["auto","Real time"],["day","Day"],["dusk","Dusk"],["night","Night"]].map(function(x){return'<button type="button" data-act="cityTod" data-v="'+x[0]+'" aria-pressed="'+((S.settings.tod||"auto")===x[0])+'">'+x[1]+"</button>";}).join("")+'</div></div><div class="kv"><span>3D quality</span><div class="seg" role="group" aria-label="3D quality">'+[["auto","Auto"],["high","High"],["low","Low"]].map(function(x){return'<button type="button" data-act="q3d" data-v="'+x[0]+'" aria-pressed="'+((S.settings.q3d||"auto")===x[0])+'">'+x[1]+"</button>";}).join("")+'</div></div><p class="pnote" style="margin-top:10px">Your city stays when you Ascend. It keeps earning at '+Math.round(cityIdlePct(S)*100)+"% while you’re idle or away, for up to 12 hours.</p></div>";
+  if(!isOpen(S,"city"))return glassHead("Town Hall",esc(UNLOCK_TXT.city[1]))+worldMid()+'<p class="pnote locknote">'+ICON.lock+esc(lockLine("city"))+".</p>";
+  if(!cityBuilt(S))return glassHead("Name your town","Every skill you learn becomes a building.")+worldMid()+cityFoundForm("P");
+  var t=now(),C=S.city,pop=cityPop(S),rk=cityRank(pop),wait=policyWait(S,t),ups=cityUpsOpen(S),shown=UI.cityAllUps?ups:ups.slice(0,8),pg=CITY_PAGES.some(function(x){return x[0]===UI.cityPage;})?UI.cityPage:"hall";
+  var h='<div class="glass-h"><div><span class="crumb">Town Hall</span>'+(UI.cityRename?'<div class="crn"><label class="sr" for="cityNameIn">Town name</label><input type="text" id="cityNameIn" maxlength="24" autocomplete="off" spellcheck="false" value="'+esc(C.name)+'"><button type="button" class="btn primary sm" data-act="cityRename">Save</button></div>':"<h2>"+esc(C.name)+' <button type="button" class="ren" data-act="cityRenameOpen" aria-label="Rename your town">'+ICON.pencil+"</button></h2>")+"<p>"+esc(rk.name)+" · "+fmtInt(pop)+" residents"+(rk.next?" · "+fmtInt(rk.next[0]-pop)+" to "+esc(rk.next[1]):"")+"</p></div>"+backBtn()+"</div>";
+  h+='<div class="wsw pages" role="group" aria-label="Town Hall pages">'+CITY_PAGES.map(function(x){return'<button type="button" data-act="cityPage" data-v="'+x[0]+'" aria-pressed="'+(pg===x[0])+'">'+x[1]+"</button>";}).join("")+"</div>";
+  var coins='<div class="cp-top"><div class="cp-coins">'+ICON.coin+'<b id="cpCoins" class="num">'+fmt(C.coins)+'</b><span class="num" id="cpRate">+'+fmt(cityRate(S,t))+'/s</span></div><div class="cp-sub">A medium question pays <b>'+fmt(cityAnswerPreview())+"</b> coins · your residents add ×"+TRIM(Math.round(citySparkMult(S)*100)/100)+" to all sparks</div></div>";
+  if(pg==="hall"){
+    h+=introHTML("hall","The Town Hall keeps the town’s plans: the stage goals, the projects that need learning across subjects, and policies once the town is big enough. Building and upgrading have their own page.");
+    h+=worldMid()+coins;
+    h+='<div class="sec" id="cwLand" style="margin-top:6px"><div class="sec-h"><h3>Town projects</h3><small>restored by what you learn</small></div>'+projectHTML("square")+'<div style="height:10px"></div>'+landmarkHTML("harbor")+"</div>";
+    h+='<div class="sec" id="cwHall"><div class="sec-h"><h3>Policies</h3><small>'+(pop<POLICY_POP?"open at "+POLICY_POP+" residents":wait?"next change in "+fmtDur(wait/1000):"one policy at a time")+'</small></div><div class="pols">'+POLICIES.map(function(p){var on=C.pol===p.id,dis=pop<POLICY_POP||on||wait>0;return'<button type="button" class="pol'+(on?" on":"")+'" data-act="cityPol" data-v="'+p.id+'"'+(dis?" disabled":"")+' aria-pressed="'+on+'"><b>'+esc(p.name)+"</b><span>"+esc(p.desc)+"</span>"+(on?"<em>In effect</em>":"")+"</button>";}).join("")+"</div></div>";
+  }else if(pg==="build"){
+    h+=coins;
+    h+='<div class="sec" id="cwBuild" style="margin-top:6px"><div class="sec-h"><h3>Build</h3><div class="seg" role="group" aria-label="How many to build">'+[1,10,"max"].map(function(n){return'<button type="button" data-act="cityN" data-v="'+n+'" aria-pressed="'+(String(C.buyN)===String(n))+'">'+(n==="max"?"Max":"×"+n)+"</button>";}).join("")+'</div></div><p class="pnote">A building opens when you light the first node of its skill. Each node after that, each mastery tier, and each tool makes it earn more. Prices rise 15% per copy. Tap a building’s picture to open its page.</p>';
+    DKEYS.forEach(function(d){var list=CITY_B.filter(function(B){return B.d===d;}).sort(function(a,b){return a.cls-b.cls;}),dn=cityDistrictN(S,d);
+      h+='<div class="cdist" style="--dc:'+DOMAINS[d].color+'"><div class="cdist-h"><b>'+esc(DISTRICTS[d])+"</b><span>"+esc(DOMAINS[d].name)+" · "+dn+" built</span></div>"+list.map(cityRowHTML).join("")+"</div>";});
+    h+='</div><div class="sec" id="cwUps"><div class="sec-h"><h3>Upgrades</h3><small>'+Object.keys(C.up).length+" of "+CITY_UP.length+" bought</small></div>";
+    h+=ups.length?shown.map(function(u){var c=cityUpCost(S,u);return'<div class="row"><div><div class="rt1">'+esc(u.name)+'</div><div class="rdesc">'+esc(u.desc)+'</div></div><button type="button" class="buy cbuy" data-act="cityUp" data-v="'+esc(u.id)+'" data-cost="'+c+'" aria-label="Buy '+esc(u.name)+" for "+fmt(c)+' coins">'+ICON.coin+"<span>"+fmt(c)+'</span><i class="fill"></i></button></div>';}).join("")+(ups.length>8?'<button type="button" class="btn line sm" data-act="cityAllUps" style="margin-top:8px">'+(UI.cityAllUps?"Show fewer":"Show all "+ups.length)+"</button>":""):'<p class="pnote">New upgrades appear as your town grows: the first ×2 for a building comes when you own one.</p>';
+    h+='</div><div class="sec" id="cwWonders"><div class="sec-h"><h3>Wonders</h3><small>landmarks with big bonuses</small></div>'+WONDERS.map(wonderCardHTML).join("")+"</div>";
+  }else{
+    h+='<div class="sec" id="cwStats" style="margin-top:6px"><div class="sec-h"><h3>Stats</h3><small>founded '+esc(new Date(C.founded).toLocaleDateString())+"</small></div>"+[["Coins earned",fmt(C.life)],["Buildings built",fmtInt(C.built)],["Paydays from right answers",fmtInt(C.answers)],["Golden blimps caught",fmtInt(C.blimps)],["Tools installed",fmtInt(S.stats.tools||0)],["Best output",fmt(C.bestRate)+"/s"],["Spark bonus from residents","×"+TRIM(Math.round(citySparkMult(S)*100)/100)]].map(function(r){return'<div class="kv"><span>'+r[0]+"</span><b>"+r[1]+"</b></div>";}).join("");
+    h+='<div class="kv"><span>Main screen shows</span><div class="seg" role="group" aria-label="Main screen">'+[["engine","Engine"],["city","Town"],["3d","3D"]].map(function(x){return'<button type="button" data-act="view" data-v="'+x[0]+'" aria-pressed="'+(S.settings.view===x[0])+'">'+x[1]+"</button>";}).join("")+"</div></div>";
+    h+='<div class="kv"><span>Sky</span><div class="seg" role="group" aria-label="Sky">'+[["auto","Real time"],["day","Day"],["dusk","Dusk"],["night","Night"]].map(function(x){return'<button type="button" data-act="cityTod" data-v="'+x[0]+'" aria-pressed="'+((S.settings.tod||"auto")===x[0])+'">'+x[1]+"</button>";}).join("")+'</div></div><div class="kv"><span>3D quality</span><div class="seg" role="group" aria-label="3D quality">'+[["auto","Auto"],["high","High"],["low","Low"]].map(function(x){return'<button type="button" data-act="q3d" data-v="'+x[0]+'" aria-pressed="'+((S.settings.q3d||"auto")===x[0])+'">'+x[1]+"</button>";}).join("")+'</div></div><p class="pnote" style="margin-top:10px">Your town stays when you Ascend. It keeps earning at '+Math.round(cityIdlePct(S)*100)+"% while you’re idle or away, for up to 12 hours.</p></div>";
+  }
   return h;
 }
 /* ---------- What's new in v6: the city ---------- */
@@ -6806,7 +6995,7 @@ function wnTryCity(k){
   if(k==="coins"){if(UI.tab!=="network"){UI.tab="network";applyViews();}toast("Coins","Every right answer pays coins. Watch the City line on your next one.","acc");return;}
   if(!cityBuilt(S)){setTab("city");return;}
   if(k==="learn"){if(UI.tab!=="city")setTab("city");var lot=CITY_B.filter(function(B){return!cityN(S,B.id);})[0];setTimeout(function(){if(lot)cityLook(lot.id,true);},120);return;}
-  if(k==="blimp"){if(UI.tab!=="city")setTab("city");setTimeout(function(){if(!S.wnBlimp&&!CT.blimp&&cityOn()&&spawnBlimp(performance.now())){S.wnBlimp=true;saveLocal();toast("There it is","A golden blimp is crossing your city. Catch it!","mint");}else toast("Golden blimps","One crosses the sky every few minutes while you look at your city.","acc");},150);}
+  if(k==="blimp"){if(UI.tab!=="city")setTab("city");setTimeout(function(){if(!S.wnBlimp&&!CT.blimp&&cityOn()&&spawnBlimp(performance.now())){S.wnBlimp=true;saveLocal();toast("There it is","A golden blimp is crossing your town. Catch it!","mint");}else toast("Golden blimps","One crosses the sky every few minutes while you look at your town.","acc");},150);}
 }
 /* ---------- Units: stage badge, stage card, ladder, Advance ---------- */
 function stageProgress(){var R=unitReqs(S);if(!R)return{met:1,n:1,p:100};var m=R.filter(function(r){return reqMet(S,r);}).length;return{met:m,n:R.length,p:Math.round(100*m/R.length)};}
@@ -6822,18 +7011,18 @@ function stageCardHTML(){var U=S.unit,Un=UNITS[U.u-1],R=unitReqs(S),pr=stageProg
   else h+='<p class="sc-note">You cleared every stage there is. Unit '+(U.u+1)+" arrives in a future update. Until then, push the Expedition deeper: every depth pays more.</p>";
   h+='<div class="sc-foot">'+(U.ready&&nx?'<button type="button" class="btn primary sm" data-act="advance">Advance to Unit '+(U.u+1)+"</button>":"")+'<button type="button" class="linkbtn" data-act="ladder">See the whole ladder</button>'+(U.legacy?'<span class="pnote" style="margin:0">Legacy '+U.legacy+": sparks ×"+TRIM(1+0.25*U.legacy)+", coins ×"+(1+U.legacy)+"</span>":"")+"</div></div>";
   return h;}
-function wswHTML(){var ex=!!S.exp,b=cityBuilt(S),cur=UI.wv==="exp"&&ex?"exp":S.settings.view==="3d"&&b?"3d":"city";return'<div class="wsw" role="group" aria-label="World">'+[["city",ICON.city,"City"],["3d",ICON.cube,"3D"],["exp",ICON.compass,"Expedition"]].map(function(x){var dis=(x[0]==="exp"&&!ex)||(x[0]==="3d"&&!b);return'<button type="button" data-act="wv" data-v="'+x[0]+'" aria-pressed="'+(cur===x[0]&&!dis)+'"'+(dis?' disabled title="'+(x[0]==="exp"?"Opens in Unit 2":"Found your city first")+'"':"")+">"+(dis?ICON.lock:x[1])+"<span>"+x[2]+"</span></button>";}).join("")+"</div>";}
+function wswHTML(){var ex=!!S.exp,b=cityBuilt(S),cur=UI.wv==="exp"&&ex?"exp":S.settings.view==="3d"&&b?"3d":"city";return'<div class="wsw" role="group" aria-label="World">'+[["city",ICON.city,"Town"],["3d",ICON.cube,"3D"],["exp",ICON.compass,"Expedition"]].map(function(x){var dis=(x[0]==="exp"&&!ex)||(x[0]==="3d"&&!b);return'<button type="button" data-act="wv" data-v="'+x[0]+'" aria-pressed="'+(cur===x[0]&&!dis)+'"'+(dis?' disabled title="'+(x[0]==="exp"?"Opens in Unit 2":"Name your town first")+'"':"")+">"+(dis?ICON.lock:x[1])+"<span>"+x[2]+"</span></button>";}).join("")+"</div>";}
 function worldMid(){return stageCardHTML()+wswHTML();}
 function showLadder(){var U=S.unit;modal("<h2>The ladder</h2><p>Each unit has five stages. Clear them all and Advance: back to square one with a new mechanic, and Legacy that makes every run after it faster.</p>"+UNITS.map(function(Un){var now=Un.n===U.u,lock=Un.n>U.u;return'<div class="ladder-u'+(now?" now":"")+(lock?" lock":"")+'"><h4>Unit '+Un.n+" · "+esc(Un.name)+"</h4><p>"+esc(Un.line)+'</p><div class="ladder-st">'+[1,2,3,4,5].map(function(k){var key=Un.n+"."+k,done=U.cleared.indexOf(key)>=0;return'<span class="'+(done?"done":now&&k===U.st&&!U.ready?"now":"")+'">'+key+"</span>";}).join("")+"</div></div>";}).join("")+'<div class="ladder-u lock"><h4>Unit '+(UNITS.length+1)+' · Coming soon</h4><p>A new mechanic unlike the others. Keep climbing.</p></div><div class="mfoot"><button type="button" class="btn primary" data-act="modalClose">Back</button></div>',false,true);}
 function advanceConfirm(){var U=S.unit,nx=unitNext(S);if(!nx)return;
-  modal('<div class="adv-modal"><div class="big-u">Advance to Unit '+(U.u+1)+"</div><h2>"+esc(nx.name)+"</h2><p>"+esc(nx.line)+'</p><div class="adv-cols"><div class="lose"><h5>Resets</h5><ul><li>Sparks, upgrades, pathways, hubs</li><li>Your whole city: coins, buildings, upgrades, wonders, policy</li></ul></div><div class="keep"><h5>Stays</h5><ul><li>Scores, skill nodes, mastery, blind spots</li><li>Evolutions, Insight, level, trophies, chests</li><li>Your city’s name, and every cleared stage bonus</li></ul></div></div><p><b>Legacy '+(U.legacy+1)+"</b>: all sparks ×"+TRIM(1+0.25*(U.legacy+1))+" and city coins ×"+(U.legacy+2)+', forever.</p><div class="mfoot" style="justify-content:center"><button type="button" class="btn primary" data-act="advanceGo">Advance</button><button type="button" class="btn line" data-act="modalClose">Not yet</button></div></div>');}
+  modal('<div class="adv-modal"><div class="big-u">Advance to Unit '+(U.u+1)+"</div><h2>"+esc(nx.name)+"</h2><p>"+esc(nx.line)+'</p><div class="adv-cols"><div class="lose"><h5>Resets</h5><ul><li>Sparks, upgrades, pathways, hubs</li><li>Your whole city: coins, buildings, upgrades, wonders, policy</li></ul></div><div class="keep"><h5>Stays</h5><ul><li>Scores, skill nodes, mastery, blind spots</li><li>Evolutions, Insight, level, trophies, chests</li><li>Your town’s name, tools, projects, and every cleared stage bonus</li></ul></div></div><p><b>Legacy '+(U.legacy+1)+"</b>: all sparks ×"+TRIM(1+0.25*(U.legacy+1))+" and city coins ×"+(U.legacy+2)+', forever.</p><div class="mfoot" style="justify-content:center"><button type="button" class="btn primary" data-act="advanceGo">Advance</button><button type="button" class="btn line" data-act="modalClose">Not yet</button></div></div>');}
 function advanceGo(){if(!unitAdvance(S,now(),Math.floor(Math.random()*1e9)))return;var U=S.unit;shownSparks=0;UI.wv="exp";S.settings.view="map";CT.grow={};MT.px=MT.py=0;MT.fresh=true;
   checkAch(S,now()).forEach(function(a){setTimeout(function(){toast("Trophy · "+a[1],a[2]+" +2% sparks forever.","");},1800);});saveAll();closeModal();UI.tab="city";renderAll();SND.evolve();vib([30,40,90]);
-  modal('<div class="adv-modal"><div class="evo-orb"></div><div class="big-u">Unit '+U.u+"</div><h2>"+esc(UNITS[U.u-1].name)+"</h2><p>"+(U.u===2?"Your base camp sits in the middle of a fogged map. Right answers pay supplies; supplies reveal tiles. Hire a crew, find the eight Guardians, and beat them with right answers in their domains.":esc(UNITS[U.u-1].line))+'</p><p class="pnote">Legacy '+U.legacy+" is active: sparks ×"+TRIM(1+0.25*U.legacy)+", coins ×"+(1+U.legacy)+'. Rebuild your city too: later stages ask for it.</p><div class="mfoot" style="justify-content:center"><button type="button" class="btn primary" data-act="modalClose">Start exploring</button></div></div>');}
+  modal('<div class="adv-modal"><div class="evo-orb"></div><div class="big-u">Unit '+U.u+"</div><h2>"+esc(UNITS[U.u-1].name)+"</h2><p>"+(U.u===2?"Your base camp sits in the middle of a fogged map. Right answers pay supplies; supplies reveal tiles. Hire a crew, find the eight Guardians, and beat them with right answers in their domains.":esc(UNITS[U.u-1].line))+'</p><p class="pnote">Legacy '+U.legacy+" is active: sparks ×"+TRIM(1+0.25*U.legacy)+", coins ×"+(1+U.legacy)+'. Rebuild your town too: later stages ask for it.</p><div class="mfoot" style="justify-content:center"><button type="button" class="btn primary" data-act="modalClose">Start exploring</button></div></div>');}
 function stagesCleared(list){if(!list||!list.length)return;list.forEach(function(c){toast("Stage "+c.key+" cleared",(c.last?"Unit complete! ":"")+"+"+RARITY[c.chest].name+" chest, and +2% sparks and coins for good.","acc",'<button type="button" class="btn primary sm" data-act="stageGo">'+(c.last?"Advance":"Next stage")+"</button>",6500);});
   SND.rank();vib([15,25,60]);renderLoot();stageBtnRender();renderNav(true);if(UI.tab==="city")renderPanel();var L=list[list.length-1];if(L.last&&unitNext(S))queueModal(unitDoneModal);}
 function unitDoneModal(){var U=S.unit,nx=unitNext(S);if(!U.ready||!nx)return;modal('<div class="adv-modal"><div class="evo-orb"></div><div class="big-u">Unit '+U.u+' complete</div><h2>'+esc(UNITS[U.u-1].name)+'</h2><p>Every stage is cleared. You can Advance to Unit '+(U.u+1)+": "+esc(nx.name)+', whenever you’re ready. It resets almost everything and makes every run after it faster.</p><div class="mfoot" style="justify-content:center"><button type="button" class="btn primary" data-act="advance">See what Advance does</button><button type="button" class="btn line" data-act="modalClose">Keep building</button></div></div>');}
-function stageGo(){closeModal();if(UI.tab!=="city")setTab("city");else renderPanel();setTimeout(function(){var el=$("stageCard");if(el)el.scrollIntoView({block:"start",behavior:reduced?"auto":"smooth"});},60);}
+function stageGo(){closeModal();UI.cityPage="hall";if(UI.tab!=="city")setTab("city");else renderPanel();setTimeout(function(){var el=$("stageCard");if(el)el.scrollIntoView({block:"start",behavior:reduced?"auto":"smooth"});},60);}
 
 /* ---------- The Expedition map ---------- */
 var MT={cv:null,ctx:null,w:0,h:0,dpr:1,ts:40,ox:0,oy:0,px:0,py:0,aw:0,ah:0,mw:0,mh:0,vis:[0,0],pin:-1,hover:-1,fx:[],drag:null,t:0,lastDraw:0,tipW:0,tipH:0,fresh:true};
@@ -7016,7 +7205,7 @@ function guildClaim(){var G=guildInfo();if(!G||G.claimed||G.tot<G.goal||G.me<40)
 /* ---------- What's new in v7: units ---------- */
 var WN7=[
  {k:"stages",t:"Units and stages",p:"The game is now a ladder: Unit 1 has stages 1.1 to 1.5, Unit 2 has 2.1 to 2.5, and so on. Each stage has a checklist: the unit’s own goals plus <b>study</b> goals that never reset. Clearing one pays a chest and +2% sparks and coins for good.",tryL:"Show my stage",
-  demo:function(){return'<div class="stagecard" style="width:100%;margin:0"><div class="sc-h"><span class="sc-u">Unit 1 · The City</span><b>Stage 1.2</b></div><div class="sc-pips"><i class="on"></i><i class="now" style="--p:50"></i><i></i><i></i><i></i></div><ul class="sc-req">'+[["300 residents in your city",0],["8 different buildings",1],["18 skill nodes lit",1,1],["150 right answers in all",0,1]].map(function(x,k){return'<li class="'+(x[1]?"ok":"")+'" data-act="wnTick" data-i="'+k+'" style="cursor:pointer"><span class="ck">✓</span><span>'+x[0]+(x[2]!=null?'<span class="lt">study</span>':"")+"</span><em>"+(x[1]?"done":"tap")+"</em></li>";}).join("")+'</ul></div><p class="wn-note" id="wnTickTxt">Tap the goals to check them off.</p>';}},
+  demo:function(){return'<div class="stagecard" style="width:100%;margin:0"><div class="sc-h"><span class="sc-u">Unit 1 · The Town</span><b>Stage 1.2</b></div><div class="sc-pips"><i class="on"></i><i class="now" style="--p:50"></i><i></i><i></i><i></i></div><ul class="sc-req">'+[["300 residents in your city",0],["8 different buildings",1],["18 skill nodes lit",1,1],["150 right answers in all",0,1]].map(function(x,k){return'<li class="'+(x[1]?"ok":"")+'" data-act="wnTick" data-i="'+k+'" style="cursor:pointer"><span class="ck">✓</span><span>'+x[0]+(x[2]!=null?'<span class="lt">study</span>':"")+"</span><em>"+(x[1]?"done":"tap")+"</em></li>";}).join("")+'</ul></div><p class="wn-note" id="wnTickTxt">Tap the goals to check them off.</p>';}},
  {k:"advance",t:"Advance",p:"Finish x.5 and you can <b>Advance</b>: sparks, upgrades, pathways, and your whole city reset to square one, and a brand-new mechanic opens. Your learning stays, and <b>Legacy</b> makes every run after it faster.",tryL:"See the ladder",
   demo:function(){return'<div class="wn-coinBox"><button type="button" class="wn-coin" data-act="wnAdv" aria-label="Demo: Advance" style="background:radial-gradient(circle at 35% 30%,#FFF1B8,#FFC933 45%,#B8860B)">'+ICON.ascend+'</button><div><b id="wnLegN" class="num">×1</b><span id="wnLegT">sparks</span></div></div><p class="wn-note" id="wnAdvTxt">Tap to Advance (just a demo).</p>';}},
  {k:"map",t:"Unit 2: The Expedition",p:"A fogged map in eight regions, one per domain. Right answers pay <b>supplies</b>; supplies reveal tiles with gems, camps, caches, and crates. At each region’s heart waits a <b>Guardian</b>: beat it with right answers in its domain.",tryL:"Open the Expedition",
@@ -7351,6 +7540,22 @@ function w3Launch(K,c){var st=S.city.w.launch||0,need=WONDER_BY.launch.pop,A=acc
     for(var k=0;k<3;k++){var a=k*Math.PI*2/3;BX(K,0.1,1.6,1.0,Math.sin(a)*0.95,0.6,Math.cos(a)*0.95,"#D64545",0,{ry:a});}CY(K,0.2,0.2,0.1,0,6.3,0.84,"!#FFE7A3",10,0,{rx:Math.PI/2});
 });var fl=DYN(K,0,0.5,0,function(){CN(K,0.6,2.4,0,-1.8,0,"!#FFB347",10,{rx:Math.PI});CN(K,0.35,1.6,0,-1.4,0,"!#FFF1C4",10,{rx:Math.PI});});
   ANIM(K,[rk,fl],function(L,t){var ph=((t%90)+90)%90/90,lift=ph>0.86?Math.pow((ph-0.86)/0.14,2.2):0;L.forEach(function(o){o.position.y=0.5+lift*170;});L[0].visible=lift<0.99;L[1].visible=lift>0&&lift<0.99;});}
+/* ---------- v10: the Town Square in 3D: a basin in the plaza behind the tower, dry and dark until the town restores it ---------- */
+function w3Square(K,on,ready){var i,f;
+  CY(K,6.2,6.2,0.12,0,0,0,"#C9C3B6",28);CY(K,3.4,3.6,0.5,0,0,0,"#ADA390",24);CY(K,3.0,3.0,0.5,0,0.02,0,on?"#2B6FA3":"#4A4E58",24);
+  if(on){var wat=DYN(K,0,0.52,0,function(){CY(K,2.95,2.95,0.06,0,0,0,"!#5FB4FF",24);});ANIM(K,wat,function(o,t){o.position.y=0.52+Math.sin(t*2)*0.02;});
+    CY(K,0.5,0.6,1.8,0,0.5,0,"#D2C9B6",12);CY(K,1.2,1.2,0.2,0,2.3,0,"#D2C9B6",16);
+    var jets=DYN(K,0,2.5,0,function(){for(var k=0;k<3;k++){var a=k*Math.PI*2/3;SP(K,0.16,Math.sin(a)*0.5,0.4,Math.cos(a)*0.5,"!#DFF3FF",{ws:6,hs:4});}SP(K,0.22,0,0.9,0,"!#DFF3FF",{ws:6,hs:4});});
+    ANIM(K,jets,function(o,t){var k=(t*1.3)%1;o.position.y=2.5+k*1.2;o.scale.set(1+k*0.6,1-k*0.5,1+k*0.6);});}
+  else{CY(K,0.5,0.6,1.6,0,0.5,0,"#7A7F8A",12);CY(K,1.1,1.1,0.16,0,2.1,0,"#7A7F8A",16);
+    for(i=0;i<5;i++){var a=i*1.26+0.4;BX(K,1.8,0.02,0.06,Math.sin(a)*1.4,0.52,Math.cos(a)*1.4,"#2A2E36",0,{ry:a+0.7});}}
+  var P=[[-5,-5],[5,-5],[5,5],[-5,5]],lc=on?"!#FFE7A3":"#3A4658";
+  P.forEach(function(q){CY(K,0.07,0.09,3.6,q[0],0,q[1],"#2E3440",8);SP(K,0.26,q[0],3.75,q[1],lc,{ws:8,hs:6});});
+  for(i=0;i<4;i++){var a1=P[i],b1=P[(i+1)%4];BEAM(K,a1[0],3.6,a1[1],b1[0],3.6,b1[1],0.025,lc);for(var j=1;j<6;j++){f=j/6;SP(K,0.12,a1[0]+(b1[0]-a1[0])*f,3.5-Math.sin(f*Math.PI)*0.45,a1[1]+(b1[1]-a1[1])*f,lc,{ws:6,hs:4});}}
+  [[-4.2,0,Math.PI/2],[4.2,0,-Math.PI/2],[0,-4.2,0],[0,4.2,Math.PI]].forEach(function(q){BX(K,1.6,0.08,0.44,q[0],0.45,q[1],"#5B4632",0,{ry:q[2]});BX(K,1.6,0.42,0.06,q[0]-Math.sin(q[2])*0.22,0.55,q[1]-Math.cos(q[2])*0.22,"#5B4632",0,{ry:q[2]});});
+  if(ready&&!on&&!K.ghost){BX(K,1.9,0.72,0.1,0,1.6,4.8,"#1F7A55");SIGN(K,"RESTORE",1.8,0.62,0,1.96,4.86,"#FFFFFF",null,{glow:1});}
+  if(on)for(i=0;i<4;i++){var a2=i*1.57+0.6,px=Math.sin(a2)*4.3,pz=Math.cos(a2)*4.3;BX(K,0.34,0.7,0.24,px,0.5,pz,["#E0845E","#5DD6A8","#C9A2FF","#FFC933"][i]);SP(K,0.16,px,1.36,pz,"#F2D6B3",{ws:6,hs:5});}
+  K.maxY=Math.max(K.maxY,4.2);}
 /* ---- layout: 29 lots on a ring road around the civic plaza, one district per domain, in the skyline's order ---- */
 function w3Layout(){var list=[],sumW=0,prev=null;
   W3_ORDER.forEach(function(d){CITY_LOTS[d].forEach(function(id){var B=CITY_BY[id];if(!B)return;var w=B.w*0.09;list.push({id:id,d:d,w:w,dp:id==="bridge"?7:clamp(B.w*0.075,4.2,8)});sumW+=w;});});
@@ -7358,7 +7563,7 @@ function w3Layout(){var list=[],sumW=0,prev=null;
   list.forEach(function(L){if(prev&&prev.d!==L.d)s+=G-g;var a=Math.PI+(s+L.w/2)/W3_R0,rc=W3_R0+0.7+L.dp/2;L.a=a;L.x=rc*Math.sin(a);L.z=-rc*Math.cos(a);L.ry=-a;
     var D=dist[L.d]||(dist[L.d]={a0:Math.PI+(s-g/2)/W3_R0});D.a1=Math.PI+(s+L.w+g/2)/W3_R0;s+=L.w+g;prev=L;});
   var He=dist.eoi,ham=(He.a0+He.a1)/2;list.push({id:"harbor",x:93*Math.sin(ham),z:-93*Math.cos(ham),ry:-ham,w:32,dp:32});
-  list.push({id:"hall",x:0,z:17,ry:0,w:12,dp:8},{id:"tower",x:0,z:0,ry:0,w:7.6,dp:7.6},{id:"glib",x:-19,z:0,ry:Math.PI/2,w:12,dp:9},{id:"launch",x:19,z:0,ry:-Math.PI/2,w:10,dp:10});
+  list.push({id:"hall",x:0,z:17,ry:0,w:12,dp:8},{id:"tower",x:0,z:0,ry:0,w:7.6,dp:7.6},{id:"glib",x:-19,z:0,ry:Math.PI/2,w:12,dp:9},{id:"launch",x:19,z:0,ry:-Math.PI/2,w:10,dp:10},{id:"square",x:0,z:-18,ry:0,w:12.4,dp:12.4});
   W3.lotL=list;W3.lots={};list.forEach(function(L){W3.lots[L.id]=L;});W3.dmap=dist;
   var gaps=[];W3_ORDER.forEach(function(d,i){var nx=dist[W3_ORDER[(i+1)%8]],a=dist[d].a1,b=nx.a0;if(b<a)b+=Math.PI*2;gaps.push((a+b)/2);});W3.gaps=gaps;
   var X=W3.lots.cross;W3.lightA=X.a;}
@@ -7440,6 +7645,7 @@ function w3Tod(){var T=T3,tod=cityTOD(),n=tod.n,dk=tod.dk,h=tod.h,u=W3.sky.mater
   W3.cloudM.color.set(mixHex("#FFFFFF","#2A3550",n));W3.cloudM.emissive.set(mixHex("#FFFFFF","#1A2238",n));W3.cloudM.emissiveIntensity=0.35-0.2*n;if(dk>0.2)W3.cloudM.emissive.set(mixHex("#FFFFFF","#FFB08A",dk*0.6));}
 /* ---- lots: build, rebuild when they change, and animate ---- */
 function w3LotSig(L){var B=CITY_BY[L.id],pop=cityPop(S);if(L.id==="harbor")return(restoreDone(S,"harbor")?"on":restoreReady(S,"harbor")?"ready":"off")+"|"+acc();
+  if(L.id==="square")return(projDone(S,"square")?"on":projReady(S,"square")?"ready":"off");
   if(B){var n=cityN(S,B.id),lv=cityLv(n),can=cityCanBuild(S,B);return lv+"|"+(lv?(B.id==="water"?S.city.name:""):(can?1:0)+"|"+(can&&S.city.coins>=cityCost(S,B.id,1)?1:0));}
   if(L.id==="hall")return S.city.name+"|"+S.city.pol+"|"+acc();
   if(L.id==="tower"){var st=S.city.w.tower||0;return st+"|"+(st?proj(S).total:pop>=WONDER_BY.tower.pop)+"|"+acc();}
@@ -7452,6 +7658,7 @@ function w3LotBuild(L){var T=T3,B=CITY_BY[L.id],K,c,lv=0,grp=new T.Group();if(L.
     if(lv){W3B[B.st](K,L.w,L.dp,w3H(B.st,lv),lv,c);L.box={hw:L.w/2-0.1,hd:L.dp/2-0.1};}
     else{K.ghost=true;K.gcol=mixHex(col,"#FFFFFF",0.35);W3B[B.st](K,L.w,L.dp,w3H(B.st,1),1,c);K.ghost=false;var gy=K.maxY;w3Fence(K,L,B,c);K.maxY=Math.max(gy,3);}}
   else if(L.id==="harbor"){K=w3Kit(78);w3Harbor(K,restoreDone(S,"harbor"),restoreReady(S,"harbor"));L.box=null;}
+  else if(L.id==="square"){K=w3Kit(79);w3Square(K,projDone(S,"square"),projReady(S,"square"));L.box={hw:3.7,hd:3.7,oz:0};}
   else{c=w3Colors(acc());K=w3Kit(77);
     if(L.id==="hall"){w3Hall(K,c);L.box={hw:7.4,hd:5.8,oz:0.6};}
     else if(L.id==="tower"){w3Tower(K,c);L.box=(S.city.w.tower||0)?{hw:3.9,hd:3.9}:{hw:2.6,hd:2.6};}
@@ -7603,9 +7810,10 @@ function w3TipPlace(){var id=CT.pin?CT.pin.id:CT.hover,el=$("ctip");if(!id||!el|
   el.style.visibility="";el.style.left=Math.round(x)+"px";el.style.top=Math.round(y)+"px";}
 /* The nearest building gets an "Open" prompt; E opens it. */
 function w3Near(){var P=W3.pos,best="",bd=3.6;W3.lotL.forEach(function(L){if(!L.grp)return;var q=w3LocalIn(L,P.x,P.z),B=L.box||{hw:L.w/2-0.2,hd:L.dp/2-0.2},dx=Math.max(0,Math.abs(q[0])-B.hw),dz=Math.max(0,Math.abs(q[1])-B.hd),d=Math.hypot(dx,dz);if(d<bd){bd=d;best=L.id;}});
-  if(best===W3.near)return;W3.near=best;var b=$("w3Act");if(!b)return;if(!best){b.hidden=true;return;}var B=CITY_BY[best],nm=B?B.name:best==="hall"?"Town Hall":best==="harbor"?"Harbor Bridge":WONDER_BY[best==="glib"?"library":best].name;
+  if(best===W3.near)return;W3.near=best;var b=$("w3Act");if(!b)return;if(!best){b.hidden=true;return;}var B=CITY_BY[best],nm=B?B.name:best==="hall"?"Town Hall":best==="harbor"?"Harbor Bridge":best==="square"?"Town Square":WONDER_BY[best==="glib"?"library":best].name;
   b.innerHTML=(isMobile()?"":"<kbd>E</kbd>")+"<span>"+esc((B&&!cityN(S,B.id)?"Lot: ":"Open ")+nm)+"</span>";b.hidden=false;}
-function w3Open(){if(W3.near)ctipShow(W3.near,true);}
+/* E opens the nearest place as a page; the small card stays for a tap or click. */
+function w3Open(){if(W3.near)placeOpen(W3.near);}
 /* Show me: from the City panel, jump to a building and face it. */
 function w3Look(id){var L=W3.lots[id];if(!L||!W3.ready){if(W3.ready===false)W3.lookQ=id;return;}var P=W3.pos,fx=Math.sin(L.ry),fz=Math.cos(L.ry),B=L.box||{hd:L.dp/2},d=(B.hd||L.dp/2)+(B.oz||0)+4.5,tx=L.x+fx*d,tz=L.z+fz*d;
   if(Math.hypot(P.x-tx,P.z-tz)>16){P.x=tx;P.z=tz;P.y=0;W3.vel.set(0,0,0);W3.face=Math.atan2(-fx,-fz);w3Fire(tx,6,tz,1);}
@@ -7649,7 +7857,7 @@ function w3Wire(){var cv=W3.cv;
 /* ---- showing, hiding, sizing ---- */
 function w3Adopt(host){if(!host)return;["cityHud","ctip"].forEach(function(id){var e=$(id);if(e&&e.parentNode!==host)host.appendChild(e);});var n=document.querySelector(".city-news");if(n&&n.parentNode!==host)host.appendChild(n);}
 function w3Msg(k){var el=$("w3Msg");if(!el)return;if(!k){el.hidden=true;el.innerHTML="";return;}el.hidden=false;
-  if(k==="load")el.innerHTML='<div class="w3-box"><div class="w3-spin"></div><b>Building your city in 3D…</b><p>First visit only: it loads a 3D engine (about 170 KB).</p></div>';
+  if(k==="load")el.innerHTML='<div class="w3-box"><div class="w3-spin"></div><b>Building your town in 3D…</b><p>First visit only: it loads a 3D engine (about 170 KB).</p></div>';
   else el.innerHTML='<div class="w3-box"><b>'+(k==="lost"||k==="bug"?"The 3D view stopped":"3D couldn’t start here")+"</b><p>"+(k==="bug"?"Something went wrong in the 3D city. Try again, or use the 2D city.":k==="lost"?"Your graphics driver reset it. Try again, or use the 2D city.":W3.err==="gl"?"This browser or device doesn’t allow WebGL, which the 3D city needs.":"It needs to load a 3D engine from cdn.jsdelivr.net. Check your connection, or use the 2D city.")+'</p><div class="w3-btns"><button type="button" class="btn primary sm" data-act="w3Retry">Try again</button><button type="button" class="btn line sm" data-act="view" data-v="city">Use the 2D city</button></div></div>';}
 function w3Show(){var ww=$("w3Wrap");w3Adopt(ww);W3.lastT=0;W3.p0=0;W3.shownAt=performance.now();CT.hudSig="";cityHudRender();cityNewsTick(true);
   if(W3.ready&&!W3.lost){W3.lastDraw=0;W3.lastIn=performance.now();w3Resize();w3Sync();w3Tod();w3Touch();w3HelpShow();if(W3.lookQ){var q=W3.lookQ;W3.lookQ=null;w3Look(q);}return;}
@@ -7665,7 +7873,7 @@ function w3Offset(){var V=w3VisRange();if(V[0]===W3.vis[0]&&V[1]===W3.vis[1])ret
 function w3HelpShow(){var h=$("w3Help");if(!h||W3.moved||W3.help)return;W3.help=true;var touch=window.matchMedia&&matchMedia("(pointer:coarse)").matches;
   h.innerHTML=touch?"<b>Walk</b> with the stick · <b>drag</b> to look · <b>tap</b> a building to open it, or the ground to walk there":"<b>W A S D</b> to walk · <b>drag</b> to look · <b>Space</b> to jump · <b>E</b> opens the nearest building · click the ground to walk there";h.hidden=false;h.classList.remove("out");setTimeout(function(){if(!h.hidden){h.classList.add("out");setTimeout(function(){h.hidden=true;},500);}},14000);}
 /* ---- setup: renderer, lights, world, lots, life, you ---- */
-function w3Init(){var T=T3,ww=$("w3Wrap"),cv=document.createElement("canvas");cv.id="w3Cv";cv.tabIndex=0;cv.setAttribute("aria-label","Your city in 3D. Use W A S D or the arrow keys to walk, drag to look around, Space to jump, and E to open the nearest building.");ww.insertBefore(cv,ww.firstChild);
+function w3Init(){var T=T3,ww=$("w3Wrap"),cv=document.createElement("canvas");cv.id="w3Cv";cv.tabIndex=0;cv.setAttribute("aria-label","Your town in 3D. Use W A S D or the arrow keys to walk, drag to look around, Space to jump, and E to open the nearest building.");ww.insertBefore(cv,ww.firstChild);
   var q=W3.q=w3Q(),ren;try{ren=new T.WebGLRenderer({canvas:cv,antialias:q==="high",powerPreference:"high-performance"});}catch(e){cv.parentNode.removeChild(cv);W3.err="gl";throw e;}
   W3.cv=cv;W3.ren=ren;ren.setPixelRatio(Math.min(q==="high"?2:1.25,window.devicePixelRatio||1));ren.outputColorSpace=T.SRGBColorSpace;ren.toneMapping=T.ACESFilmicToneMapping;ren.toneMappingExposure=1.08;ren.shadowMap.enabled=q==="high";ren.shadowMap.type=T.PCFSoftShadowMap;
   var sc=W3.scene=new T.Scene();sc.fog=new T.Fog("#BCDBF2",95,330);W3.cam=new T.PerspectiveCamera(55,1,0.3,700);W3.ray=new T.Raycaster();W3.ray.camera=W3.cam;W3.o3=new T.Object3D();
@@ -7690,7 +7898,7 @@ function w3Tick(t,dt){try{w3Frame(t,dt);}catch(e){w3Crash(e);return;}w3Pace(t);}
 function w3Pace(t){if(W3.q!=="high"||(S.settings.q3d||"auto")!=="auto"||modalOpen()||document.visibilityState!=="visible"||t-W3.shownAt<2500){W3.lastT=0;W3.p0=0;return;}
   if(!W3.p0){W3.p0=W3.lastT=t;W3.fs=W3.fn=0;return;}var gap=t-W3.lastT;W3.lastT=t;if(gap>0&&gap<2000){W3.fs+=gap;W3.fn++;}if(t-W3.p0<4000&&W3.fn<150)return;
   var avg=W3.fn?W3.fs/W3.fn:0,n=W3.fn;W3.p0=0;if(n<4||avg<=42)return;
-  W3.slow=true;W3.lastT=0;w3Teardown();w3Show();toast("3D set to Low","This device was drawing the city slowly, so 3D switched to Low quality. You can change it in the City tab under Stats.","",null,6000);}
+  W3.slow=true;W3.lastT=0;w3Teardown();w3Show();toast("3D set to Low","This device was drawing the town slowly, so 3D switched to Low quality. You can change it on the Town Hall’s Stats page.","",null,6000);}
 
 /* ---------- v9: Today's Adventure ---------- */
 ICON.sun=SV('<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M5.3 18.7L7 17M17 7l1.7-1.7"/>');
@@ -7698,7 +7906,7 @@ ICON.check=SV('<path d="M5 12.5l4.5 4.5L19 7.5"/>');
 ICON.bridge=SV('<path d="M2.5 17h19M4 17v-5.5M20 17v-5.5M4 11.5c3.2 0 5-3.5 8-3.5s4.8 3.5 8 3.5M8 17v-4M12 17v-6M16 17v-4"/>');
 ICON.hydra=SV('<path d="M6 21c0-4 1-7 4.5-8.6L9.2 9.6C8.4 7.8 9 5.5 11 4.4c2.4-1.3 5.6-.6 7 1.5l-2.2.9 1.6 1.8c-1.4 1-3.4 1.3-5 .7l.9 2.3c3 1.4 3.7 5.2 3.7 9.4"/><circle cx="13.3" cy="6.8" r=".9" style="fill:currentColor"/>');
 ICON.stump=SV('<path d="M7 21c0-3 .8-5.6 3.2-7.2M17 21c0-3-.8-5.6-3.2-7.2M10.2 13.8c1.2-.6 2.4-.6 3.6 0"/>');
-var ADV_ACT={boss:"Fight",arcade:"Play",gaunt:"Start",found:"Found it",restore:"Restore",expand:"Open",build:"Build",zone:"Open"};
+var ADV_ACT={boss:"Fight",arcade:"Play",gaunt:"Start",found:"Found it",restore:"Restore",expand:"Open",build:"Build",zone:"Open",project:"Restore",tool:"Open"};
 function advActLabel(s){if(!s)return"";if(s.k==="boss"&&S.boss&&S.boss.d===s.d)return"Back to it";return ADV_ACT[s.k]||"";}
 function advShort(s){if(s.k==="boss")return"Beat the "+BOSSES[s.d].name.replace(/^The /,"");if(s.k==="skill")return"Practice "+s.sk;if(s.k==="place")return"Place "+DOMAINS[s.d].short;return s.t;}
 function advProg(s){return s.k==="review"||s.k==="place"?s.p+"/"+s.n:s.k==="skill"?s.p+"/"+s.n+" right":"";}
@@ -7754,7 +7962,9 @@ function advDoA(){var s=advStep(S);if(!s)return;closeM();
   else if(s.k==="found")openTab("city");
   else if(s.k==="restore")restoreA(s.id);
   else if(s.k==="expand"||s.k==="zone")zoneGo(s.d);
-  else if(s.k==="build")cityGo(s.id);}
+  else if(s.k==="build")cityGo(s.id);
+  else if(s.k==="project")projectA(s.id);
+  else if(s.k==="tool")placeOpen(s.id);}
 function advPauseA(){if(!advPause(S))return;closeM();advServe();saveAll();renderFocus();renderAdv();UI.railSig="";renderRail();renderNav(true);toast("Adventure paused","Free play. Resume from the bar whenever you like.","",null,3000);}
 function advSkipA(){var s=advStep(S);if(!s||!s.opt)return;advSkip(S,now());closeM();if(advFocusFor(advStep(S)))advServe();saveAll();renderFocus();renderAdv();UI.railSig="";renderRail();renderNav(true);if(S.adv.done)advDoneNote();}
 function advClaimA(){var A=S.adv,r=advClaim(S,now());if(!r)return;SND.rank();vib([20,30,60]);burst(window.innerWidth/2,window.innerHeight/2,26);saveAll();renderLoot();renderAdv();UI.railSig="";renderRail();renderNav(true);
@@ -7777,7 +7987,10 @@ function fbEventsHTML(r){var ev=[];
   if(r.revDone)ev.push(["<b>Daily review done</b> "+RARITY[r.revDone.chest].name+" chest","gold",'<button type="button" data-act="openChest" data-v="'+r.revDone.chest+'">Open</button>']);
   (r.quests||[]).forEach(function(q){if(q.id==="weekly"){ev.push(["<b>Weekly done</b> 100 right","gold",S.weekly.claimed?"":'<button type="button" data-act="claimW">Claim</button>']);return;}var i=S.quests.list.indexOf(q);ev.push(["<b>Quest done</b> "+esc(questLabel(q)),"gold",i>=0&&!q.claimed?'<button type="button" data-act="claimQ" data-i="'+i+'">Claim</button>':""]);});
   if(r.set&&r.set.chest)ev.push(["<b>Perfect set</b> Rare chest","gold"]);
-  if(r.earned){var RE=RESTORE_BY[r.earned];ev.push(["<b>"+esc(RE.name)+" earned</b> restore it in your City","gold",cityBuilt(S)?'<button type="button" data-act="lmkGo" data-v="'+r.earned+'">Go</button>':""]);}
+  if(r.earned){var RE=RESTORE_BY[r.earned];ev.push(["<b>"+esc(RE.name)+" earned</b> restore it at the Town Hall","gold",cityBuilt(S)?'<button type="button" data-act="lmkGo" data-v="'+r.earned+'">Go</button>':""]);}
+  if(r.town&&r.town.opps)r.town.opps.forEach(function(id){var B=CITY_BY[id],o=oppOf(S,id);if(B&&o)ev.push(["<b>"+esc(TOOLS.names[o.lv])+"</b> for the "+esc(B.name),"gold",'<button type="button" data-act="place" data-v="'+id+'">Open</button>']);});
+  if(r.town&&r.town.proj)r.town.proj.forEach(function(id){var P=PROJECT_BY[id];if(P)ev.push(["<b>"+esc(P.name)+"</b> evidence complete: fund it at the Town Hall","gold",'<button type="button" data-act="cityGo" data-v="projects">Go</button>']);});
+  if(r.round&&r.round.done)ev.push(["<b>Round done</b> "+r.round.c+" of "+r.round.n+" right at the "+esc(CITY_BY[r.round.id].name),"mint"]);
   if(r.dayUp)ev.push(["<b>Day "+S.days.streak+"</b> locked in"+(r.froze?" · a freeze covered "+r.froze:""),"mint"]);
   if(r.leveled)ev.push(["<b>"+esc(DOMAINS[r.leveled.d].short)+" Lv "+r.leveled.lv+"</b> +2% sparks there","mint"]);
   (r.newAch||[]).forEach(function(a){ev.push(["<b>Trophy</b> "+esc(a[1])+" · +2% sparks",""]);});
@@ -7823,7 +8036,7 @@ function bossTgtA(i){if(!bossSetTarget(S,i))return;SND.tone(740,0.04,"triangle",
 
 /* ---------- v9: learning evidence ---------- */
 function agoTxt(ms){var m=Math.round(ms/60000);if(m<1)return"just now";if(m<60)return m+" min ago";var h=Math.round(m/60);if(h<24)return h+" h ago";var d=Math.round(h/24);return d+" day"+(d===1?"":"s")+" ago";}
-function lrnText(e){var sk=e[3];if(e[1]==="node")return sk+": skill node "+e[4]+" lit";if(e[1]==="medal")return sk+": "+(["","Bronze","Silver","Gold"][e[4]]||"")+" mastery";if(e[1]==="erase")return sk+": blind spot erased for good";if(e[1]==="recover")return sk+": "+(e[4]?"full comeback":"comeback");if(e[1]==="restore")return(RESTORE_BY.harbor&&e[3]===RESTORE_BY.harbor.sk?"Harbor Bridge restored with "+sk:"Landmark restored");return sk;}
+function lrnText(e){var sk=e[3];if(e[1]==="node")return sk+": skill node "+e[4]+" lit";if(e[1]==="medal")return sk+": "+(["","Bronze","Silver","Gold"][e[4]]||"")+" mastery";if(e[1]==="erase")return sk+": blind spot erased for good";if(e[1]==="recover")return sk+": "+(e[4]?"full comeback":"comeback");if(e[1]==="restore")return(RESTORE_BY.harbor&&e[3]===RESTORE_BY.harbor.sk?"Harbor Bridge restored with "+sk:"Landmark restored");if(e[1]==="tool")return sk+": "+(TOOLS.names[e[4]]||"a tool")+" installed";if(e[1]==="project")return sk+" restored";return sk;}
 function learnHTML(){var t=now(),L=lrnSummary(S,t,7),fr=S.lrn.fr,bar="",i,gr=L.gaunt;
   for(i=Math.max(0,fr.length-20);i<fr.length;i++)bar+='<i class="'+(fr.charAt(i)==="1"?"y":"n")+'"></i>';for(i=Math.min(20,fr.length);i<20;i++)bar+="<i></i>";
   var best=gr.length?Math.max.apply(null,gr.map(function(g){return g[2];})):null,gl=gr.length?gr.slice(-3).map(function(g){return(g[1]==="rw"?"RW ":"Math ")+g[2];}).join(" · "):"No timed Gauntlet this week";
@@ -7858,13 +8071,14 @@ function coachSpotAt(d){var old=$("coachSpot");if(old)old.remove();if(!ST.g||!ST
   var el=document.createElement("div");el.id="coachSpot";el.style.cssText="position:fixed;pointer-events:none;left:"+(r.left+p.x-36)+"px;top:"+(r.top+p.y-36)+"px;width:72px;height:72px";document.body.appendChild(el);return true;}
 function onbShow(){var O=S.onb;if(!O||O.done||!S.welcomed){coachHide();return;}if(modalOpen()){queueModal(onbShow);return;}
   if(O.step===0)coach(0,"#conBody","left","Answer your first question","Pick an answer, then press <b>"+esc(formOf(S).verb)+"</b> or Enter. There’s no timer pressure, and every answer comes with an explanation.","");
+  else if(O.step===1&&worldView()!=="engine"&&cityBuilt(S)){var d1=O.d||(cur&&cur.d)||"alg",ok1=!!O.ok,PB=cityBOf(d1,O.sk||"");coach(1,"#cityHud","right",ok1?"The town noticed":"A miss becomes a rematch",(ok1?"That right answer paid <b>coins</b> to "+esc(S.city.name)+" and grew your <b>"+esc(DOMAINS[d1].name)+"</b> rating. Every 3rd, 10th, and 25th right answer in a skill lights a node"+(PB?", and the first one opens the <b>"+esc(PB.name)+"</b> in "+esc(DISTRICTS[d1]):"")+".":"Nothing is lost. The question comes back as a <b>blind spot</b> in 10 minutes so you can win it back, and you can try a fresh one right away.")+" Read the explanation, then keep going.",'<button type="button" class="btn primary sm" data-act="onbNext">Next question</button>');}
   else if(O.step===1){var d=O.d||(cur&&cur.d)||"alg",ok=!!O.ok,spot=coachSpotAt(d);coach(1,spot?"#coachSpot":"#engineCv",spot&&ST.g&&domPos(d).x>ST.g.cx?"left":"right",ok?"Your engine grew":"A miss becomes a rematch",
       (ok?"That right answer powered <b>"+esc(DOMAINS[d].name)+"</b>. Its pillar climbs toward 1520 as you get more right, and every 3rd, 10th, and 25th right answer in a skill lights a node.":"Nothing is lost. The question comes back as a <b>blind spot</b> in 10 minutes so you can win it back, and you can try a fresh one right away.")+" Read the explanation, then keep going.",'<button type="button" class="btn primary sm" data-act="onbNext">Next question</button>');}
   else if(O.step===2)onbGiftModal();
   else if(O.step===3){renderAdv();var A=advEnsure(S,now()),s0=A.steps[0];coach(3,"#advBar","left","Your next goal: Today’s Adventure","Each day it plans a short session: blind spots that are due, the skill that needs it most, a challenge, and a reward chest. It starts with <b>"+esc(s0?s0.t:"")+"</b>. Take it on now, or keep playing freely.",'<button type="button" class="btn line sm" data-act="onbLater">Later</button><button type="button" class="btn primary sm" data-act="onbAdv">Start it</button>');}
-  else if(O.step===4){var cy=EVO[UNLOCK.city];coach(4,"#decknav","top","Everything else lives down here","<b>Progress</b> tracks what you’ve learned. <b>Arena</b>, <b>Upgrades</b>, and <b>Zones</b> are open now, and your <b>City</b> opens at "+esc(cy.name)+". Locked tabs say exactly what they need.",'<button type="button" class="btn primary sm" data-act="onbDone">Got it</button>');}}
+  else if(O.step===4){coach(4,"#decknav","top","The places live down here","<b>Town</b> is where you are: open any building to work there. <b>Town Hall</b> keeps the plans and projects. <b>Progress</b> tracks what you’ve learned, and <b>Arena</b>, <b>Upgrades</b>, and <b>Zones</b> open as you go. A locked place says exactly what it needs.",'<button type="button" class="btn primary sm" data-act="onbDone">Got it</button>');}}
 function onbAfter(q,ok){var O=S.onb;if(!O||O.done||!S.welcomed)return;O.n=(O.n||0)+1;
-  if(O.step===0){O.step=1;O.d=q.d;O.ok=ok;saveLocal();setTimeout(onbShow,reduced?0:700);}
+  if(O.step===0){O.step=1;O.d=q.d;O.sk=q.sk;O.ok=ok;saveLocal();setTimeout(onbShow,reduced?0:700);}
   else if(O.step===1&&O.n>=3){O.step=O.gift?3:2;coachHide();saveLocal();setTimeout(onbShow,reduced?0:900);}}
 function onbGiftModal(){var d=(cur&&cur.d)||S.onb.d||"alg",Z=ZONES[d],N=Z.nodes.r1,U=UPG.focus;
   modal('<h2>Your first upgrade is free</h2><p>Sparks from right answers buy upgrades. Pick one to start with; you can buy the others soon.</p><div class="gifts">'+
@@ -7874,9 +8088,9 @@ function onbGiftModal(){var d=(cur&&cur.d)||S.onb.d||"alg",Z=ZONES[d],N=Z.nodes.
 function onbGiftA(v){var d=(cur&&cur.d)||S.onb.d||"alg";if(!onbGift(S,v,d))return;var nm=v==="focus"?UPG.focus.name:v==="zone"?ZONES[d].short+": "+ZONES[d].nodes.r1[0]:DOMAINS[d].short+" hub";
   S.onb.step=3;saveAll();closeModal();SND.buy();vib(12);renderHUD();toast("Installed: "+nm,"It’s working already. More upgrades open up as you earn sparks.","mint",null,3600);setTimeout(onbShow,reduced?0:500);}
 function onbFinish(){S.onb.done=true;S.onb.step=9;coachHide();saveLocal();renderAdv();UI.railSig="";renderRail();}
-function showWelcome(){modal('<h2>Welcome to Grind to 1520</h2><p>A study game for the PSAT. Answer real practice questions, and every right answer powers your engine and grows a world around it.</p><ul class="wel">'+
+function showWelcome(){modal('<h2>Welcome to <span style="color:var(--accent)">To 1520</span></h2><p>A small town that grows as you learn. Answer real PSAT practice questions: every right answer pays the town and grows your skills, and what you learn decides what gets built.</p><ul class="wel">'+
   "<li><span>"+ICON.target+"</span><div><b>Answer a question.</b> No timer pressure, and an explanation after every answer.</div></li>"+
-  "<li><span>"+ICON.network+"</span><div><b>Watch your world respond.</b> Right answers grow your engine. Misses come back later for a rematch.</div></li>"+
+  "<li><span>"+ICON.city+"</span><div><b>Watch the town respond.</b> Right answers pay coins and grow your skills. Misses come back later for a rematch.</div></li>"+
   "<li><span>"+ICON.spark+"</span><div><b>Make your first choice.</b> Pick a free upgrade, then follow Today’s Adventure.</div></li></ul>"+
   '<p style="font-size:13px">About two minutes, and you can skip it. Your score here is a game estimate, not an official prediction: check it with full practice tests in Bluebook.</p><div class="mfoot"><button type="button" class="btn primary" data-act="welcomeGo">Let’s go</button><button type="button" class="btn line" data-act="welcomeSkip">Skip the intro</button></div>',true);}
 /* Existing players get a short list of what changed, never the beginner intro. */
@@ -7889,9 +8103,130 @@ function showNew9(){var R=RESTORE_BY.harbor,hb=restoreDone(S,"harbor")?"Restored
     "<li><span>"+ICON.reviews+"</span><div><b>Progress shows what you’ve learned</b><p>Fresh-question accuracy, skills improved, blind spots erased, and timed results, kept apart from game rewards. Tabs are grouped into study, challenge, and build: Evolution is now Upgrades and Plan is now Progress. 1520 is the game’s target, not a “perfect” score.</p></div></li></ul>"+
     '<div class="mfoot"><button type="button" class="btn primary" data-act="new9Go">Show me the Adventure</button><button type="button" class="btn line" data-act="modalClose">Got it</button><button type="button" class="linkbtn dim" data-act="wnTour" data-v="8">Earlier updates</button></div>',false,true);}
 
+/* ---------- v10: places. A building is a page: work there, see what you've learned, install tools, build. ---------- */
+function introHTML(key,txt){if(!S.intro||S.intro[key])return"";return'<div class="intro" id="intro-'+key+'"><p>'+txt+'</p><button type="button" class="btn line sm" data-act="introOk" data-v="'+key+'">Got it</button></div>';}
+function toolPips(lv){var h='<span class="tpips" role="img" aria-label="'+lv+' of '+TOOLS.max+' tools">';for(var i=0;i<TOOLS.max;i++)h+='<i class="'+(i<lv?"on":"")+'"></i>';return h+"</span>";}
+/* Open a place. Buildings get their own page; the civic lots go to the Town Hall's pages. */
+function placeOpen(id){closeM();if(!id)return;hideTip(true);ctipHide(true);
+  if(!CITY_BY[id]){if(id==="harbor"||id==="square"){cityGo("projects");return;}if(id==="hall"){cityGo("hall");return;}cityGo("wonders");return;}
+  if(UI.tab==="place"&&UI.place===id){renderPanel(true);return;}
+  pushBack();UI.place=id;UI.tab="place";applyViews();if(isMobile())window.scrollTo(0,0);}
+function placeHTML(id){var B=CITY_BY[id];if(!B)return glassHead("Town","");var d=B.d,dom=DOMAINS[d],col=dom.color,t=now(),n=cityN(S,id),lv=cityLv(n),can=cityCanBuild(S,B),skk=d+"|"+B.sk,sk=S.sk[skk]||{},P=profOf(S,d,B.sk),st=skillStars(S,d,B.sk),c=skillCorrect(S,d,B.sk),nx=nextStarAt(c),Zd=ZONES[d],R=S.round&&S.round.id===id&&!S.round.done?S.round:null,busy=!!(S.g||UI.arc||S.boss);
+  var h='<div class="place" style="--dc:'+col+'">'+glassHead(B.name,esc(B.sk)+" · "+esc(dom.name)+(n?" · "+n+" owned"+(lv?", level "+lv:""):can?" · an empty lot, ready to build":" · an empty lot"),'<span style="color:'+col+'">'+esc(DISTRICTS[d])+"</span>");
+  h+=introHTML("place","Every building has a skill. <b>Working here</b> is a short round of "+esc(B.sk)+" questions. What you learn here powers the building, and coins from anywhere can improve it.");
+  h+='<div class="pl-hero"><img alt="" src="'+cityThumb(id,Math.max(1,lv))+'"><div><p class="cq">“'+esc(B.line)+'”</p><button type="button" class="linkbtn" data-act="cityLook" data-v="'+id+'">Show me</button></div></div>';
+  h+='<div class="sec" id="plWork"><div class="sec-h"><h3>Work here</h3><small>'+(R?"round in progress · "+R.a+" of "+R.n:"rounds of "+ROUND_N)+"</small></div>";
+  if(R)h+='<p class="pnote">A round is under way: '+R.a+" of "+R.n+" answered, "+R.c+' right so far.</p><div class="row2"><button type="button" class="btn primary sm" data-act="roundBack">Back to the questions</button><button type="button" class="btn line sm" data-act="roundFree">End the round</button></div>';
+  else h+='<div class="row2"><button type="button" class="btn primary sm" data-act="roundGo" data-v="'+id+'"'+(busy?" disabled":"")+">Practice "+esc(B.sk)+" · "+ROUND_N+' questions</button><button type="button" class="btn line sm" data-act="roundGo" data-v="'+id+'" data-hard="1"'+(busy?" disabled":"")+">Hard drill · "+ROUND_N+"</button></div>"+(busy?'<p class="pnote">Finish '+(S.boss?"the boss fight":S.g?"the Gauntlet":"the Arcade game")+" first.</p>":"");
+  h+='<div class="pl-learn"><div class="kv"><span>Skill nodes</span><b><span class="st">'+starsTxt(st)+"</span> "+(nx?(nx-c)+" more right to node "+(st+1):"all five lit")+"</b></div>";
+  h+='<div class="kv"><span>Proficiency</span><b class="band b'+P.band+'">'+esc(P.name)+'</b></div><div class="meter prof"><i style="width:'+(100*clamp(P.p,0,1)).toFixed(0)+'%"></i></div><p class="pnote">'+esc(profHow(S,d,B.sk))+(P.n?" Based on your last "+P.n+" answer"+(P.n===1?"":"s")+" here.":" No answers here yet.")+"</p>";
+  h+='<div class="kv"><span>Mastery</span><b>'+badgeHTML(sk.m)+esc(masteryLine(sk))+"</b></div></div></div>";
+  var tl=toolLv(S,id),op=oppOf(S,id);
+  h+='<div class="sec" id="plTools"><div class="sec-h"><h3>Tools</h3><small>'+tl+" of "+TOOLS.max+" installed</small></div>";
+  if(op||tl)h+=introHTML("tools","Tools appear when your recent answers in a skill reach a proficiency band. Each one makes the building produce "+Math.round(TOOLS.out*100)+"% more and its right answers pay "+Math.round(TOOLS.pay*100)+"% more coins. The price is set the moment a tool appears, and it never changes.");
+  h+='<div class="tools">'+[1,2,3].map(function(L){var s2=L<=tl?"on":op&&op.lv===L?"open":"lock";return'<div class="tool '+s2+'"><b>'+esc(TOOLS.names[L])+"</b><span>"+(s2==="on"?"installed":s2==="open"?"available now":"needs "+PROF.bands[TOOLS.band[L]].name+" proficiency")+"</span></div>";}).join("")+"</div>";
+  if(op)h+='<div class="opp"><div><b>'+esc(TOOLS.names[op.lv])+"</b><p>"+esc(toolLine(op.lv))+"</p></div>"+(cityBuilt(S)?'<button type="button" class="buy cbuy" data-act="toolBuy" data-v="'+id+'" data-cost="'+op.cost+'" aria-label="Install '+esc(TOOLS.names[op.lv])+" for "+fmt(op.cost)+' coins">'+ICON.coin+"<span>"+fmt(op.cost)+'</span><i class="fill"></i></button>':"")+"</div>";
+  else if(tl<TOOLS.max)h+='<p class="pnote">Reach <b>'+esc(PROF.bands[TOOLS.band[tl+1]].name)+"</b> proficiency in "+esc(B.sk)+" and "+esc(TOOLS.names[tl+1])+" appears here, with a price that then stays fixed.</p>";
+  else h+='<p class="pnote">Every tool is installed: output ×'+TRIM(Math.round(toolMult(S,id)*100)/100)+" and right answers here pay ×"+TRIM(1+TOOLS.pay*tl)+" coins.</p>";
+  h+="</div>";
+  h+='<div class="sec" id="plBuild"><div class="sec-h"><h3>Build</h3><small>'+(n?fmt(cityRateOf(S,B,t))+"/s":"nothing built yet")+"</small></div>";
+  if(!cityBuilt(S))h+='<p class="pnote">The town isn’t founded yet.</p>';
+  else if(!can)h+='<p class="pnote">Light your first <b>'+esc(B.sk)+"</b> node to build here: "+(nx-c)+" more right answer"+(nx-c===1?"":"s")+". Working here is the way to do it.</p>";
+  else{var each=CITY_CLASS[B.cls].r*cityLearn(S,B)*toolMult(S,id)*cityBMult(S,B,t)*cityGlobal(S,t),nl=CITY_LV_AT.filter(function(x){return x>n;})[0];
+    h+='<div class="kv"><span>'+n+" owned"+(lv?" · level "+lv:"")+"</span><b>"+(n?"+"+fmt(each*n)+"/s":"+"+fmt(each)+"/s each")+"</b></div>"+(nl?'<div class="kv"><span>Next level at '+nl+" owned</span><b>"+(nl-n)+" more</b></div>":"");
+    h+='<div class="kv"><span>Learning ×'+TRIM(Math.round(cityLearn(S,B)*100)/100)+" · tools ×"+TRIM(Math.round(toolMult(S,id)*100)/100)+'</span><div class="seg" role="group" aria-label="How many to build">'+[1,10,"max"].map(function(k){return'<button type="button" data-act="cityN" data-v="'+k+'" aria-pressed="'+(String(S.city.buyN)===String(k))+'">'+(k==="max"?"Max":"×"+k)+"</button>";}).join("")+"</div></div>";
+    h+='<div class="row2"><button type="button" class="buy cbuy" data-act="cityBuy" data-v="'+id+'">'+ICON.coin+'<span class="bc"></span><i class="fill"></i></button></div>';
+    var ups=cityUpsOpen(S).filter(function(u){return u.b===id;});if(ups.length)h+='<div class="pl-ups">'+ups.map(function(u){var cst=cityUpCost(S,u);return'<div class="row"><div><div class="rt1">'+esc(u.name.replace(B.name+": ",""))+'</div><div class="rdesc">'+esc(u.desc)+'</div></div><button type="button" class="buy cbuy" data-act="cityUp" data-v="'+esc(u.id)+'" data-cost="'+cst+'" aria-label="Buy '+esc(u.name)+" for "+fmt(cst)+' coins">'+ICON.coin+"<span>"+fmt(cst)+'</span><i class="fill"></i></button></div>';}).join("")+"</div>";}
+  h+="</div>";
+  h+='<div class="sec pl-zone"><div class="sec-h"><h3>Part of '+esc(DISTRICTS[d])+'</h3><small>'+esc(Zd.name)+'</small></div><p class="pnote">'+esc(Zd.rule)+": "+esc(Zd.line)+'</p><div class="row2"><button type="button" class="btn line sm" data-act="zoneGo" data-v="'+d+'">Open '+esc(Zd.name)+'</button><button type="button" class="btn line sm" data-act="focusD" data-v="'+d+'">Practice all of '+esc(dom.short)+"</button></div></div>";
+  return h+"</div>";}
+/* ---- rounds ---- */
+function roundGo(id,hard){var B=CITY_BY[id];if(!B)return;if(S.g||UI.arc){toast("Finish what you’re in first","A round can start right after.","pink");return;}if(S.boss){toast("Finish the boss fight first","A round can start right after.","pink");return;}
+  var f="sk:"+B.d+"|"+B.sk+(hard?"|hard":"");advFree(f);roundStart(S,id,!!hard,now());closeM();UI.showRound=false;saveAll();UI.tab="network";applyViews();nextQ();renderFocus();renderNav(true);
+  toast("Round at the "+B.name,(hard?"Five hard ":"Five ")+B.sk+" questions. Every answer counts as usual; the round keeps the tally.","mint",null,3800);SND.tone(660,0.06,"triangle",0.03);SND.tone(880,0.08,"triangle",0.03,0.07);}
+function roundCancel(){if(!S.round||S.round.done)return;roundEnd(S);UI.showRound=false;renderNav(true);}
+/* After the last question: the tally, then back to the building. */
+function roundSumHTML(R){var B=CITY_BY[R.id],pct=Math.round(100*R.c/Math.max(1,R.n)),P=profOf(S,B.d,B.sk),op=oppOf(S,R.id);
+  var h='<div class="setsum roundsum"><span class="lab">Round done · '+esc(B.name)+'</span><div class="big"><b>'+R.c+"/"+R.n+"</b><span>"+pct+"% right in "+esc(B.sk)+"</span></div>";
+  h+='<div class="grid"><div class="stat"><b>+'+fmt(R.sparks)+'</b><span>sparks</span></div><div class="stat"><b>+'+fmt(R.coins)+'</b><span>coins</span></div><div class="stat"><b class="band b'+P.band+'">'+esc(P.name)+'</b><span>proficiency now</span></div><div class="stat"><b>'+(R.node||0)+"</b><span>new skill node"+(R.node===1?"":"s")+"</span></div></div>";
+  h+='<p class="pnote">'+esc(profHow(S,B.d,B.sk))+"</p>";
+  if(op)h+='<p class="pnote" style="color:var(--spark-2)">'+esc(TOOLS.names[op.lv])+" is available for the "+esc(B.name)+" ("+fmt(op.cost)+" coins).</p>";
+  return h+'<div class="row2"><button type="button" class="btn line sm" data-act="roundAgain">Another round</button><button type="button" class="btn line sm" data-act="roundFree">Keep going freely</button></div></div>';}
+function roundBackA(){var R=S.round;if(!R)return;
+  if(R.done){var id=R.id;roundEnd(S);UI.showRound=false;saveAll();placeOpen(id);if(!cur||!Q||Q.answered)nextQ();else{renderConsole();renderFocus();}renderNav(true);return;}
+  UI.tab="network";applyViews();if(isMobile())window.scrollTo(0,0);}
+function roundAgainA(){var R=S.round;if(!R)return;var id=R.id,hard=R.hard;roundEnd(S);UI.showRound=false;roundGo(id,hard);}
+function roundFreeA(){var R=S.round;if(!R)return;roundEnd(S);UI.showRound=false;saveAll();renderFocus();renderNav(true);if(UI.tab==="place")renderPanel();if(!cur||!Q||Q.answered)nextQ();else renderConsole();toast("Round ended","Free play. Open any building to start another.","",null,2600);}
+/* ---- tools ---- */
+function toolBuyA(id,btn){var r=toolBuy(S,id,now());if(!r)return;var B=CITY_BY[id];SND.buy();fxBuy(btn);vib([10,20,40]);toast(TOOLS.names[r.lv]+" · "+B.name,toolLine(r.lv),"mint",null,4200);
+  var L=cityLot(id);if(L&&cityOn())cityFireworks(L.x+L.w/2,cityTopY(L)-10*CT.u,2);w3Fx(id,2);checkAch(S,now()).forEach(function(a){toast("Trophy · "+a[1],a[2]+" +2% sparks forever.","");});cityAfterBuy();}
+/* ---- town projects ---- */
+function projectHTML(id){var P=PROJECT_BY[id],G=projProg(S,P),done=G.done,ready=projReady(S,id),at=done?S.world[id].at:0,canPay=ready&&cityBuilt(S)&&S.city.coins>=P.coins;
+  var h='<div class="lmk proj'+(done?" on":"")+'" id="lmk-'+id+'"><div class="lmk-h"><b>'+esc(P.name)+"</b><span>"+(done?"restored "+esc(new Date(at).toLocaleDateString()):ready?"ready to fund":"a town project")+"</span></div>";
+  h+=introHTML("project","Town projects are the bigger restorations. They ask for proficiency across subjects, then coins, and they change the town for good.");
+  h+='<div class="lmk-art"><figure'+(done?"":' class="cur"')+'><img alt="The dry square" src="'+squareThumb(false)+'"><figcaption>Before</figcaption></figure><figure'+(done?' class="cur"':"")+'><img alt="The restored square" src="'+squareThumb(true)+'"><figcaption>After</figcaption></figure></div>';
+  h+="<p>"+esc(done?P.after:P.before)+'</p><p class="why">'+esc(P.why)+"</p>";
+  if(!done){h+='<div class="lmk-req">';
+    h+='<div class="'+(G.okRW?"ok":"")+'"><i></i><span>'+esc(PROF.bands[P.band].name)+" proficiency in a skill from "+P.rw+' Reading &amp; Writing subjects</span><span class="num">'+Math.min(G.rw,P.rw)+" / "+P.rw+"</span></div>";
+    h+='<div class="'+(G.okM?"ok":"")+'"><i></i><span>… and from '+P.m+' Math subjects</span><span class="num">'+Math.min(G.m,P.m)+" / "+P.m+"</span></div>";
+    h+='<div class="'+(G.coinsOk?"ok":"")+'"><i></i><span>'+fmtInt(P.coins)+' coins from the town’s treasury</span><span class="num">'+fmt(G.coins)+" / "+fmt(P.coins)+"</span></div></div>";
+    h+='<div class="proj-doms">'+DKEYS.map(function(d){var b=G.doms[d];return'<span class="pd'+(b>=P.band?" ok":"")+'" style="--dc:'+DOMAINS[d].color+'" title="'+esc(DOMAINS[d].name+": "+PROF.bands[b].name)+'">'+esc(DOMAINS[d].short)+"<small>"+esc(PROF.bands[b].name)+"</small></span>";}).join("")+"</div>";
+    if(!ready){var weak=DKEYS.filter(function(d){return G.doms[d]<P.band;}).sort(function(a,b){return S.r[a]-S.r[b];}),need=(!G.okRW?weak.filter(function(d){return DOMAINS[d].sec==="rw";}):weak.filter(function(d){return DOMAINS[d].sec==="m";}))[0];
+      h+='<div class="row">'+(need?'<button type="button" class="btn primary sm" data-act="focusD" data-v="'+need+'">Practice '+esc(DOMAINS[need].name)+"</button>":"")+"</div>";}
+    else h+='<div class="row"><button type="button" class="btn primary sm" data-act="projectGo" data-v="'+id+'"'+(canPay?"":" disabled")+">Restore it · "+fmtInt(P.coins)+" coins</button>"+(canPay?"":'<span class="pnote" style="margin:0;align-self:center">'+fmt(Math.max(0,P.coins-G.coins))+" more coins</span>")+"</div>";
+    h+='<p class="pnote" style="margin:0">When it’s done: +'+Math.round((P.mult-1)*100)+"% output for the whole town, an "+RARITY[P.chest].name+" chest (once), and the square comes alive on the skyline and in 3D.</p>";}
+  else h+='<div class="row"><button type="button" class="btn line sm" data-act="lmkLook" data-v="square">Show me</button></div><p class="pnote" style="margin:0">The town’s output is +'+Math.round((P.mult-1)*100)+"% for good.</p>";
+  return h+"</div>";}
+function projectA(id){var P=PROJECT_BY[id];if(!P)return;
+  if(projDone(S,id)){cityLookLandmark(id);return;}
+  if(!projReady(S,id)){toast("Not yet",P.need,"");cityGo("projects");return;}
+  if(!(S.city.coins>=P.coins)){toast("Not enough coins yet",fmt(P.coins-S.city.coins)+" more. Right answers and buildings both pay into the treasury.","");return;}
+  var s0=S.adv&&S.adv.started&&!S.adv.paused?advStep(S):null,r=projDo(S,id,now());if(!r)return;saveAll();closeM();
+  if(UI.tab!=="city"){UI.tab="city";UI.wv="city";}UI.cityPage="hall";if(S.settings.view!=="3d")S.settings.view="city";applyViews();
+  SND.evolve();vib([20,30,80]);renderLoot();renderAdv();UI.railSig="";renderRail();renderNav(true);cityHudRender();
+  setTimeout(function(){cityLookLandmark(id);if(cityOn()){var L=cityLot(id);if(L){cityFireworks(L.x+L.w*0.5,CT.gy-80*CT.u,4);cityFireworks(L.x+L.w*0.2,CT.gy-100*CT.u,3);}}if(w3Shown()&&W3.ready){w3Sync();var L3=W3.lots[id];if(L3)w3Fire(L3.x,8,L3.z,4);}},120);
+  toast(P.name+" restored",P.after+" +"+RARITY[r.chest].name+" chest.","mint",'<button type="button" class="btn primary sm" data-act="openChest" data-v="'+r.chest+'">Open chest</button>',9000);
+  if(s0&&s0.k==="project"&&s0.st==="done")setTimeout(function(){advStepDone(s0);},600);else advTick();}
+/* ---- what changed, for players who were already here ---- */
+function showNew10(){var b=cityBuilt(S);
+  modal('<h2>What’s new: To 1520</h2><p>The game has a new name and a home. Everything you’ve earned is still here; this update organizes it into places.</p><ul class="new9">'+
+   "<li><span>"+ICON.city+"</span><div><b>The town is where you live now</b><p>"+(b?"Your town":"A town")+" is open from the start and shows on the main screen: walk it in 2D or 3D. <b>Town Hall</b> keeps the plans: stage goals, projects, and policies.</p></div></li>"+
+   "<li><span>"+ICON.hall+"</span><div><b>Every building is a place</b><p>Open one from the skyline, or press E next to it in 3D. Its page has a round of five questions in its skill, what you’ve learned there, its tools, and building.</p></div></li>"+
+   "<li><span>"+ICON.tool+"</span><div><b>Tools follow proficiency</b><p>Your last twelve answers in a skill set a band: Learning, Working, Skilled, Expert. Each band reveals a tool for that skill’s building, priced the moment it appears. Coins from anywhere pay for it.</p></div></li>"+
+   "<li><span>"+ICON.star+"</span><div><b>The Town Square</b><p>The first town project. It needs Working proficiency in two Reading and Writing subjects and two Math subjects, then coins, and it changes the square for good.</p></div></li></ul>"+
+   '<div class="mfoot"><button type="button" class="btn primary" data-act="new10Go">Show me the town</button><button type="button" class="btn line" data-act="modalClose">Got it</button><button type="button" class="linkbtn dim" data-act="whatsNew">Earlier updates</button></div>',false,true);}
+/* ---------- v10: the Town Square on the skyline: a dry basin under dark lanterns, then a running fountain and a lit square ---------- */
+function drawSquare(c,x,g,w,P,on,ready){var u=CT.u,t=CT.t,n=P.n,cx=x+w/2,bw=w*0.46,bh=9*u,by=g-5*u,i,f;
+  cRect(c,x,g-4*u,w,4*u,P.stone);c.strokeStyle=hexA("#000000",0.18);c.lineWidth=1;for(i=x+8*u;i<x+w;i+=12*u){c.beginPath();c.moveTo(i,g-4*u);c.lineTo(i,g);c.stroke();}
+  var px0=x+w*0.12,px1=x+w*0.88,ph=42*u,lit=on&&n>0.15;
+  [px0,px1].forEach(function(px){cRect(c,px-1.2*u,g-ph,2.4*u,ph,P.line);cRect(c,px-4*u,g-ph-3*u,8*u,3*u,P.line);if(lit)cGlow(c,"#FFE7A3",px,g-ph-1.5*u,14*u,0.55*n);});
+  c.strokeStyle=on?hexA("#FFE7A3",0.75):P.line;c.lineWidth=1;c.beginPath();for(i=0;i<=20;i++){f=i/20;var sx=px0+(px1-px0)*f,sy=g-ph-3*u+Math.sin(f*Math.PI)*10*u;if(i)c.lineTo(sx,sy);else c.moveTo(sx,sy);}c.stroke();
+  for(i=1;i<8;i++){f=i/8;var lx=px0+(px1-px0)*f,ly=g-ph-3*u+Math.sin(f*Math.PI)*10*u+3*u;
+    if(on){c.fillStyle="#FFE7A3";c.beginPath();c.arc(lx,ly,2.2*u,0,6.283);c.fill();if(n>0.15)cGlow(c,"#FFE7A3",lx,ly,9*u*(0.75+0.25*Math.sin(t*3+i)),0.7*n);}else{c.fillStyle=P.roof;c.beginPath();c.arc(lx,ly,2*u,0,6.283);c.fill();}}
+  [x+w*0.2,x+w*0.8].forEach(function(bx){cRect(c,bx-7*u,g-9*u,14*u,2*u,P.roof);cRect(c,bx-7*u,g-6*u,14*u,1.6*u,P.roof);cRect(c,bx-6*u,g-6*u,1.5*u,6*u,P.roof);cRect(c,bx+4.5*u,g-6*u,1.5*u,6*u,P.roof);});
+  c.fillStyle=P.stone;c.beginPath();c.ellipse(cx,by,bw/2+3*u,bh+2*u,0,0,6.283);c.fill();
+  c.fillStyle=on?mixC("#2B6FA3","#0A1E3A",0.35*n):mixC("#5A5E66","#22262E",n);c.beginPath();c.ellipse(cx,by-1*u,bw/2,bh,0,0,6.283);c.fill();
+  if(!on){c.strokeStyle=hexA("#000000",0.35);c.lineWidth=1;c.beginPath();c.moveTo(cx-bw*0.3,by-2*u);c.lineTo(cx-bw*0.1,by+2*u);c.lineTo(cx+bw*0.05,by-1*u);c.moveTo(cx+bw*0.15,by-4*u);c.lineTo(cx+bw*0.3,by+3*u);c.stroke();cRect(c,cx-2*u,by-16*u,4*u,15*u,P.roof);}
+  else{c.strokeStyle=hexA("#BFE3FF",0.35);c.lineWidth=1;for(i=0;i<3;i++){var rr=((t*0.35+i/3)%1);c.beginPath();c.ellipse(cx,by-1*u,bw/2*rr,bh*rr,0,0,6.283);c.stroke();}
+    cRect(c,cx-2.2*u,by-18*u,4.4*u,17*u,P.stone);cRect(c,cx-5*u,by-19*u,10*u,2*u,P.stone);
+    [-1,0,1].forEach(function(k){var H=(k?14:22)*u,D=(k?19:22)*u;c.strokeStyle=hexA("#DFF3FF",0.85);c.lineWidth=1.6*u;c.beginPath();for(var j=0;j<=10;j++){var ff=j/10,jx=cx+k*ff*14*u,jy=by-19*u-Math.sin(ff*Math.PI)*H+ff*ff*D;if(j)c.lineTo(jx,jy);else c.moveTo(jx,jy);}c.stroke();
+      var dp=((t*1.4+k*0.3)%1+1)%1,dx=cx+k*dp*14*u,dy=by-19*u-Math.sin(dp*Math.PI)*H+dp*dp*D;c.fillStyle="#FFFFFF";c.beginPath();c.arc(dx,dy,1.2*u,0,6.283);c.fill();});
+    if(n>0.15)cGlow(c,"#9CD3FF",cx,by-8*u,22*u,0.35*n);
+    for(i=0;i<4;i++){var pp=cx+(i-1.5)*bw*0.42+Math.sin(t*0.6+i)*2*u,bob=Math.abs(Math.sin(t*2+i*1.7))*0.8*u,col=["#E0845E","#5DD6A8","#C9A2FF","#FFC933"][i];cRect(c,pp-1.6*u,g-13*u-bob,3.2*u,7*u,col);c.fillStyle="#F2D6B3";c.beginPath();c.arc(pp,g-15*u-bob,1.8*u,0,6.283);c.fill();}}
+  if(ready&&!on){var pulse=0.5+0.5*Math.sin(t*3);cGlow(c,"#3FE09E",cx,by-12*u,24*u,0.25+0.25*pulse);cRect(c,cx-15*u,g-40*u,30*u,11*u,"#1F7A55");c.font="700 "+(6*u).toFixed(1)+'px "Chakra Petch",sans-serif';c.textAlign="center";c.fillStyle="#fff";c.fillText("RESTORE",cx,g-32.5*u);}
+  var hov=CT.pin&&CT.pin.id==="square"||CT.hover==="square";if(hov){c.strokeStyle=hexA("#5DD6A8",CT.pin&&CT.pin.id==="square"?0.9:0.5);c.lineWidth=1.5;c.setLineDash([4,3]);c.strokeRect(x-4,g-70*u,w+8,70*u);c.setLineDash([]);}}
+function squareThumb(on){var key="square:"+(on?1:0);if(THUMB[key]!=null)return THUMB[key];var W=480,H=160,cv=document.createElement("canvas");cv.width=W;cv.height=H;var c=cv.getContext("2d");
+  var su=CT.u,stt=CT.t,sw=CT.w,sp=CT.pin,sh=CT.hover;CT.u=1.55;CT.t=8.7;CT.w=W;CT.pin=null;CT.hover=null;
+  try{var P=cityPal({n:on?0.55:0.35,dk:0}),g=H-16,lw=150*CT.u,x0=(W-lw)/2,gr=c.createLinearGradient(0,0,0,H);gr.addColorStop(0,on?"#1B2A4A":"#2A3350");gr.addColorStop(0.7,on?"#6C5A8A":"#7C8494");gr.addColorStop(1,on?"#C98A6A":"#A9A39A");c.fillStyle=gr;c.fillRect(0,0,W,H);
+    c.fillStyle=P.ground;c.fillRect(0,g,W,H-g);drawSquare(c,x0,g,lw,P,on,false);}catch(e){}
+  CT.u=su;CT.t=stt;CT.w=sw;CT.pin=sp;CT.hover=sh;var url="";try{url=cv.toDataURL("image/png");}catch(e){}THUMB[key]=url;return url;}
+function squareTipHTML(){var P=PROJECT_BY.square,G=projProg(S,P),rd=projReady(S,"square"),done=G.done;
+  return'<h5 style="color:#5DD6A8">'+esc(P.name)+'</h5><div class="k">the plaza · a town project</div><div>'+esc(done?P.after:P.before)+"</div>"+(done?'<div class="ok">Restored</div>':rd?'<div class="ok">Evidence complete'+(G.coinsOk?" · ready to fund":" · "+fmt(P.coins-G.coins)+" more coins")+"</div>":'<div class="k">'+Math.min(G.rw,P.rw)+" of "+P.rw+" Reading &amp; Writing subjects · "+Math.min(G.m,P.m)+" of "+P.m+" Math subjects at Working</div>")+
+    '<div class="row2">'+(rd&&!done&&G.coinsOk?'<button type="button" class="btn primary sm" data-act="projectGo" data-v="square">Restore it</button>':"")+'<button type="button" class="btn line sm" data-act="lmkGo" data-v="square">Details</button></div>';}
+
 /* ---------- v9: landmarks ---------- */
 function restoreA(id){var R=RESTORE_BY[id];if(!R)return;
-  if(!cityBuilt(S)){toast("Found your city first","The "+R.name+" is in your city’s "+DISTRICTS[R.d]+" district.","");openTab("city");return;}
+  if(!cityBuilt(S)){toast("Name your town first","The "+R.name+" is in your town’s "+DISTRICTS[R.d]+" district.","");openTab("city");return;}
   if(restoreDone(S,id)){cityLookLandmark(id);return;}
   if(!restoreReady(S,id)){var P=restoreProg(S,R);toast("Not yet",R.need+" You have "+P.right+" right"+(P.recent!=null?", "+P.recent+" of your last 10":"")+".","",'<button type="button" class="btn primary sm" data-act="focusSk" data-v="'+esc(R.d+"|"+R.sk)+'">Practice it</button>',6000);return;}
   var s0=S.adv&&S.adv.started&&!S.adv.paused?advStep(S):null,r=restoreDo(S,id,now());if(!r)return;saveAll();closeM();
@@ -8010,7 +8345,7 @@ document.addEventListener("click",function(e){
    case"advLen":advReplan(S,now(),v);saveLocal();showAdv();UI.advSig="";renderAdv();UI.railSig="";renderRail();break;
    case"cbTry":cbTry();break;case"bossTgt":bossTgtA(i);break;
    case"restore":restoreA(v);break;case"lmkLook":closeM();if(!cityBuilt(S))break;if(UI.tab!=="city"){UI.tab="city";UI.wv="city";applyViews();}setTimeout(function(){cityLookLandmark(v);},120);break;
-   case"lmkGo":closeM();UI.wv="city";if(UI.tab!=="city")setTab("city");else applyViews();setTimeout(function(){var el=$("lmk-"+v);if(el){el.scrollIntoView({block:"center",behavior:reduced?"auto":"smooth"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}},90);break;
+   case"lmkGo":closeM();UI.wv="city";UI.cityPage="hall";if(UI.tab!=="city")setTab("city");else applyViews();setTimeout(function(){var el=$("lmk-"+v);if(el){el.scrollIntoView({block:"center",behavior:reduced?"auto":"smooth"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}},90);break;
    case"welcomeSkip":S.welcomed=true;S.seenV3=true;S.seenV4=true;S.onb.done=true;S.onb.step=9;saveLocal();closeModal();SND.wake();renderAdv();UI.railSig="";renderRail();toast("Intro skipped","Replay it anytime from Settings. Today’s Adventure is above your questions.","",null,4200);break;
    case"onbSkip":closeM();onbFinish();toast("Intro skipped","Replay it anytime from Settings.","",null,3000);break;
    case"onbNext":coachHide();advance();break;case"onbGift":onbGiftA(v);break;
@@ -8057,11 +8392,16 @@ document.addEventListener("click",function(e){
    case"lgJoin":if(!CAP.db||!CAP.uid)break;S.settings.league=true;saveAll();CAP.lgSig="";lgPush(true);UI.lg=null;renderPanel();setTimeout(lgFetch,800);break;
    case"lgLeave":lgLeave();break;case"lgRefresh":lgPush(true);lgFetch();toast("League","Refreshing the table.","",null,1800);break;
    case"tab":closeModal();setTab(v);if(UI.tab==="arena"&&S.settings.league){lgPush();lgFetch();}break;
+   case"back":closeModal();goBack();break;
+   case"place":closeModal();placeOpen(v);break;case"roundGo":roundGo(v,!!b.getAttribute("data-hard"));break;case"roundBack":roundBackA();break;case"roundAgain":roundAgainA();break;case"roundFree":roundFreeA();break;
+   case"toolBuy":toolBuyA(v,b);break;case"projectGo":projectA(v);break;case"cityPage":UI.cityPage=v;renderPanel(true);break;
+   case"introOk":S.intro[v]=1;saveLocal();var inEl=$("intro-"+v);if(inEl)inEl.remove();break;
+   case"new10Go":closeModal();S.settings.view=cityBuilt(S)?(S.settings.view==="3d"?"3d":"city"):"engine";saveLocal();if(UI.tab!=="network")setTab("network");else applyViews();break;
    case"form":if(formOpen(S,v)){S.form=v;saveLocal();applyViews();renderHUD();renderConsole();}break;
    case"profile":showProfile(v);break;
    case"scrollTo":var tg=$(v);if(tg)tg.scrollIntoView({block:"start",behavior:reduced?"auto":"smooth"});break;
    case"buyUp":buyUpA(v,b);break;case"buyGen":buyGenA(v,b);break;case"buyHub":buyHubA(v,b);break;
-   case"zoneOpen":UI.zone=ZONES[v]?v:null;renderPanel(true);if(isMobile())window.scrollTo(0,0);break;case"zoneGo":closeModal();zoneGo(v);break;
+   case"zoneOpen":UI.zone=ZONES[v]?v:null;renderPanel(true);if(isMobile())window.scrollTo(0,0);break;case"zoneGo":closeModal();if(UI.tab==="place")pushBack();zoneGo(v);break;
    case"zBuy":zBuyA(v,b);break;case"zExpand":zExpandA(v,b);break;case"keyBuy":keyBuyA(v);break;case"zLaunch":zLaunchA(b);break;case"zWithdraw":zWithdrawA(b);break;
    case"roadClaim":roadGot(roadClaim(S,+v));refreshProfileLevel();break;case"roadAll":roadGot(roadClaimAll(S));refreshProfileLevel();break;
    case"talBuy":if(talBuy(S,v)){SND.buy();vib(10);toast(TAL_BY[v].name,TAL_BY[v].desc,"mint",null,2400);refreshProfileLevel();renderLoot();renderNav(true);saveAll();}break;
@@ -8077,8 +8417,8 @@ document.addEventListener("click",function(e){
    case"claimQ":var cq=claimQuest(S,i);if(cq){if(b.closest(".ev"))b.remove();SND.buy();toast("Quest claimed","+Rare chest"+(cq.bonus?", plus an Epic chest for clearing all three.":"."),"mint");checkAch(S,now()).forEach(function(a){toast("Trophy · "+a[1],a[2]+" +2% sparks forever.","");});UI.railSig="";renderRail();renderLoot();saveAll();if(b.closest(".toast"))b.closest(".toast").remove();if(modalOpen()&&$("pfProj"))showProfile();}break;
    case"claimW":if(claimWeekly(S)){if(b.closest(".ev"))b.remove();SND.rank();toast("Weekly claimed","+Legendary chest.","mint");UI.railSig="";renderRail();renderLoot();saveAll();if(b.closest(".toast"))b.closest(".toast").remove();if(modalOpen()&&$("pfProj"))showProfile();}break;
    case"bossGo":closeModal();bossGo(v);break;case"bossFlee":bossFlee();break;
-   case"focusD":advFree(v);S.focus=v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();if(isMobile())window.scrollTo(0,0);toast("Focus",v==="spots"?"Reviewing blind spots.":"Training "+DOMAINS[v].name+".","mint",null,2200);break;
-   case"focusSk":var sf=skFocus("sk:"+v);if(sf){if(modalOpen())closeModal();advFree("sk:"+v);S.focus="sk:"+v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();if(isMobile())window.scrollTo(0,0);toast("Focus",(sf.hard?"Hard drill: ":"Training ")+sf.sk+".","mint",null,2200);}break;
+   case"focusD":advFree(v);roundCancel();S.focus=v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();if(isMobile())window.scrollTo(0,0);toast("Focus",v==="spots"?"Reviewing blind spots.":"Training "+DOMAINS[v].name+".","mint",null,2200);break;
+   case"focusSk":var sf=skFocus("sk:"+v);if(sf){if(modalOpen())closeModal();advFree("sk:"+v);roundCancel();S.focus="sk:"+v;saveLocal();hideTip(true);UI.tab="network";applyViews();nextQ();if(isMobile())window.scrollTo(0,0);toast("Focus",(sf.hard?"Hard drill: ":"Training ")+sf.sk+".","mint",null,2200);}break;
    case"pack":showPackModal();break;case"impOpen":showImportModal();break;case"impGo":importGo();break;case"impClear":var ids={};S.imports.forEach(function(x){ids[x.id]=1;});for(var ri=RW_BANK.length-1;ri>=0;ri--)if(ids[RW_BANK[ri].id])RW_BANK.splice(ri,1);S.imports=[];saveAll();showImportModal("Cleared.");break;case"packgo":openPack();break;
    case"packstop":if(CAP.packCtl){try{CAP.packCtl.abort();}catch(x){}}break;
    case"modalClose":closeModal();break;
@@ -8105,13 +8445,13 @@ document.addEventListener("click",function(e){
      S=newState(now());S.welcomed=true;S.seenV3=true;shownSparks=0;ST.disp={};ST.parts=[];ST.pulses=[];ST.fx=[];closeModal();saveLocal();if(CAP.ref)cloudPush(true);stageLayout();renderAll();nextQ();toast("Fresh start","Back to 320. Climb again.","pink");break;
   }
 });
-document.addEventListener("change",function(e){if(e.target&&e.target.id==="loadFileIn"){loadFile(e.target);return;}if(e.target&&e.target.id==="focusSel"){advFree(e.target.value);S.focus=e.target.value;saveLocal();renderAdv();if(Q&&!Q.answered&&!UI.showSet)nextQ();else renderFocus();}});
+document.addEventListener("change",function(e){if(e.target&&e.target.id==="loadFileIn"){loadFile(e.target);return;}if(e.target&&e.target.id==="focusSel"){advFree(e.target.value);roundCancel();S.focus=e.target.value;saveLocal();renderAdv();if(Q&&!Q.answered&&!UI.showSet)nextQ();else renderFocus();}});
 document.addEventListener("keydown",function(e){
   if(S)S.lastInteract=now();SND.wake();
   if(S&&(e.ctrlKey||e.metaKey)&&!e.altKey&&(e.key==="s"||e.key==="S")){e.preventDefault();saveNow();return;}
   if(modalOpen()){if(e.key==="Enter"&&e.target&&e.target.id==="cityNameM"){e.preventDefault();cityFoundA("M");return;}if(UI.wn&&e.target&&e.target.id==="wnTwIn")return;if(UI.wn&&(e.key==="ArrowRight"||e.key==="ArrowLeft")){wnGo(UI.wn.i+(e.key==="ArrowRight"?1:-1));e.preventDefault();return;}if(e.key==="Escape"&&!$("modal").dataset.lock)closeModal();return;}
   if(e.key==="Escape"&&COACH){if(COACH.step===3){S.onb.step=4;saveLocal();coachHide();onbShow();}else if(COACH.step===4)onbFinish();else coachHide();return;}
-  if(e.key==="Escape"){if(MT.pin>=0){mtipHide();return;}if(CT.pin){ctipHide(true);return;}if(ST.pin){hideTip(true);return;}if(UI.tab!=="network"&&!isMobile()){setTab("network");return;}}
+  if(e.key==="Escape"){if(MT.pin>=0){mtipHide();return;}if(CT.pin){ctipHide(true);return;}if(ST.pin){hideTip(true);return;}if(UI.tab!=="network"&&!isMobile()){goBack();return;}}
   if(e.target&&(e.target.id==="cityNameIn"||e.target.id==="cityNameP")){if(e.key==="Enter"){e.preventDefault();if(e.target.id==="cityNameP")cityFoundA("P");else{var rb=document.querySelector('[data-act="cityRename"]');if(rb)rb.click();}}return;}
   var tag=(e.target&&e.target.tagName||"").toLowerCase();
   if(tag==="button"&&(e.key==="Enter"||e.key===" "))return;
@@ -8153,8 +8493,10 @@ document.addEventListener("mouseup",function(){setTimeout(hlApply,0);});
 document.addEventListener("touchend",function(){setTimeout(hlApply,60);},{passive:true});
 
 /* ---------- boot ---------- */
-function start(hot){
-  var t=now();
+/* If anything goes wrong before the first frame, the title card turns into a recovery screen and the save is left as it was. */
+function start(hot){try{startGame(hot);}catch(e){try{console.error(e);}catch(x){}if(window.__title)window.__title.fail(e&&e.message);}}
+function startGame(hot){
+  var t=now();if(window.__title)window.__title.msg("Opening your save…");
   S=(hot&&hot.S&&hot.S.r)?migrate(hot.S,t):(loadLocal()||newState(t));
   var fresh=!S.welcomed,off=offlineGain(S,t),coff=cityOffline(S,t),xoff=expOffline(S,t);if(off)addSparks(S,off.gain);if(coff)cityEarn(S,coff.gain);if(xoff)expGain(S,xoff);
   S.lastSeen=t;S.lastInteract=t;shownSparks=S.sparks;rollDay(S,t);
@@ -8163,15 +8505,16 @@ function start(hot){
   impRegister(S.imports);
   if(S.pick&&!S.pick.done){var gotp=autoPick(S);if(gotp.length)setTimeout(function(){toast("Card from your last set",gotp.map(cardLabel).join(" and ")+".","mint",null,4200);},1400);}
   evoCheck(S,t);
-  wireStage();wireCity();wireMap();renderAll();nextQ();saveLocal();stageLayout();
+  wireStage();wireCity();wireMap();renderAll();nextQ();if(S.round&&S.round.done){UI.showRound=true;renderConsole();}saveLocal();stageLayout();
   if(fresh)showWelcome();
   else if(!S.seenV3){S.seenV3=true;S.seenV9=true;saveLocal();showWhatsNew();}
+  else if(!S.seenV10){S.seenV10=true;S.seenV9=true;S.seenV8=true;S.seenV7=true;S.seenV6=true;S.seenV5=true;S.seenV4=true;saveLocal();showNew10();}
   else if(!S.seenV9){S.seenV9=true;S.seenV8=true;S.seenV7=true;S.seenV6=true;S.seenV5=true;S.seenV4=true;saveLocal();showNew9();}
   else if(!S.seenV8){S.seenV8=true;S.seenV7=true;S.seenV6=true;S.seenV5=true;S.seenV4=true;saveLocal();showTour(8,0);}
   else if(!S.seenV7){S.seenV7=true;S.seenV6=true;S.seenV5=true;S.seenV4=true;saveLocal();showTour(7,0);}
   else if(!S.seenV6){S.seenV6=true;S.seenV5=true;S.seenV4=true;saveLocal();showTour(6,0);}
   else if(!S.seenV5){S.seenV5=true;S.seenV4=true;saveLocal();showTour(5,0);}
-  if(!fresh&&cityBuilt(S)&&!S.settings.w3new){S.settings.w3new=true;saveLocal();setTimeout(function(){toast("New · Walk your city in 3D","Explore its streets, open any building up close, and catch golden blimps overhead.","mint",'<button type="button" class="btn primary sm" data-act="view" data-v="3d">Walk it</button>',9000);},3200);}
+  if(!fresh&&cityBuilt(S)&&!S.settings.w3new){S.settings.w3new=true;saveLocal();setTimeout(function(){toast("New · Walk your town in 3D","Explore its streets, open any building up close, and catch golden blimps overhead.","mint",'<button type="button" class="btn primary sm" data-act="view" data-v="3d">Walk it</button>',9000);},3200);}
   else if((off&&off.gain>=1)||(coff&&coff.gain>=1)||(xoff&&xoff.gems+xoff.sup>=1))showOffline(off,coff,xoff);
   if(S.evo.stage>S.evo.seen){if(modalOpen())UI.afterModal=maybeEvolveModal;else maybeEvolveModal();}
   if(!UI.afterModal)maybeSeasonEnd();
@@ -8180,6 +8523,7 @@ function start(hot){
   var bootCl=unitCheck(S,t);if(bootCl.length){saveLocal();setTimeout(function(){stagesCleared(bootCl);},1500);}
   try{if(window.claude&&window.claude.hot&&typeof window.claude.hot.snapshot==="function")window.claude.hot.snapshot(function(){return{S:S};});}catch(e){}
   requestAnimationFrame(loop);initCaps();
+  if(window.__title)window.__title.done();
   /* Test hook for the local Playwright checks; published pages never see it. */
   if(location.protocol==="file:")window.__g1520={S:function(){return S;},cur:function(){return cur;},Q:function(){return Q;},arc:function(){return UI.arc;},arcEnd:arcEnd,city:function(){return CT;},map:function(){return MT;},tileXY:tileXY,expExploreA:expExploreA,cityFrame:function(t){cityFrame(t,0.033);},w3:function(){return W3;},w3Screen:w3Screen,w3Look:w3Look,w3Frame:function(t){w3Frame(t,0.033);},catchBlimp:catchBlimp,spawnBlimp:spawnBlimp,spawnSurge:spawnSurge,surge:function(){return ST.surge;},core:function(){return ST.g?{x:ST.g.cx,y:ST.g.coreY}:null;}};
 }

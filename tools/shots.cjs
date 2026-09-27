@@ -8,7 +8,7 @@ const { routeThree } = require("./three.cjs");
 
 const out = process.argv[2] || ".";
 const only = process.argv[3] || "";
-// GAME=dist/Grind-to-1520/grind-to-1520.html checks the PC edition instead.
+// GAME=dist/To-1520/to-1520.html checks the PC edition instead.
 const file = "file://" + path.resolve(__dirname, "..", process.env.GAME || "index.html");
 const cache = {};
 

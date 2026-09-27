@@ -5,7 +5,7 @@ const { chromium } = require("playwright");
 const { simulate } = require("./sim.cjs");
 const { routeThree } = require("./three.cjs");
 
-// GAME=dist/Grind-to-1520/grind-to-1520.html checks the PC edition instead.
+// GAME=dist/To-1520/to-1520.html checks the PC edition instead.
 const file = "file://" + path.resolve(__dirname, "..", process.env.GAME || "index.html");
 const KEY = "grind1520.save.v1";
 const base = JSON.stringify(simulate({ days: 6, perDay: 60, learn: 0.25, seed: 3, ascend: 3 }).S);
@@ -20,6 +20,8 @@ function unit2(S, edit) {
 function save(edit) {
   const S = JSON.parse(base);
   S.welcomed = true; S.seenV3 = true; S.seenV4 = true; S.evo.seen = S.evo.stage; S.lastSeen = S.lastInteract = Date.now();
+  // Most checks drive the engine screen; the ones about the town set the view themselves.
+  S.settings.view = "engine";
   if (edit) edit(S);
   return JSON.stringify(S);
 }
@@ -29,8 +31,9 @@ async function open(browser, json, w, h, opts) {
   page.on("pageerror", (e) => page.errors.push(e.message));
   await page.route(/^https?:\/\//, (r) => r.abort());
   if (!(opts && opts.noThree)) await routeThree(page);
-  // Seed the save once per tab, so a reload shows what the game saved rather than the starting save.
-  if (json) await page.addInitScript((j) => { try { if (!sessionStorage.getItem("seeded")) { localStorage.setItem("grind1520.save.v1", j); sessionStorage.setItem("seeded", "1"); } } catch (e) {} }, json);
+  // Seed the save once per page: only while there is no save yet (or it is still the untouched seed), so a reload
+  // shows what the game saved rather than the starting save. No marker is needed, so nothing can lose it.
+  if (json) await page.addInitScript((j) => { try { var cur = localStorage.getItem("grind1520.save.v1"); if (cur === null || cur === j) localStorage.setItem("grind1520.save.v1", j); } catch (e) {} }, json);
   await page.goto(file);
   await page.waitForTimeout(900);
   return page;
@@ -272,12 +275,19 @@ const TESTS = {
     if (s.imports.length !== 5) throw new Error("imports " + s.imports.length);
     return page;
   },
-  async "locked tabs stay locked on a new game"(b) {
+  async "a new game opens its town; only the next locked place shows"(b) {
     const page = await open(b, null);
     await page.click('[data-act="welcomeGo"]');
+    const s0 = await state(page);
+    if (!s0.city.founded || s0.settings.view !== "city") throw new Error("no town on a new game: " + JSON.stringify([s0.city.founded, s0.settings.view]));
+    if ((await page.getAttribute("body", "data-view")) !== "city") throw new Error("the main screen is not the town");
+    const tabs = await page.$$eval("#decknav .dn-tab b", (els) => els.map((e) => e.textContent.trim().replace(/NEW$/, "")));
+    if (tabs[0] !== "Town" || tabs[1] !== "Town Hall") throw new Error("places bar: " + tabs.join(" | "));
+    if (tabs.filter((t) => t === "Ascend").length !== 1 || (await page.locator("#decknav .dn-tab.locked").count()) !== 1) throw new Error("exactly one locked place should show: " + tabs.join(" | "));
     await page.click('#decknav [data-v="city"]');
-    if (await page.isVisible("#panelWrap")) throw new Error("city opened at stage 0");
-    if (!/locked/i.test(await page.textContent("#toasts"))) throw new Error("no lock toast");
+    if (!(await page.isVisible("#panelWrap")) || !/Town Hall/.test(await page.textContent("#panel .crumb"))) throw new Error("the Town Hall did not open at stage 0");
+    await page.click('#decknav [data-v="ascend"]');
+    if (!/locked/i.test(await page.textContent("#toasts"))) throw new Error("no lock toast for Ascend");
     // Things to do and buy are open from the first answer: the Arcade and the zones. Bosses wait for stage 1.
     await page.click('#decknav [data-v="arena"]');
     if (!(await page.isVisible("#panelWrap"))) throw new Error("the Arena is closed on a new game");
@@ -497,17 +507,21 @@ const TESTS = {
     if (!(await page.isVisible("#lsvg"))) throw new Error("grid not visible");
     return page;
   },
-  async "found a city and build on it"(b) {
-    const page = await open(b, save((S) => { S.city = { founded: 0, asked: false, name: "Sparkton", coins: 0, life: 0, b: {}, up: {}, w: {}, pol: "", polAt: 0, buffs: [], blimps: 0, buyN: 1, answers: 0, built: 0, bestRate: 0 }; }));
-    if (!(await page.locator("#modal:not([hidden]) #cityNameM").count())) throw new Error("founding prompt did not open");
-    await page.fill("#cityNameM", "Testville");
-    await page.click('#modal [data-act="cityFound"]');
-    await page.waitForTimeout(400);
+  async "an unfounded save gets its town; rename it and build on it"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "city"; S.city = { founded: 0, asked: false, name: "Sparkton", coins: 5000, life: 0, b: {}, up: {}, w: {}, pol: "", polAt: 0, buffs: [], blimps: 0, buyN: 1, answers: 0, built: 0, bestRate: 0 }; }));
+    if (await page.locator("#modal:not([hidden]) #cityNameM").count()) throw new Error("the old founding prompt came back");
+    const s0 = await state(page);
+    if (!s0.city.founded || s0.city.name !== "Sparkton") throw new Error("the town was not founded on load: " + JSON.stringify({ f: s0.city.founded, n: s0.city.name }));
+    if (!(await page.isVisible("#cityCv"))) throw new Error("town canvas hidden");
+    await page.click('#decknav [data-v="city"]');
+    await page.click('#panel [data-act="cityRenameOpen"]');
+    await page.fill("#cityNameIn", "Testville");
+    await page.click('#panel [data-act="cityRename"]');
+    await page.waitForTimeout(200);
     const s1 = await state(page);
-    if (!s1.city.founded || s1.city.name !== "Testville") throw new Error("not founded: " + JSON.stringify({ f: s1.city.founded, n: s1.city.name }));
-    if (s1.settings.view !== "city") throw new Error("view did not switch to the city");
-    if ((await page.getAttribute("body", "data-tab")) !== "city") throw new Error("City tab not open");
-    if (!(await page.isVisible("#cityCv"))) throw new Error("city canvas hidden");
+    if (s1.city.name !== "Testville") throw new Error("rename failed: " + s1.city.name);
+    if ((await page.getAttribute("body", "data-tab")) !== "city") throw new Error("Town Hall not open");
+    await page.click('#panel [data-act="cityPage"][data-v="build"]');
     await page.click('#panel [data-act="cityBuy"].can');
     await page.waitForTimeout(200);
     const s2 = await state(page);
@@ -532,7 +546,8 @@ const TESTS = {
     return page;
   },
   async "catch a golden blimp"(b) {
-    const page = await open(b, save((S) => { S.settings.view = "city"; }));
+    // The one-time "walk your town in 3D" note sits where the blimp flies, so mark it seen.
+    const page = await open(b, save((S) => { S.settings.view = "city"; S.settings.w3new = true; }));
     const s0 = await state(page);
     await page.evaluate(() => window.__g1520.spawnBlimp(performance.now()));
     await page.waitForTimeout(2600);
@@ -548,7 +563,6 @@ const TESTS = {
   async "pass a Town Hall policy"(b) {
     const page = await open(b, save((S) => { S.city.pol = ""; S.city.polAt = 0; }));
     await page.click('#decknav [data-v="city"]');
-    await page.click('#panel [data-act="scrollTo"][data-v="cwHall"]');
     await page.click('#panel [data-act="cityPol"][data-v="study"]');
     const s = await state(page);
     if (s.city.pol !== "study") throw new Error("policy is " + JSON.stringify(s.city.pol));
@@ -575,6 +589,7 @@ const TESTS = {
     await page.waitForTimeout(300);
     const box = await page.locator("#cityCv").boundingBox();
     if (!box || box.height < 250) throw new Error("city canvas too small: " + JSON.stringify(box));
+    await page.click('#panel [data-act="cityPage"][data-v="build"]');
     if (!(await page.locator('#panel [data-act="cityBuy"]').count())) throw new Error("no build list");
     const over = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
     if (over) throw new Error("horizontal overflow on the City tab");
@@ -697,9 +712,14 @@ const TESTS = {
     if (s.seenV7 !== true) throw new Error("tour will show again");
     return page;
   },
-  async "the Library building shows its own card, not the wonder's"(b) {
+  async "the Library building shows its own page and card, not the wonder's"(b) {
     const page = await open(b, save((S) => { S.settings.view = "city"; S.city.b.library = S.city.b.library || 1; }));
     await page.click('[data-act="tab"][data-v="city"]');
+    await page.click('#panel [data-act="cityPage"][data-v="build"]');
+    await page.click('#panel .cthumb[data-v="library"]');
+    await page.waitForTimeout(300);
+    const h = await page.textContent("#panel .glass-h");
+    if (!/Library/.test(h) || !/Central Ideas and Details/.test(h) || /Wonder|Grand/.test(h)) throw new Error("wrong page: " + h.slice(0, 100));
     await page.click('#panel [data-act="cityLook"][data-v="library"]');
     await page.waitForTimeout(400);
     const t = await page.textContent("#ctip");
@@ -736,7 +756,7 @@ const TESTS = {
     if (!/Saved/.test(await page.textContent(".toasts"))) throw new Error("no saved message");
     const [dl] = await Promise.all([page.waitForEvent("download"), page.click('#modal [data-act="saveFile"]')]);
     const code = require("fs").readFileSync(await dl.path(), "utf8");
-    if (!/^G1520:/.test(code) || !/^grind-to-1520-save-\d{4}-\d{2}-\d{2}\.txt$/.test(dl.suggestedFilename())) throw new Error("bad save file: " + dl.suggestedFilename());
+    if (!/^G1520:/.test(code) || !/^to-1520-save-\d{4}-\d{2}-\d{2}\.txt$/.test(dl.suggestedFilename())) throw new Error("bad save file: " + dl.suggestedFilename());
     const S = JSON.parse(Buffer.from(code.slice(6), "base64").toString("utf8"));
     S.city.name = "Filetown";
     const f = require("path").join(require("os").tmpdir(), "g1520-load-test.txt");
@@ -852,7 +872,9 @@ const TESTS = {
     if (!/Town Hall/.test(await page.textContent("#w3Act"))) throw new Error("no prompt for the nearest building");
     await page.focus("#w3Cv");
     await page.keyboard.press("e");
-    await page.waitForFunction(() => { const t = document.getElementById("ctip"); return t && !t.hidden && /Town Hall/.test(t.textContent); }, null, { timeout: 8000 });
+    // E opens the place as a page: the Town Hall's own page here.
+    await page.waitForFunction(() => document.body.dataset.tab === "city" && /Town Hall/.test((document.querySelector("#panel .crumb") || {}).textContent || ""), null, { timeout: 8000 });
+    if (!(await page.isVisible("#w3Cv"))) throw new Error("the 3D town disappeared behind the page");
     return page;
   },
   async "build from a 3D building card"(b) {
@@ -861,8 +883,12 @@ const TESTS = {
     await page.click('[data-act="tab"][data-v="city"]');
     await page.waitForTimeout(500);
     if (!(await page.locator('#panel [data-act="wv"][data-v="3d"][aria-pressed="true"]').count())) throw new Error("the World tab is not on 3D");
+    await page.click('#panel [data-act="cityPage"][data-v="build"]');
     const id = await page.getAttribute('#panel .cbrow [data-act="cityBuy"]', "data-v");
     const n0 = (await state(page)).city.b[id] || 0;
+    await page.click('#panel .cthumb[data-v="' + id + '"]');
+    await page.waitForTimeout(300);
+    if (!(await page.locator('#panel [data-act="roundGo"]').count())) throw new Error("the building's page did not open");
     await page.click('#panel [data-act="cityLook"][data-v="' + id + '"]');
     await page.waitForFunction(() => { const t = document.getElementById("ctip"); return t && !t.hidden && t.style.visibility !== "hidden" && t.querySelector('[data-act="cityBuy"]'); }, null, { timeout: 10000 });
     await page.click('#ctip [data-act="cityBuy"]');
@@ -929,7 +955,7 @@ const TESTS = {
     await page.waitForSelector("#coach", { timeout: 5000 });
     if (!/first question/i.test(await page.textContent("#coach"))) throw new Error("no prompt to answer");
     await answerRight(page);
-    await page.waitForFunction(() => { const c = document.getElementById("coach"); return c && /engine grew/i.test(c.textContent) && c.style.visibility !== "hidden"; }, null, { timeout: 5000 });
+    await page.waitForFunction(() => { const c = document.getElementById("coach"); return c && /engine grew|town noticed/i.test(c.textContent) && c.style.visibility !== "hidden"; }, null, { timeout: 5000 });
     await page.click('#coach [data-act="onbNext"]');
     await answerAny(page); await page.click("#nextBtn");
     await answerAny(page);
@@ -939,7 +965,7 @@ const TESTS = {
     const s1 = await state(page);
     if (s1.up.focus !== 1 || s1.onb.gift !== "focus") throw new Error("the free upgrade was not installed");
     await page.click('#coach [data-act="onbAdv"]');
-    await page.waitForFunction(() => { const c = document.getElementById("coach"); return c && /Everything else/.test(c.textContent); }, null, { timeout: 5000 });
+    await page.waitForFunction(() => { const c = document.getElementById("coach"); return c && /places live|Everything else/.test(c.textContent); }, null, { timeout: 5000 });
     await page.click('#coach [data-act="onbDone"]');
     const s2 = await state(page);
     if (!s2.onb.done) throw new Error("the intro did not finish");
@@ -964,14 +990,16 @@ const TESTS = {
     if (!(await state(p1)).onb.done) throw new Error("the skip was not saved");
     if (p1.errors.length) throw new Error("page errors: " + p1.errors.join(" | "));
     await p1.close();
-    const page = await open(b, save((S) => { S.v = 8; delete S.seenV9; delete S.onb; delete S.adv; delete S.lrn; delete S.world; delete S.recov; delete S.gb.hist; }));
-    if (!(await page.locator('#modal:not([hidden]) [data-act="new9Go"]').count())) throw new Error("no what's new for a v8 save");
+    const page = await open(b, save((S) => { S.v = 8; delete S.seenV9; delete S.seenV10; delete S.onb; delete S.adv; delete S.lrn; delete S.world; delete S.recov; delete S.gb.hist; delete S.tools; delete S.opps; delete S.intro; }));
+    if (!(await page.locator('#modal:not([hidden]) [data-act="new10Go"]').count())) throw new Error("no what's new for a v8 save");
     if (await page.locator("#coach").count()) throw new Error("an existing player got the beginner intro");
-    await page.click('#modal [data-act="new9Go"]');
-    await page.waitForSelector("#modal:not([hidden]) .advsteps", { timeout: 5000 });
+    await page.click('#modal [data-act="new10Go"]');
+    await page.waitForTimeout(400);
+    if ((await page.getAttribute("body", "data-view")) !== "city") throw new Error("Show me the town did not show the town");
     const s = await state(page);
-    if (s.v !== 9 || !s.seenV9 || !s.onb.done) throw new Error("migration flags: " + JSON.stringify([s.v, s.seenV9, s.onb]));
-    if (!Array.isArray(s.gb.hist) || !s.lrn || !s.world) throw new Error("new fields missing after migration");
+    if (s.v !== 10 || !s.seenV9 || !s.seenV10 || !s.onb.done) throw new Error("migration flags: " + JSON.stringify([s.v, s.seenV9, s.seenV10, s.onb]));
+    if (!Array.isArray(s.gb.hist) || !s.lrn || !s.world || !s.tools || !s.opps || !s.intro) throw new Error("new fields missing after migration");
+    if (!s.intro.town || s.intro.place) throw new Error("intro flags for an existing player: " + JSON.stringify(s.intro));
     return page;
   },
   async "today's adventure: follow a step, resume after a reload, claim once"(b) {
@@ -989,7 +1017,8 @@ const TESTS = {
     if (s.adv.i < 1) throw new Error("the first step never finished");
     await page.reload(); await page.waitForTimeout(900);
     const s2 = await state(page);
-    if (s2.adv.i !== s.adv.i || !s2.adv.started || s2.adv.day !== s.adv.day) throw new Error("the adventure did not survive a reload");
+    const advSum = (S) => S.adv ? { i: S.adv.i, started: !!S.adv.started, day: S.adv.day, steps: S.adv.steps.map((x) => x.k + ":" + x.st + ":" + x.p) } : null;
+    if (!s2.adv || s2.adv.i !== s.adv.i || !s2.adv.started || s2.adv.day !== s.adv.day) throw new Error("the adventure did not survive a reload: " + JSON.stringify({ before: advSum(s), after: advSum(s2) }));
     if (!/Step 2/.test(await page.textContent("#conAdv"))) throw new Error("the bar lost its place: " + (await page.textContent("#conAdv")));
     for (let k = 0; k < 4 && !(await state(page)).adv.done; k++) { await page.click('#conAdv [data-act="advOpen"]'); await page.click('#modal [data-act="advSkip"]'); await page.waitForTimeout(150); }
     const c0 = (await state(page)).chests.r;
@@ -1138,6 +1167,158 @@ const TESTS = {
     for (let i = 0; i < 6; i++) { await answerAny(page); await page.click("#nextBtn"); await page.waitForTimeout(120); }
     const s1 = await state(page);
     if (s1.stats.answered !== 6) throw new Error("answered " + s1.stats.answered);
+    return page;
+  },
+  /* ---- v10: the title card, safe loading, places, rounds, tools, and the Town Square ---- */
+  async "the title card goes away by itself, and a broken save shows a recovery screen, untouched"(b) {
+    const page = await open(b, save());
+    const t = await page.evaluate(() => ({ ready: !!(window.__title && window.__title.ready), card: !!document.getElementById("title"), shown: !!(window.__title && window.__title.t0) }));
+    if (!t.shown || !t.ready || t.card) throw new Error("title card state after boot: " + JSON.stringify(t));
+    await page.close();
+    const p2 = await b.newPage({ viewport: { width: 1440, height: 900 } });
+    p2.errors = [];
+    p2.on("pageerror", (e) => p2.errors.push(e.message));
+    await p2.route(/^https?:\/\//, (r) => r.abort());
+    await p2.addInitScript(() => localStorage.setItem("grind1520.save.v1", "{not json at all"));
+    await p2.goto(file); await p2.waitForTimeout(900);
+    const r = await p2.evaluate(() => ({ failed: document.getElementById("title").classList.contains("failed"), retry: !!document.getElementById("tlRetry"), dl: !!document.getElementById("tlSave"), raw: localStorage.getItem("grind1520.save.v1"), txt: document.getElementById("titleFail").textContent }));
+    if (!r.failed || !r.retry || !r.dl) throw new Error("no recovery screen: " + JSON.stringify(r));
+    if (r.raw !== "{not json at all") throw new Error("the broken save was changed: " + r.raw);
+    if (!/couldn’t be read/.test(r.txt) || !/has not been changed/.test(r.txt)) throw new Error("recovery text: " + r.txt.slice(0, 120));
+    const [dl] = await Promise.all([p2.waitForEvent("download"), p2.click("#tlSave")]);
+    if (!/^to-1520-save-recovered\.txt$/.test(dl.suggestedFilename())) throw new Error("recovered file name: " + dl.suggestedFilename());
+    return p2;
+  },
+  async "open a building from the skyline, work there for a round of five, then go back"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "city"; S.onb = { step: 9, done: true }; S.adv = null; S.rev = { date: "x", n: 0, p: 0, done: true }; S.round = null; }));
+    const lot = await page.evaluate(() => { const C = window.__g1520.city(), L = C.lots.find((l) => l.id === "bank"); C.camTo = null; C.cam = Math.max(C.camMin, Math.min(C.camMax, L.x + L.w / 2 - (C.vis[0] + C.vis[1]) / 2)); window.__g1520.cityFrame(performance.now()); const r = document.getElementById("cityCv").getBoundingClientRect(); return { x: r.left + L.x + L.w / 2 - C.cam, y: r.top + C.gy - 20 }; });
+    await page.mouse.click(lot.x, lot.y); await page.waitForTimeout(250);
+    if (!(await page.locator('#ctip [data-act="place"]').count())) throw new Error("the skyline card has no Open button");
+    await page.click('#ctip [data-act="place"]'); await page.waitForTimeout(300);
+    if ((await page.getAttribute("body", "data-tab")) !== "place" || !/Bank/.test(await page.textContent("#panel h2"))) throw new Error("the Bank's page did not open");
+    if (!/Percentages/.test(await page.textContent("#panel")) || !/Proficiency/.test(await page.textContent("#panel"))) throw new Error("the page is missing its skill or proficiency");
+    if (!(await page.isVisible("#cityCv"))) throw new Error("the town vanished behind the page");
+    await page.click('#panel [data-act="roundGo"]:not([data-hard])'); await page.waitForTimeout(400);
+    let s = await state(page);
+    if (!s.round || s.round.id !== "bank" || s.focus !== "sk:psda|Percentages") throw new Error("the round did not start: " + JSON.stringify([s.round, s.focus]));
+    if (!/Round · Bank/.test(await page.textContent("#conHead"))) throw new Error("the console head does not show the round");
+    for (let i = 0; i < 5; i++) { if (i % 2) await answerWrong(page); else await answerRight(page); if (i < 4) { await page.click("#nextBtn"); await page.waitForTimeout(150); } }
+    s = await state(page);
+    if (!s.round.done || s.round.a !== 5 || s.round.c !== 3 || s.focus !== "mix") throw new Error("round tally: " + JSON.stringify(s.round) + " focus " + s.focus);
+    if (!/Round results/.test(await page.textContent("#nextBtn"))) throw new Error("no results button");
+    await page.click("#nextBtn"); await page.waitForTimeout(300);
+    if (!(await page.locator("#conBody .roundsum").count()) || !/3\/5/.test(await page.textContent("#conBody .roundsum"))) throw new Error("no round summary");
+    await page.click('#conFoot [data-act="roundBack"]'); await page.waitForTimeout(400);
+    if ((await page.getAttribute("body", "data-tab")) !== "place" || (await state(page)).round !== null) throw new Error("Back to the Bank failed");
+    await page.click('#panel [data-act="back"]'); await page.waitForTimeout(200);
+    if ((await page.getAttribute("body", "data-tab")) !== "network") throw new Error("Back did not return to the town");
+    return page;
+  },
+  async "a round survives a reload and ends when you pick another focus"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "city"; S.onb = { step: 9, done: true }; S.adv = null; S.rev = { date: "x", n: 0, p: 0, done: true }; S.round = null; S.city.b.market = S.city.b.market || 1; }));
+    await page.click('#decknav [data-v="city"]'); await page.click('#panel [data-act="cityPage"][data-v="build"]');
+    await page.click('#panel .cthumb[data-v="market"]'); await page.waitForTimeout(300);
+    await page.click('#panel [data-act="roundGo"]:not([data-hard])'); await page.waitForTimeout(300);
+    await answerRight(page); await page.click("#nextBtn"); await page.waitForTimeout(150); await answerRight(page);
+    let s = await state(page);
+    if (!s.round || s.round.a !== 2) throw new Error("two answers expected: " + JSON.stringify(s.round));
+    await page.reload(); await page.waitForTimeout(900);
+    s = await state(page);
+    if (!s.round || s.round.a !== 2 || s.round.done) throw new Error("the round did not survive the reload: " + JSON.stringify(s.round));
+    if (!/Round · Market/.test(await page.textContent("#conHead"))) throw new Error("the console forgot the round after a reload");
+    if (!/Round at the Market/.test(await page.textContent("#decknav"))) throw new Error("the places bar does not mention the round");
+    await page.selectOption("#focusSel", "alg"); await page.waitForTimeout(200);
+    s = await state(page);
+    if (s.round !== null || s.focus !== "alg") throw new Error("picking a focus should end the round: " + JSON.stringify([s.round, s.focus]));
+    return page;
+  },
+  async "tools: Working proficiency reveals an offer whose price holds; it is bought once"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "city"; S.onb = { step: 9, done: true }; S.adv = null; S.city.coins = 1e12; S.tools = {}; S.opps = {}; S.sk["psda|Percentages"] = { n: 8, c: 7, pr: "bbbbbb", pb: 0 }; }));
+    let s = await state(page);
+    if (!s.opps.bank || s.opps.bank.lv !== 1) throw new Error("no offer for the Bank on load: " + JSON.stringify(s.opps.bank));
+    const cost = s.opps.bank.cost;
+    await answerRight(page); await page.click("#nextBtn"); await page.waitForTimeout(150);
+    await page.reload(); await page.waitForTimeout(900);
+    s = await state(page);
+    if (s.opps.bank.cost !== cost) throw new Error("the price changed: " + cost + " to " + s.opps.bank.cost);
+    await page.click('#decknav [data-v="city"]'); await page.click('#panel [data-act="cityPage"][data-v="build"]');
+    await page.click('#panel .cthumb[data-v="bank"]'); await page.waitForTimeout(300);
+    const opp = await page.textContent("#panel .opp");
+    if (!/Better tools/.test(opp)) throw new Error("the page does not show the offer: " + opp);
+    const c0 = (await state(page)).city.coins;
+    await page.click('#panel [data-act="toolBuy"]'); await page.waitForTimeout(300);
+    s = await state(page);
+    // The town keeps earning while the check runs, so allow a moment's income around the price.
+    if (s.tools.bank !== 1 || s.opps.bank || Math.abs((c0 - s.city.coins) - cost) > Math.max(2e6, cost * 0.05)) throw new Error("buying: " + JSON.stringify({ tools: s.tools, opp: s.opps.bank, coins: [c0, s.city.coins], cost }));
+    if (await page.locator('#panel [data-act="toolBuy"]').count()) throw new Error("a second buy button is showing");
+    if (!(await page.locator("#panel .tool.on").count())) throw new Error("the installed tool is not marked");
+    if (await page.evaluate(() => toolBuy(window.__g1520.S(), "bank", Date.now())) !== null) throw new Error("the tool could be bought twice");
+    await page.reload(); await page.waitForTimeout(900);
+    s = await state(page);
+    if (s.tools.bank !== 1 || s.opps.bank) throw new Error("the tool did not survive a reload");
+    return page;
+  },
+  async "the Town Square: evidence across subjects, funded once, changed in 2D and 3D"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "3d"; S.settings.w3new = true; S.onb = { step: 9, done: true }; S.adv = null; S.world = {}; S.city.coins = 3000; S.city.b = {}; S.city.up = {}; S.city.buffs = []; Object.keys(S.sk).forEach((k) => { S.sk[k].pr = ""; S.sk[k].pb = 0; }); ["ii|Inferences", "sec|Boundaries", "alg|Linear functions"].forEach((k) => { S.sk[k] = { n: 8, c: 7, pr: "bbbbbb", pb: 0 }; }); }));
+    let s = await state(page);
+    if (s.world.square) throw new Error("the project should not be earned with only one Math subject: " + JSON.stringify(s.world.square));
+    await page.click('#decknav [data-v="city"]'); await page.waitForTimeout(400);
+    const card = await page.textContent("#lmk-square");
+    if (!/1 \/ 2/.test(card) || (await page.locator('#lmk-square [data-act="projectGo"]').count())) throw new Error("the card should show one Math subject missing and no fund button: " + card.slice(0, 200));
+    await page.evaluate(() => { const S = window.__g1520.S(); S.sk["geo|Circles"] = { n: 8, c: 7, pr: "bbbbbb", pb: 0 }; townAfter(S, Date.now()); });
+    await page.keyboard.press("Control+s"); await page.waitForTimeout(200);
+    await page.click('#decknav [data-v="network"]'); await page.click('#decknav [data-v="city"]'); await page.waitForTimeout(400);
+    s = await state(page);
+    if (!s.world.square || !s.world.square.earned) throw new Error("the evidence was not kept: " + JSON.stringify(s.world.square));
+    const e0 = s.chests.e, c0 = s.city.coins;
+    await w3Ready(page);
+    const sig0 = await page.evaluate(() => window.__g1520.w3().lots.square.sig);
+    if (!/ready/.test(sig0)) throw new Error("the 3D square does not show it is ready: " + sig0);
+    await page.click('#lmk-square [data-act="projectGo"]'); await page.waitForTimeout(1500);
+    s = await state(page);
+    if (!s.world.square || !s.world.square.at || s.chests.e !== e0 + 1 || Math.abs(c0 - s.city.coins - 1500) > 1) throw new Error("funding: " + JSON.stringify({ sq: s.world.square, e: [e0, s.chests.e], coins: [c0, s.city.coins] }));
+    if (await page.evaluate(() => projDo(window.__g1520.S(), "square", Date.now())) !== null) throw new Error("the project could be paid twice");
+    if (!/restored/i.test(await page.textContent("#lmk-square .lmk-h")) || (await page.locator('#lmk-square [data-act="projectGo"]').count())) throw new Error("the card does not show it restored");
+    const sig1 = await page.evaluate(() => window.__g1520.w3().lots.square.sig);
+    if (!/^on/.test(sig1)) throw new Error("the 3D square did not rebuild: " + sig1);
+    await page.click('#panel [data-act="wv"][data-v="city"]'); await page.waitForTimeout(400);
+    const mm = await page.evaluate(() => { const C = window.__g1520.city(); const L = C.lots.find((l) => l.id === "square"); return { lot: !!L, sig: C.mapSig }; });
+    if (!mm.lot || !/s/.test(mm.sig)) throw new Error("the skyline has no restored square: " + JSON.stringify(mm));
+    await page.reload(); await page.waitForTimeout(900);
+    s = await state(page);
+    if (!s.world.square || !s.world.square.at || s.chests.e !== e0 + 1) throw new Error("the restoration did not survive a reload: " + JSON.stringify({ sq: s.world.square, e: [e0, s.chests.e] }));
+    return page;
+  },
+  async "back paths: a page opened from a page returns to it; the places bar starts fresh"(b) {
+    const page = await open(b, save((S) => { S.settings.view = "city"; S.onb = { step: 9, done: true }; S.adv = null; S.city.b.bank = S.city.b.bank || 1; }));
+    await page.click('#decknav [data-v="city"]'); await page.click('#panel [data-act="cityPage"][data-v="build"]');
+    await page.click('#panel .cthumb[data-v="bank"]'); await page.waitForTimeout(300);
+    if (!/Back to Town Hall/.test(await page.getAttribute("#panel .xbtn.back", "aria-label"))) throw new Error("the Bank's back button should lead to the Town Hall: " + (await page.getAttribute("#panel .xbtn.back", "aria-label")));
+    await page.click('#panel .pl-zone [data-act="zoneGo"]'); await page.waitForTimeout(300);
+    if ((await page.getAttribute("body", "data-tab")) !== "zones" || !/Exchange/.test(await page.textContent("#panel h2"))) throw new Error("the zone did not open from the page");
+    if (!/Back to the Bank/.test(await page.getAttribute("#panel .xbtn.back", "aria-label"))) throw new Error("the zone's back button should lead to the Bank");
+    await page.keyboard.press("Escape"); await page.waitForTimeout(300);
+    if ((await page.getAttribute("body", "data-tab")) !== "place" || !/Bank/.test(await page.textContent("#panel h2"))) throw new Error("Escape did not go back to the Bank");
+    await page.click('#panel [data-act="back"]'); await page.waitForTimeout(300);
+    if ((await page.getAttribute("body", "data-tab")) !== "city" || !/Build/.test(await page.textContent("#panel .wsw.pages [aria-pressed=\"true\"]"))) throw new Error("Back did not return to the Town Hall's Build page");
+    await page.click('#decknav [data-v="zones"]'); await page.waitForTimeout(200);
+    if (!/Back to the town/.test(await page.getAttribute("#panel .xbtn.back", "aria-label"))) throw new Error("a places-bar tap should start fresh");
+    await page.keyboard.press("Escape"); await page.waitForTimeout(200);
+    if ((await page.getAttribute("body", "data-tab")) !== "network") throw new Error("Escape from a top-level page should show the town");
+    return page;
+  },
+  async "the late dev save loads into v10 with what's new, tools on offer, and the square's evidence kept"(b) {
+    const page = await open(b, lateSave((S) => { S.seenV10 = false; S.settings.view = "city"; }));
+    if (!(await page.locator('#modal:not([hidden]) [data-act="new10Go"]').count())) throw new Error("no what's new for the late save");
+    await page.click('#modal [data-act="modalClose"]'); await page.waitForTimeout(200);
+    const s = await state(page);
+    if (s.v !== 10 || !s.seenV10) throw new Error("migration: " + JSON.stringify([s.v, s.seenV10]));
+    if (Object.keys(s.opps).length < 10) throw new Error("expected offers across the town, got " + Object.keys(s.opps).length);
+    if (!s.world.square || !s.world.square.earned) throw new Error("the square's evidence should already be kept");
+    if (!Object.keys(s.sk).every((k) => typeof s.sk[k].pr === "string")) throw new Error("skills without a proficiency window");
+    await page.click('#decknav [data-v="city"]'); await page.waitForTimeout(400);
+    if (!(await page.locator('#lmk-square [data-act="projectGo"]').count())) throw new Error("the late save cannot fund the square");
+    if (!/Tools installed/.test((await page.click('#panel [data-act="cityPage"][data-v="stats"]'), await page.textContent("#panel")))) throw new Error("no tools stat");
     return page;
   },
 };

@@ -1,6 +1,7 @@
-# Grind to 1520
+# To 1520
 
-A PSAT/NMSQT practice game where your engine grows from 320 to 1520.
+A PSAT/NMSQT practice game set in a small town that grows as you learn. Your game estimate climbs from 320
+toward 1520; the town, its buildings, and its projects grow with what you actually know.
 
 Open `index.html` in a browser to play. Everything is in that one file: the question bank, the
 generators, the game engine, and the UI. Progress saves to the browser. Published as a Claude
@@ -8,29 +9,57 @@ artifact, it can also save to your Claude account and write fresh question packs
 
 ## Start here
 
-- **The intro.** A new game opens with a two-minute playable intro: answer a question, watch the
-  engine respond, pick a free first upgrade (Sharper Focus, a zone rule, or a domain hub), and meet
-  Today's Adventure. Every step can be skipped, and Settings → The intro → **Replay it** runs it
-  again (the free upgrade is paid once). Existing saves skip it and get a short list of what changed.
+- **The title card.** The game opens on a short title card and moves into play by itself the moment
+  it has loaded; there is nothing to click. If loading ever fails, the same screen says why, offers
+  **Try again** and **Download my save file**, and leaves the saved progress exactly as it was.
+- **The town.** You arrive in a small town (rename it at the Town Hall). It is on the main screen from
+  the first minute, as a skyline or in 3D, with the question console beside it. Every PSAT skill is a
+  building; empty lots say LEARN or BUILD. Practice earns coins for the town and sparks for the
+  engine, and what you learn decides what gets built.
+- **Places.** The bar at the bottom lists the places: **Town** (where you are), **Town Hall** (plans,
+  projects, building, stats), **Progress**, **Arena**, **Upgrades**, **Zones**, and **Ascend**. Only
+  the next locked place shows, with what it needs. Every page has a Back button (Escape works too)
+  that returns to where you came from.
+- **A building is a page.** Open one from the skyline card, from the Town Hall's Build page, or walk
+  up to it in 3D and press E. Its page has **Work here** (a round of five questions in its skill, or a
+  hard drill), what you have learned there (skill nodes, proficiency, mastery), its **Tools**, and
+  **Build**. Rounds keep a tally and pay nothing extra; every answer counts as usual. A round survives
+  a reload, and picking another focus ends it.
+- **The intro.** A new game opens with a two-minute playable intro: answer a question, watch the town
+  respond, pick a free first upgrade, and meet Today's Adventure. Every step can be skipped, and
+  Settings → The intro → **Replay it** runs it again (the free upgrade is paid once). Existing saves
+  skip it and get a short list of what changed.
 - **Today's Adventure.** One guided session a day, in the bar above your questions. It plans, in
-  order: the blind spots that are due, the skill that needs it most (with the reason: your shakiest
-  accuracy, a domain below your average, a node about to light, or a landmark it repairs), a
-  challenge on that domain (a boss, or an Arcade game on Quick days), and something to put into your
-  world (restore a landmark, expand a zone, build or grow that skill's building, or upgrade its
-  zone). Pick **Quick** (Rare chest), **Standard** (Epic), or **Deep** (Epic and Rare, with a
-  Gauntlet added once it's open). The practice steps are required; the challenge and world steps are optional and can be
-  skipped. The reward is paid once per day, and only after the required steps are done; if you
-  finish them and forget to claim, the chest is paid when the next day's plan arrives.
-  - It's a layer over ordinary play: the steps use the normal question focus, so everything you
-    answer still counts for quests, reviews, and the rest. Picking your own focus pauses it (free
-    play); **Resume** picks up the same step. A practice step ends at its target of right answers,
-    or after twice that many tries, so a hard day never traps anyone.
-  - It lives in the save: reload, close the game, or come back later and it resumes where it was.
-    A started adventure survives midnight for 18 hours; an unstarted one is replanned each day.
-- **Where things are.** The tabs are grouped: study (Engine, Progress), challenge (Arena), and build
-  (Upgrades, Zones, City, Ascend). A locked tab says exactly what it needs ("Opens at Circuit: 5
-  more skill nodes"), and the bar under the engine shows the next evolution and what it opens. Dots
-  mean something to spend on; the only count is the daily review.
+  order: the blind spots that are due, the skill that needs it most (with the reason), a challenge on
+  that domain, and something to put into the town (a project or tool you can afford, restore a
+  landmark, expand a zone, or build). Pick **Quick**, **Standard**, or **Deep**; the practice steps
+  are required, the rest optional. The reward is paid once per day. It is a layer over ordinary play:
+  picking your own focus pauses it, and it resumes where it was.
+
+## Proficiency, tools, and town projects
+
+- **Proficiency** is what your last twelve answers in a skill show, kept apart from ratings and
+  rewards. Each answer is weighted: hard questions 1.5, medium 1, easy 0.5, and any repeat (a
+  question you had seen before, or a review) half of that. The weighted accuracy is shrunk toward
+  50% while there is little evidence (three units of weight). Bands: **Learning**, **Working** (55%
+  and 4 units of evidence), **Skilled** (70%, 8 units, and at least 3 hard questions), **Expert**
+  (85%, 12 units, 5 hard questions, and a Bronze medal). A band holds until accuracy falls 8 points
+  under its bar, so one bad day never takes it away; twelve easy repeats reach nothing, and easy
+  questions alone stop at Working. Purchases never touch it, and it never touches a rating.
+- **Tools** are three upgrades per skill building: Better tools (Working), Skilled hands (Skilled),
+  and Master craft (Expert). Each makes the building produce 60% more and its right answers pay 25%
+  more coins. A tool appears as an offer the moment the band is reached; its price is set then, from
+  the building's class and the town's output, and never changes. Coins from anywhere pay for it, once.
+  Tools are learning, so they stay through Advance. Tuning lives in `PROF` and `TOOLS` in the engine.
+- **The Town Square** is the first town project. The fountain has been dry for years and the lanterns
+  are dark. It needs Working proficiency in a skill from two Reading and Writing subjects and two
+  Math subjects, then 1,500 coins from the treasury. The evidence is kept once it is complete, the
+  coins are paid once, and the square is restored for good: the fountain runs, the lanterns light,
+  people gather, an Epic chest is paid, and the town's output is +15%. It shows on the skyline and in
+  3D, and it survives Advance. Projects live on the Town Hall's Plans page with the Harbor Bridge.
+- **What is still open.** A permanent campaign completion tied to 1520 is planned; the story and the
+  mechanics are undecided, so nothing here pretends to be it. The game estimate stays a game
+  estimate, and completing projects is never a test score.
 
 ## The climb
 
@@ -169,10 +198,11 @@ has a page for each one.
   **Ctrl+S**), **Download a save file** (a text file holding your backup code), and **Load a save
   file**, which replaces the progress in this browser.
 
-## Your city
+## Your town
 
-At stage 2 you found a city and name it. Every PSAT skill is a building, so the skyline shows what
-you've learned: 29 buildings in eight districts, one district per domain.
+The town is there from the first minute, and you can rename it at the Town Hall. Every PSAT skill is a
+building, so the skyline shows what you've learned: 29 buildings in eight districts, one district per
+domain, with the civic plaza (Town Hall, the wonders, and the Town Square) in the middle.
 
 - **Learn to build.** A building opens when you light the first node of its skill. Each further
   node adds 50% to its output, and Bronze, Silver, and Gold mastery multiply it again. Empty lots
@@ -194,22 +224,24 @@ you've learned: 29 buildings in eight districts, one district per domain.
   seconds.
 - **Landmarks: the Harbor Bridge.** A storm broke the bridge in the Harbor district, so nobody can
   reach Lantern Isle and its lantern is dark. Get 10 Transitions questions right, with 7 of your last
-  10 right, and **Restore** it from the City tab's Landmarks (or from Today's Adventure). The bridge
+  10 right, and **Restore** it from the Town Hall's projects (or from Today's Adventure). The bridge
   is rebuilt with lamps lit, people cross it, the lantern shines, and it pays an Epic chest, once.
   It stays restored for good (Advance doesn't undo it). Saves from before this update count their
   history: until the skill has 10 recent results, the last 10 hard Transitions questions (or overall
   accuracy in the skill) stand in for "your last 10".
-- **Town Hall.** From 50 residents, pass one policy at a time (switchable once an hour): Study City,
-  Night Owls, Tourism Board, or Green Belt.
-- **The skyline.** Show it on the main screen instead of the engine, or open the City tab (on
-  desktop the panel sits on the right so the city stays in view). The sky follows your clock; tap
+- **Town Hall.** Its Plans page has the stage goals, the town projects, and, from 50 residents, one
+  policy at a time (switchable once an hour): Study City, Night Owls, Tourism Board, or Green Belt.
+  Its Build page has every building by district, the upgrades, and the wonders; Stats has the numbers
+  and the screen settings.
+- **The skyline.** It is the main screen unless you pick the engine, and it stays in view behind the
+  Town Hall and building pages on desktop. The sky follows your clock; tap
   the sun or moon to pick day, dusk, or night. Drag, scroll, or use the arrow keys to look around,
   tap a building to build or train it, and read the news ticker for headlines about what you've
   built.
 
-## Your city in 3D
+## Your town in 3D
 
-Pick **3D** on the main-screen switch (or in the City tab) to walk through your city.
+Pick **3D** on the main-screen switch (or at the Town Hall) to walk through your town.
 
 - **The layout.** The 29 buildings stand around a ring road, one district per domain in the
   skyline's order, with signs where each district begins. Town Hall, the 1520 Tower, the Grand
@@ -221,9 +253,10 @@ Pick **3D** on the main-screen switch (or in the City tab) to walk through your 
 - **Moving around.** W A S D or the arrow keys walk (Shift runs, Space jumps), and dragging looks
   around; the scroll wheel or a pinch zooms. On a phone, use the stick in the corner and the Jump
   button. Click or tap the ground to walk there.
-- **Buildings.** Click or tap one for its card, where you can build or train it. Walk up to one and
-  press E, or tap the prompt, to open the nearest. In the City tab, a building's thumbnail takes
-  you straight to it.
+- **Buildings.** Click or tap one for its card, where you can build or open its page. Walk up to one
+  and press E, or tap the prompt, to open the nearest one's page. The Town Square sits in the plaza
+  behind the tower: a dry basin under dark lanterns until the project is done, then a running
+  fountain under lit ones.
 - **The harbor.** Past the Harbor district a path leads to a lagoon, the Harbor Bridge, and Lantern
   Isle. Until the bridge is restored its middle has fallen into the water, a CLOSED barrier blocks
   it, and the water stops you. Once it's restored you can walk over the arched bridge to the isle
@@ -340,7 +373,12 @@ node tools/sim.cjs --days 21 --per-day 60   # balance sim: a modeled student pla
 node tools/guide.cjs                        # engine checks for Today's Adventure (plan, resume, claim
                                             # once), comebacks (paid once), the Harbor Bridge (retroactive,
                                             # paid once), the three boss encounters, learning evidence,
-                                            # the intro's free upgrade, and the v8 → v9 migration
+                                            # the intro's free upgrade, and the v8 → v10 migration
+node tools/town.cjs                         # engine checks for proficiency (sparse, strong, inconsistent,
+                                            # struggling, and easy-repeat histories; hysteresis), tool
+                                            # offers (revealed once, price fixed, bought once), the Town
+                                            # Square (evidence kept, paid once, +15%, survives Advance),
+                                            # rounds, and the v9 → v10 migration with bad-value repair
 
 export NODE_PATH=$(npm root -g)             # tools below use Playwright + Chromium
 node tools/smoke.cjs                        # boot, answer questions, fail on page errors
@@ -353,13 +391,16 @@ node tools/flows.cjs                        # functional checks: buying, bosses,
                                             # Level Road, talents, titles, the 3D city, the intro and its
                                             # replay, what's new, Today's Adventure (resume after reload,
                                             # claim once), comebacks, the three boss encounters, restoring
-                                            # the Harbor Bridge, crossing it in 3D, learning evidence, and
-                                            # the top bar fitting at 1280 to 1920 wide
+                                            # the Harbor Bridge, crossing it in 3D, learning evidence, the
+                                            # top bar fitting at 1280 to 1920 wide, the title card and the
+                                            # recovery screen, building pages and rounds (resume after a
+                                            # reload), tool offers, the Town Square in 2D and 3D, back
+                                            # paths, and the late dev save
 node tools/flows.cjs city                   # only the checks whose name contains "city"
 node tools/shots.cjs out/                   # screenshots of the main screens from simulated saves
-node tools/pc.cjs                           # the PC edition: dist/Grind-to-1520/ (game file, launcher,
-                                            # readme) and a .zip; Three.js and the fonts are built in
-GAME=dist/Grind-to-1520/grind-to-1520.html node tools/flows.cjs   # run any check against the PC edition
+node tools/pc.cjs                           # the PC edition: dist/To-1520/ (game file, launcher, readme)
+                                            # and a .zip; Three.js and the fonts are built in
+GAME=dist/To-1520/to-1520.html node tools/flows.cjs   # run any check against the PC edition
 node tools/devsave.cjs                      # a maxed-out save to explore (dist/dev-save.txt): paste it
                                             # into Settings → Backup code → Restore
 ```
@@ -389,4 +430,9 @@ saves get the zones at tier 1, their level's talent points, and every Level Road
 their level to claim, and they see the zones tour once. Version 9 adds the adventure, learning
 evidence, comebacks, and landmarks without touching ratings, skills, or blind spots: existing
 players skip the intro and see the short what's-new list once, their last Gauntlet seeds the timed
-results, and their Transitions history can already have earned the Harbor Bridge.
+results, and their Transitions history can already have earned the Harbor Bridge. Version 10 ("To 1520")
+keeps the same save key and backup-code prefix, so the rename loses nothing. It adds a proficiency
+window to each skill, seeded from the kept results as repeats; tools, offers, intro flags, and the
+round; founds the town for any save that had not (the Town Hall is open from stage 0); marks the
+town intros as seen for existing players; and repairs impossible tool levels or offers. A stored save
+that cannot be read is never replaced: the title card becomes a recovery screen instead.
