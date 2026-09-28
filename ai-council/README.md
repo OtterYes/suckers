@@ -1,6 +1,41 @@
 # Decision Council
 
-Five Claude agents that look at a decision from different angles and give you one practical recommendation. You run the council from your computer's terminal; you don't need a browser after the one-time setup in step 3.
+Five Claude agents that look at a decision from different angles and give you one practical recommendation.
+
+There are two ways to run it:
+
+| | **Option A: Claude subscription** | **Option B: API credits** |
+|---|---|---|
+| Pays with | Your Claude Pro or Max plan's usage limits | Pay-as-you-go credits on platform.claude.com |
+| Runs in | Claude Code (terminal, desktop app, or claude.ai/code) | The Python scripts in this folder |
+| Extra cost | None beyond your plan | Per question (with a spending cap) |
+| How | Type `/council your decision` | `python ask_council.py "your decision"` |
+
+## Option A: Run it on your Claude subscription
+
+Pro and Max plans include Claude Code. Claude Code usage counts against the same usage limits as the Claude apps. The council is set up as Claude Code **subagents**:
+
+- `.claude/agents/council-researcher.md`, `council-strategist.md`, `council-critic.md`, `council-verifier.md`: the four members. The Researcher and Verifier have web search and web fetch. The Strategist and Critic can only read files.
+- `.claude/skills/council/SKILL.md`: the `/council` command. When you use it, your main Claude Code session acts as the Coordinator.
+
+These files are at the top of the repository, not in this folder.
+
+To use it:
+
+1. Open Claude Code in this repository: run `claude` in the repository folder, open it in the desktop app, or start a session for it at claude.ai/code. Sign in with your Claude account, not an API key.
+2. Type `/council` followed by your decision, for example:
+   `/council Should I switch jobs? Offer is 15% more pay but a 1-hour commute. I value time with family.`
+3. The Coordinator may ask you up to three questions, then runs the rounds and writes the report in the chat.
+
+Two notes:
+- **Start a new session after you first get these files.** Claude Code only picks up a new `.claude/agents` folder when a session starts.
+- **Don't set the `ANTHROPIC_API_KEY` environment variable on the same computer.** If it's set, Claude Code uses the key and bills your API credits instead of your subscription.
+
+Five agents at once use your plan's limits faster than a normal chat. If you reach a limit, Claude Code shows your options, such as waiting for the reset.
+
+## Option B: Run it with API credits (Claude Managed Agents)
+
+The rest of this README covers Option B. It uses the platform's hosted multi-agent feature and pay-as-you-go API credits, which are separate from any Claude subscription. You run the council from your computer's terminal; you don't need a browser after the one-time setup in step 3.
 
 | Agent | What it does | Tools |
 |---|---|---|
