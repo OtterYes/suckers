@@ -1,0 +1,258 @@
+[
+ {
+  "id": "cs01",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 1,
+  "p": "The new library was designed to be ______: its large windows let in natural light, and its open layout makes it easy for visitors to find their way around.",
+  "c": [
+   "inviting",
+   "secretive",
+   "fragile",
+   "temporary"
+  ],
+  "a": 0,
+  "x": "The details after the colon (light, easy to navigate) describe a welcoming space.",
+  "t": "Nothing about the building suggests it is fragile or temporary."
+ },
+ {
+  "id": "cs02",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 2,
+  "p": "Although the scientist’s early experiments produced ______ results, she refined her methods, and her later trials yielded consistent, reliable data.",
+  "c": [
+   "erratic",
+   "predictable",
+   "definitive",
+   "celebrated"
+  ],
+  "a": 0,
+  "x": "“Although” sets up a contrast with “consistent, reliable,” so the early results were inconsistent: erratic.",
+  "t": "“Predictable” means about the same as consistent, so it kills the contrast."
+ },
+ {
+  "id": "cs03",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 2,
+  "p": "Critics praised the novelist’s ______ prose, noting that she could describe a complex scene in just a few carefully chosen words.",
+  "c": [
+   "economical",
+   "extravagant",
+   "careless",
+   "repetitive"
+  ],
+  "a": 0,
+  "x": "Describing a lot with few words is economical writing.",
+  "t": "“Extravagant” is the opposite: wordy and showy."
+ },
+ {
+  "id": "cs04",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 3,
+  "p": "The committee’s report was notably ______: rather than recommending a single course of action, it laid out the benefits and drawbacks of several options and left the final decision to the city council.",
+  "c": [
+   "evenhanded",
+   "partisan",
+   "urgent",
+   "dismissive"
+  ],
+  "a": 0,
+  "x": "Presenting both sides of several options without pushing one is evenhanded (fair and balanced).",
+  "t": "“Partisan” means taking one side, the opposite of what the report did."
+ },
+ {
+  "id": "cs05",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 2,
+  "p": "Many early inventors worked alone, but the Wright brothers ______ closely, dividing tasks and testing each other’s ideas as they developed their flying machine.",
+  "c": [
+   "collaborated",
+   "competed",
+   "hesitated",
+   "retired"
+  ],
+  "a": 0,
+  "x": "“But” contrasts with working alone, and “dividing tasks and testing each other’s ideas” is collaboration.",
+  "t": "Testing each other’s ideas could sound like competing, but dividing tasks shows teamwork."
+ },
+ {
+  "id": "cs06",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 3,
+  "p": "The historian cautioned that the diary, though vivid, should not be treated as a ______ account of the battle, since its author was writing from memory decades later.",
+  "c": [
+   "definitive",
+   "fictional",
+   "brief",
+   "sympathetic"
+  ],
+  "a": 0,
+  "x": "Writing from memory decades later makes the account less reliable, so it shouldn’t be treated as definitive (final and authoritative).",
+  "t": "The concern is reliability, not that the diary is made up, so “fictional” misses the point."
+ },
+ {
+  "id": "cs07",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 1,
+  "p": "The hikers were ______ by the storm, so they waited inside the cabin until the rain stopped.",
+  "c": [
+   "delayed",
+   "hurried",
+   "guided",
+   "celebrated"
+  ],
+  "a": 0,
+  "x": "Waiting until the rain stopped means the storm delayed them.",
+  "t": "“Hurried” would mean they moved faster, not that they waited."
+ },
+ {
+  "id": "cs08",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 2,
+  "p": "Some scientists were initially ______ of the new theory, but as more evidence accumulated in its favor, many of them came to accept it.",
+  "c": [
+   "skeptical",
+   "certain",
+   "fond",
+   "unaware"
+  ],
+  "a": 0,
+  "x": "They came to accept it only after more evidence, so at first they doubted it.",
+  "t": "“Unaware” doesn’t fit: the evidence changed their minds, which means they already knew the theory and doubted it."
+ },
+ {
+  "id": "cs09",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 3,
+  "p": "The artist’s later paintings are more ______ than her early work: where the early canvases depict recognizable landscapes, the later ones consist of shapes and colors with no obvious real-world subject.",
+  "c": [
+   "abstract",
+   "realistic",
+   "colorful",
+   "traditional"
+  ],
+  "a": 0,
+  "x": "Shapes and colors with no real-world subject is the definition of abstract art.",
+  "t": "“Colorful” grabs a word from the text, but the contrast is recognizable versus not recognizable."
+ },
+ {
+  "id": "cs10",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 2,
+  "p": "Because the bridge was built to ______ strong earthquakes, it suffered only minor damage when a major quake struck the region.",
+  "c": [
+   "withstand",
+   "predict",
+   "cause",
+   "measure"
+  ],
+  "a": 0,
+  "x": "Minor damage in a major quake means it was built to withstand (resist) earthquakes.",
+  "t": "A bridge can’t predict or measure quakes, and it certainly shouldn’t cause them."
+ },
+ {
+  "id": "cs11",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 3,
+  "p": "The mayor’s speech was deliberately ______; she avoided committing to any specific policy so that she could adjust her position after hearing from residents.",
+  "c": [
+   "vague",
+   "passionate",
+   "concise",
+   "hostile"
+  ],
+  "a": 0,
+  "x": "Avoiding any specific commitment on purpose means the speech was deliberately vague.",
+  "t": "“Concise” means short and clear, and a speech can be short but still specific."
+ },
+ {
+  "id": "cs12",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 2,
+  "p": "The documentary ______ the history of the city’s jazz clubs, tracing their rise in the 1920s, their decline in the 1960s, and their recent revival.",
+  "c": [
+   "chronicles",
+   "invents",
+   "conceals",
+   "interrupts"
+  ],
+  "a": 0,
+  "x": "Tracing events in order over time is chronicling.",
+  "t": "A documentary tracing real history doesn’t invent it."
+ },
+ {
+  "id": "cs13",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 3,
+  "p": "Although the chemical is ______ in small amounts, it can become harmful when it builds up in the body over time.",
+  "c": [
+   "benign",
+   "toxic",
+   "rare",
+   "expensive"
+  ],
+  "a": 0,
+  "x": "“Although” contrasts with “harmful,” so in small amounts it is harmless: benign.",
+  "t": "“Toxic” means harmful, which destroys the contrast."
+ },
+ {
+  "id": "cs14",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 1,
+  "p": "The coach asked the players to ______ their water bottles before practice so they would stay hydrated in the heat.",
+  "c": [
+   "refill",
+   "abandon",
+   "decorate",
+   "question"
+  ],
+  "a": 0,
+  "x": "Staying hydrated requires water, so they should refill their bottles.",
+  "t": "None of the other actions helps them drink more water."
+ },
+ {
+  "id": "cs15",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 2,
+  "p": "The poet’s use of everyday language made her work ______ to readers who might otherwise have found poetry intimidating.",
+  "c": [
+   "accessible",
+   "obscure",
+   "offensive",
+   "irrelevant"
+  ],
+  "a": 0,
+  "x": "Everyday language helps readers who find poetry intimidating, so it makes the work accessible (easy to approach).",
+  "t": "“Obscure” means hard to understand, the opposite of the effect described."
+ },
+ {
+  "id": "cs16",
+  "d": "cs",
+  "sk": "Words in Context",
+  "lv": 3,
+  "p": "Rather than ______ the earlier study’s findings, the new research builds on them, using a larger sample to test whether the original results hold in other regions.",
+  "c": [
+   "refuting",
+   "extending",
+   "replicating",
+   "publishing"
+  ],
+  "a": 0,
+  "x": "“Rather than” needs the opposite of building on the findings. Refuting (proving wrong) is that opposite.",
+  "t": "The new research does extend and partly replicate the study, so saying “rather than” either one contradicts the sentence."
+ }
+]

@@ -1,0 +1,318 @@
+[
+ {
+  "id": "ii17",
+  "d": "ii",
+  "sk": "Command of Evidence: Quantitative",
+  "lv": 2,
+  "p": "A student researching reading habits in one town claims that the share of teens who read for fun at least 30 minutes a day was lower in 2025 than in 2015.",
+  "tb": {
+   "cap": "Teens who read for fun at least 30 minutes per day",
+   "h": [
+    "Year",
+    "Percent of teens"
+   ],
+   "r": [
+    [
+     "2015",
+     "42%"
+    ],
+    [
+     "2019",
+     "37%"
+    ],
+    [
+     "2022",
+     "31%"
+    ],
+    [
+     "2025",
+     "29%"
+    ]
+   ]
+  },
+  "q": "Which choice most effectively uses data from the table to support the student’s claim?",
+  "c": [
+   "In 2025, 29% of teens read for fun at least 30 minutes a day, compared with 42% in 2015.",
+   "In 2019, 37% of teens read for fun at least 30 minutes a day.",
+   "Between 2022 and 2025, the percent of teens who read for fun fell by 2 percentage points.",
+   "More than a quarter of teens read for fun at least 30 minutes a day in every year shown."
+  ],
+  "a": 0,
+  "x": "The claim compares 2025 with 2015, so the right answer must use both of those years.",
+  "t": "The third choice is accurate but compares the wrong years."
+ },
+ {
+  "id": "ii18",
+  "d": "ii",
+  "sk": "Command of Evidence: Quantitative",
+  "lv": 2,
+  "p": "Four community gardens tracked their tomato harvests for one season. The garden coordinator claims that the garden that used drip irrigation produced the most tomatoes per plant.",
+  "tb": {
+   "cap": "Tomato harvest by garden",
+   "h": [
+    "Garden",
+    "Irrigation",
+    "Plants",
+    "Total harvest (kg)"
+   ],
+   "r": [
+    [
+     "Elm St.",
+     "Sprinkler",
+     "40",
+     "120"
+    ],
+    [
+     "Oak Park",
+     "Drip",
+     "25",
+     "100"
+    ],
+    [
+     "Riverside",
+     "Hand-watered",
+     "30",
+     "75"
+    ],
+    [
+     "Hilltop",
+     "Sprinkler",
+     "50",
+     "140"
+    ]
+   ]
+  },
+  "q": "Which choice most effectively uses data from the table to support the coordinator’s claim?",
+  "c": [
+   "Hilltop harvested 140 kilograms of tomatoes, more than any other garden.",
+   "Oak Park, which used drip irrigation, harvested 4.0 kilograms per plant, more than any other garden.",
+   "Riverside had more plants than Oak Park did.",
+   "Elm St. and Hilltop both used sprinkler irrigation."
+  ],
+  "a": 1,
+  "x": "Per plant: Elm St. 3.0, Oak Park 4.0, Riverside 2.5, Hilltop 2.8. Oak Park (drip) is highest.",
+  "t": "Hilltop had the biggest total, but it also had the most plants. The claim is per plant."
+ },
+ {
+  "id": "ii19",
+  "d": "ii",
+  "sk": "Command of Evidence: Quantitative",
+  "lv": 3,
+  "p": "A marine biologist counted fish species on reefs with different amounts of live coral cover. Reefs with less than 10% live coral averaged 18 fish species. Reefs with 30% to 50% cover averaged 41 species, and reefs with more than 50% cover averaged 44 species. These results suggest that ______",
+  "q": "Which choice most effectively uses the data to complete the statement?",
+  "c": [
+   "fish diversity increases steadily with every additional percentage point of coral cover.",
+   "reefs with more than 50% coral cover have more than twice as many fish species as reefs with 30% to 50% cover.",
+   "more live coral is associated with more fish species, though the gain is much smaller above 50% cover than at lower levels.",
+   "fish diversity is unrelated to the amount of live coral on a reef."
+  ],
+  "a": 2,
+  "x": "18 to 41 is a big jump; 41 to 44 is a small one. More coral goes with more species, with a smaller gain at the top.",
+  "t": "44 is not more than twice 41, and the data are grouped ranges, so they can’t show a steady per-point increase."
+ },
+ {
+  "id": "ii20",
+  "d": "ii",
+  "sk": "Command of Evidence: Quantitative",
+  "lv": 2,
+  "p": "A city tracked average daily riders on four bus routes before and after it made Route 4, and only Route 4, free to ride. A transportation analyst claims that ridership grew more on the free route than on the other routes.",
+  "tb": {
+   "cap": "Average daily riders",
+   "h": [
+    "Route",
+    "Before",
+    "After"
+   ],
+   "r": [
+    [
+     "Route 1",
+     "1,200",
+     "1,260"
+    ],
+    [
+     "Route 2",
+     "900",
+     "930"
+    ],
+    [
+     "Route 3",
+     "1,500",
+     "1,540"
+    ],
+    [
+     "Route 4 (free)",
+     "800",
+     "1,150"
+    ]
+   ]
+  },
+  "q": "Which choice most effectively uses data from the table to support the analyst’s claim?",
+  "c": [
+   "Route 3 had the most riders both before and after the change.",
+   "Daily ridership on Route 4 rose by 350 riders, while no other route gained more than 60 riders.",
+   "Route 1 gained 60 riders per day after the change.",
+   "Route 4 had fewer riders than Route 1 before the change."
+  ],
+  "a": 1,
+  "x": "Gains: Route 1 +60, Route 2 +30, Route 3 +40, Route 4 +350. Only the second choice compares the free route’s gain with the others.",
+  "t": "The third choice gives one route’s gain but never compares it with Route 4."
+ },
+ {
+  "id": "ii21",
+  "d": "ii",
+  "sk": "Command of Evidence: Quantitative",
+  "lv": 3,
+  "p": "A researcher surveyed students about their breakfast habits and their average quiz scores. The researcher concluded that eating breakfast is associated with higher quiz scores but that the type of breakfast may matter less than simply eating something.",
+  "tb": {
+   "cap": "Average quiz score by breakfast habit",
+   "h": [
+    "Breakfast habit",
+    "Average score"
+   ],
+   "r": [
+    [
+     "No breakfast",
+     "72"
+    ],
+    [
+     "Cereal",
+     "81"
+    ],
+    [
+     "Eggs",
+     "82"
+    ],
+    [
+     "Fruit and yogurt",
+     "80"
+    ]
+   ]
+  },
+  "q": "Which choice most effectively uses data from the table to support the researcher’s conclusion?",
+  "c": [
+   "Students who ate eggs averaged 82, the highest score of any group.",
+   "Students who ate no breakfast averaged 72, while the three breakfast groups averaged between 80 and 82.",
+   "Students who ate cereal scored 1 point lower on average than students who ate eggs.",
+   "Students who ate fruit and yogurt scored lower than students who ate cereal."
+  ],
+  "a": 1,
+  "x": "The conclusion has two parts: breakfast beats no breakfast (72 vs. 80–82), and the type matters little (80–82 are close). Only the second choice shows both.",
+  "t": "The first choice highlights one breakfast type, which suggests type matters. That’s the opposite of the conclusion."
+ },
+ {
+  "id": "ii22",
+  "d": "ii",
+  "sk": "Command of Evidence: Quantitative",
+  "lv": 1,
+  "p": "A student surveyed 40 classmates about their favorite weekend activity. The student claims that outdoor activities were more popular overall than indoor activities.",
+  "tb": {
+   "cap": "Favorite weekend activity",
+   "h": [
+    "Activity",
+    "Type",
+    "Students"
+   ],
+   "r": [
+    [
+     "Hiking",
+     "Outdoor",
+     "9"
+    ],
+    [
+     "Sports",
+     "Outdoor",
+     "12"
+    ],
+    [
+     "Video games",
+     "Indoor",
+     "10"
+    ],
+    [
+     "Movies",
+     "Indoor",
+     "6"
+    ],
+    [
+     "Board games",
+     "Indoor",
+     "3"
+    ]
+   ]
+  },
+  "q": "Which choice most effectively uses data from the table to support the student’s claim?",
+  "c": [
+   "Twelve students chose sports, more than chose any other single activity.",
+   "A total of 21 students chose outdoor activities, while 19 chose indoor activities.",
+   "Ten students chose video games.",
+   "Board games were the least popular activity."
+  ],
+  "a": 1,
+  "x": "The claim compares outdoor and indoor overall: 9 + 12 = 21 outdoor vs. 10 + 6 + 3 = 19 indoor.",
+  "t": "The first choice is about one activity, not outdoor versus indoor."
+ },
+ {
+  "id": "ii23",
+  "d": "ii",
+  "sk": "Command of Evidence: Quantitative",
+  "lv": 3,
+  "p": "Researchers counted two lizard species on a small island every year for five years after a new predator arrived. Species A, which lives mainly on the ground, fell from about 900 individuals to about 300. Species B, which spends most of its time in trees, fell from about 850 to about 700. The researchers suggested that the predator hunts mainly on the ground.",
+  "q": "Which choice best explains how the data support the researchers’ suggestion?",
+  "c": [
+   "Both species declined, which shows that the predator hunts in trees as well as on the ground.",
+   "The ground-dwelling species declined far more sharply than the tree-dwelling species, which fits a predator that hunts mostly on the ground.",
+   "Species B started with fewer individuals than Species A, so it was less likely to be hunted.",
+   "Species A was more common than Species B before the predator arrived."
+  ],
+  "a": 1,
+  "x": "Species A lost about two-thirds of its population; Species B lost under a fifth. The bigger drop on the ground points to a ground hunter.",
+  "t": "The first choice treats any decline as equal. The key evidence is the difference in how much each fell."
+ },
+ {
+  "id": "ii24",
+  "d": "ii",
+  "sk": "Command of Evidence: Quantitative",
+  "lv": 2,
+  "p": "A library tracked how many print books and e-books patrons borrowed each year. The librarian claims that e-book borrowing grew faster than print borrowing between 2021 and 2024.",
+  "tb": {
+   "cap": "Books borrowed (thousands)",
+   "h": [
+    "Year",
+    "Print",
+    "E-books"
+   ],
+   "r": [
+    [
+     "2021",
+     "52",
+     "14"
+    ],
+    [
+     "2022",
+     "50",
+     "19"
+    ],
+    [
+     "2023",
+     "51",
+     "25"
+    ],
+    [
+     "2024",
+     "49",
+     "31"
+    ]
+   ]
+  },
+  "q": "Which choice most effectively uses data from the table to support the librarian’s claim?",
+  "c": [
+   "Print borrowing was higher than e-book borrowing in every year.",
+   "E-book borrowing more than doubled, from 14,000 to 31,000, while print borrowing fell slightly, from 52,000 to 49,000.",
+   "Patrons borrowed 51,000 print books in 2023.",
+   "E-book borrowing rose by 5,000 between 2021 and 2022."
+  ],
+  "a": 1,
+  "x": "The claim compares growth of both formats from 2021 to 2024. Only the second choice gives both changes across that span.",
+  "t": "The last choice shows e-book growth for one year, with no comparison to print."
+ }
+]

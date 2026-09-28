@@ -1,0 +1,222 @@
+[
+ {
+  "id": "eo31",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 2,
+  "n": [
+   "The platypus is a mammal native to eastern Australia.",
+   "Unlike most mammals, it lays eggs.",
+   "It uses its bill to detect electric fields produced by prey underwater.",
+   "Its young feed on milk produced by the mother."
+  ],
+  "goal": "emphasize a way in which the platypus differs from most mammals",
+  "c": [
+   "Unlike most mammals, the platypus lays eggs.",
+   "The platypus, a mammal, is native to eastern Australia.",
+   "Platypus young feed on milk produced by their mother.",
+   "The platypus hunts for prey underwater."
+  ],
+  "a": 0,
+  "x": "The goal is a difference from most mammals. Only this choice states one directly.",
+  "t": "Feeding young on milk is something most mammals do, so it’s a similarity."
+ },
+ {
+  "id": "eo32",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 3,
+  "n": [
+   "Mary Anning (1799–1847) was a fossil collector in Lyme Regis, England.",
+   "As a young girl, she helped uncover one of the first ichthyosaur skeletons to be scientifically identified.",
+   "She later found one of the first plesiosaur skeletons.",
+   "Because she was a woman, she was excluded from the Geological Society of London."
+  ],
+  "goal": "present Anning’s discoveries to an audience unfamiliar with her",
+  "c": [
+   "Anning was excluded from the Geological Society of London because she was a woman.",
+   "Mary Anning, a nineteenth-century fossil collector from Lyme Regis, England, found early ichthyosaur and plesiosaur skeletons.",
+   "One of the first ichthyosaur skeletons was uncovered with the help of a young girl.",
+   "Lyme Regis, England, was home to Mary Anning from 1799 to 1847."
+  ],
+  "a": 1,
+  "x": "An unfamiliar audience needs to know who she was and what she found. Only this choice does both.",
+  "t": "The first choice is about her exclusion, not her discoveries."
+ },
+ {
+  "id": "eo33",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 2,
+  "n": [
+   "Coral reefs cover less than 1% of the ocean floor.",
+   "They support about 25% of all marine species.",
+   "Rising ocean temperatures can cause corals to expel the algae living in their tissues, a process called bleaching.",
+   "Bleached corals can recover if temperatures return to normal quickly."
+  ],
+  "goal": "emphasize how important coral reefs are relative to their size",
+  "c": [
+   "Although coral reefs cover less than 1% of the ocean floor, they support about 25% of all marine species.",
+   "Rising ocean temperatures can cause corals to bleach.",
+   "Bleached corals can recover if temperatures return to normal quickly.",
+   "Coral reefs, which can bleach, support many marine species."
+  ],
+  "a": 0,
+  "x": "“Relative to their size” needs both numbers: tiny area, huge share of species.",
+  "t": "The last choice mentions species but leaves out the size comparison."
+ },
+ {
+  "id": "eo34",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 3,
+  "n": [
+   "The Harlem Renaissance was a cultural movement centered in New York City’s Harlem neighborhood.",
+   "It flourished in the 1920s and early 1930s.",
+   "Langston Hughes wrote poetry that drew on the rhythms of jazz and blues.",
+   "Zora Neale Hurston wrote novels and collected folklore in the American South."
+  ],
+  "goal": "make a generalization about the kinds of work produced during the Harlem Renaissance",
+  "c": [
+   "Langston Hughes wrote poetry that drew on the rhythms of jazz and blues.",
+   "The Harlem Renaissance flourished in the 1920s and early 1930s.",
+   "Writers of the Harlem Renaissance produced varied work, from jazz-influenced poetry to novels and collections of folklore.",
+   "Zora Neale Hurston collected folklore in the American South."
+  ],
+  "a": 2,
+  "x": "A generalization covers the range of work. Only this choice sums up several kinds together.",
+  "t": "The first and last choices are single examples, not generalizations."
+ },
+ {
+  "id": "eo35",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 2,
+  "n": [
+   "Tardigrades are microscopic animals about 0.5 millimeters long.",
+   "They can survive temperatures from near absolute zero to above 150°C.",
+   "They have survived short periods in the vacuum of space.",
+   "In harsh conditions, they dry out and enter a state called cryptobiosis."
+  ],
+  "goal": "explain how tardigrades survive harsh conditions",
+  "c": [
+   "Tardigrades are microscopic animals about 0.5 millimeters long.",
+   "In harsh conditions, tardigrades dry out and enter a state called cryptobiosis.",
+   "Tardigrades have been studied by scientists for many years.",
+   "Tardigrades are about 0.5 millimeters long and live in many places."
+  ],
+  "a": 1,
+  "x": "The goal is how they survive. Cryptobiosis is the mechanism.",
+  "t": "Their size doesn’t explain how they survive."
+ },
+ {
+  "id": "eo36",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 3,
+  "n": [
+   "In 1928, Alexander Fleming noticed that mold had contaminated one of his bacteria cultures.",
+   "The bacteria near the mold had been killed.",
+   "The mold was later identified as a species of Penicillium.",
+   "Penicillin, the substance produced by the mold, became one of the first widely used antibiotics."
+  ],
+  "goal": "explain the significance of Fleming’s observation",
+  "c": [
+   "In 1928, Alexander Fleming noticed mold in one of his bacteria cultures.",
+   "Fleming’s observation that mold had killed bacteria led to penicillin, one of the first widely used antibiotics.",
+   "The mold Fleming observed was later identified as a species of Penicillium.",
+   "Bacteria near the mold in Fleming’s culture had been killed."
+  ],
+  "a": 1,
+  "x": "Significance means why it mattered: it led to one of the first widely used antibiotics.",
+  "t": "The first choice describes the observation but not why it mattered."
+ },
+ {
+  "id": "eo37",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 2,
+  "n": [
+   "The Atacama Desert in Chile is one of the driest places on Earth.",
+   "Some of its weather stations have never recorded rain.",
+   "Its dry, clear skies make it an excellent location for astronomical observatories.",
+   "Several major telescopes have been built there."
+  ],
+  "goal": "explain why astronomers build telescopes in the Atacama Desert",
+  "c": [
+   "The Atacama Desert in Chile is one of the driest places on Earth.",
+   "Some weather stations in the Atacama Desert have never recorded rain.",
+   "Because of its dry, clear skies, the Atacama Desert is an excellent place for astronomical observatories.",
+   "Several major telescopes have been built in Chile."
+  ],
+  "a": 2,
+  "x": "“Why” calls for a reason. The clear skies are the reason.",
+  "t": "Dryness alone doesn’t mention astronomy at all."
+ },
+ {
+  "id": "eo38",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 3,
+  "n": [
+   "Alligators have broad, U-shaped snouts.",
+   "Crocodiles have narrower, V-shaped snouts.",
+   "Alligators live mainly in freshwater habitats.",
+   "Many crocodile species can tolerate salt water."
+  ],
+  "goal": "contrast alligators and crocodiles in terms of habitat",
+  "c": [
+   "Alligators have U-shaped snouts, while crocodiles have V-shaped snouts.",
+   "Alligators live mainly in freshwater habitats, whereas many crocodile species can tolerate salt water.",
+   "Alligators and crocodiles are both reptiles with distinctive snouts.",
+   "Many crocodile species can tolerate salt water."
+  ],
+  "a": 1,
+  "x": "The goal names both a contrast and a topic (habitat). Only this choice does both.",
+  "t": "The first choice contrasts them, but by snout shape instead of habitat."
+ },
+ {
+  "id": "eo39",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 2,
+  "n": [
+   "Maria Tallchief (1925–2013) was an American ballerina.",
+   "She was a member of the Osage Nation.",
+   "She is often called America’s first major prima ballerina.",
+   "She danced with the New York City Ballet from 1948 to 1965."
+  ],
+  "goal": "introduce Maria Tallchief and her significance",
+  "c": [
+   "Maria Tallchief, a member of the Osage Nation, is often called America’s first major prima ballerina.",
+   "Maria Tallchief danced with the New York City Ballet from 1948 to 1965.",
+   "Maria Tallchief lived from 1925 to 2013.",
+   "The New York City Ballet employed many dancers between 1948 and 1965."
+  ],
+  "a": 0,
+  "x": "An introduction says who she was. “First major prima ballerina” says why she matters.",
+  "t": "The dates are facts about her, but they don’t show her significance."
+ },
+ {
+  "id": "eo40",
+  "d": "eoi",
+  "sk": "Rhetorical Synthesis",
+  "lv": 3,
+  "n": [
+   "A study tested two groups of students on vocabulary.",
+   "Group 1 studied the words by rereading a list.",
+   "Group 2 studied the same words by quizzing themselves.",
+   "A week later, Group 2 remembered 50% more words than Group 1."
+  ],
+  "goal": "present the study’s conclusion",
+  "c": [
+   "In the study, students who quizzed themselves remembered 50% more words a week later than students who reread a list.",
+   "The study tested two groups of students on vocabulary.",
+   "Group 1 studied by rereading a list, and Group 2 studied the same words.",
+   "Rereading a list is one way students study vocabulary."
+  ],
+  "a": 0,
+  "x": "A conclusion states the result: self-quizzing beat rereading. (That’s also why this game quizzes you.)",
+  "t": "The second choice describes the setup, not the result."
+ }
+]

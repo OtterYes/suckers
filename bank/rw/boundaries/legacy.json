@@ -1,0 +1,18 @@
+[
+ {
+  "id": "se19",
+  "d": "sec",
+  "sk": "Boundaries",
+  "lv": 3,
+  "p": "In 1969, astronauts Neil Armstrong and Buzz Aldrin became the first people to walk on the ______ Michael Collins remained in orbit aboard the command module.",
+  "c": [
+   "Moon, while",
+   "Moon while,",
+   "Moon; while",
+   "Moon. While"
+  ],
+  "a": 0,
+  "x": "“While Michael Collins remained …” is a dependent clause, so a comma attaches it to the main sentence.",
+  "t": "A period or semicolon would leave “While … module.” stranded as a fragment."
+ }
+]

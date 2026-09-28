@@ -1,0 +1,138 @@
+[
+ {
+  "id": "ii09",
+  "d": "ii",
+  "sk": "Command of Evidence: Textual",
+  "lv": 2,
+  "p": "A student claims that honeybees can communicate the location of food sources to other bees in their hive.",
+  "q": "Which finding, if true, would most directly support the student’s claim?",
+  "c": [
+   "Honeybees visit many different types of flowers during a single day.",
+   "After one bee performs a specific movement pattern in the hive, other bees fly directly to the food source that the first bee visited.",
+   "Honeybee hives can contain tens of thousands of individual bees.",
+   "Honeybees can see some colors that humans cannot."
+  ],
+  "a": 1,
+  "x": "Only this finding shows information about a location passing from one bee to others.",
+  "t": "The other choices are true-sounding bee facts that have nothing to do with communication."
+ },
+ {
+  "id": "ii10",
+  "d": "ii",
+  "sk": "Command of Evidence: Textual",
+  "lv": 2,
+  "p": "Some researchers hypothesize that sea otters help protect kelp forests. Sea otters eat sea urchins, and sea urchins feed on kelp. Without otters, the researchers argue, urchin populations can grow so large that they destroy kelp forests.",
+  "q": "Which finding, if true, would most directly support the researchers’ hypothesis?",
+  "c": [
+   "Kelp forests grow more quickly in cold water than in warm water.",
+   "Sea otters spend a large portion of each day grooming their fur.",
+   "In areas where sea otters disappeared, sea urchin numbers increased and kelp cover declined sharply.",
+   "Sea urchins are eaten by several species of fish as well as by sea otters."
+  ],
+  "a": 2,
+  "x": "The hypothesis predicts a chain: fewer otters, more urchins, less kelp. This finding shows exactly that chain.",
+  "t": "The last choice, if anything, weakens the idea that otters specifically are needed."
+ },
+ {
+  "id": "ii11",
+  "d": "ii",
+  "sk": "Command of Evidence: Textual",
+  "lv": 3,
+  "p": "An economist argues that remote work has made small towns more attractive to young professionals, who can now keep well-paying city jobs while enjoying lower housing costs.",
+  "q": "Which finding, if true, would most strongly support the economist’s argument?",
+  "c": [
+   "Housing costs in large cities have risen steadily over the past decade.",
+   "Since remote work became common, the number of residents aged 25 to 35 in many small towns has grown, and many of these new residents work for employers based in cities.",
+   "Many young professionals report that they prefer working in an office to working remotely.",
+   "Small towns have fewer restaurants and entertainment venues than large cities do."
+  ],
+  "a": 1,
+  "x": "The argument predicts young professionals moving to small towns while keeping city jobs. This finding shows both parts.",
+  "t": "The first choice is about city prices only. It doesn’t show anyone moving to small towns."
+ },
+ {
+  "id": "ii12",
+  "d": "ii",
+  "sk": "Command of Evidence: Textual",
+  "lv": 3,
+  "p": "In a poem, the speaker describes an old family farmhouse. A student claims that the speaker associates the house with a sense of lasting comfort despite its age.",
+  "q": "Which quotation from the poem most effectively illustrates the student’s claim?",
+  "c": [
+   "“The roof has lost a shingle every spring, / and the porch leans like a tired traveler.”",
+   "“Its crooked doors still open to my knock / as warmly as they did when I was small.”",
+   "“A new road runs past the eastern field, / where trucks now hurry toward the town.”",
+   "“My grandmother planted roses by the gate, / though few of them survived the winter.”"
+  ],
+  "a": 1,
+  "x": "The claim has two parts: age and lasting comfort. “Crooked doors” shows age, and “as warmly as they did when I was small” shows comfort that has lasted.",
+  "t": "The first quotation shows the house’s age but no comfort, so it proves only half the claim."
+ },
+ {
+  "id": "ii13",
+  "d": "ii",
+  "sk": "Command of Evidence: Textual",
+  "lv": 2,
+  "p": "A biologist claims that a certain species of frog uses its bright coloring to warn predators that it is poisonous.",
+  "q": "Which observation would most directly support the biologist’s claim?",
+  "c": [
+   "Birds that eat one of the frogs and become ill later avoid frogs with that coloring.",
+   "The frog lays its eggs in small pools of water that collect in plants.",
+   "The frog’s coloring changes slightly as it grows from a juvenile to an adult.",
+   "Several other frog species in the same region are brown or green."
+  ],
+  "a": 0,
+  "x": "A warning signal works only if predators learn from it. Birds avoiding the coloring after getting sick shows the color is working as a warning.",
+  "t": "The last choice shows other frogs look different, but not that predators respond to the color."
+ },
+ {
+  "id": "ii14",
+  "d": "ii",
+  "sk": "Command of Evidence: Textual",
+  "lv": 3,
+  "p": "A historian argues that a particular nineteenth-century novel was widely read by factory workers when it was first published.",
+  "q": "Which finding, if true, would most directly weaken the historian’s argument?",
+  "c": [
+   "The novel’s author had worked in a factory as a young man.",
+   "Several factory workers mentioned the novel in letters written in the 1850s.",
+   "When the novel was first published, it cost about two weeks of a factory worker’s wages and was not available in public libraries.",
+   "The novel remained popular for many decades after it was first published."
+  ],
+  "a": 2,
+  "x": "If workers couldn’t afford the book and couldn’t borrow it, they probably didn’t read it widely. That weakens the argument.",
+  "t": "The second choice supports the argument. Read the question word: weaken."
+ },
+ {
+  "id": "ii15",
+  "d": "ii",
+  "sk": "Command of Evidence: Textual",
+  "lv": 1,
+  "p": "A student claims that the school’s new recycling program has reduced the amount of trash the school sends to landfills.",
+  "q": "Which evidence would best support the student’s claim?",
+  "c": [
+   "Students say they like the colorful new recycling bins.",
+   "The school’s weekly landfill pickup has dropped from 40 bags to 28 bags since the program began.",
+   "The recycling program was proposed by the student council.",
+   "Other schools in the district are considering similar programs."
+  ],
+  "a": 1,
+  "x": "The claim is about less trash going to landfills. Only this choice measures landfill trash before and after.",
+  "t": "Liking the bins says nothing about how much trash was reduced."
+ },
+ {
+  "id": "ii16",
+  "d": "ii",
+  "sk": "Command of Evidence: Textual",
+  "lv": 2,
+  "p": "Researchers hypothesize that songbirds living near busy highways sing at a higher pitch than birds of the same species living in quiet forests, because higher-pitched songs are easier to hear over low-frequency traffic noise.",
+  "q": "Which finding, if true, would most directly support the researchers’ hypothesis?",
+  "c": [
+   "Birds near highways sing more often in the morning than in the evening.",
+   "Recordings show that birds near highways sing at a higher minimum pitch than birds of the same species in quiet forests.",
+   "Traffic noise is louder on weekdays than on weekends.",
+   "Forest-dwelling birds of the species build larger nests than highway-dwelling birds do."
+  ],
+  "a": 1,
+  "x": "The hypothesis compares pitch near highways with pitch in forests. Only this choice measures that difference.",
+  "t": "The first choice is about timing, not pitch."
+ }
+]

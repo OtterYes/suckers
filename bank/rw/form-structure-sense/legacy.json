@@ -1,0 +1,498 @@
+[
+ {
+  "id": "se01",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 1,
+  "p": "The collection of rare coins ______ displayed in a locked glass case near the museum’s entrance.",
+  "c": [
+   "is",
+   "are",
+   "were",
+   "have been"
+  ],
+  "a": 0,
+  "x": "The subject is “collection” (singular). “Of rare coins” is just a describing phrase.",
+  "t": "“Coins” sits right before the blank and tempts you toward a plural verb."
+ },
+ {
+  "id": "se02",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "Each of the students who entered the science fair ______ required to submit a written report.",
+  "c": [
+   "was",
+   "were",
+   "are",
+   "have been"
+  ],
+  "a": 0,
+  "x": "“Each” is singular, so it takes “was.”",
+  "t": "“Students” is inside the phrase “of the students,” so it isn’t the subject."
+ },
+ {
+  "id": "se03",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "The results of the survey, which was conducted over three months, ______ that most residents support the new park.",
+  "c": [
+   "suggest",
+   "suggests",
+   "has suggested",
+   "is suggesting"
+  ],
+  "a": 0,
+  "x": "The subject is “results” (plural). Skip the phrase and the clause between commas.",
+  "t": "“Survey” is singular, but it isn’t the subject of this verb."
+ },
+ {
+  "id": "se04",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "When the museum reopened after renovations, ______ new wing featured interactive exhibits about local history.",
+  "c": [
+   "its",
+   "it’s",
+   "their",
+   "they’re"
+  ],
+  "a": 0,
+  "x": "The museum (singular) owns the wing, so use the possessive “its.”",
+  "t": "“It’s” means “it is.” Test it: “it is new wing” doesn’t work."
+ },
+ {
+  "id": "se05",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 1,
+  "p": "The two scientists published ______ findings in a leading journal last spring.",
+  "c": [
+   "their",
+   "there",
+   "they’re",
+   "its"
+  ],
+  "a": 0,
+  "x": "Plural owners (two scientists) take the plural possessive “their.”",
+  "t": "“There” is a place, and “they’re” means “they are.”"
+ },
+ {
+  "id": "se06",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "Neither the coach nor the players ______ expecting the storm to delay the game.",
+  "c": [
+   "were",
+   "was",
+   "is",
+   "has been"
+  ],
+  "a": 0,
+  "x": "With “neither … nor,” the verb agrees with the closer subject: “players” (plural), so “were.”",
+  "t": "“Coach” comes first, but the closer noun decides."
+ },
+ {
+  "id": "se07",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "The ______ reports, written by all twenty-five members of the class, were collected at the end of the semester.",
+  "c": [
+   "students’",
+   "student’s",
+   "students",
+   "students’s"
+  ],
+  "a": 0,
+  "x": "Many students own the reports, so use the plural possessive: students’.",
+  "t": "“Student’s” would mean one student, but the text says twenty-five members wrote them."
+ },
+ {
+  "id": "se08",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "Walking through the ancient ruins, ______",
+  "c": [
+   "the visitors noticed carvings that had survived for centuries.",
+   "carvings that had survived for centuries caught the visitors’ attention.",
+   "the carvings had survived for centuries, and the visitors noticed them.",
+   "centuries had passed, but the visitors still noticed the carvings."
+  ],
+  "a": 0,
+  "x": "Whoever is walking must come right after the comma. Only the visitors can walk.",
+  "t": "In the second choice, the carvings would be walking, which is a dangling modifier."
+ },
+ {
+  "id": "se09",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "By the time the rescue team arrived, the hikers ______ for nearly six hours.",
+  "c": [
+   "had been waiting",
+   "wait",
+   "will wait",
+   "are waiting"
+  ],
+  "a": 0,
+  "x": "The waiting happened before another past event (the team arrived), so use the past perfect: “had been waiting.”",
+  "t": "Present-tense choices clash with “arrived.”"
+ },
+ {
+  "id": "se10",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "Every summer, the town ______ a festival that celebrates its founding, and thousands of visitors attend.",
+  "c": [
+   "hosts",
+   "hosted",
+   "had hosted",
+   "will have hosted"
+  ],
+  "a": 0,
+  "x": "“Every summer” and “attend” are present tense, so the verb is “hosts.”",
+  "t": "“Hosted” is past tense and clashes with “attend.”"
+ },
+ {
+  "id": "se11",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "The novel’s main character, a retired sailor who spends his days repairing old ______ is based on the author’s grandfather.",
+  "c": [
+   "boats,",
+   "boats",
+   "boats;",
+   "boats—"
+  ],
+  "a": 0,
+  "x": "The extra description opened with a comma after “character,” so it must close with a comma.",
+  "t": "A dash can’t close a phrase that a comma opened. Match the pair."
+ },
+ {
+  "id": "se12",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "The architect ______ designed the city’s tallest building also created several of its public parks.",
+  "c": [
+   "who",
+   "whom",
+   "which",
+   "whose"
+  ],
+  "a": 0,
+  "x": "The blank is the subject of “designed,” and it refers to a person, so use “who.”",
+  "t": "“Which” is for things, and “whom” is for objects."
+ },
+ {
+  "id": "se13",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "The recipe calls for three main ______ flour, butter, and sugar.",
+  "c": [
+   "ingredients:",
+   "ingredients,",
+   "ingredients;",
+   "ingredients"
+  ],
+  "a": 0,
+  "x": "A complete sentence followed by a list: a colon introduces it.",
+  "t": "A semicolon needs complete sentences on both sides, and “flour, butter, and sugar” isn’t one."
+ },
+ {
+  "id": "se14",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "Among the items found in the time capsule ______ a newspaper from 1925, a pocket watch, and a letter to future residents.",
+  "c": [
+   "were",
+   "was",
+   "is",
+   "has been"
+  ],
+  "a": 0,
+  "x": "The sentence is inverted. The real subject comes after the verb: three items, so “were.”",
+  "t": "“Time capsule” sits right before the blank, but it’s inside a phrase."
+ },
+ {
+  "id": "se15",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "The flock of geese ______ south every autumn, stopping at the same lake along the way.",
+  "c": [
+   "flies",
+   "fly",
+   "flying",
+   "have flown"
+  ],
+  "a": 0,
+  "x": "“Flock” is a singular collective noun, so it takes “flies.”",
+  "t": "“Geese” is inside the phrase “of geese,” and “flying” would leave the sentence without a main verb."
+ },
+ {
+  "id": "se16",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 1,
+  "p": "The hikers took off ______ backpacks and sat down to rest at the summit.",
+  "c": [
+   "their",
+   "there",
+   "they’re",
+   "its"
+  ],
+  "a": 0,
+  "x": "The hikers (plural) own the backpacks, so use “their.”",
+  "t": "“They’re” means “they are.”"
+ },
+ {
+  "id": "se17",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "The team’s goals are to make the software easier to use, to reduce its cost, and ______",
+  "c": [
+   "to improve its security.",
+   "improving its security.",
+   "its security will be improved.",
+   "security improvements."
+  ],
+  "a": 0,
+  "x": "Items in a list must be parallel: “to make … to reduce … to improve.”",
+  "t": "“Improving” breaks the “to ___” pattern."
+ },
+ {
+  "id": "se18",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "Each of the paintings in the exhibit has a small card beside ______ that explains the work’s history.",
+  "c": [
+   "it",
+   "them",
+   "they",
+   "those"
+  ],
+  "a": 0,
+  "x": "Each card sits beside one painting (“each”), so use the singular “it.”",
+  "t": "“Them” agrees with “paintings,” but the subject is “each.”"
+ },
+ {
+  "id": "se20",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "The documentary, which features interviews with dozens of ______ explores how the city’s music scene changed over fifty years.",
+  "c": [
+   "musicians,",
+   "musicians",
+   "musicians;",
+   "musicians—"
+  ],
+  "a": 0,
+  "x": "The extra clause opened with a comma after “documentary,” so it closes with a comma.",
+  "t": "Leaving it out makes the reader think the musicians explore the music scene."
+ },
+ {
+  "id": "se21",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "The documentary—which features interviews with dozens of ______ explores how the city’s music scene changed over fifty years.",
+  "c": [
+   "musicians—",
+   "musicians,",
+   "musicians;",
+   "musicians"
+  ],
+  "a": 0,
+  "x": "The interruption opened with a dash, so it must close with a dash.",
+  "t": "A comma can’t close a dash-opened phrase. Match the pair."
+ },
+ {
+  "id": "se22",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "Once a small fishing village, the town ______ into a popular tourist destination over the past century.",
+  "c": [
+   "has grown",
+   "grows",
+   "will grow",
+   "is growing"
+  ],
+  "a": 0,
+  "x": "“Over the past century” describes change up to now, so use the present perfect: “has grown.”",
+  "t": "“Is growing” describes something happening right now, not over a whole past century."
+ },
+ {
+  "id": "se23",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "Researchers studying the fossil ______ that the animal was about the size of a house cat.",
+  "c": [
+   "concluded",
+   "concluding",
+   "to conclude",
+   "having concluded"
+  ],
+  "a": 0,
+  "x": "The sentence needs a main verb for “Researchers.” Only “concluded” is one.",
+  "t": "“Concluding” and “having concluded” can’t be main verbs, so they leave a fragment."
+ },
+ {
+  "id": "se24",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "The city’s oldest ______ built in 1850, is now a museum dedicated to local history.",
+  "c": [
+   "house,",
+   "house",
+   "house;",
+   "house:"
+  ],
+  "a": 0,
+  "x": "“Built in 1850” is extra information set off by a pair of commas, and the closing comma is already there.",
+  "t": "Without the opening comma, the sentence has a lone comma between the subject and the verb."
+ },
+ {
+  "id": "se25",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "The number of students enrolled in the robotics club ______ doubled since last year.",
+  "c": [
+   "has",
+   "have",
+   "are",
+   "were"
+  ],
+  "a": 0,
+  "x": "“The number” is singular. (“A number of” would be plural.)",
+  "t": "“Students” and “robotics club” are both inside phrases."
+ },
+ {
+  "id": "se26",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "Unlike ______ the new phone model has a battery that lasts two full days.",
+  "c": [
+   "the previous model,",
+   "the previous model",
+   "the previous model:",
+   "the previous model;"
+  ],
+  "a": 0,
+  "x": "An introductory phrase is followed by a comma before the main sentence.",
+  "t": "A semicolon or colon needs a complete sentence before it."
+ },
+ {
+  "id": "se27",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "Of the twelve entries in the competition, the judges were most impressed by one ______ design, which used recycled materials to build a solar-powered shelter.",
+  "c": [
+   "team’s",
+   "teams",
+   "teams’",
+   "teams’s"
+  ],
+  "a": 0,
+  "x": "“One team” owns the design, so use the singular possessive: team’s.",
+  "t": "“Teams’” is plural possessive, which clashes with “one.”"
+ },
+ {
+  "id": "se28",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "Known for its bright red feathers, ______",
+  "c": [
+   "the northern cardinal is a common sight at backyard bird feeders.",
+   "backyard bird feeders often attract the northern cardinal.",
+   "many people enjoy seeing the northern cardinal at feeders.",
+   "bird watchers often spot the northern cardinal at feeders."
+  ],
+  "a": 0,
+  "x": "The thing known for red feathers must come right after the comma: the cardinal.",
+  "t": "The other choices put feeders, people, or bird watchers right after the comma."
+ },
+ {
+  "id": "se29",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 1,
+  "p": "The orchestra performed three pieces: a symphony by Mozart, a concerto by Vivaldi, ______ a new work by a local composer.",
+  "c": [
+   "and",
+   "and,",
+   "; and",
+   ", and,"
+  ],
+  "a": 0,
+  "x": "The comma before the blank is already there, so just add “and” before the last item.",
+  "t": "Don’t put a comma after “and.”"
+ },
+ {
+  "id": "se30",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 3,
+  "p": "The scientist’s notebooks, ______ were donated to the university after her death, contain detailed sketches of the plants she studied.",
+  "c": [
+   "which",
+   "that",
+   "they",
+   "these"
+  ],
+  "a": 0,
+  "x": "After a comma, an extra (nonessential) clause about things uses “which.”",
+  "t": "“They” would create a comma splice, and “that” can’t follow a comma in this kind of clause."
+ },
+ {
+  "id": "se31",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 1,
+  "p": "Last year, the school ______ a new policy that lets students use calculators on all math tests.",
+  "c": [
+   "adopted",
+   "adopts",
+   "will adopt",
+   "is adopting"
+  ],
+  "a": 0,
+  "x": "“Last year” calls for the past tense.",
+  "t": "The other choices don’t match a finished past action."
+ },
+ {
+  "id": "se32",
+  "d": "sec",
+  "sk": "Form, Structure, and Sense",
+  "lv": 2,
+  "p": "The Sahara Desert, which covers much of North Africa, ______ roughly the same size as the United States.",
+  "c": [
+   "is",
+   "are",
+   "being",
+   "have been"
+  ],
+  "a": 0,
+  "x": "The subject is “The Sahara Desert” (singular). Skip the clause between commas.",
+  "t": "“Being” leaves the sentence without a main verb."
+ }
+]

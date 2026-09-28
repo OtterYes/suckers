@@ -1,0 +1,130 @@
+[
+ {
+  "id": "ii25",
+  "d": "ii",
+  "sk": "Inferences",
+  "lv": 2,
+  "p": "Many plants rely on bees for pollination, and bee activity drops sharply in cold, rainy weather. An orchard owner noticed that her apple trees produced much less fruit in a year when the weeks of spring blossoming were unusually cold and wet. This observation suggests that ______",
+  "c": [
+   "apple trees need more water than other fruit trees do.",
+   "the weather reduced pollination by limiting bee activity while the trees were in bloom.",
+   "bees prefer the blossoms of other plants to apple blossoms.",
+   "the orchard owner should plant a different variety of apple tree."
+  ],
+  "a": 1,
+  "x": "Link the facts: cold, wet weather means fewer bees; fewer bees means less pollination; less pollination means less fruit.",
+  "t": "Nothing in the text compares apple trees with other fruit trees."
+ },
+ {
+  "id": "ii26",
+  "d": "ii",
+  "sk": "Inferences",
+  "lv": 3,
+  "p": "Archaeologists excavating an ancient settlement found tools made from obsidian, a volcanic glass. Chemical analysis showed that the obsidian came from a volcano more than 300 kilometers away. The settlement’s residents had no horses or wheeled vehicles. The archaeologists concluded that ______",
+  "c": [
+   "the residents probably got the obsidian through trade with other groups or by making long journeys on foot.",
+   "the volcano must have erupted near the settlement at some point in the past.",
+   "obsidian tools were less useful than tools made from local stone.",
+   "the residents moved their settlement closer to the volcano."
+  ],
+  "a": 0,
+  "x": "The obsidian traveled 300 km without horses or wheels, so people must have carried it or traded for it.",
+  "t": "The second choice contradicts the chemical evidence that the source was 300 km away."
+ },
+ {
+  "id": "ii27",
+  "d": "ii",
+  "sk": "Inferences",
+  "lv": 2,
+  "p": "Some coffee shops play slow, soft music, while others play fast, loud music. A researcher found that customers in shops with fast, loud music tended to finish their drinks and leave more quickly. Because shops with limited seating benefit when customers don’t stay long, the findings suggest that such shops ______",
+  "c": [
+   "should stop playing music altogether.",
+   "might choose faster, louder music so that seats open up more often.",
+   "earn less money than shops with more seating.",
+   "attract customers who prefer slow, soft music."
+  ],
+  "a": 1,
+  "x": "Fast, loud music means shorter stays. Small shops want shorter stays. So they might choose fast, loud music.",
+  "t": "Stopping music altogether isn’t supported. The finding is about which music to play."
+ },
+ {
+  "id": "ii28",
+  "d": "ii",
+  "sk": "Inferences",
+  "lv": 3,
+  "p": "Glaciers form when more snow falls in winter than melts in summer, so layers build up and compress into ice over many years. Scientists found that one mountain glacier has been shrinking for three decades, even though winter snowfall in the region has stayed about the same. The scientists most likely concluded that ______",
+  "c": [
+   "winter snowfall is not related to the growth of glaciers.",
+   "the glacier’s shrinking is probably due to increased summer melting.",
+   "the glacier will begin growing again within the next decade.",
+   "the region’s snowfall measurements must be inaccurate."
+  ],
+  "a": 1,
+  "x": "A glacier balances snowfall against melting. If snowfall stayed the same and the glacier shrank, melting must have increased.",
+  "t": "The first choice overreaches. Snowfall still matters; it just didn’t change."
+ },
+ {
+  "id": "ii29",
+  "d": "ii",
+  "sk": "Inferences",
+  "lv": 2,
+  "p": "In the early 1900s, many American cities had several competing daily newspapers; by the end of the century, most had only one or two. Some historians blame the rise of radio and television, which gave people new ways to get the news. Others point out that the number of newspapers had already begun to fall in the 1920s, before radio was widespread. The second group of historians would most likely argue that ______",
+  "c": [
+   "radio and television had no effect at all on newspapers.",
+   "factors other than radio and television probably contributed to the decline.",
+   "newspapers became more popular after radio was introduced.",
+   "most cities had only one newspaper by the 1920s."
+  ],
+  "a": 1,
+  "x": "If the decline started before radio spread, radio can’t be the whole story. Something else must have contributed.",
+  "t": "“No effect at all” is too extreme. The second group only shows the decline began earlier."
+ },
+ {
+  "id": "ii30",
+  "d": "ii",
+  "sk": "Inferences",
+  "lv": 3,
+  "p": "A company tested two versions of its website. Version A had a large Sign Up button at the top of the page; Version B placed the same button at the bottom. Visitors who saw Version A were more likely to sign up. However, people who signed up through Version B were much more likely to still be active users a year later. One possible explanation for these results is that ______",
+  "c": [
+   "visitors who scrolled to the bottom before signing up had learned more about the service and were more committed to it.",
+   "the button in Version A was a different color from the button in Version B.",
+   "most visitors to the website never signed up.",
+   "Version B was shown to fewer visitors than Version A was."
+  ],
+  "a": 0,
+  "x": "Reaching a button at the bottom means reading the whole page. People who read everything first are more likely to be committed users.",
+  "t": "The second choice contradicts the text, which says it was the same button."
+ },
+ {
+  "id": "ii31",
+  "d": "ii",
+  "sk": "Inferences",
+  "lv": 1,
+  "p": "Maya’s plant sat on a north-facing windowsill that got little direct sunlight. After several weeks, she noticed that its stems had grown long and thin, and they all leaned toward the window. Based on this observation, Maya most likely concluded that the plant ______",
+  "c": [
+   "was getting too much water.",
+   "was growing toward the limited light available.",
+   "would grow faster in a dark closet.",
+   "did not need sunlight to grow."
+  ],
+  "a": 1,
+  "x": "Stems stretching and leaning toward the window show the plant reaching for scarce light.",
+  "t": "Nothing in the text mentions watering."
+ },
+ {
+  "id": "ii32",
+  "d": "ii",
+  "sk": "Inferences",
+  "lv": 2,
+  "p": "Early mapmakers often filled unexplored regions of their maps with drawings of sea monsters and imaginary creatures. As explorers returned with more detailed information over the following centuries, these drawings gradually disappeared and were replaced by coastlines and place names. This change suggests that the drawings ______",
+  "c": [
+   "were added mainly because mapmakers enjoyed drawing animals.",
+   "were used, at least in part, to fill areas about which mapmakers had little information.",
+   "caused explorers to avoid certain parts of the ocean.",
+   "were more accurate than the coastlines that replaced them."
+  ],
+  "a": 1,
+  "x": "The drawings vanished exactly as real information arrived, so they were standing in for missing information.",
+  "t": "The text never says what explorers did in response to the drawings."
+ }
+]

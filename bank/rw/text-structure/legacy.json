@@ -1,0 +1,138 @@
+[
+ {
+  "id": "cs17",
+  "d": "cs",
+  "sk": "Text Structure and Purpose",
+  "lv": 2,
+  "p": "Many people think of bats as blind. In fact, all bat species can see, and some fruit bats have excellent vision. {{The belief may come from the fact that many bats rely heavily on echolocation, using sound rather than sight to navigate in the dark.}} Scientists continue to study how bats combine these senses.",
+  "q": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+  "c": [
+   "It offers a possible explanation for how a misconception mentioned earlier arose.",
+   "It provides evidence that some bats cannot see at all.",
+   "It introduces a topic unrelated to the previous sentences.",
+   "It summarizes the results of a specific scientific study."
+  ],
+  "a": 0,
+  "x": "The underlined sentence explains where “the belief” (that bats are blind) may come from.",
+  "t": "The text says all bats can see, so the second choice contradicts it."
+ },
+ {
+  "id": "cs18",
+  "d": "cs",
+  "sk": "Text Structure and Purpose",
+  "lv": 3,
+  "p": "For years, researchers assumed that forgetting was simply a failure of memory. Recent studies suggest a different view. {{Forgetting unimportant details may help the brain focus on information that is useful for making decisions.}} In one experiment, participants who forgot minor details of a task performed better when the task’s rules changed.",
+  "q": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+  "c": [
+   "It states an alternative view that the next sentence supports with an example.",
+   "It restates the assumption that researchers held for many years.",
+   "It questions the results of the experiment described in the final sentence.",
+   "It explains why the participants in the experiment forgot minor details."
+  ],
+  "a": 0,
+  "x": "The underlined sentence is the “different view,” and the experiment in the next sentence backs it up.",
+  "t": "The old assumption was “forgetting is failure.” The underlined sentence is the new view, not the old one."
+ },
+ {
+  "id": "cs19",
+  "d": "cs",
+  "sk": "Text Structure and Purpose",
+  "lv": 2,
+  "p": "The following text is from a short story. Theo had always considered the attic off-limits, a dusty place of forgotten furniture and shadows. But on the first rainy day of summer, with nothing else to do, he climbed the narrow stairs. At the top, he found a trunk filled with his grandfather’s letters, each one tied with faded blue ribbon.",
+  "q": "Which choice best describes the overall structure of the text?",
+  "c": [
+   "It describes a character’s attitude toward a place and then presents an event that leads to a discovery there.",
+   "It compares two characters’ feelings about the same place.",
+   "It presents a character’s memories of a trip he took with his grandfather.",
+   "It explains why a character decides never to return to a place."
+  ],
+  "a": 0,
+  "x": "First Theo’s attitude (off-limits), then an event (he climbs up), then a discovery (the letters).",
+  "t": "Only one character appears; the grandfather is mentioned through his letters."
+ },
+ {
+  "id": "cs20",
+  "d": "cs",
+  "sk": "Text Structure and Purpose",
+  "lv": 3,
+  "p": "Some economists argue that raising the minimum wage leads businesses to hire fewer workers. Others counter that higher wages reduce employee turnover, saving businesses the cost of hiring and training replacements. {{A recent study of restaurants in neighboring counties found evidence for both effects: hiring slowed slightly, but workers stayed in their jobs longer.}}",
+  "q": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+  "c": [
+   "It presents findings suggesting that each of the two views has some support.",
+   "It shows that the first group of economists is right and the second is wrong.",
+   "It introduces a third view that contradicts both earlier arguments.",
+   "It explains why restaurants are the best type of business to study."
+  ],
+  "a": 0,
+  "x": "Hiring slowed (supports view 1) and workers stayed longer (supports view 2): evidence for both.",
+  "t": "The study supports both sides, so it can’t prove one side wrong."
+ },
+ {
+  "id": "cs21",
+  "d": "cs",
+  "sk": "Text Structure and Purpose",
+  "lv": 2,
+  "p": "Before refrigerators, people in cold climates harvested ice from frozen lakes each winter. Workers cut the ice into large blocks, packed them in sawdust, and stored them in insulated icehouses, where the blocks could last well into summer. Ice harvesting became a major industry in the 1800s, with ships carrying ice from New England to distant ports.",
+  "q": "Which choice best states the main purpose of the text?",
+  "c": [
+   "To describe how people preserved ice before refrigeration existed",
+   "To argue that ice harvesting was more efficient than modern refrigeration",
+   "To explain how refrigerators were invented",
+   "To criticize the working conditions of ice harvesters"
+  ],
+  "a": 0,
+  "x": "The text simply describes how the ice trade worked. It makes no argument or criticism.",
+  "t": "The text never compares ice harvesting with modern refrigeration."
+ },
+ {
+  "id": "cs22",
+  "d": "cs",
+  "sk": "Text Structure and Purpose",
+  "lv": 3,
+  "p": "In her essay, the author recalls learning to cook from her grandmother, who never used written recipes. “A pinch,” her grandmother would say, or “until it looks right.” At first the author found these instructions frustrating. {{Only years later did she realize that her grandmother had been teaching her to trust her own judgment rather than follow rules.}}",
+  "q": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+  "c": [
+   "It reveals how the author’s understanding of an earlier experience changed over time.",
+   "It provides an example of one of the grandmother’s recipes.",
+   "It explains why the author never learned to cook.",
+   "It describes the grandmother’s frustration with the author."
+  ],
+  "a": 0,
+  "x": "“At first … frustrating” then “Only years later did she realize”: the sentence shows her view changing.",
+  "t": "The frustration belonged to the author, not the grandmother."
+ },
+ {
+  "id": "cs23",
+  "d": "cs",
+  "sk": "Text Structure and Purpose",
+  "lv": 2,
+  "p": "Solar panels generate electricity only when the sun is shining, which creates a challenge for power grids at night. One solution is to store extra energy in large batteries during the day. {{Another is to pump water uphill into a reservoir when energy is plentiful and release it through turbines when energy is needed.}}",
+  "q": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+  "c": [
+   "It presents a second approach to the problem described earlier in the text.",
+   "It explains why batteries are the best way to store energy.",
+   "It describes a disadvantage of solar panels.",
+   "It questions whether the problem can be solved at all."
+  ],
+  "a": 0,
+  "x": "“One solution … Another”: the underlined sentence gives the second solution.",
+  "t": "The disadvantage of solar panels comes in the first sentence, not the underlined one."
+ },
+ {
+  "id": "cs24",
+  "d": "cs",
+  "sk": "Text Structure and Purpose",
+  "lv": 3,
+  "p": "Critics often describe the painter as a realist, pointing to her detailed portraits of farmworkers. Yet a closer look at her work complicates that label. {{Her figures are often placed against backgrounds of flat, unrealistic color, and their proportions are subtly stretched.}}",
+  "q": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+  "c": [
+   "It gives details suggesting that the painter’s work does not fit neatly into one category.",
+   "It lists the reasons critics consider the painter a realist.",
+   "It argues that her portraits of farmworkers are her most important work.",
+   "It describes how her style changed over the course of her career."
+  ],
+  "a": 0,
+  "x": "“Complicates that label” is the claim; flat, unrealistic color and stretched proportions are the evidence that she isn’t purely a realist.",
+  "t": "The details push against the realist label, so they can’t be reasons for it."
+ }
+]

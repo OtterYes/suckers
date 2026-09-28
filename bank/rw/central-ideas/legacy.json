@@ -1,0 +1,130 @@
+[
+ {
+  "id": "ii01",
+  "d": "ii",
+  "sk": "Central Ideas and Details",
+  "lv": 1,
+  "p": "Many people assume that deserts are nearly lifeless at night, but the opposite is often true. When the sun sets and temperatures drop, animals that spent the day hidden in burrows or under rocks come out to hunt, forage, and find mates. Kangaroo rats gather seeds, owls hunt from the air, and scorpions wait in the sand for passing insects. For many desert species, darkness is the busiest time of day.",
+  "c": [
+   "Many desert animals are most active at night rather than during the day.",
+   "Kangaroo rats find food more successfully than owls or scorpions do.",
+   "Desert nights are so cold that most animals cannot survive outside their burrows.",
+   "Scorpions are the most common predators in desert environments."
+  ],
+  "a": 0,
+  "x": "The text opens by rejecting the idea that deserts are lifeless at night, then lists animals that become active after dark. The last sentence sums it up: darkness is the busiest time.",
+  "t": "The third choice flips the text. The cooler temperatures are why animals come out, not why they stay hidden."
+ },
+ {
+  "id": "ii02",
+  "d": "ii",
+  "sk": "Central Ideas and Details",
+  "lv": 2,
+  "p": "For decades, historians described the medieval period in Europe as a “Dark Age” of little scientific progress. More recent scholarship has challenged that view. Researchers examining monastery records have found detailed observations of eclipses, careful improvements to water mills, and new techniques for measuring time. These findings suggest that while the period differed from the eras before and after it, it was far from intellectually stagnant.",
+  "c": [
+   "Monasteries were the only places in medieval Europe where scientific work took place.",
+   "Recent research indicates that the medieval period saw more scientific activity than was once believed.",
+   "Historians have proven that medieval scientists were more advanced than earlier scientists.",
+   "Records of eclipses are the most reliable source of information about medieval Europe."
+  ],
+  "a": 1,
+  "x": "The text sets up an old view (“Dark Age”), says recent scholarship challenges it, and gives evidence of scientific work. The main idea is that the period was more active than once thought.",
+  "t": "“More advanced than earlier scientists” goes too far. The text only says the period was not stagnant."
+ },
+ {
+  "id": "ii03",
+  "d": "ii",
+  "sk": "Central Ideas and Details",
+  "lv": 2,
+  "p": "Nadia had practiced the concerto every evening for three months, but when she walked onto the stage, the notes she knew so well seemed to scatter like startled birds. She sat at the piano and stared at the keys. Then she remembered her teacher’s advice: play the first phrase for yourself, not for the audience. She took a breath, placed her hands, and began, quietly at first and then with growing confidence as the music carried her forward.",
+  "c": [
+   "Nadia regrets not practicing the concerto more carefully before the performance.",
+   "Nadia’s teacher sits in the audience and helps her remember the music.",
+   "Nadia overcomes her initial nervousness by recalling advice and focusing on the music.",
+   "Nadia decides that performing for an audience matters less than practicing alone."
+  ],
+  "a": 2,
+  "x": "Nadia panics at first, remembers her teacher’s advice, and then plays with growing confidence. That arc is the main idea.",
+  "t": "The last choice twists the advice. She still performs; the advice just helps her begin."
+ },
+ {
+  "id": "ii04",
+  "d": "ii",
+  "sk": "Central Ideas and Details",
+  "lv": 3,
+  "p": "Urban planners once treated street trees mainly as decoration. But studies of city neighborhoods have linked tree cover to lower summer temperatures, reduced stormwater runoff, and even lower energy bills for nearby buildings. As a result, some cities now count trees as part of their infrastructure, alongside roads and water pipes, and budget for their maintenance accordingly.",
+  "c": [
+   "Some cities have begun to treat street trees as practical infrastructure because of the measurable benefits trees provide.",
+   "Street trees reduce energy bills more effectively than improvements to roads or water pipes do.",
+   "Urban planners have stopped considering how street trees affect the appearance of neighborhoods.",
+   "Cities with more street trees have larger budgets than cities with fewer street trees."
+  ],
+  "a": 0,
+  "x": "The text moves from “decoration” to measured benefits to a new policy (counting trees as infrastructure). The first choice captures that whole shift.",
+  "t": "The second choice invents a comparison between trees and roads that the text never makes."
+ },
+ {
+  "id": "ii05",
+  "d": "ii",
+  "sk": "Central Ideas and Details",
+  "lv": 3,
+  "p": "The octopus has a remarkably decentralized nervous system: about two-thirds of its neurons are located in its arms rather than in its brain. Experiments have shown that an octopus arm can respond to touch and even grasp objects without receiving signals from the brain. Some biologists argue that this arrangement lets each arm handle routine tasks on its own, leaving the brain free to coordinate the animal’s overall behavior.",
+  "c": [
+   "Octopuses are more intelligent than other animals because their arms contain so many neurons.",
+   "The way an octopus’s neurons are distributed may allow its arms to act somewhat independently of the brain.",
+   "Biologists have not yet determined whether octopus arms can respond to touch.",
+   "An octopus’s brain cannot control the movement of its arms."
+  ],
+  "a": 1,
+  "x": "Every sentence builds toward one point: neurons in the arms may let the arms work partly on their own.",
+  "t": "“Cannot control” overstates it. The brain still coordinates overall behavior."
+ },
+ {
+  "id": "ii06",
+  "d": "ii",
+  "sk": "Central Ideas and Details",
+  "lv": 1,
+  "p": "In 1896, the first modern Olympic Games were held in Athens, Greece. Organizers hoped the event would promote friendship among nations by bringing athletes together in peaceful competition. Although only fourteen countries sent athletes that year, the Games grew steadily, and today athletes from more than two hundred nations take part.",
+  "c": [
+   "The modern Olympic Games began with a small number of countries and grew into a much larger international event.",
+   "The first modern Olympic Games failed to promote friendship among nations.",
+   "Athletes from Greece won most of the events at the 1896 Olympic Games.",
+   "The Olympic Games are always held in Athens because the first modern Games took place there."
+  ],
+  "a": 0,
+  "x": "The text contrasts the small start (fourteen countries) with today’s size (more than two hundred nations).",
+  "t": "The text never says the Games failed at their goal, and it says nothing about who won."
+ },
+ {
+  "id": "ii07",
+  "d": "ii",
+  "sk": "Central Ideas and Details",
+  "lv": 2,
+  "p": "Architect Julia Morgan designed more than seven hundred buildings during her career, including the elaborate Hearst Castle in California. Yet for much of the twentieth century, her name was far less familiar than those of her male contemporaries. Morgan rarely gave interviews and preferred to let her work speak for itself, a choice that may have contributed to her relative obscurity. In recent decades, however, historians have renewed attention to her achievements, and in 2014 she became the first woman to receive the American Institute of Architects’ Gold Medal.",
+  "c": [
+   "Julia Morgan designed more buildings than any other architect of her time.",
+   "Although Julia Morgan was once relatively overlooked, her accomplishments have recently received greater recognition.",
+   "Julia Morgan’s refusal to give interviews kept her from receiving major commissions.",
+   "Hearst Castle is the most important building Julia Morgan designed."
+  ],
+  "a": 1,
+  "x": "The text moves from obscurity (“far less familiar”) to recognition (“renewed attention,” the Gold Medal).",
+  "t": "The third choice contradicts the text. She clearly received major commissions, such as Hearst Castle."
+ },
+ {
+  "id": "ii08",
+  "d": "ii",
+  "sk": "Central Ideas and Details",
+  "lv": 3,
+  "p": "When a language has no written form, knowledge of it can be lost quickly if its speakers shift to another language. In recent years, some communities have partnered with linguists to create dictionaries, record elders telling stories, and develop classes for children. These efforts do not simply preserve words; they give young speakers chances to use the language in daily life, which many researchers consider essential to keeping a language alive.",
+  "c": [
+   "Recording elders’ stories is the most effective way to preserve an unwritten language.",
+   "Linguists have created written forms for every language that previously lacked one.",
+   "Community efforts to sustain endangered languages aim not only to document them but also to keep them in active use.",
+   "Children learn unwritten languages more quickly than adults do."
+  ],
+  "a": 2,
+  "x": "The key sentence says the efforts “do not simply preserve words” but help young people use the language. That two-part goal is the main idea.",
+  "t": "The first choice picks one detail and calls it “most effective,” which the text never claims."
+ }
+]

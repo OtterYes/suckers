@@ -1,0 +1,110 @@
+[
+ {
+  "id": "cs25",
+  "d": "cs",
+  "sk": "Cross-Text Connections",
+  "lv": 3,
+  "p": "Text 1: Some psychologists argue that multitasking is a skill that improves with practice. In their view, people who regularly juggle several tasks, such as texting while doing homework, gradually become more efficient at switching their attention.",
+  "p2": "Text 2: Researchers compared people who frequently multitask with people who rarely do. The frequent multitaskers performed worse on tests of focus and were more easily distracted by irrelevant information, suggesting that heavy multitasking may weaken attention rather than strengthen it.",
+  "q": "Based on the texts, how would the researchers in Text 2 most likely respond to the view in Text 1?",
+  "c": [
+   "They would argue that their findings cast doubt on the idea that frequent multitasking improves attention.",
+   "They would agree that frequent multitaskers are better at switching attention.",
+   "They would claim that texting while doing homework is the only harmful kind of multitasking.",
+   "They would suggest that the psychologists in Text 1 studied too many people."
+  ],
+  "a": 0,
+  "x": "Text 1 says practice improves multitasking; Text 2 found frequent multitaskers did worse. Text 2 undercuts Text 1.",
+  "t": "Text 2 never singles out texting as the only harmful kind."
+ },
+ {
+  "id": "cs26",
+  "d": "cs",
+  "sk": "Cross-Text Connections",
+  "lv": 3,
+  "p": "Text 1: Many popular histories credit a single inventor with creating the first practical light bulb, describing a breakthrough achieved in one laboratory.",
+  "p2": "Text 2: The historical record shows that dozens of inventors in several countries were experimenting with electric lighting at the same time, and many of their improvements were shared or borrowed. The “first practical light bulb” was less a single invention than the result of many people’s work.",
+  "q": "Which choice best describes how Text 2 relates to Text 1?",
+  "c": [
+   "Text 2 challenges the idea in Text 1 that one person was responsible for the invention.",
+   "Text 2 adds details about the laboratory mentioned in Text 1.",
+   "Text 2 agrees with Text 1 but focuses on a later period.",
+   "Text 2 argues that electric lighting was never practical."
+  ],
+  "a": 0,
+  "x": "Text 1: one inventor. Text 2: many people’s work. Text 2 pushes back on Text 1.",
+  "t": "Text 2 disagrees with Text 1, so it isn’t adding supporting details."
+ },
+ {
+  "id": "cs27",
+  "d": "cs",
+  "sk": "Cross-Text Connections",
+  "lv": 2,
+  "p": "Text 1: Homework helps students practice the skills they learn in class. Without regular practice at home, students are likely to forget what they learned.",
+  "p2": "Text 2: Practice matters, but studies of elementary school students have found little connection between the amount of homework assigned and students’ test scores. For younger students, shorter assignments may work just as well as longer ones.",
+  "q": "How would the author of Text 2 most likely respond to Text 1?",
+  "c": [
+   "By agreeing that practice matters while questioning whether more homework is always better, at least for younger students",
+   "By arguing that students should never be assigned homework",
+   "By claiming that students forget nothing they learn in class",
+   "By stating that homework matters more for younger students than for older ones"
+  ],
+  "a": 0,
+  "x": "Text 2 opens with “Practice matters” (agreement) and then questions the amount of homework (qualification).",
+  "t": "“Never assign homework” is far more extreme than anything Text 2 says."
+ },
+ {
+  "id": "cs28",
+  "d": "cs",
+  "sk": "Cross-Text Connections",
+  "lv": 3,
+  "p": "Text 1: The decline of honeybee populations is often blamed on a single cause: a group of pesticides called neonicotinoids. Banning these chemicals, some advocates argue, would allow bee populations to recover.",
+  "p2": "Text 2: Researchers studying bee colonies have identified several interacting threats, including parasitic mites, poor nutrition from shrinking wildflower habitat, and pesticide exposure. Addressing only one of these factors is unlikely to reverse the decline.",
+  "q": "Based on the texts, how would the researchers in Text 2 most likely view the advocates’ argument in Text 1?",
+  "c": [
+   "As incomplete, because it focuses on one cause when several factors contribute to the decline",
+   "As correct, because pesticides are the only serious threat to honeybees",
+   "As irrelevant, because honeybee populations are not actually declining",
+   "As convincing, because parasitic mites are harmless to bees"
+  ],
+  "a": 0,
+  "x": "Text 2 lists several threats and says fixing one won’t be enough, so a single-cause argument is incomplete.",
+  "t": "Text 2 includes pesticides as one threat, but says they are not the only one."
+ },
+ {
+  "id": "cs29",
+  "d": "cs",
+  "sk": "Cross-Text Connections",
+  "lv": 2,
+  "p": "Text 1: Some architects favor glass-walled skyscrapers because they let in natural light and give occupants sweeping views of the city.",
+  "p2": "Text 2: Glass walls can make buildings expensive to heat and cool, since glass lets heat escape in winter and lets in intense sunlight in summer. Some newer designs use fewer, carefully placed windows to balance light and energy use.",
+  "q": "Which choice best describes how Text 2 relates to Text 1?",
+  "c": [
+   "It points out a drawback of the design that Text 1 describes favorably.",
+   "It gives more examples of the benefits described in Text 1.",
+   "It argues that skyscrapers should not be built.",
+   "It explains how the architects in Text 1 became interested in glass."
+  ],
+  "a": 0,
+  "x": "Text 1 praises glass walls; Text 2 raises an energy-cost drawback.",
+  "t": "Text 2 suggests better designs, not banning skyscrapers."
+ },
+ {
+  "id": "cs30",
+  "d": "cs",
+  "sk": "Cross-Text Connections",
+  "lv": 3,
+  "p": "Text 1: Some literary critics argue that a novel’s meaning is fixed by its author’s intentions. To understand a book, they claim, readers should learn as much as possible about what the author meant to say.",
+  "p2": "Text 2: Other critics hold that once a book is published, readers bring their own experiences to it, and those experiences shape what the book means to them. On this view, a novel can hold meanings its author never intended.",
+  "q": "How would the critics in Text 2 most likely respond to the claim in Text 1?",
+  "c": [
+   "They would argue that an author’s intentions do not fully determine what a novel means.",
+   "They would agree that readers should focus only on the author’s intentions.",
+   "They would claim that authors never have intentions when writing.",
+   "They would argue that readers’ experiences are irrelevant to interpretation."
+  ],
+  "a": 0,
+  "x": "Text 2 says novels can hold meanings the author never intended, so intentions don’t fully fix the meaning.",
+  "t": "Text 2 doesn’t deny that authors have intentions; it just says they aren’t the whole story."
+ }
+]
