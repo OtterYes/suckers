@@ -24,6 +24,7 @@ func finish(result: Dictionary) -> void:
 	finished.emit(result)
 
 
-func cancel(reason: String) -> void:
+## Stops the job. `by_user` is false for timeouts, which count as a failed try.
+func cancel(reason: String, by_user := true) -> void:
 	cancelled = true
-	finish({"ok": false, "cancelled": true, "error": reason})
+	finish({"ok": false, "cancelled": true, "by_user": by_user, "error": reason})

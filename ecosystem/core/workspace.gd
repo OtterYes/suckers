@@ -90,6 +90,16 @@ func add_task(t: Task) -> String:
 	return t.id
 
 
+## Removes a task that was never approved, and any links to it.
+func remove_task(id: String) -> void:
+	tasks.erase(id)
+	for t in tasks.values():
+		t.depends_on.erase(id)
+	for p in plans.values():
+		p.task_ids.erase(id)
+	changed.emit("task", id)
+
+
 func get_task(id: String) -> Task:
 	return tasks.get(id)
 
@@ -189,9 +199,12 @@ func memory_for(agent_id: String, project_id: String) -> Array:
 
 # --- Activity and usage -------------------------------------------------------
 
-func log_activity(agent_id: String, task_id: String, kind: String, message: String) -> Dictionary:
+## `extra` holds details the world uses to animate, e.g. {"from_agent": "roblox_builder"}.
+func log_activity(agent_id: String, task_id: String, kind: String, message: String,
+		extra := {}) -> Dictionary:
 	var entry := {"id": new_id("a"), "t": now(), "agent_id": agent_id,
 		"task_id": task_id, "kind": kind, "message": message}
+	entry.merge(extra)
 	activity.append(entry)
 	if activity.size() > MAX_ACTIVITY:
 		activity = activity.slice(activity.size() - MAX_ACTIVITY)

@@ -129,6 +129,40 @@ static func plan(ws: Workspace, goal: String, forced_area := "", deadline := "")
 	return {"ok": true, "plan_id": plan_id}
 
 
+## Approves a proposed plan. Tasks in `skip_ids` (unchecked in the review) are removed.
+## Returns how many tasks were queued.
+static func approve(ws: Workspace, plan_id: String, skip_ids := []) -> int:
+	var plan: Dictionary = ws.plans.get(plan_id, {})
+	if plan.get("status", "") != "proposed":
+		return 0
+	for id in skip_ids:
+		ws.remove_task(id)
+	var queued := 0
+	for t in ws.tasks_for_plan(plan_id):
+		if ws.set_task_status(t.id, Task.QUEUED, "plan approved"):
+			queued += 1
+			ws.log_activity(t.owner, t.id, "assigned", "%s picked up \"%s\"" % [
+				AgentDefs.find(t.owner).get("name", t.owner), t.title])
+	ws.set_plan_status(plan_id, "approved")
+	ws.log_activity("coordinator", "", "plan_approved", "You approved %d tasks" % queued)
+	return queued
+
+
+## Throws away a plan I didn't approve. Nothing had run, so nothing is lost.
+static func discard(ws: Workspace, plan_id: String) -> void:
+	var plan: Dictionary = ws.plans.get(plan_id, {})
+	if plan.get("status", "") != "proposed":
+		return
+	for id in plan.task_ids.duplicate():
+		ws.remove_task(id)
+	ws.set_plan_status(plan_id, "discarded")
+	var project_id: String = plan.project_id
+	if ws.tasks.values().all(func(t): return t.project_id != project_id):
+		ws.projects.erase(project_id)
+		ws.changed.emit("project", project_id)
+	ws.log_activity("coordinator", "", "plan_discarded", "You discarded the plan for \"%s\"" % plan.goal)
+
+
 ## Task templates for each area. `deps` use keys from the same plan.
 static func _template(area: String, info: Dictionary) -> Array:
 	var game: String = info.game_type

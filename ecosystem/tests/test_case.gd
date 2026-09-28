@@ -36,5 +36,15 @@ func temp_dir(label: String) -> String:
 	return path
 
 
+## Waits (frame by frame) until `condition` returns true, or gives up after `max_sec`.
+func wait_until(condition: Callable, max_sec := 5.0) -> bool:
+	var give_up := Time.get_ticks_msec() + int(max_sec * 1000)
+	while Time.get_ticks_msec() < give_up:
+		if condition.call():
+			return true
+		await tree.process_frame
+	return condition.call()
+
+
 func wait(seconds: float) -> void:
 	await tree.create_timer(seconds).timeout

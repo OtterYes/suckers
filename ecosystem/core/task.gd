@@ -42,6 +42,7 @@ var status := PROPOSED
 var deliverable_id := ""
 var attempts := 0
 var blocker := ""
+var revision_note := ""   # what I asked to change last time
 var log: Array = []
 var created_at := ""
 var updated_at := ""
@@ -72,7 +73,7 @@ func to_dict() -> Dictionary:
 		"priority": priority, "due": due, "estimate_min": estimate_min,
 		"depends_on": depends_on.duplicate(), "status": status,
 		"deliverable_id": deliverable_id, "attempts": attempts,
-		"blocker": blocker, "log": log.duplicate(true),
+		"blocker": blocker, "revision_note": revision_note, "log": log.duplicate(true),
 		"created_at": created_at, "updated_at": updated_at,
 	}
 
@@ -99,6 +100,7 @@ static func from_dict(d: Dictionary) -> Task:
 	t.deliverable_id = str(d.get("deliverable_id", ""))
 	t.attempts = int(d.get("attempts", 0))
 	t.blocker = str(d.get("blocker", t.blocker))
+	t.revision_note = str(d.get("revision_note", ""))
 	t.log = Array(d.get("log", [])).duplicate(true)
 	t.created_at = str(d.get("created_at", ""))
 	t.updated_at = str(d.get("updated_at", ""))
