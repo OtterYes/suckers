@@ -1,3 +1,4 @@
+process.env.TZ = "UTC";
 // Balance simulator: plays the real engine from index.html with a modeled student.
 //
 //   node tools/sim.cjs                 default run (1160-level student, 60 questions a day, 21 days)
@@ -31,6 +32,21 @@ function simulate(opts) {
   const mark = (k, v) => { if (!(k in firsts)) firsts[k] = v; };
   let answered = 0, ascends = 0;
   let incomeEMA = 0; // sparks per active second from answers
+  const served = {}; // questions served per skill
+  const lessons = []; // lessons passed: {key, l, day, n: answers logged at that lesson when it passed}
+
+  // The student's chance on a question: the engine's own pCorrect() at their true ability (plus an optional
+  // per-skill offset, opts.skillOff["d|Skill"]), or a fixed chance (opts.p) for a coin-flip or a strong student.
+  // A lesson the student has not practiced yet can cost a penalty that fades over its first answers
+  // (opts.lessonPen, over opts.lessonPenN answers). Without these options nothing changes.
+  function pAnswer(q) {
+    let p = opts.p != null ? opts.p : E.pCorrect(T[q.d] + ((opts.skillOff && opts.skillOff[q.d + "|" + q.sk]) || 0), q.lv, !q.spr);
+    if (opts.lessonPen && q.lesson > 0) {
+      const L = S.les && S.les[q.d + "|" + q.sk], n = L && L.n ? (L.n[q.lesson] || 0) : 0;
+      p = Math.max(0.02, p - opts.lessonPen * Math.max(0, 1 - n / (opts.lessonPenN || 8)));
+    }
+    return p;
+  }
 
   function answerIncomeShare(kind) {
     const L = S.up;
@@ -161,7 +177,7 @@ function simulate(opts) {
     for (let mod = 0; mod < 2; mod++) {
       const G = S.g;
       G.qs.forEach((q, k) => {
-        const ok = rnd() < E.pCorrect(T[q.d], q.lv, !q.spr);
+        const ok = rnd() < pAnswer(q);
         G.resp[k] = ok ? (q.spr ? String(q.spr.vals[0]) : q.correct) : (q.spr ? "-99999" : (q.correct + 1) % 4);
         G.ms[k] = 60000;
       });
@@ -182,9 +198,11 @@ function simulate(opts) {
     for (let i = 0; i < opts.perDay; i++) {
       const q = E.nextQuestion(S, t, rnd, recent);
       recent.push(q.key); if (recent.length > 24) recent.shift();
-      const ok = rnd() < E.pCorrect(T[q.d], q.lv, !q.spr);
+      served[q.d + "|" + q.sk] = (served[q.d + "|" + q.sk] || 0) + 1;
+      const ok = rnd() < pAnswer(q);
       const ms = (E.DOMAINS[q.d].sec === "rw" ? 62 : 84) * 1000 * (0.65 + 0.7 * rnd());
       const res = E.applyAnswer(S, q, ok, { now: t + ms, ms, rnd, mode: "train" });
+      if (res.lesson) { const lk = res.lesson.d + "|" + res.lesson.sk; lessons.push({ key: lk, l: res.lesson.l, day: day + 1, n: S.les[lk].n[res.lesson.l] || 0 }); mark("lesson:" + lk + ":" + res.lesson.l, `day ${day + 1} q${answered + 1}`); }
       const dt = (ms + 14000) / 1000;
       E.tick(S, dt, true);
       city(t + ms, dt);
@@ -230,10 +248,51 @@ function simulate(opts) {
     });
     now += DAY;
   }
-  return { rows, firsts, S, E };
+  return { rows, firsts, S, E, served, lessons };
+}
+
+// node tools/sim.cjs --lessons: how the Lessons ladders behave for three students over 21 days.
+//   Serving leans toward the skills the test asks most: the seven weightiest R&W skills get at least 55% of R&W
+//   questions. A coin-flip student (p = 0.5) passes few lessons; a strong one (p = 0.95) clears lesson 1 of a
+//   skill in a dozen answers or fewer, most of the time.
+function lessonsReport() {
+  const E = loadEngine();
+  const sec = (k) => E.DOMAINS[k.split("|")[0]].sec;
+  const keys = Object.keys(E.SK_LESSONS || {}), total = keys.reduce((a, k) => a + E.SK_LESSONS[k].length, 0);
+  const fails = [];
+  const check = (ok, msg) => { console.log((ok ? "ok   " : "FAIL ") + msg); if (!ok) fails.push(msg); };
+
+  const base = simulate({ days: 21, perDay: 60, learn: 0.25, seed: 1, ascend: 3 });
+  const rw = Object.keys(base.served).filter((k) => sec(k) === "rw"), rwN = rw.reduce((a, k) => a + base.served[k], 0);
+  const top7 = Object.keys(E.SKILL_W).filter((k) => sec(k) === "rw").sort((a, b) => E.SKILL_W[b] - E.SKILL_W[a]).slice(0, 7);
+  const top7N = top7.reduce((a, k) => a + (base.served[k] || 0), 0);
+  console.log("Served per skill (default student, 21 days):");
+  Object.keys(base.served).sort((a, b) => base.served[b] - base.served[a]).forEach((k) => console.log("  " + k.padEnd(44) + String(base.served[k]).padStart(5) + (sec(k) === "rw" ? "  " + Math.round(100 * base.served[k] / rwN) + "% of R&W" : "")));
+  check(top7N / rwN >= 0.55, `the seven weightiest R&W skills get ${Math.round(100 * top7N / rwN)}% of R&W questions (need 55%)`);
+  const ratio = (d) => { const ks = Object.keys(base.served).filter((k) => k.split("|")[0] === d); const ns = ks.map((k) => base.served[k]); return ns.length > 1 ? Math.max(...ns) / Math.max(1, Math.min(...ns)) : 1; };
+  E.DKEYS.forEach((d) => check(ratio(d) <= 6, `${d}: most-served to least-served skill ${ratio(d).toFixed(1)}:1 (cap 4:1 on the odds, so under 6:1 served)`));
+  console.log(`Lessons passed by the default student: ${base.lessons.length} of ${total}` + (base.lessons.length ? "; first passes: " + base.lessons.slice(0, 8).map((x) => x.key.split("|")[1] + " L" + x.l + " day " + x.day + " (" + x.n + " answers)").join(", ") : ""));
+  if (!total) { console.log("No lessons in the bank yet; the student checks need SK_LESSONS."); return fails; }
+
+  const coin = simulate({ days: 21, perDay: 60, p: 0.5, seed: 2, ascend: 0 });
+  check(coin.lessons.length / total < 0.15, `a coin-flip student passes ${coin.lessons.length} of ${total} lessons in 21 days (${Math.round(100 * coin.lessons.length / total)}%, need under 15%)`);
+
+  const strong = simulate({ days: 21, perDay: 60, p: 0.95, seed: 3, ascend: 0 });
+  const first = strong.lessons.filter((x) => x.l === 1).map((x) => x.n).sort((a, b) => a - b);
+  const med = first.length ? first[Math.floor(first.length / 2)] : Infinity;
+  console.log(`A strong student passed lesson 1 in ${first.length} skills; answers needed: ${first.join(" ")}`);
+  // A new account starts at the easy end, and easy answers carry half a unit, so the first lesson takes a few more than eight.
+  check(first.length >= Math.min(keys.length, 10) && med <= 12, `a strong student clears lesson 1 in a median of ${med} answers across ${first.length} skills (need 12 or fewer, in at least ${Math.min(keys.length, 10)} skills)`);
+  check(strong.lessons.length > coin.lessons.length * 2, `a strong student passes ${strong.lessons.length} lessons, a coin-flip student ${coin.lessons.length}`);
+  return fails;
 }
 
 if (require.main === module) {
+  if (process.argv.includes("--lessons")) {
+    const fails = lessonsReport();
+    console.log(fails.length ? fails.length + " check(s) failed" : "all lesson checks passed");
+    process.exit(fails.length ? 1 : 0);
+  }
   const r = simulate({
     days: arg("days", 21), perDay: arg("per-day", 60), learn: arg("learn", 0.25), seed: arg("seed", 1),
     ascend: arg("ascend", 3),
@@ -241,4 +300,4 @@ if (require.main === module) {
   console.table(r.rows);
   console.log(r.firsts);
 }
-module.exports = { simulate, TRUE_1160 };
+module.exports = { simulate, TRUE_1160, lessonsReport };

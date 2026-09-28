@@ -1,0 +1,202 @@
+[
+ {
+  "id": "tr-l1a-01",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 1,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "To repot a houseplant, first loosen the soil around the edge of the old pot and slide the plant out, keeping the root ball as intact as you can. ______ set the plant in the new pot at the same depth it grew before and fill the gaps with fresh soil, pressing gently so that no air pockets remain around the roots.",
+  "c": [
+   "Even so,",
+   "For example,",
+   "After that,",
+   "As a result,"
+  ],
+  "a": 2,
+  "x": "The passage walks through a task step by step: 'first' marks loosening the soil and sliding the plant out, and setting it in the new pot is simply the next step. An explicit ordering word followed by the next action is the sequence cue.",
+  "t": "cause where sequence belongs: 'As a result' tempts because the second step follows the first, but sliding the plant out does not produce the placing of it; the writer is giving the next instruction, not an outcome."
+ },
+ {
+  "id": "tr-l1a-02",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 1,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "Lichens can grow on bare rock where almost nothing else survives, slowly breaking the stone surface into the first thin traces of soil. ______ they can go for months without water, shutting down until the next rain revives them, which lets them cover cliffs and rooftops that stay dry for most of the year.",
+  "c": [
+   "Therefore,",
+   "In addition,",
+   "By contrast,",
+   "For instance,"
+  ],
+  "a": 1,
+  "x": "Growing on bare rock and surviving months without water are two separate abilities of lichens, both on the same side, and the second could be joined to the first with 'and.' A second fact of the same kind is the addition cue.",
+  "t": "example where addition belongs: 'For instance' tempts because both sentences describe how tough lichens are, but going without water is not an instance of breaking rock into soil; it is a different ability, so it adds rather than illustrates."
+ },
+ {
+  "id": "tr-l1a-03",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 1,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "A 3D printer begins a job by heating its nozzle and laying down a thin first layer of melted plastic on the build plate. ______ it raises the nozzle a fraction of a millimeter and traces the second layer on top of the first, repeating the motion hundreds of times until the object is complete.",
+  "c": [
+   "After that,",
+   "However,",
+   "For example,",
+   "As a result,"
+  ],
+  "a": 0,
+  "x": "The first sentence describes the first layer and the second describes the layer laid on top of it, so the passage is moving through a process in order. The words 'first layer' and 'second layer' are the sequence cue.",
+  "t": "contrast where nothing opposes: 'However' tempts because the nozzle rises and starts something new, but the second layer continues the same process rather than pushing against the first; nothing in the sentence is set against what came before."
+ },
+ {
+  "id": "tr-l1a-04",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 2,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "Electronic-paper displays draw power only when the image on the screen changes, so an e-reader can hold a page for weeks on a single charge. ______ they reflect the light in the room rather than shining their own, which makes the screen readable in direct sun and easier on the eyes over long stretches of reading.",
+  "c": [
+   "Nevertheless,",
+   "Consequently,",
+   "For example,",
+   "Furthermore,"
+  ],
+  "a": 3,
+  "x": "Low power use and reflected light are two separate advantages of the same displays, and the second is not a result, an instance, or a reversal of the first. A second fact on the same side that could be joined with 'and' is the addition cue.",
+  "t": "example where addition belongs: 'For example' tempts because the second sentence gives another detail about the same displays, but reflecting the room's light is not an instance of drawing power only when the image changes; it is a different advantage, so it adds rather than illustrates."
+ },
+ {
+  "id": "tr-l1a-05",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 1,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "When the Fenwick Ridge weather station opened in 1962, its readings were written by hand each morning and mailed to the regional office once a month. ______ the station was fitted with a radio link that sent hourly readings automatically, and by the 1990s a satellite uplink had replaced the radio.",
+  "c": [
+   "Before that,",
+   "Years later,",
+   "As a result,",
+   "For instance,"
+  ],
+  "a": 1,
+  "x": "The passage moves forward through time, from hand-written readings in 1962 to a radio link and then a satellite uplink by the 1990s. Dates that advance from one sentence to the next are the sequence cue.",
+  "t": "reversed order: 'Before that' tempts because both sentences describe how readings were sent, but it would put the radio link before the 1962 hand-written logs, while 'by the 1990s' shows the radio came between the two."
+ },
+ {
+  "id": "tr-l1a-06",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 1,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "Any cardholder at the Brookmere public library can borrow far more than books: the lending collection includes cake pans, sewing machines, and a set of telescopes, each checked out for two weeks like a novel. ______ the library hosts a repair night every Thursday, when volunteers help patrons fix lamps, toasters, and torn jackets rather than throw them away.",
+  "c": [
+   "For example,",
+   "Nevertheless,",
+   "In addition,",
+   "As a result,"
+  ],
+  "a": 2,
+  "x": "The first sentence is about things patrons can borrow; the second describes a separate program in which nothing is borrowed at all. A second offering of the same kind, joinable with 'and,' is the addition cue.",
+  "t": "example where addition belongs: 'For example' tempts because the repair night is another way the library goes beyond books, but it is not an instance of the lending collection the sentence before describes; it is a different service, so it adds rather than illustrates."
+ },
+ {
+  "id": "tr-l1a-07",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 1,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "To measure how fast a river carries its water downstream, a hydrologist pours a harmless fluorescent dye into the current at a marked point and notes the exact time. ______ the team waits at a bridge farther down the river with a sensor that detects the dye, recording when the first trace and then the peak concentration pass beneath them.",
+  "c": [
+   "After that,",
+   "Consequently,",
+   "In contrast,",
+   "Specifically,"
+  ],
+  "a": 0,
+  "x": "Pouring the dye and then waiting downstream for it are two steps of one method, described in the order they are carried out. A process with steps is the sequence cue; the second sentence is what the team does next, not what the dye produced.",
+  "t": "cause where sequence belongs: 'Consequently' tempts because the waiting downstream only makes sense once the dye is in the water, but releasing the dye does not cause the team to wait; the writer is giving the next step of the procedure."
+ },
+ {
+  "id": "tr-l1a-08",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 2,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "When Dana took over the vacant lot behind her apartment building, the ground was packed hard and strewn with broken glass. She hauled in compost every weekend, sifted the soil by hand, and traded seeds with neighbors who knew the shade, yet for two summers nothing she planted lasted past July. ______ in the third spring, a row of beans came up and stayed, and by August the lot yielded enough squash and beans to fill a table at the block party.",
+  "c": [
+   "Consequently,",
+   "Eventually,",
+   "Similarly,",
+   "For example,"
+  ],
+  "a": 1,
+  "x": "The passage counts off time: two summers of failure, then the third spring when the beans finally held. A payoff arriving at the end of a long stretch is the sequence cue; the sentence tells when the change came, not what produced it.",
+  "t": "cause where sequence belongs: 'Consequently' tempts because Dana's work seems to have paid off, but the clause just before the blank reports two summers of nothing growing, and the passage never says which effort made the difference; the sentence marks the moment the payoff came, not a result."
+ },
+ {
+  "id": "tr-l1a-09",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 2,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "Cavers first surveyed the dry upper passages of Pell Hollow in the 1970s, dragging tape measures through crawlways and sketching each chamber by lamplight. Their maps ended at three flooded sumps that no one could pass. ______ divers with better breathing gear pushed through those sumps, laid guideline through the drowned lower levels, and tripled the known length of the system.",
+  "c": [
+   "Consequently,",
+   "For instance,",
+   "Before that,",
+   "Later on,"
+  ],
+  "a": 3,
+  "x": "'First' and 'in the 1970s' place the dry survey at the start, and the divers pass the very sumps where those earlier maps stopped, so the diving must come after. A process with stages in time is the sequence cue, and the blank must follow the sentence about the maps ending, not the opening one.",
+  "t": "reversed order: 'Before that' tempts because the middle sentence describes a dead end, and a student may read the diving as an earlier attempt that came before it, but 'first' marks the 1970s survey as the earliest stage, and the divers pass through the sumps those maps stopped at."
+ },
+ {
+  "id": "tr-l1a-10",
+  "d": "eoi",
+  "sk": "Transitions",
+  "lv": 2,
+  "lesson": 1,
+  "tags": [
+   "solved:3/3"
+  ],
+  "p": "Spider silk has held the attention of materials engineers for decades, in part because a strand thinner than a human hair can absorb more energy before breaking than a steel wire of the same weight, stretching to nearly half again its length without snapping. ______ the silk is spun at room temperature from a water-based liquid, whereas most synthetic fibers of comparable strength must be drawn from heated solvents at a cost that rules out many uses.",
+  "c": [
+   "Moreover,",
+   "However,",
+   "As a result,",
+   "For example,"
+  ],
+  "a": 0,
+  "x": "The opening 'in part because' promises more than one reason engineers admire the silk, and gentle, low-cost spinning is the second reason, not a result or an instance of the first. A second fact of the same kind, joinable with 'and,' is the addition cue; the 'whereas' inside the sentence contrasts silk with synthetics, not the sentence with the one before it.",
+  "t": "contrast where nothing opposes: 'However' tempts because the sentence contains 'whereas' and sets silk against synthetic fibers, but that contrast lives inside the sentence; between the two sentences nothing is opposed, since 'in part because' announces a list of reasons and both sentences give advantages of silk."
+ }
+]

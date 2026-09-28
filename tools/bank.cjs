@@ -218,12 +218,13 @@ function load() {
     gens.push({ name, src: src.replace(/\s+$/, "") });
   });
 
-  // Clue Hunter tuples.
-  const wf = path.join(BANK, "arc", "words.json");
-  if (fs.existsSync(wf)) {
-    arcWords = readJSON(wf);
-    if (!Array.isArray(arcWords)) err(wf, "must be an array");
-    else arcWords.forEach((w, i) => {
+  // Clue Hunter tuples: every bank/arc/*.json, in name order.
+  const adir = path.join(BANK, "arc");
+  (fs.existsSync(adir) ? fs.readdirSync(adir).filter(n => n.endsWith(".json")).sort() : []).forEach(name => {
+    const wf = path.join(adir, name), arr = readJSON(wf);
+    if (!Array.isArray(arr)) { err(wf, "must be an array"); return; }
+    arcWords = arcWords.concat(arr);
+    arr.forEach((w, i) => {
       const at = "tuple " + i;
       if (typeof w.s !== "string" || !/_{4,}/.test(w.s)) err(wf, at + ": s needs a ______ blank");
       if (!Array.isArray(w.clue) || w.clue.length !== 2 || !(w.clue[0] <= w.clue[1])) err(wf, at + ": clue [start,end] token range required");
@@ -232,7 +233,7 @@ function load() {
       if (typeof w.why !== "string") err(wf, at + ": why required");
       walkStrings(w, str => { if (bad(str)) err(wf, at + ": forbidden markup"); });
     });
-  }
+  });
 
   return { errors, warns, legacy, lessons, items, gens, arcWords };
 }

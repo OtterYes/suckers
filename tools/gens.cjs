@@ -82,7 +82,8 @@ Object.keys(MGEN).sort().forEach(id => {
 });
 
 // 3. Lesson coverage (once MGEN_LESSON exists): every math skill x lesson needs at least two distinct sources.
-if (E.MGEN_LESSON || (E.MATH_STATIC && E.MATH_STATIC.some(m => m.lesson))) {
+const mathLessons = Object.keys(E.SK_LESSONS || {}).some(k => ["alg", "adv", "psda", "geo"].includes(k.split("|")[0]));
+if (mathLessons) {
   const src = {};
   Object.keys(MGEN).forEach(id => { const l = E.MGEN_LESSON && E.MGEN_LESSON[id]; if (l) { const k = MGEN[id].d + "|" + MGEN[id].sk + "|" + l; (src[k] = src[k] || new Set()).add(id); } });
   (E.MATH_STATIC || []).forEach(m => { if (m.lesson) { const k = m.d + "|" + m.sk + "|" + m.lesson; (src[k] = src[k] || new Set()).add(m.id); } });

@@ -35,8 +35,13 @@ async function open(browser, json, w, h, opts) {
   // shows what the game saved rather than the starting save. No marker is needed, so nothing can lose it.
   if (json) await page.addInitScript((j) => { try { var cur = localStorage.getItem("grind1520.save.v1"); if (cur === null || cur === j) localStorage.setItem("grind1520.save.v1", j); } catch (e) {} }, json);
   await page.goto(file);
-  await page.waitForTimeout(900);
+  await booted(page);
   return page;
+}
+// Booted: the engine is exposed and the title card has left the page (it fades out on its own once the game is ready).
+async function booted(page) {
+  try { await page.waitForFunction(() => window.__g1520 && window.__g1520.S(), null, { timeout: 15000 }); } catch (e) { await page.waitForTimeout(900); return; }
+  try { await page.waitForFunction(() => !document.getElementById("title"), null, { timeout: 5000 }); } catch (e) {}
 }
 const state = (page) => page.evaluate((k) => JSON.parse(localStorage.getItem(k)), KEY);
 // Phones and tablets with a touch screen: taps and drags are touch events, and (pointer: coarse) applies.
@@ -53,7 +58,7 @@ async function openTouch(browser, json, dev, opts) {
   if (json) await page.addInitScript((j) => { try { var cur = localStorage.getItem("grind1520.save.v1"); if (cur === null || cur === j) localStorage.setItem("grind1520.save.v1", j); } catch (e) {} }, json);
   if (opts && opts.init) await page.addInitScript(opts.init);
   await page.goto(file);
-  await page.waitForTimeout(900);
+  await booted(page);
   return page;
 }
 async function touchDrag(page, x0, y0, x1, y1, steps) {
@@ -190,12 +195,13 @@ const TESTS = {
     return page;
   },
   async "ascend resets the run and keeps the climb"(b) {
-    const gated = await open(b, save((S) => { S.runSparks = 6e7; S.lifeSparks = 6e8; S.gb.since = 0; }));
+    // Insight to gain: lifetime sparks well past what the save has already been paid for (the base save's own history varies).
+    const gated = await open(b, save((S) => { S.runSparks = 6e7; S.lifeSparks = 6e8; S.insight = S.insightEarned = 0; S.gb.since = 0; }));
     await gated.click('[data-act="tab"][data-v="ascend"]');
     const blocked = await gated.locator('#panel [data-act="sleep"][disabled]').count();
     await gated.close();
     if (!blocked) throw new Error("ascend not gated on a Gauntlet score");
-    const page = await open(b, save((S) => { S.runSparks = 6e7; S.lifeSparks = 6e8; S.hub.alg = 7; S.gb.since = 760; }));
+    const page = await open(b, save((S) => { S.runSparks = 6e7; S.lifeSparks = 6e8; S.insight = S.insightEarned = 0; S.hub.alg = 7; S.gb.since = 760; }));
     const s0 = await state(page);
     await page.click('[data-act="tab"][data-v="ascend"]');
     await page.click('#panel [data-act="sleep"]');
@@ -1031,14 +1037,14 @@ const TESTS = {
     if (!(await state(p1)).onb.done) throw new Error("the skip was not saved");
     if (p1.errors.length) throw new Error("page errors: " + p1.errors.join(" | "));
     await p1.close();
-    const page = await open(b, save((S) => { S.v = 8; delete S.seenV9; delete S.seenV10; delete S.onb; delete S.adv; delete S.lrn; delete S.world; delete S.recov; delete S.gb.hist; delete S.tools; delete S.opps; delete S.intro; }));
-    if (!(await page.locator('#modal:not([hidden]) [data-act="new10Go"]').count())) throw new Error("no what's new for a v8 save");
+    const page = await open(b, save((S) => { S.v = 8; delete S.seenV9; delete S.seenV10; delete S.seenV11; delete S.onb; delete S.adv; delete S.lrn; delete S.world; delete S.recov; delete S.gb.hist; delete S.tools; delete S.opps; delete S.intro; }));
+    if (!(await page.locator('#modal:not([hidden]) [data-act="new11Go"]').count())) throw new Error("no what's new for a v8 save");
     if (await page.locator("#coach").count()) throw new Error("an existing player got the beginner intro");
-    await page.click('#modal [data-act="new10Go"]');
+    await page.click('#modal [data-act="new11Go"]');
     await page.waitForTimeout(400);
     if ((await page.getAttribute("body", "data-view")) !== "city") throw new Error("Show me the town did not show the town");
     const s = await state(page);
-    if (s.v !== 10 || !s.seenV9 || !s.seenV10 || !s.onb.done) throw new Error("migration flags: " + JSON.stringify([s.v, s.seenV9, s.seenV10, s.onb]));
+    if (s.v !== 11 || !s.seenV9 || !s.seenV10 || !s.seenV11 || !s.onb.done) throw new Error("migration flags: " + JSON.stringify([s.v, s.seenV9, s.seenV10, s.seenV11, s.onb]));
     if (!Array.isArray(s.gb.hist) || !s.lrn || !s.world || !s.tools || !s.opps || !s.intro) throw new Error("new fields missing after migration");
     if (!s.intro.town || s.intro.place) throw new Error("intro flags for an existing player: " + JSON.stringify(s.intro));
     return page;
@@ -1073,7 +1079,8 @@ const TESTS = {
     return page;
   },
   async "a miss offers a fresh try, and the rematch pays a comeback once"(b) {
-    const page = await open(b, save((S) => { S.spots = []; S.onb = { step: 9, done: true }; S.adv = null; }));
+    // No comebacks paid yet: the base save's own history may already hold one for whichever question comes up.
+    const page = await open(b, save((S) => { S.spots = []; S.recov = {}; S.onb = { step: 9, done: true }; S.adv = null; }));
     await answerWrong(page);
     await page.waitForSelector('#conBody [data-act="cbTry"]');
     const missed = await page.evaluate(() => window.__g1520.cur().key);
@@ -1087,7 +1094,7 @@ const TESTS = {
     if ((await page.evaluate(() => window.__g1520.cur().key)) !== missed) throw new Error("the rematch was not served");
     const r0 = (await state(page)).stats.recovered || 0;
     await answerRight(page);
-    if (!/Full comeback/.test(await page.textContent("#conBody"))) throw new Error("no full comeback");
+    if (!/Full comeback/.test(await page.textContent("#conBody"))) throw new Error("no full comeback: " + (await page.evaluate((k) => { const S = window.__g1520.S(), q = window.__g1520.cur(), R = window.__g1520.Q().res || {}; return JSON.stringify({ key: q.key, missed: k, spot: S.spots.find((x) => x.k === k), recov: !!S.recov[k], res: { spot: R.spot, recover: R.recover, comeback: R.comeback, parts: R.parts } }); }, missed)));
     const s1 = await state(page);
     if ((s1.stats.recovered || 0) !== r0 + 1 || !s1.recov[missed]) throw new Error("the comeback was not recorded");
     return page;
@@ -1350,11 +1357,11 @@ const TESTS = {
     return page;
   },
   async "the late dev save loads into v10 with what's new, tools on offer, and the square's evidence kept"(b) {
-    const page = await open(b, lateSave((S) => { S.seenV10 = false; S.settings.view = "city"; }));
-    if (!(await page.locator('#modal:not([hidden]) [data-act="new10Go"]').count())) throw new Error("no what's new for the late save");
+    const page = await open(b, lateSave((S) => { S.seenV11 = false; S.settings.view = "city"; }));
+    if (!(await page.locator('#modal:not([hidden]) [data-act="new11Go"]').count())) throw new Error("no what's new for the late save");
     await page.click('#modal [data-act="modalClose"]'); await page.waitForTimeout(200);
     const s = await state(page);
-    if (s.v !== 10 || !s.seenV10) throw new Error("migration: " + JSON.stringify([s.v, s.seenV10]));
+    if (s.v !== 11 || !s.seenV11) throw new Error("migration: " + JSON.stringify([s.v, s.seenV11]));
     if (Object.keys(s.opps).length < 10) throw new Error("expected offers across the town, got " + Object.keys(s.opps).length);
     if (!s.world.square || !s.world.square.earned) throw new Error("the square's evidence should already be kept");
     if (!Object.keys(s.sk).every((k) => typeof s.sk[k].pr === "string")) throw new Error("skills without a proficiency window");
@@ -1428,7 +1435,7 @@ const TESTS = {
   async "touch: phones and tablets fit, with finger-sized controls and fields that don't zoom"(b) {
     let last = null;
     for (const dev of ["small", "se", "phone", "tab1024", "tab1180"]) {
-      for (const [nm, json] of [["day 6", save((S) => { S.settings.view = "city"; S.onb = { step: 9, done: true }; S.intro = { town: 1, hall: 1, place: 1, tools: 1, project: 1 }; })], ["late", lateSave((S) => { S.settings.view = "city"; S.seenV10 = true; })]]) {
+      for (const [nm, json] of [["day 6", save((S) => { S.settings.view = "city"; S.onb = { step: 9, done: true }; S.intro = { town: 1, hall: 1, place: 1, tools: 1, project: 1 }; })], ["late", lateSave((S) => { S.settings.view = "city"; S.seenV10 = true; S.seenV11 = true; })]]) {
         if (last) await last.close();
         last = await openTouch(b, json, dev);
         for (let j = 0; j < 4; j++) { const m = last.locator('#modal:not([hidden]) [data-act="modalClose"]'); if (await m.count()) { await m.first().tap(); await last.waitForTimeout(120); } }

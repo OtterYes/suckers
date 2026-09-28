@@ -1,0 +1,287 @@
+[
+ {
+  "name": "Addition and sequence",
+  "rule": "When the second sentence gives more of the same or the next thing that happened, choose a transition that adds or orders; nothing is being opposed, explained, or illustrated.",
+  "steps": [
+   "Read both sentences and ask: is the second one another point on the same side, or the next step in time?",
+   "Look for time markers (first, then, years later, today) and for a second fact of the same kind as the first.",
+   "Cross out every choice that signals contrast, cause, or example; keep the one that adds or orders."
+  ],
+  "cues": [
+   "a second fact of the same kind as the first, one that could be joined to it with 'and'",
+   "a process with steps or a shift in time (first, next, then, later, eventually)",
+   "no word in the second sentence that names a member of a category, a result, or an opposite"
+  ],
+  "example": {
+   "p": "For most of the nineteenth century, keepers at the Harrow Point lighthouse worked through the night in shifts, climbing the tower every few hours to trim the wick and wind the clockwork that turned the lens. ______ they kept a daily log of passing ships, weather, and any repairs the station needed, a record that historians still consult today.",
+   "q": "Which choice completes the text with the most logical transition?",
+   "c": [
+    "In addition,",
+    "As a result,",
+    "For instance,",
+    "By contrast,"
+   ],
+   "a": 0,
+   "x": "Keeping the log is a second duty of the same kind as tending the light, not a result or an example of it. The cue is a second fact on the same side that could be joined to the first with 'and.'"
+  },
+  "trap": {
+   "c": "For instance,",
+   "why": "Keeping a log looks like a detail about the keepers' work, but it is not an instance of trimming the wick or winding the clockwork; it is a separate duty, so it adds rather than illustrates."
+  },
+  "stems": [
+   "Which choice completes the text with the most logical transition?"
+  ],
+  "words": [
+   40,
+   90
+  ],
+  "traps": [
+   "example where addition belongs",
+   "cause where sequence belongs",
+   "contrast where nothing opposes",
+   "reversed order",
+   "similarity where addition belongs"
+  ],
+  "lv": {
+   "1": "Explicit ordering words (first, next) or a plainly parallel second fact, with distractors from far-off categories that fail at a glance.",
+   "2": "The order is implied by dates or tense, or the added point shares a topic with the first so an example transition tempts; one distractor is a near neighbor such as 'consequently' after a step that looks like it caused the next.",
+   "3": "The added point or next step sits inside a long sentence with its own detail, the passage has three sentences and the blank must be placed against the right one, or the payoff after a long stretch ('eventually') must be told apart from a result."
+  },
+  "topics": [
+   "science",
+   "history",
+   "arts",
+   "social science",
+   "technology",
+   "everyday life"
+  ]
+ },
+ {
+  "name": "Example and clarification",
+  "rule": "When the second sentence names a specific case of, gives the exact figure behind, or restates in plainer words what the first sentence said in general, choose an example or clarification transition.",
+  "steps": [
+   "Find the general word or claim in the first sentence: a category, a vague amount, or an abstract phrase.",
+   "Check whether the second sentence names a member of that category, supplies the precise number, or says the same thing more concretely.",
+   "Reject choices that add a new point, report a result, or push against the first sentence."
+  ],
+  "cues": [
+   "a general category followed by a named member (some animals... bears)",
+   "a vague quantity followed by a precise figure (a great deal of energy... 95 percent less)",
+   "an abstract phrase followed by concrete specifics (everyday objects... cooking pots and toys)"
+  ],
+  "example": {
+   "p": "Community orchestras across the country have found creative ways to fill their rehearsal halls with players who never studied music formally. ______ the Lindale Civic Orchestra pairs each newcomer with a veteran member for a season, lending instruments from a donated collection and holding an open reading night every month where anyone can sit in.",
+   "q": "Which choice completes the text with the most logical transition?",
+   "c": [
+    "For example,",
+    "Nevertheless,",
+    "Consequently,",
+    "Afterward,"
+   ],
+   "a": 0,
+   "x": "The first sentence speaks of orchestras in general and their creative ways; the second names one orchestra and its specific methods. A named member after a general category is the example cue."
+  },
+  "trap": {
+   "c": "Consequently,",
+   "why": "Because the second sentence describes what one orchestra does, it can read like an outcome of the national trend, but the trend did not cause Lindale's program; the program is one instance of it."
+  },
+  "stems": [
+   "Which choice completes the text with the most logical transition?"
+  ],
+  "words": [
+   40,
+   90
+  ],
+  "traps": [
+   "result where example belongs",
+   "addition where example belongs",
+   "contrast where nothing opposes",
+   "sequence where clarification belongs",
+   "concession where example belongs"
+  ],
+  "lv": {
+   "1": "The category and its named member sit side by side and the member is obviously one of the kind (some birds migrate... the Arctic tern), with the transition placed at the start or after the subject.",
+   "2": "The instance is a precise figure or a restatement rather than a named thing, so the student must see that nothing new is added and no result is reported; an addition distractor competes.",
+   "3": "The specific case is embedded in a long sentence with a different grammatical subject, or the clarification arrives as 'rather than X, it does Y' so a contrast transition tempts."
+  },
+  "topics": [
+   "science",
+   "history",
+   "arts",
+   "social science",
+   "technology",
+   "everyday life"
+  ]
+ },
+ {
+  "name": "Cause, effect, and purpose",
+  "rule": "When the second sentence is what the first one produced, what it logically implies, or the action someone took to reach the goal it states, choose a cause, result, or purpose transition, and check that the direction runs the right way.",
+  "steps": [
+   "Ask: did the first sentence make the second one happen, or prove that it must be true?",
+   "If the first sentence states a goal or a wish, ask whether the second is the step taken toward it.",
+   "Test the direction by swapping the sentences in your head; if the second would have caused the first, the result transition is reversed."
+  ],
+  "cues": [
+   "a change in the first sentence and a measurable outcome in the second (barriers added... riders doubled)",
+   "a fact that makes the second sentence follow by simple reasoning (20 liters each... 4,000 for the herd)",
+   "a wanted outcome followed by an action that serves it (wanted less waste... began making stock from scraps)"
+  ],
+  "example": {
+   "p": "Ferry service to Kestrel Island once ran only twice a day, and most residents planned their entire week around the schedule. In 2019 the island council bought a second boat and added six sailings, including a late-evening run. ______ islanders now commute to jobs on the mainland that were out of reach before, and the number of year-round households has grown for the first time in decades.",
+   "q": "Which choice completes the text with the most logical transition?",
+   "c": [
+    "As a result,",
+    "Even so,",
+    "In particular,",
+    "Likewise,"
+   ],
+   "a": 0,
+   "x": "More sailings made mainland jobs reachable, and the commuting and growth are the outcomes. The cue is a change followed by an outcome that the change plainly produced."
+  },
+  "trap": {
+   "c": "Even so,",
+   "why": "The words 'out of reach before' and 'for the first time in decades' hint at a turnaround, which can feel like a surprise, but nothing in the growth runs against the added sailings; it is exactly what they were meant to produce, so a concession is wrong."
+  },
+  "stems": [
+   "Which choice completes the text with the most logical transition?"
+  ],
+  "words": [
+   40,
+   90
+  ],
+  "traps": [
+   "reversed cause",
+   "concession where a result belongs",
+   "example where a result belongs",
+   "addition where purpose belongs",
+   "sequence where cause belongs"
+  ],
+  "lv": {
+   "1": "A physical cause and its obvious outcome in two short sentences, with contrast and example choices that clearly fail.",
+   "2": "The link is an inference (a calculation, or a goal followed by the action that serves it) rather than a stated event, or a 'then' distractor competes because the result also comes later in time.",
+   "3": "The passage has three sentences and the result follows from only one of them, the purpose link is stated indirectly, or a reversed-cause distractor is tempting because both sentences describe changes."
+  },
+  "topics": [
+   "science",
+   "history",
+   "arts",
+   "social science",
+   "technology",
+   "everyday life"
+  ]
+ },
+ {
+  "name": "Direct contrast",
+  "rule": "When the second sentence sets something against the first, whether a different thing, time, view, or way of measuring that points the opposite way, choose a contrast transition, and make sure the two really do differ.",
+  "steps": [
+   "Name the two things being compared: two animals, two eras, two chapters, two ways of measuring.",
+   "Ask whether the second sentence says something opposite to, or different from, what the first said about its subject.",
+   "Reject choices that would make the two sentences agree, add up, or cause each other."
+  ],
+  "cues": [
+   "limiting words in the first sentence that invite an exception (only, once, some, usually)",
+   "a new subject doing the opposite of the first (shallow roots... deep roots; room-sized... pocket-sized)",
+   "a claim about one measure followed by a different answer under another measure"
+  ],
+  "example": {
+   "p": "Handwritten letters in the Dunmore family archive from the 1840s are full of news about weather, crops, and the health of neighbors, and they rarely mention anything the writers felt or feared. ______ the letters from the 1890s, written by the same family's grandchildren, dwell on moods, quarrels, and private hopes, and barely note what was happening on the farm.",
+   "q": "Which choice completes the text with the most logical transition?",
+   "c": [
+    "By contrast,",
+    "Accordingly,",
+    "In other words,",
+    "Similarly,"
+   ],
+   "a": 0,
+   "x": "The 1840s letters report outward events and skip feelings; the 1890s letters do the reverse. Two subjects set against each other on the same point is the contrast cue."
+  },
+  "trap": {
+   "c": "Similarly,",
+   "why": "Both sentences describe family letters from the same archive, so a comparison feels natural, but the content of the two sets is opposite, and 'similarly' would claim they match."
+  },
+  "stems": [
+   "Which choice completes the text with the most logical transition?"
+  ],
+  "words": [
+   40,
+   90
+  ],
+  "traps": [
+   "similarity where contrast belongs",
+   "cause where contrast belongs",
+   "example where contrast belongs",
+   "sequence where contrast belongs",
+   "addition where contrast belongs"
+  ],
+  "lv": {
+   "1": "The opposition is stated with plain opposites in two short sentences (cannot fly... excellent swimmers), and the distractors share nothing with the passage.",
+   "2": "The contrast hinges on a limiting word (only, some) or on a qualification of the first claim rather than a flat opposite, or a later finding overturns an earlier one so a result transition tempts.",
+   "3": "The two sentences share a subject, era, or category, so a similarity or sequence transition tempts, or the difference lies in the details of a long sentence rather than in its main verb."
+  },
+  "topics": [
+   "science",
+   "history",
+   "arts",
+   "social science",
+   "technology",
+   "everyday life"
+  ]
+ },
+ {
+  "name": "Concession and correction",
+  "rule": "When the first sentence sets up an expectation or a common belief and the second sentence defeats it, either admitting the first is true but showing it did not lead where expected, or replacing the belief with the fact, choose a concession or correction transition.",
+  "steps": [
+   "Ask what the first sentence leads you to expect: higher prices, a flop, a single wall.",
+   "Check whether the second sentence delivers that expectation or blocks it; a blocked expectation calls for a concession, a corrected belief for a correction.",
+   "Watch for words such as assume, believed, often described, dismissed, or praised, which announce that a reversal is coming."
+  ],
+  "cues": [
+   "a belief or assumption flagged in the first sentence (many people assume, is often described as)",
+   "a cause that should produce one outcome, followed by the opposite outcome (drought... prices stayed stable)",
+   "praise or blame followed by the other side of the ledger (praised the effects... noted the plot was confusing)"
+  ],
+  "example": {
+   "p": "The Marlow Street bridge was closed for repairs for most of the summer, cutting off the fastest route between the two halves of town, and shop owners on the far side braced for a season of empty aisles. ______ sales along the affected blocks were slightly higher than the year before, largely because the detour steered drivers past storefronts they had never noticed.",
+   "q": "Which choice completes the text with the most logical transition?",
+   "c": [
+    "Even so,",
+    "As a result,",
+    "In addition,",
+    "For example,"
+   ],
+   "a": 0,
+   "x": "The closure and the owners' fears set up an expectation of lost sales, and the second sentence reports the opposite. A blocked expectation is the concession cue; the 'because' clause explains the surprise but does not make it a result of the closure."
+  },
+  "trap": {
+   "c": "As a result,",
+   "why": "The sentence ends with 'because the detour...', so the higher sales do have a cause, but that cause is the detour, not the closure the first sentence describes; the sales ran against what the closure was expected to do."
+  },
+  "stems": [
+   "Which choice completes the text with the most logical transition?"
+  ],
+  "words": [
+   40,
+   90
+  ],
+  "traps": [
+   "result where a concession belongs",
+   "addition where a caveat belongs",
+   "example where a correction belongs",
+   "similarity where a correction belongs",
+   "sequence where a concession belongs"
+  ],
+  "lv": {
+   "1": "A clear expectation and a flat surprise, marked by words such as assume, dismissed, or braced for, with distractors that plainly fail.",
+   "2": "The expectation is implied rather than stated (a bad harvest, harsh reviews, a common description) or the caveat follows good news without a signal word, so the student must supply the expectation before spotting the reversal.",
+   "3": "The second sentence contains its own explanation (a because clause) or mixes agreement with reversal, so a result or addition transition tempts; the student must separate what caused the outcome from what the outcome defies."
+  },
+  "topics": [
+   "science",
+   "history",
+   "arts",
+   "social science",
+   "technology",
+   "everyday life"
+  ]
+ }
+]

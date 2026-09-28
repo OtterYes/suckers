@@ -1,3 +1,4 @@
+process.env.TZ = "UTC";
 // Engine checks for the town layer: proficiency bands, tools and their opportunities, the Town Square project,
 // practice rounds, and the v10 save migration. Runs in plain Node, no browser.
 //   node tools/town.cjs
@@ -30,7 +31,7 @@ const band = (S, d, sk) => E.profOf(S, d, sk).name;
 
 section("fresh game: a town from the first minute, v10 fields, repeatable migration", () => {
   const S = fresh();
-  ok(S.v === 10 && S.seenV10 === true, "fresh save is v10 and won't see What's New");
+  ok(S.v === 11 && S.seenV11 === true, "fresh save is v11 and won't see What's New");
   ok(E.cityBuilt(S) && S.city.coins >= 200 && S.city.name, "the town exists with a starting treasury (" + S.city.coins + " coins)");
   ok(S.settings.view === "city", "the main screen shows the town");
   ok(S.tools && S.opps && S.intro && S.round === null, "tools, opportunities, intros, and round fields exist");
@@ -204,12 +205,12 @@ section("adventure: the world step can be a tool or the project", () => {
 });
 
 section("migration: a v9 save gains the town layer without touching its learning history", () => {
-  const raw = clone(SIM.S); raw.v = 9; delete raw.tools; delete raw.opps; delete raw.intro; delete raw.round; delete raw.seenV10;
+  const raw = clone(SIM.S); raw.v = 9; delete raw.tools; delete raw.opps; delete raw.intro; delete raw.round; delete raw.seenV10; delete raw.seenV11;
   for (const k in raw.sk) { delete raw.sk[k].pr; delete raw.sk[k].pb; }
   raw.city.founded = 0; raw.city.asked = false; raw.welcomed = true;
   const before = { r: JSON.stringify(raw.r), spots: JSON.stringify(raw.spots), n: Object.keys(raw.sk).map((k) => raw.sk[k].n + "/" + raw.sk[k].c).join(","), answered: raw.stats.answered };
   const S = E.migrate(clone(raw), T0);
-  ok(S.v === 10 && S.seenV10 === false, "v9 becomes v10 and sees What's New");
+  ok(S.v === 11 && S.seenV10 === false && S.seenV11 === false, "v9 becomes v11 and sees What's New");
   ok(S.intro.town === 1 && S.intro.hall === 1 && !S.intro.place, "existing players skip the town intros but meet the new pages");
   ok(JSON.stringify(S.r) === before.r && JSON.stringify(S.spots) === before.spots && S.stats.answered === before.answered, "ratings, blind spots, and counts unchanged");
   ok(Object.keys(S.sk).map((k) => S.sk[k].n + "/" + S.sk[k].c).join(",") === before.n, "every skill's tries and rights unchanged");
@@ -226,7 +227,7 @@ section("migration: the dev save loads and repairs bad values", () => {
   const raw = JSON.parse(Buffer.from(t.slice(6), "base64").toString("utf8"));
   raw.tools = { bank: "x", nothere: 2, mint: 9, market: 2.7 }; raw.opps = { bank: { lv: 7, cost: 10 }, market: { lv: 1, cost: -5 }, census: { lv: 1, cost: 40, at: 1 }, bogus: { lv: 1, cost: 5 } };
   const S = E.migrate(clone(raw), T0);
-  ok(S.v === 10, "dev save is v10");
+  ok(S.v === 11, "dev save is v11");
   ok(!S.tools.bank && !S.tools.nothere && S.tools.mint === 3 && S.tools.market === 2, "tool levels are whole numbers within range: " + JSON.stringify(S.tools));
   ok(!S.opps.bogus && !(S.opps.market && (S.opps.market.cost <= 0 || S.opps.market.lv !== 3)), "impossible offers are dropped (a made-up building, a negative price): " + JSON.stringify(S.opps.market || null));
   ok(S.opps.bank && S.opps.bank.lv === 1 && S.opps.bank.cost > 0 && S.opps.bank.cost !== 10, "an out-of-range level is dropped and a fresh, fairly priced offer takes its place: " + JSON.stringify(S.opps.bank));

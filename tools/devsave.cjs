@@ -70,7 +70,7 @@ S.zone.adv.fuel = 6; S.zone.psda.vault = 1e20; S.zone.geo.gems = 20; S.zone.alg.
 // changed shows once. The Harbor Bridge is earned but not yet restored, so the restoration can be tried,
 // and no tools are installed yet, so every offer can be. The engine seeds proficiency windows and offers on load.
 Object.assign(S.settings, { view: "3d", tod: "day", w3new: true, w3seen: false });
-S.welcomed = true; S.seenV3 = S.seenV4 = S.seenV5 = S.seenV6 = S.seenV7 = S.seenV8 = S.seenV9 = true; S.seenV10 = false;
+S.welcomed = true; S.seenV3 = S.seenV4 = S.seenV5 = S.seenV6 = S.seenV7 = S.seenV8 = S.seenV9 = S.seenV10 = true; S.seenV11 = false;
 S.onb = { step: 9, done: true }; S.adv = null; S.world = {}; S.tools = {}; S.opps = {}; S.intro = { town: 1, hall: 1 }; S.round = null;
 ENG.townFix(S, now);
 S.streak = 0; S.lastSeen = S.lastInteract = now;

@@ -1,3 +1,4 @@
+process.env.TZ = "UTC";
 // Engine checks for the guidance layer: Today's Adventure, comebacks, the Harbor Bridge, boss encounters,
 // learning evidence, onboarding gifts, and the v8 to v10 save migration. Runs in plain Node, no browser.
 //   node tools/guide.cjs
@@ -21,7 +22,7 @@ function qIn(S, d, sk, now) { const q = sk ? E.buildForSkill(S, d, sk, 2, rnd, [
 
 section("fresh game", () => {
   const S = E.migrate(E.newState(T0), T0);
-  ok(S.v === 10, "fresh state is v10");
+  ok(S.v === 11, "fresh state is v11");
   ok(S.onb && S.onb.done === false && S.onb.step === 0, "fresh players get the intro");
   ok(S.adv === null && S.world && S.lrn && S.recov && Array.isArray(S.gb.hist), "new fields exist");
   const A = E.advEnsure(S, T0);
@@ -40,7 +41,7 @@ section("v8 dev save migrates to v10 without touching learning history", () => {
   const strip = (sk) => { const o = clone(sk); Object.keys(o).forEach((k) => { delete o[k].pr; delete o[k].pb; }); return o; };
   const before = { r: JSON.stringify(raw.r), sk: JSON.stringify(strip(raw.sk)), spots: JSON.stringify(raw.spots), stats: raw.stats.answered };
   const S = E.migrate(clone(raw), T0);
-  ok(S.v === 10 && S.seenV9 === false && S.seenV10 === false, "v8 save is now v10 and will see What's New");
+  ok(S.v === 11 && S.seenV9 === false && S.seenV10 === false && S.seenV11 === false, "v8 save is now v11 and will see What's New");
   ok(S.onb.done === true, "existing players skip the beginner intro");
   // v10 adds a proficiency window (pr) and band (pb) to each skill; everything else must be untouched.
   const skNoProf = clone(S.sk); Object.keys(skNoProf).forEach((k) => { delete skNoProf[k].pr; delete skNoProf[k].pb; });
@@ -53,7 +54,7 @@ section("v8 dev save migrates to v10 without touching learning history", () => {
   const A = E.advEnsure(S, T0);
   ok(A.steps.length >= 3, "late saves get a full adventure");
   const S2 = E.migrate(JSON.parse(JSON.stringify(S)), T0 + 5);
-  ok(S2.world.harbor && S2.v === 10, "restored state survives a save round trip");
+  ok(S2.world.harbor && S2.v === 11, "restored state survives a save round trip");
   // an unwelcomed v8 save with no answers is effectively new, so it gets the intro
   const fresh8 = clone(E.newState(T0)); fresh8.v = 8; delete fresh8.onb; fresh8.welcomed = false;
   ok(E.migrate(fresh8, T0).onb.done === false, "a brand-new v8 save still gets the intro");
@@ -130,14 +131,16 @@ section("Adventure: pause, skip, lengths, overnight", () => {
 });
 
 section("Adventure picks a skill with a reason", () => {
-  const S = mid();
+  // Placement done everywhere, so the pick is about skills, not about finishing a domain's first 20 answers.
+  const placed = (S) => { DKEYS_each(E, (d) => { S.dx[d].cal = true; }); return S; };
+  const S = placed(mid());
   const p = E.advPick(S, T0, "");
   ok(p.kind === "skill" && E.DOMAINS[p.d].skills.includes(p.sk), "picks a real skill");
   ok(typeof p.why === "string" && p.why.length > 20, "explains why: " + p.why);
   const p2 = E.advPick(S, T0, p.d + "|" + p.sk);
   ok(p2.sk !== p.sk || p2.d !== p.d || true, "avoids yesterday's pick when it can");
   // Transitions not yet earned: the pick nudges toward the bridge
-  const S2 = mid(); S2.sk["eoi|Transitions"] = { n: 4, c: 2, rr: "1010" };
+  const S2 = placed(mid()); S2.sk["eoi|Transitions"] = { n: 4, c: 2, rr: "1010" };
   DKEYS_each(E, (d) => E.DOMAINS[d].skills.forEach((sk) => { if (!(d === "eoi" && sk === "Transitions")) S2.sk[d + "|" + sk] = { n: 40, c: 30, rr: "1101101101" }; }));
   const p3 = E.advPick(S2, T0, "");
   ok(p3.sk === "Transitions" && /Harbor Bridge/.test(p3.why), "the bridge skill wins when it's close: " + p3.why);
