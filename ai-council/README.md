@@ -20,7 +20,33 @@ Pro and Max plans include Claude Code. Claude Code usage counts against the same
 
 These files are at the top of the repository, not in this folder.
 
-To use it:
+### Set up on Windows (about 5 minutes)
+
+1. Open **PowerShell**: click Start, type `PowerShell`, and press Enter. You don't need to run it as administrator.
+2. Install Claude Code:
+   ```
+   irm https://claude.ai/install.ps1 | iex
+   ```
+3. Close PowerShell, open a new window, and check the install:
+   ```
+   claude --version
+   ```
+   This should print a version number. If `claude` isn't recognized, see "Fix your PATH" in Anthropic's install troubleshooting guide (code.claude.com/docs/en/troubleshoot-install).
+4. Install the council:
+   ```
+   irm https://raw.githubusercontent.com/OtterYes/suckers/claude/epic-faraday-o3kzvu/ai-council/install-council.ps1 | iex
+   ```
+   This copies the four members and the `/council` command into your user folder (`%USERPROFILE%\.claude`), so `/council` works in any folder. If `ANTHROPIC_API_KEY` is set, it asks before removing it, so that Claude Code uses your subscription.
+5. Open a new PowerShell window and start Claude Code in a folder for your council work:
+   ```
+   mkdir $HOME\council -Force; cd $HOME\council; claude
+   ```
+   The first time, a browser opens: log in with your Claude account (the one with your Pro or Max plan). When Claude Code asks whether you trust the folder, say yes.
+6. Type `/council` followed by your decision.
+
+If something doesn't work, run `claude doctor` in PowerShell. It checks your installation and suggests fixes.
+
+### Using it from this repository instead
 
 1. Open Claude Code in this repository: run `claude` in the repository folder, open it in the desktop app, or start a session for it at claude.ai/code. Sign in with your Claude account, not an API key.
 2. Type `/council` followed by your decision, for example:
