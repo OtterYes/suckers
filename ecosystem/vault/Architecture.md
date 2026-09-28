@@ -57,7 +57,7 @@ An agent working on a task sees only:
 
 School, business, and creator projects never see each other unless a dependency links them or I share a project on purpose.
 
-## Planned folder layout (created in M1)
+## Folder layout (built in M1)
 ```
 ecosystem/
   project.godot, main.tscn, app.gd   # app entry + global "App" singleton
@@ -69,6 +69,7 @@ ecosystem/
   world/           # 3D world
   assets/models/   # Astra .glb files go here
   tests/           # headless tests
+  tools/           # app_driver.gd: end-to-end runs and screenshots
   vault/           # this Obsidian vault (ignored by Godot)
 ```
 See [[Data Model]].

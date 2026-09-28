@@ -20,3 +20,4 @@ A log of important choices. Each has the reason and what would make us change it
 | D14 | UI built mostly in code, not the visual editor | Easier for Claude to write, review, and test. I can still inspect it in the editor. | I want to design screens visually |
 | D15 | **Luau exports follow a Rojo layout** (`src/server`, `src/client`, `src/shared`) | I use Rojo, so exported files drop straight into a synced project | I stop using Rojo |
 | D16 | **Astra models as `.glb`** | Astra can export any format, and `.glb` imports most cleanly into Godot | — |
+| D17 | **F1 = dashboard, F2 = world** (not Tab) | Tab moves between buttons for keyboard users, so it can't also switch views | — |

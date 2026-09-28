@@ -7,6 +7,8 @@ It links to [[Home]], [[Milestones]], and [[Decisions]].
 Approved on 2026-09-28. See [[Open Questions]] for the answers.
 
 ## Active goal: M1, the demo loop (vertical slice)
+**Status (2026-09-28):** built and checked in the cloud on Linux (29 unit tests + an end-to-end run + screenshots). **Waiting on me** to run it on Windows (`ecosystem/README.md`). After that, M2 starts.
+
 Build the smallest complete version of the workflow in **demo mode** (no AI calls, $0):
 
 1. I type a goal, e.g. *"Prototype a Roblox obstacle game and plan three TikToks about building it"*.
@@ -18,13 +20,13 @@ Build the smallest complete version of the workflow in **demo mode** (no AI call
 7. I review and edit the deliverables, mark tasks done, and save. After I close and reopen the app, everything is still there.
 
 Done when (checks I can see):
-- [ ] The app opens on Windows from the Godot editor with no errors
-- [ ] I can do steps 1–7 above in under 5 minutes
-- [ ] Every agent state in the 3D world matches the task board
-- [ ] Every demo deliverable says it is a template and not AI output
-- [ ] Every Luau draft says "Not tested in Roblox Studio"
-- [ ] Automated headless tests pass (Claude runs them in the cloud; I can run them too)
-- [ ] Closing and reopening the app keeps all tasks, deliverables, and edits
+- [ ] The app opens on Windows from the Godot editor with no errors *(only I can check this)*
+- [ ] I can do steps 1–7 above in under 5 minutes *(only I can check this; the automated run takes ~3 s)*
+- [x] Every agent state in the 3D world matches the task board *(end-to-end check + screenshots)*
+- [x] Every demo deliverable says it is a template and not AI output *(unit test)*
+- [x] Every Luau draft says "Not tested in Roblox Studio" *(unit test + end-to-end check)*
+- [x] Automated headless tests pass: `run_tests.bat` (Windows) or `run_tests.sh`
+- [x] Closing and reopening the app keeps all tasks, deliverables, and edits *(two-run end-to-end check)*
 
 ## Rules for every session
 - Build on branch `claude/determined-brown-uqabil`, in the `ecosystem/` folder only. Never touch the To 1520 game files.

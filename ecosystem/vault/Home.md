@@ -2,7 +2,7 @@
 
 A desktop app for my Windows PC: a small, living 3D world where a team of AI agents helps with school, business, TikTok, and Roblox work.
 
-> **Status:** Design approved (M0). Building **M1, the demo loop**. See [[Goal]].
+> **Status:** M1 (demo loop) is built. One check is left for me: run it on Windows. See [[Goal]]. How to run it: `ecosystem/README.md`.
 
 ## Start here
 - [[Goal]]: what we are building right now and how we'll know it's done

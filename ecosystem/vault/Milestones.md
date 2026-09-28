@@ -6,13 +6,13 @@ Each milestone ends with things **I can check myself**. At each one, Claude repo
 - [x] I've approved this vault
 - [x] [[Open Questions]] answered, or defaults accepted
 
-## M1: Demo loop (vertical slice, $0) ← *current*
+## M1: Demo loop (vertical slice, $0) ← *current: built, waiting on my Windows check*
 Steps, each small and runnable:
-1. **Data core:** Workspace, Task, and Store (save, load, backups) + headless tests
-2. **Coordinator + mock specialists:** goal → plan, templates for all 5 agents (Roblox the most complete)
-3. **Runner:** queues, dependencies, one job per agent, simulated delay, cancel, retry
-4. **Dashboard:** new goal, plan review, board, side panel with deliverable editor, mark done, save
-5. **Graybox world:** HQ + 4 areas as simple shapes, 5 agents whose lights and labels show real states, click an agent → panel, Tab to swap views
+1. ✅ **Data core:** Workspace, Task, and Store (save, load, backups) + headless tests
+2. ✅ **Coordinator + mock specialists:** goal → plan, templates for all 5 agents (Roblox the most complete)
+3. ✅ **Runner:** queues, dependencies, one job per agent, simulated delay, cancel, retry, timeout, budget check
+4. ✅ **Dashboard:** new goal, plan review, Today/Board/Activity, side panel with deliverable editor, mark done, autosave
+5. ✅ **Graybox world:** HQ + 4 areas as simple shapes, 5 agents whose rings and labels show real states, motions from real events, click an agent → panel, F1/F2 to swap views
 
 Done when: every check in [[Goal]] passes, including close → reopen → everything is still there.
 

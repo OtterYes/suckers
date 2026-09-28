@@ -1,6 +1,6 @@
 # Dashboard (2D)
 
-The fast, accessible version of everything. **Tab** switches between it and the world.
+The fast, accessible version of everything. **F1** shows it and **F2** shows the world. Tab is kept for moving between buttons ([[Decisions]] D17).
 
 ## Layout
 - **Top bar:** mode badge (**DEMO: no AI calls, $0**), AI usage and estimated cost today and this month, Save (plus an autosave time), a Pending approvals counter, and View toggle
@@ -11,7 +11,8 @@ The fast, accessible version of everything. **Tab** switches between it and the 
 ## Deliverable editor
 - A readable text editor for Markdown and Luau, with a monospace font for code
 - Labels at the top: *Demo template* or *AI draft (model, cost)*, *Edited by you*, and for Luau *Not tested in Roblox Studio*
-- Buttons: **Save edits**, **Mark done**, **Ask for changes** (reruns with my note; AI in M4), **Copy**, **Export .md or .luau** (to a folder I choose)
+- Buttons: **Save edits**, **Mark done**, **Ask for changes** (reruns with my note; AI in M4), **Copy**, and later **Export .md or .luau** (to a folder I choose; not built yet)
+- Unsaved edits are kept automatically when I click away or mark the task done
 
 ## Accessibility
 - Full keyboard use, with visible focus
