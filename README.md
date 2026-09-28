@@ -400,7 +400,10 @@ runs offline after that. It is independent of `index.html` and keeps its own sav
 - **Questions.** 128 original items in Digital PSAT style, 16 per domain, tagged easy, medium, and
   hard, each with a short explanation. Math mixes multiple choice with typed answers (fractions and
   decimals are both accepted). Selection is adaptive: the first questions in a domain are easy, and
-  the tier mix shifts toward hard as mastery rises. Missed questions return a few questions later.
+  the tier mix shifts toward hard as mastery rises. Answer order is shuffled every time. Once a math
+  domain’s written questions at a tier have been seen, procedural drills (typed-answer templates for
+  linear equations, slopes, systems, quadratics, percents, means, probability, area, volume, and
+  similar triangles) fill in at reduced pay. Missed questions return a few questions later.
 - **Mastery and score.** Each domain has a 0–100% mastery rating moved by an Elo-style update, so a
   hard question moves it more than an easy one and only hard questions can push it near 100%. The
   estimated score is 160 + 600 × average mastery per section, for a 320–1520 range.

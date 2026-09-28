@@ -106,7 +106,7 @@ const booted = (page) => page.waitForFunction(() => window.ORBIT && document.get
   check("publish button enabled", await page.evaluate(() => !document.getElementById("pubBtn").disabled && window.ORBIT._.starsForPublish() === 2));
   await page.click("#pubBtn"); await page.waitForTimeout(100);
   await page.click('#modal [data-modal="doPublish"]'); await page.waitForTimeout(150);
-  const pub = await page.evaluate(() => { const s = window.ORBIT.state; return { stars: s.stars, data: s.data, sat: s.b.sat, lvl: s.dom.alg.lvl, hint: !!s.res.hint, runEarned: s.runEarned, modal: document.getElementById("modal").textContent.includes("published"), mastery: s.dom.cs.r }; });
+  const pub = await page.evaluate(() => { const s = window.ORBIT.state; return { stars: s.stars, data: s.data, sat: s.b.sat, lvl: s.dom.alg.lvl, hint: !!s.res.hint, runEarned: s.runEarned, modal: document.getElementById("modal").textContent.includes("published"), mastery: Object.values(s.dom).reduce((a, d) => a + d.r, 0) }; });
   check("publish resets run and grants stars", pub.stars === 2 && pub.data < 100 && pub.sat === 0 && pub.lvl === 0 && pub.hint && pub.runEarned < 100 && pub.modal && pub.mastery > 0, pub);
   await page.click('#modal [data-modal="close"]'); await page.waitForTimeout(80);
   await page.click('#pbody [data-act="buyP"][data-id="head"]'); await page.waitForTimeout(80);

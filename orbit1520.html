@@ -580,6 +580,7 @@ const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const neg = (v) => (v < 0 ? "−" + String(-v) : String(v));
 const par = (v) => (v < 0 ? `(${neg(v)})` : String(v));
 const tm = (c, v = "") => (c === 0 ? "" : ` ${c < 0 ? "−" : "+"} ${Math.abs(c) === 1 && v ? "" : Math.abs(c)}${v}`);
+const cx = (c) => (c === 1 ? "x" : c === -1 ? "−x" : `${neg(c)}x`); // leading coefficient on x
 function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a || 1; }
 const fr = (a, b) => { const g = gcd(a, b); return `${a / g}/${b / g}`; };
 const GEN = {
@@ -587,7 +588,7 @@ const GEN = {
     { t: 1, make() { const a = ri(2, 9), x = ri(-8, 12), b = ri(-15, 15) || 4, c = a * x + b; return { q: `If ${a}x${tm(b)} = ${neg(c)}, what is the value of x?`, a: x, e: `${b < 0 ? `Add ${-b} to` : `Subtract ${b} from`} both sides to get ${a}x = ${neg(c - b)}, then divide by ${a}: x = ${neg(x)}.` }; } },
     { t: 1, make() { const m = pick([-4, -3, -2, -1, 1, 2, 3, 4, 5]), x1 = ri(-6, 6), dx = ri(1, 4), y1 = ri(-9, 9), x2 = x1 + dx, y2 = y1 + m * dx; return { q: `In the xy-plane, a line passes through the points (${neg(x1)}, ${neg(y1)}) and (${neg(x2)}, ${neg(y2)}). What is the slope of the line?`, a: m, e: `Slope = (change in y)/(change in x) = (${neg(y2)} − ${par(y1)})/(${neg(x2)} − ${par(x1)}) = ${neg(m * dx)}/${dx} = ${neg(m)}.` }; } },
     { t: 1, make() { const m = ri(2, 9), b = ri(-12, 12) || 3, k = ri(-5, 9); return { q: `The function f is defined by f(x) = ${m}x${tm(b)}. What is the value of f(${neg(k)})?`, a: m * k + b, e: `Substitute ${neg(k)} for x: ${m}${par(k)}${tm(b)} = ${neg(m * k)}${tm(b)} = ${neg(m * k + b)}.` }; } },
-    { t: 2, make() { const x0 = ri(-5, 8), a = ri(1, 6), c = pick([-4, -3, -2, -1]), y0 = ri(-10, 10), b = y0 - a * x0, d = y0 - c * x0; return { q: `y = ${a === 1 ? "" : a}x${tm(b)}\ny = ${neg(c) === "−1" ? "−" : neg(c)}x${tm(d)}\n\nIf (x, y) is the solution to the system of equations above, what is the value of x?`, a: x0, e: `Set the right sides equal: ${a === 1 ? "" : a}x${tm(b)} = ${neg(c)}x${tm(d)}, so ${a - c}x = ${neg(d - b)} and x = ${neg(x0)}.` }; } },
+    { t: 2, make() { const x0 = ri(-5, 8), a = ri(1, 6), c = pick([-4, -3, -2, -1]), y0 = ri(-10, 10), b = y0 - a * x0, d = y0 - c * x0; return { q: `y = ${cx(a)}${tm(b)}\ny = ${cx(c)}${tm(d)}\n\nIf (x, y) is the solution to the system of equations above, what is the value of x?`, a: x0, e: `Set the right sides equal: ${cx(a)}${tm(b)} = ${cx(c)}${tm(d)}, so ${a - c}x = ${neg(d - b)} and x = ${neg(x0)}.` }; } },
     { t: 2, make() { const fee = ri(2, 9) * 5, rate = ri(2, 12), k = ri(3, 12), total = fee + rate * k; return { q: `A tutoring service charges a one-time registration fee of $${fee} plus $${rate} per session. A student paid a total of $${total}, including the fee. How many sessions did the student pay for?`, a: k, e: `Solve ${fee} + ${rate}n = ${total}: ${rate}n = ${total - fee}, so n = ${k}.` }; } },
   ],
   adv: [
@@ -1161,11 +1162,11 @@ function viewPractice() {
     let feedback = "";
     if (cur.done) {
       const ans = q.spr ? (Array.isArray(q.a) ? q.a.map(fmtAns).join(" or ") : fmtAns(q.a)) : `${letters[(cur.order || [0, 1, 2, 3]).indexOf(q.a)]}`;
-      const delta = cur.delta >= 0 ? `+${(cur.delta * 100).toFixed(1)}` : (cur.delta * 100).toFixed(1);
+      const delta = Math.abs(cur.delta) < 0.0005 ? "unchanged" : cur.delta > 0 ? `+${(cur.delta * 100).toFixed(1)}%` : `${(cur.delta * 100).toFixed(1).replace("-", "−")}%`;
       feedback = `<div class="feedback ${cur.correct ? "ok" : "bad"}">
         <h4>${cur.correct ? "Correct" : `Not quite — the answer is ${esc(ans)}`}${cur.wind ? " · Second Wind saved your combo" : ""}</h4>
         <p>${esc(q.e)}</p>
-        <div class="reward">${cur.correct ? `<span>+${fmt(cur.reward)} Data</span>` : `<span class="m">No Data · combo reset</span>`}<span class="m">${esc(d.short)} mastery ${delta}%</span>${cur.parts.map((p) => `<span>${esc(p)}</span>`).join("")}</div>
+        <div class="reward">${cur.correct ? `<span>+${fmt(cur.reward)} Data</span>` : `<span class="m">No Data · combo reset</span>`}<span class="m">${esc(d.short)} mastery ${delta}</span>${cur.parts.map((p) => `<span>${esc(p)}</span>`).join("")}</div>
       </div>`;
     }
     const hintBtn = !cur.done && !q.spr && S.res.hint && cur.gone < 0 ? `<button class="btn ghost sm" data-act="hint">Eliminate one <span class="cost">−30%</span></button>` : "";
