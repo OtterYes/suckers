@@ -1,0 +1,7 @@
+# Godot's import cache. Rebuilt automatically when the project opens.
+.godot/
+# Exported builds
+build/
+# Never commit secrets (API keys live in the user folder, not here)
+secrets.cfg
+*.secret

@@ -1,0 +1,21 @@
+# Glossary
+
+- **Agent:** a role in the app (like the Roblox Builder) with its own tasks, tools, limits, and memory
+- **Coordinator:** the agent that plans, schedules, and hands out tasks
+- **Deliverable:** what a task produces: a doc, a script, a checklist, or Luau code
+- **Demo mode / mock:** agents fill in prewritten templates instead of calling an AI. Free, and always labeled.
+- **API:** a way for one program to talk to another. The app uses an AI provider's API to get real AI answers.
+- **API key:** a password for an API. Whoever has it can spend money on the account, so it never goes in the repo.
+- **Token:** a chunk of text (about ¾ of a word). AI providers charge per token.
+- **Godot:** the free game engine the app is built with
+- **Scene / Node:** Godot builds everything from nodes (a camera, a button, a 3D shape) arranged in scenes
+- **Signal:** Godot's way for one part to announce "something happened" so others can react (this is our "events")
+- **Autoload:** a script Godot keeps running for the whole app. Our `App` holds the workspace.
+- **GDScript:** Godot's Python-like language
+- **JSON:** a plain-text format for saving data
+- **Headless test:** running the app's logic without opening a window, to check it automatically
+- **Vertical slice:** a thin version of *every* layer working end to end, instead of one layer finished perfectly
+- **Luau:** Roblox's programming language
+- **Rojo:** a tool that syncs files on your PC into Roblox Studio
+- **glTF / .glb:** a standard 3D model file format that Godot imports well
+- **Renderer:** the part of Godot that draws the 3D. *Compatibility* is simpler, *Forward+* is prettier.
