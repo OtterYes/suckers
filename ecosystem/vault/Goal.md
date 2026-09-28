@@ -3,14 +3,10 @@
 This note is written so any work session (or a `/goal`-style command) can start from it alone.
 It links to [[Home]], [[Milestones]], and [[Decisions]].
 
-## Active goal: M0, lock the design
-**Status:** waiting for my confirmation.
+## Done: M0, lock the design
+Approved on 2026-09-28. See [[Open Questions]] for the answers.
 
-Done when:
-- [ ] I've read [[Product Summary]], [[MVP Scope]], and [[Milestones]] and said "approved", or listed changes
-- [ ] [[Open Questions]] 1–3 are answered, or I've accepted the defaults
-
-## Next goal: M1, the demo loop (vertical slice)
+## Active goal: M1, the demo loop (vertical slice)
 Build the smallest complete version of the workflow in **demo mode** (no AI calls, $0):
 
 1. I type a goal, e.g. *"Prototype a Roblox obstacle game and plan three TikToks about building it"*.

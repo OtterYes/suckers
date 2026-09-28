@@ -3,7 +3,7 @@
 Models I'll generate with Astra to replace the simple shapes. **Not needed until M3.** The app always falls back to simple shapes if a file is missing.
 
 ## Format rules (all models)
-- **File:** `.glb` (glTF binary, textures embedded). `.gltf` and `.fbx` also import into Godot. `.glb` is simplest.
+- **File:** `.glb` (glTF binary, textures embedded). Astra can export any format, so always pick `.glb` ([[Decisions]] D16).
 - **Scale:** 1 unit = 1 meter. Characters about **1.7 m** tall.
 - **Origin:** at the feet, centered. **Facing:** +Z (the glTF "forward").
 - **Size budget:** characters ≤ 15k triangles, props ≤ 5k, area buildings ≤ 30k. Textures 1024–2048 px.

@@ -2,11 +2,11 @@
 
 Each milestone ends with things **I can check myself**. At each one, Claude reports what works, what's still simulated, how to verify it, and what's next.
 
-## M0: Design locked ← *current*
-- [ ] I've approved this vault (or listed changes)
-- [ ] [[Open Questions]] answered, or defaults accepted
+## M0: Design locked ✅ (2026-09-28)
+- [x] I've approved this vault
+- [x] [[Open Questions]] answered, or defaults accepted
 
-## M1: Demo loop (vertical slice, $0)
+## M1: Demo loop (vertical slice, $0) ← *current*
 Steps, each small and runnable:
 1. **Data core:** Workspace, Task, and Store (save, load, backups) + headless tests
 2. **Coordinator + mock specialists:** goal → plan, templates for all 5 agents (Roblox the most complete)
