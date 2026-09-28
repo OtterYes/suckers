@@ -385,6 +385,40 @@ Questions built on a graph or picture don't copy as text.
 On the published page, **Fresh pack** asks Claude for 5 new questions in any domain, including Math
 with grid-ins. Progress shows how many unseen Reading and Writing questions are left in each domain.
 
+## ORBIT 1520 (idle station game)
+
+`orbit1520.html` is a second, self-contained game in this repo: an idle/incremental PSAT study game
+rendered with three.js. Open the file in a browser; it loads three.js r160 from jsdelivr once and
+runs offline after that. It is independent of `index.html` and keeps its own save
+(`orbit1520.save.v1` in the browser).
+
+- **The station.** You build a research station in orbit. The eight PSAT domains are the eight
+  modules on the ring; each one glows and grows with your mastery in that domain, so the scene is the
+  mastery map. Click a module (or its label) to see its stats and practice it. The core, solar arrays,
+  relay rings, uplink antenna, and satellites appear as you buy them, and a particle knowledge stream
+  flows from the modules into the core.
+- **Questions.** 128 original items in Digital PSAT style, 16 per domain, tagged easy, medium, and
+  hard, each with a short explanation. Math mixes multiple choice with typed answers (fractions and
+  decimals are both accepted). Selection is adaptive: the first questions in a domain are easy, and
+  the tier mix shifts toward hard as mastery rises. Missed questions return a few questions later.
+- **Mastery and score.** Each domain has a 0–100% mastery rating moved by an Elo-style update, so a
+  hard question moves it more than an easy one and only hard questions can push it near 100%. The
+  estimated score is 160 + 600 × average mastery per section, for a 320–1520 range.
+- **The loop.** Correct answers pay Data (tier × combo × research multipliers, plus 20 seconds of
+  passive production). Data buys module levels, satellites, solar arrays, relay rings, uplink
+  antennas, and one-time research. Module output is level × 0.25 × (1 + 4 × mastery) Data/s, so
+  learning is the multiplier you cannot buy. Missions rotate three at a time, and achievements pay a
+  bonus. Publishing research resets the run for permanent Stars (+10% each) and a star-perk shop.
+  Mastery, reviews, streak, and achievements never reset.
+- **Idle.** The station earns while the tab is closed, up to 8 hours (each Uplink Antenna adds 2, the
+  Deep Archive perk adds 6). A “While you were away” summary shows the payout on return.
+- **Performance.** Instanced satellites and panels, capped pixel ratio, a low-graphics toggle, and
+  rendering that pauses while the tab is hidden. Saves every 10 seconds and on leave; export/import as
+  a base64 code and a hard reset with confirmation live in Settings.
+- **Checks.** `NODE_PATH=$(npm root -g) node tools/orbit-smoke.cjs [--mobile] [--shots dir]` boots the
+  game in headless Chromium, answers 24 questions through the UI, buys structures, reloads to check
+  offline earnings, and fails on any page error.
+
 ## Development
 
 The page stays a single hand-edited file. The DOM-free engine (everything above the

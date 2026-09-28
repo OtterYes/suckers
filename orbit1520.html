@@ -1,0 +1,1729 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ORBIT 1520</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="description" content="ORBIT 1520: an idle PSAT/NMSQT study game. Answer real practice questions to grow an orbital research station.">
+<meta name="theme-color" content="#060a16">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" } }
+</script>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#060a16;--bg2:#0a1124;--panel:rgba(10,17,36,.92);--panel2:rgba(16,26,52,.9);--line:rgba(120,150,210,.16);--line2:rgba(120,150,210,.3);
+  --ink:#e9eefb;--ink2:#aab6d3;--ink3:#6f7ea0;
+  --cyan:#4fd8ff;--cyan2:#a9ecff;--gold:#ffc94d;--gold2:#ffe19a;--star:#c9a6ff;--ok:#42e39b;--bad:#ff6b6b;--warn:#ffb15e;
+  --f:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --m:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --panel-w:460px;--hud-h:60px;--r:14px;
+  --sat:1;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.45;overflow:hidden;-webkit-font-smoothing:antialiased;touch-action:none;overscroll-behavior:none}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+button:disabled{cursor:not-allowed;opacity:.5}
+input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.num{font-family:var(--m);font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;background:radial-gradient(1200px 800px at 60% 40%,#0c1630 0%,#060a16 60%,#03050c 100%)}
+#labels,#popups{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.lbl{position:absolute;left:0;top:0;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0;transition:opacity .25s;will-change:transform}
+.lbl.on{opacity:1}
+.lbl b{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--c,#fff);text-shadow:0 0 8px rgba(0,0,0,.9),0 1px 2px #000;white-space:nowrap}
+.lbl i{font-style:normal;font-family:var(--m);font-size:11px;color:var(--ink2);background:rgba(6,10,22,.7);border:1px solid var(--line);padding:1px 6px;border-radius:999px;backdrop-filter:blur(4px)}
+.lbl .bar{width:54px;height:3px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
+.lbl .bar span{display:block;height:100%;background:var(--c,#fff);width:0%}
+.pop{position:absolute;left:0;top:0;transform:translate(-50%,-50%);font-family:var(--m);font-weight:700;font-size:18px;color:var(--gold);text-shadow:0 0 10px rgba(255,201,77,.6),0 1px 2px #000;animation:popup 1.1s ease-out forwards;white-space:nowrap}
+.pop.bad{color:var(--bad);text-shadow:0 0 10px rgba(255,107,107,.6)}
+.pop.txt{color:var(--cyan2);font-size:14px;font-weight:600}
+.pop.big{font-size:26px}
+@keyframes popup{0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}12%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-160%) scale(1)}}
+
+/* HUD */
+#hud{position:fixed;top:0;left:0;right:0;height:var(--hud-h);z-index:20;display:flex;align-items:center;gap:14px;padding:0 14px;padding-top:env(safe-area-inset-top,0);background:linear-gradient(180deg,rgba(6,10,22,.92),rgba(6,10,22,.55) 80%,transparent);pointer-events:none}
+#hud>*{pointer-events:auto}
+.brand{display:flex;flex-direction:column;line-height:1;min-width:0}
+.brand b{font-size:17px;letter-spacing:.18em;font-weight:800;white-space:nowrap;background:linear-gradient(90deg,var(--cyan2),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand small{font-size:10px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase;margin-top:3px}
+.hudscore{display:flex;align-items:baseline;gap:8px;cursor:pointer;border-radius:10px;padding:4px 10px;border:1px solid transparent}
+.hudscore:hover{border-color:var(--line2);background:rgba(10,17,36,.6)}
+.hudscore .big{font-family:var(--m);font-size:26px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.hudscore .of{font-family:var(--m);font-size:13px;color:var(--ink3)}
+.hudscore .split{font-family:var(--m);font-size:11px;color:var(--ink2);display:flex;flex-direction:column;line-height:1.2}
+.res{display:flex;gap:10px;margin-left:auto}
+.pill{display:flex;align-items:center;gap:8px;background:rgba(10,17,36,.75);border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 8px;backdrop-filter:blur(6px);min-width:0}
+.pill .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#0a0f1e;flex:none}
+.pill .v{font-family:var(--m);font-weight:700;font-size:15px;line-height:1;white-space:nowrap}
+.pill .s{font-family:var(--m);font-size:10.5px;color:var(--ink3);line-height:1;margin-top:3px;white-space:nowrap}
+.pill.data .ic{background:var(--gold)}
+.pill.star .ic{background:var(--star)}
+.pill.combo{border-color:rgba(255,201,77,.4)}
+.pill.combo .ic{background:#ff8a4d}
+.iconbtn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(10,17,36,.75);border:1px solid var(--line);color:var(--ink2);backdrop-filter:blur(6px)}
+.iconbtn:hover{color:#fff;border-color:var(--line2)}
+.iconbtn.off{color:var(--ink3)}
+
+/* Dock */
+#dock{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0));transform:translateX(-50%);z-index:35;display:flex;gap:6px;padding:6px;background:rgba(10,17,36,.85);border:1px solid var(--line2);border-radius:999px;backdrop-filter:blur(10px);box-shadow:0 10px 40px rgba(0,0,0,.5)}
+#dock button{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;color:var(--ink2);font-weight:600;font-size:14px;position:relative;transition:background .15s,color .15s}
+#dock button:hover{color:#fff;background:rgba(255,255,255,.06)}
+#dock button.on{background:linear-gradient(135deg,rgba(79,216,255,.25),rgba(79,216,255,.08));color:#fff;box-shadow:inset 0 0 0 1px rgba(79,216,255,.35)}
+#dock button.primary{background:linear-gradient(135deg,var(--cyan),#2aa9ff);color:#04101f}
+#dock button.primary:hover{filter:brightness(1.1)}
+#dock .dot{position:absolute;top:6px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold)}
+
+/* Panel */
+#panel{position:fixed;top:0;right:0;bottom:0;width:min(var(--panel-w),100%);z-index:30;background:var(--panel);border-left:1px solid var(--line2);backdrop-filter:blur(14px);transform:translateX(102%);transition:transform .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.45)}
+#panel.open{transform:none}
+.phead{display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top,0)) 16px 10px;border-bottom:1px solid var(--line)}
+.phead h2{margin:0;font-size:15px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--cyan2);flex:1}
+.pbody{flex:1;overflow:auto;padding:14px 16px 90px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+.pbody::-webkit-scrollbar{width:8px}.pbody::-webkit-scrollbar-thumb{background:rgba(120,150,210,.25);border-radius:4px}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.card h3{margin:0 0 8px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+.row{display:flex;align-items:center;gap:10px}
+.row.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.muted{color:var(--ink2)}.dim{color:var(--ink3)}.small{font-size:12.5px}.tiny{font-size:11px}
+.gold{color:var(--gold)}.cyan{color:var(--cyan)}.ok{color:var(--ok)}.bad{color:var(--bad)}.starc{color:var(--star)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:10px;font-weight:700;font-size:14px;background:rgba(79,216,255,.12);border:1px solid rgba(79,216,255,.3);color:var(--cyan2);transition:transform .08s,background .15s;white-space:nowrap}
+.btn:hover:not(:disabled){background:rgba(79,216,255,.22)}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn.primary{background:linear-gradient(135deg,var(--cyan),#2aa9ff);color:#04101f;border-color:transparent}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ff9d3d);color:#1d1200;border-color:transparent}
+.btn.ghost{background:transparent;border-color:var(--line2);color:var(--ink2)}
+.btn.danger{background:rgba(255,107,107,.12);border-color:rgba(255,107,107,.4);color:#ffb3b3}
+.btn.sm{padding:6px 10px;font-size:12.5px;border-radius:8px}
+.btn.wide{width:100%}
+.btn .cost{font-family:var(--m);font-weight:700;font-size:12px;opacity:.9}
+.btn.cant{opacity:.55}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line2);color:var(--ink2);background:rgba(255,255,255,.03)}
+.chip .sw{width:8px;height:8px;border-radius:50%;background:var(--c,#fff);box-shadow:0 0 6px var(--c,#fff)}
+.chip.on{color:#fff;border-color:var(--c,var(--cyan));background:color-mix(in srgb,var(--c,var(--cyan)) 18%,transparent)}
+.chip.t1{color:#9be7b1}.chip.t2{color:#ffd58a}.chip.t3{color:#ff9b9b}
+.chip.rev{color:var(--star);border-color:rgba(201,166,255,.5)}
+.bar{height:8px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.bar>span{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--c,var(--cyan)),color-mix(in srgb,var(--c,var(--cyan)) 60%,#fff));transition:width .4s}
+.kv{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:13px}
+.kv b{font-family:var(--m);font-weight:600;text-align:right}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.stat .v{font-family:var(--m);font-weight:800;font-size:18px}
+.stat .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+
+/* Question card */
+.qmeta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:10px}
+.qmeta .timer{margin-left:auto;font-family:var(--m);font-size:12px;color:var(--ink3)}
+.passage{font-size:15px;line-height:1.6;color:var(--ink);background:rgba(255,255,255,.03);border-left:3px solid var(--c,var(--cyan));padding:10px 12px;border-radius:0 10px 10px 0;margin-bottom:12px}
+.passage p{margin:0 0 8px}.passage p:last-child{margin:0}
+.passage p.tx{font-weight:800;color:var(--ink3);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
+.passage ul{margin:4px 0 0;padding-left:18px}.passage li{margin:3px 0}
+.passage table{border-collapse:collapse;width:100%;font-size:13.5px;margin:6px 0 2px}
+.passage caption{caption-side:top;text-align:left;font-weight:700;font-size:12.5px;color:var(--ink2);padding-bottom:4px}
+.passage th,.passage td{border:1px solid var(--line2);padding:4px 8px;text-align:left}
+.passage th{background:rgba(255,255,255,.05);font-weight:700}
+.passage td.n{font-family:var(--m);text-align:right}
+.stem{font-size:15.5px;font-weight:600;margin-bottom:12px;line-height:1.5}
+.stem .math{font-family:var(--m);font-weight:600}
+.choices{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.choices button{width:100%;display:flex;gap:10px;align-items:flex-start;text-align:left;padding:10px 12px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.03);font-size:14.5px;line-height:1.4;transition:background .12s,border-color .12s,transform .08s}
+.choices button:hover:not(:disabled){background:rgba(79,216,255,.08);border-color:rgba(79,216,255,.4)}
+.choices button:active:not(:disabled){transform:scale(.99)}
+.choices .L{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;font-family:var(--m);font-weight:800;font-size:12px;color:var(--ink2)}
+.choices button.right{background:rgba(66,227,155,.14);border-color:var(--ok)}
+.choices button.right .L{background:var(--ok);color:#03150c;border-color:var(--ok)}
+.choices button.wrong{background:rgba(255,107,107,.12);border-color:var(--bad)}
+.choices button.wrong .L{background:var(--bad);color:#1a0505;border-color:var(--bad)}
+.choices button.gone{opacity:.32;text-decoration:line-through}
+.choices button:disabled{cursor:default;opacity:1}
+.choices button:disabled:not(.right):not(.wrong){opacity:.6}
+.spr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.spr input{flex:1;min-width:140px;font-family:var(--m);font-size:18px;padding:10px 12px;border-radius:10px;border:1px solid var(--line2);background:rgba(0,0,0,.25);color:#fff}
+.spr input.right{border-color:var(--ok);box-shadow:0 0 0 2px rgba(66,227,155,.25)}
+.spr input.wrong{border-color:var(--bad);box-shadow:0 0 0 2px rgba(255,107,107,.25)}
+.spr small{width:100%;color:var(--ink3)}
+.feedback{margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line2);background:rgba(0,0,0,.2);animation:fadein .25s}
+.feedback.ok{border-color:rgba(66,227,155,.5)}.feedback.bad{border-color:rgba(255,107,107,.5)}
+.feedback h4{margin:0 0 6px;font-size:15px}
+.feedback p{margin:0;color:var(--ink2);font-size:14px}
+.reward{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.reward span{font-family:var(--m);font-size:11.5px;padding:3px 8px;border-radius:999px;background:rgba(255,201,77,.1);border:1px solid rgba(255,201,77,.3);color:var(--gold2)}
+.reward span.m{background:rgba(79,216,255,.1);border-color:rgba(79,216,255,.3);color:var(--cyan2)}
+.qactions{display:flex;gap:8px;margin-top:12px;align-items:center}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.combo-big{font-family:var(--m);font-weight:900;font-size:22px;color:var(--gold);text-shadow:0 0 14px rgba(255,201,77,.5)}
+.sessionbar{display:flex;gap:3px;margin:8px 0 12px}
+.sessionbar i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08)}
+.sessionbar i.ok{background:var(--ok)}.sessionbar i.bad{background:var(--bad)}
+
+/* building rows */
+.brow{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.brow:first-of-type{border-top:0}
+.brow .ico{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--c,var(--cyan));flex:none}
+.brow .t{font-weight:700;font-size:14px}
+.brow .d{font-size:12px;color:var(--ink3)}
+.brow .lvl{font-family:var(--m);font-size:12px;color:var(--ink2)}
+.mrow{cursor:pointer}
+.mrow:hover .t{color:var(--c)}
+.mini{height:4px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:5px;overflow:hidden}
+.mini span{display:block;height:100%;background:var(--c,var(--cyan))}
+.qtybar{display:flex;gap:4px}
+.qtybar button{padding:4px 10px;border-radius:8px;border:1px solid var(--line2);font-family:var(--m);font-size:12px;color:var(--ink2)}
+.qtybar button.on{background:rgba(79,216,255,.16);color:#fff;border-color:var(--cyan)}
+
+/* missions / achievements */
+.mis{padding:10px 0;border-top:1px solid var(--line)}
+.mis:first-child{border-top:0}
+.mis .t{font-weight:700;font-size:14px}
+.ach{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.ach div{border:1px solid var(--line);border-radius:10px;padding:8px;font-size:12px;background:rgba(255,255,255,.03)}
+.ach div.on{border-color:rgba(255,201,77,.5);background:rgba(255,201,77,.06)}
+.ach b{display:block;font-size:12.5px;margin-bottom:2px}
+.ach div:not(.on){opacity:.55}
+
+/* toasts */
+#toasts{position:fixed;left:14px;bottom:calc(84px + env(safe-area-inset-bottom,0));z-index:25;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:min(360px,calc(100vw - 28px))}
+.toast{background:rgba(10,17,36,.94);border:1px solid rgba(255,201,77,.45);border-left:4px solid var(--gold);border-radius:12px;padding:10px 14px;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:toastin .35s cubic-bezier(.2,.8,.2,1),toastout .4s ease-in 4.2s forwards;font-size:13.5px}
+.toast b{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.toast.info{border-color:rgba(79,216,255,.4);border-left-color:var(--cyan)}.toast.info b{color:var(--cyan)}
+@keyframes toastin{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:none}}
+@keyframes toastout{to{opacity:0;transform:translateY(8px)}}
+
+/* modal */
+#modal{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:rgba(3,5,12,.7);backdrop-filter:blur(6px);padding:16px;animation:fadein .2s}
+.mbox{width:min(520px,100%);max-height:calc(100vh - 32px);overflow:auto;background:linear-gradient(180deg,#101a36,#0a1124);border:1px solid var(--line2);border-radius:18px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.mbox h2{margin:0 0 6px;font-size:22px;letter-spacing:.04em}
+.mbox h2 small{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);font-weight:800;margin-bottom:6px}
+.mbox p{color:var(--ink2);margin:8px 0}
+.mbox .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.mbox textarea{width:100%;min-height:90px;font-family:var(--m);font-size:12px;background:rgba(0,0,0,.3);border:1px solid var(--line2);border-radius:10px;padding:8px;color:#fff;resize:vertical}
+.away{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.away .stat .v{color:var(--gold)}
+
+/* fallback / loading */
+#boot{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--bg);transition:opacity .6s}
+#boot.gone{opacity:0;pointer-events:none}
+.bootin{text-align:center}
+.bootin b{display:block;font-size:34px;letter-spacing:.3em;font-weight:900;background:linear-gradient(90deg,var(--cyan2),var(--cyan),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.bootin span{display:block;color:var(--ink3);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
+.orbitspin{width:70px;height:70px;margin:0 auto 18px;border-radius:50%;border:2px solid rgba(79,216,255,.2);border-top-color:var(--cyan);animation:spin 1.1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.setrow:first-child{border-top:0}
+.switch{width:44px;height:26px;border-radius:13px;background:rgba(255,255,255,.12);position:relative;transition:background .2s;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.switch.on{background:var(--cyan)}.switch.on::after{transform:translateX(18px)}
+kbd{font-family:var(--m);font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid var(--line2);background:rgba(255,255,255,.05)}
+
+.shake{animation:shake .35s}
+@keyframes shake{0%,100%{transform:none}20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,-2px)}80%{transform:translate(3px,2px)}}
+.flash{position:fixed;inset:0;pointer-events:none;z-index:15;background:radial-gradient(circle at 50% 50%,rgba(255,201,77,.22),transparent 60%);opacity:0}
+.flash.go{animation:flash .5s ease-out}
+@keyframes flash{0%{opacity:1}100%{opacity:0}}
+
+@media (max-width:760px){
+  :root{--hud-h:54px}
+  #hud{gap:8px;padding:0 10px}
+  .brand small{display:none}.brand b{font-size:14px}
+  .hudscore .big{font-size:21px}.hudscore .split{display:none}.hudscore{padding:2px 6px}
+  .pill .s{display:none}.pill{padding:5px 9px 5px 6px}.pill .v{font-size:13px}
+  #panel{top:auto;left:0;right:0;width:100%;height:min(78vh,calc(100vh - var(--hud-h) - 8px));border-left:0;border-top:1px solid var(--line2);border-radius:18px 18px 0 0;transform:translateY(104%)}
+  #panel.open{transform:none}
+  .pbody{padding:12px 12px 100px}
+  #dock button span.txt{display:none}
+  #dock button{padding:10px 14px}
+  #toasts{bottom:auto;top:calc(var(--hud-h) + 6px);left:10px}
+  .grid2{grid-template-columns:1fr 1fr}
+}
+@media (max-width:420px){
+  .pill.star{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .shake,.flash.go{animation:none}
+  #panel{transition:none}
+}
+</style>
+</head>
+<body>
+<canvas id="gl" aria-label="Orbital station view"></canvas>
+<div id="labels" aria-hidden="true"></div>
+<div id="popups" aria-hidden="true"></div>
+<div class="flash" id="flash"></div>
+
+<header id="hud">
+  <div class="brand"><b>ORBIT 1520</b><small>Orbital study station</small></div>
+  <button class="hudscore" id="hudScore" data-act="view" data-view="missions" title="Estimated PSAT score (opens progress)">
+    <span class="big num" id="scoreBig">320</span><span class="of">/ 1520</span>
+    <span class="split"><span id="scoreRW">RW 160</span><span id="scoreM">Math 160</span></span>
+  </button>
+  <div class="res">
+    <div class="pill combo" id="comboPill" hidden><span class="ic">×</span><div><div class="v" id="comboV">×1.0</div><div class="s">combo</div></div></div>
+    <div class="pill data" title="Data: the station's currency"><span class="ic">◈</span><div><div class="v num" id="dataV">0</div><div class="s num" id="rateV">+0 /s</div></div></div>
+    <div class="pill star" id="starPill" title="Stars: permanent +10% each" hidden><span class="ic">★</span><div><div class="v num" id="starV">0</div><div class="s">stars</div></div></div>
+    <button class="iconbtn" id="muteBtn" data-act="mute" title="Toggle sound (M)" aria-label="Toggle sound">
+      <svg class="i" viewBox="0 0 24 24" id="muteOn"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      <svg class="i" viewBox="0 0 24 24" id="muteOff" hidden><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 5M21 9l-5 5"/></svg>
+    </button>
+  </div>
+</header>
+
+<nav id="dock" aria-label="Main">
+  <button class="primary" data-act="view" data-view="practice" id="dockPractice"><svg class="i" viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M6 17h13"/><path d="M9 7h6M9 10h4"/></svg><span class="txt">Practice</span></button>
+  <button data-act="view" data-view="station" id="dockStation"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><path d="M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg><span class="txt">Station</span><i class="dot" id="dotStation" hidden></i></button>
+  <button data-act="view" data-view="missions" id="dockMissions"><svg class="i" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span class="txt">Missions</span><i class="dot" id="dotMissions" hidden></i></button>
+  <button data-act="view" data-view="settings" id="dockSettings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="txt">Settings</span></button>
+</nav>
+
+<aside id="panel" aria-live="polite">
+  <div class="phead">
+    <h2 id="panelTitle">Practice</h2>
+    <button class="iconbtn" data-act="closePanel" aria-label="Close panel (Esc)"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="pbody" id="pbody"></div>
+</aside>
+
+<div id="toasts" aria-live="polite"></div>
+<div id="modal" hidden></div>
+
+<div id="boot"><div class="bootin"><div class="orbitspin"></div><b>ORBIT 1520</b><span id="bootMsg">Establishing orbit…</span></div></div>
+
+<script type="module">
+/* ================================================================
+   ORBIT 1520 — question bank
+   Original practice items written for this game in the style of the
+   Digital PSAT/NMSQT. Not College Board material.
+   Fields: id, d (domain), t (tier 1 easy / 2 medium / 3 hard),
+   p (passage), notes (student notes), table, q (stem),
+   c (4 choices) + a (correct index)  OR  spr:true + a (number | numbers)
+   e (short explanation)
+   ================================================================ */
+const DOMAINS = [
+  { id: "cs",  sec: "rw", name: "Craft & Structure",              short: "Craft",       color: 0xf7b955, css: "#f7b955", desc: "Words in context, text structure and purpose, and connections between paired texts." },
+  { id: "ii",  sec: "rw", name: "Information & Ideas",            short: "Ideas",       color: 0xff7e67, css: "#ff7e67", desc: "Central ideas, supporting details, inferences, and using textual or quantitative evidence." },
+  { id: "sec", sec: "rw", name: "Standard English Conventions",   short: "Conventions", color: 0xc792ea, css: "#c792ea", desc: "Sentence boundaries, punctuation, agreement, verb forms, and modifiers." },
+  { id: "eoi", sec: "rw", name: "Expression of Ideas",            short: "Expression",  color: 0xff5fa2, css: "#ff5fa2", desc: "Transitions between ideas and rhetorical synthesis from student notes." },
+  { id: "alg", sec: "m",  name: "Algebra",                        short: "Algebra",     color: 0x4fd8ff, css: "#4fd8ff", desc: "Linear equations and inequalities, systems, and linear functions in context." },
+  { id: "adv", sec: "m",  name: "Advanced Math",                  short: "Adv. Math",   color: 0x58f0a0, css: "#58f0a0", desc: "Quadratics, exponentials, polynomials, radicals, and nonlinear functions." },
+  { id: "psd", sec: "m",  name: "Problem-Solving & Data Analysis", short: "Data",        color: 0x7cc6ff, css: "#7cc6ff", desc: "Ratios, rates, percents, statistics, probability, and reading data displays." },
+  { id: "geo", sec: "m",  name: "Geometry & Trigonometry",        short: "Geometry",    color: 0xffe66d, css: "#ffe66d", desc: "Area and volume, angles, triangles, circles, and right-triangle trigonometry." },
+];
+const DOM = Object.fromEntries(DOMAINS.map(d => [d.id, d]));
+const WIC = "Which choice completes the text with the most logical and precise word or phrase?";
+const CONV = "Which choice completes the text so that it conforms to the conventions of Standard English?";
+const TRANS = "Which choice completes the text with the most logical transition?";
+const NOTES_Q = (goal) => `The student wants to ${goal}. Which choice most effectively uses relevant information from the notes to accomplish this goal?`;
+
+const BANK = [
+/* ---------------- Craft & Structure ---------------- */
+{ id:"cs1", d:"cs", t:1, p:"For decades, the small coastal town relied on a single cannery for employment. When the plant closed in 1998, residents feared the local economy would collapse; instead, the town’s response was remarkably ______: within five years, a cluster of boat-repair shops and a seasonal market had replaced the lost jobs.", q:WIC,
+  c:["resilient","predictable","reluctant","uniform"], a:0, e:"The colon introduces evidence that the town recovered and adapted after a setback, which is what “resilient” means." },
+{ id:"cs2", d:"cs", t:1, p:"Marine biologist Ayana Reyes has spent years documenting the songs of humpback whales, and her recordings are notably ______: some capture a single whale for over six hours without interruption.", q:WIC,
+  c:["brief","extensive","improvised","optional"], a:1, e:"Recordings that run for six uninterrupted hours are long and thorough, so “extensive” fits; “brief” says the opposite." },
+{ id:"cs3", d:"cs", t:1, p:"Most visitors to the museum hurry past the hallway of ceramic fragments on their way to the famous mural. But the fragments repay attention. Each shard carries a fingerprint pressed into the clay before firing—a trace of a specific, unnamed worker who lived over two thousand years ago.", q:"Which choice best states the main purpose of the text?",
+  c:["To argue that the mural is overrated compared with the museum’s other holdings","To encourage readers to notice an overlooked exhibit by explaining what makes it meaningful","To describe the technique ancient potters used to fire clay","To explain why the museum acquired the ceramic fragments"], a:1, e:"The text says visitors skip the fragments, then explains why they “repay attention”: its purpose is to draw attention to an overlooked exhibit." },
+{ id:"cs4", d:"cs", t:1, p:"Although the two committee members frequently disagreed in public, their private correspondence reveals a relationship that was surprisingly ______; they exchanged warm letters for over thirty years.", q:WIC,
+  c:["cordial","formal","competitive","fleeting"], a:0, e:"Thirty years of warm letters describe a friendly relationship, so “cordial” is the precise word; the public disagreement makes it “surprising.”" },
+{ id:"cs5", d:"cs", t:1, p:"The following text is from a 1911 novel. The narrator describes a house she has just inherited.\n\nThe house had been shut up for eleven years, and it showed. Dust lay on the banister thick as felt. Yet when I opened the parlor shutters, the light fell on a piano still in tune, as if someone had been playing it in the dark.", q:"Which choice best describes the function of the last sentence?",
+  c:["It contrasts the house’s neglected appearance with a detail suggesting the house has not been entirely abandoned.","It explains why the narrator decided to inherit the house.","It establishes that the narrator is an accomplished musician.","It summarizes the extent of the damage caused by eleven years of neglect."], a:0, e:"“Yet” signals a contrast: after describing dust and neglect, the sentence offers the eerie detail of a piano still in tune." },
+{ id:"cs6", d:"cs", t:2, p:"Early accounts of the 1815 eruption of Mount Tambora were largely ______: writers who had never visited the region repeated secondhand reports, and the actual scale of the disaster was not established until scientists examined ash deposits more than a century later.", q:WIC,
+  c:["corroborated","speculative","exhaustive","meticulous"], a:1, e:"Accounts based on secondhand reports by writers who never visited are guesswork, so “speculative” fits; the other choices suggest confirmed or careful work." },
+{ id:"cs7", d:"cs", t:2, p:"Historian Lin Zhao has challenged the common claim that medieval European villages were economically isolated. Examining coin hoards buried in rural England, Zhao found silver pennies minted as far away as Baghdad. The presence of these coins does not prove that villagers traded directly with distant markets, Zhao cautions; the pennies may have passed through many hands. Still, they show that even small settlements were linked, however indirectly, to a much wider world.", q:"Which choice best describes the function of the third sentence in the text as a whole?",
+  c:["It identifies a limitation of Zhao’s evidence before the text states the conclusion the evidence does support.","It presents a counterargument that the text ultimately rejects as unfounded.","It explains the method Zhao used to date the coin hoards.","It suggests that Zhao’s findings apply only to villages in England."], a:0, e:"The third sentence concedes what the coins cannot prove; “Still” then introduces the more limited conclusion they do support." },
+{ id:"cs8", d:"cs", t:2, p:"The playwright’s early work was criticized as ______, relying on stock characters and predictable endings, but her later plays abandoned convention so thoroughly that some audiences found them baffling.", q:WIC,
+  c:["derivative","innovative","obscure","ambitious"], a:0, e:"Work built on stock characters and predictable endings copies existing models, which is what “derivative” means; “but” contrasts it with her unconventional later plays." },
+{ id:"cs9", d:"cs", t:2, p:"Text 1\nUrban beekeeping has become popular as a way to support pollinators. Advocates point out that city gardens, parks, and balcony planters offer honeybees a surprisingly varied diet, and rooftop hives now number in the thousands in some cities.\n\nText 2\nEcologist Priya Natarajan notes that honeybees are a managed, non-native species in North America. Her team found that in neighborhoods with dense concentrations of hives, wild bee species—which pollinate many native plants—declined as honeybees competed for the same flowers.", q:"Based on the texts, how would Natarajan (Text 2) most likely respond to the advocates described in Text 1?",
+  c:["By agreeing that honeybees can thrive in cities but cautioning that their success may come at the expense of wild pollinators","By arguing that city gardens do not provide enough food for honeybees to survive","By suggesting that rooftop hives should be replaced with hives at ground level","By claiming that wild bee species are not effective pollinators of native plants"], a:0, e:"Text 2 does not dispute that honeybees do well in cities; it adds that dense hives crowd out wild bees, a cost the advocates overlook." },
+{ id:"cs10", d:"cs", t:2, p:"Photographs of the 1930s Dust Bowl are so familiar that they can seem to tell the whole story: black clouds, buried fences, families on the road. Less often shown are the images farmers took of themselves in the same years—posed proudly beside new tractors or gathered at county fairs. These pictures do not deny the catastrophe. They complicate it, reminding us that the people in the famous photographs were not only victims of the decade but also participants in it.", q:"Which choice best describes the overall structure of the text?",
+  c:["It describes a widely known set of images, introduces a lesser-known set, and explains how the second set changes our understanding of the period.","It argues that the famous Dust Bowl photographs were staged and should not be trusted.","It compares photography with other art forms of the 1930s.","It presents a chronological account of the Dust Bowl from its causes to its aftermath."], a:0, e:"The text moves from familiar images to the farmers’ own photographs and ends by explaining how those photographs “complicate” the familiar story." },
+{ id:"cs11", d:"cs", t:2, p:"In her study of coral reefs, Dr. Okafor deliberately avoided ______ conclusions; because her data covered only two seasons, she reported trends as preliminary and called for longer observation.", q:WIC,
+  c:["tentative","sweeping","modest","provisional"], a:1, e:"With limited data she avoided broad, far-reaching claims, so “sweeping” fits; “tentative” and “provisional” describe the conclusions she actually offered." },
+{ id:"cs12", d:"cs", t:3, p:"Critics of the new translation have called it unfaithful, but the translator has argued that a strictly literal rendering would itself be a kind of betrayal: the original poem’s puns and rhythms, she contends, are not ______ to its meaning but constitutive of it, so a version that preserves the words while losing the music preserves very little.", q:WIC,
+  c:["incidental","essential","hostile","equivalent"], a:0, e:"The “not X but constitutive” structure needs a word opposite to “constitutive” (essential); “incidental” means secondary or nonessential." },
+{ id:"cs13", d:"cs", t:3, p:"The following text is adapted from a 1902 essay on natural history.\n\nIt is the custom of writers to praise the ant for industry. I confess I have watched ants for many summers without finding in them any quality I could honestly call a virtue. They labor, yes; but so does the tide. What I have found instead, and what interests me far more, is a creature whose every apparent decision is the sum of a thousand tiny accidents of scent and touch.", q:"The main purpose of the text is to",
+  c:["reject a conventional moral interpretation of ant behavior in favor of a more mechanistic explanation.","argue that ants are less industrious than earlier writers claimed.","compare the movements of ants with the motion of the tides.","describe the methods the author used to observe ants over many summers."], a:0, e:"The author dismisses the idea that ants have virtues and instead describes their behavior as the sum of physical “accidents of scent and touch.”" },
+{ id:"cs14", d:"cs", t:3, p:"Text 1\nSome archaeologists interpret the large stone enclosures at a Neolithic site in Anatolia as temples, since they contain carved pillars and no obvious traces of everyday activities such as cooking. In this view, the site shows that organized religion preceded, and perhaps motivated, the shift to settled farming.\n\nText 2\nRecent excavations at the same site uncovered grinding stones, cisterns, and domestic structures around the enclosures. Archaeologist Dana Feld argues that the distinction between ritual and daily life at the site may be a modern assumption rather than an ancient reality, and that the enclosures could have served a community that already lived and worked there.", q:"Based on the texts, Feld (Text 2) would most likely characterize the interpretation described in Text 1 as",
+  c:["resting on an assumption that new evidence calls into question.","correct in its conclusion but based on the wrong carved pillars.","too focused on the site’s cisterns and grinding stones.","convincingly demonstrating that farming preceded religion."], a:0, e:"Feld says the ritual-versus-daily-life split “may be a modern assumption,” and the new domestic finds undercut the “no everyday activity” reasoning in Text 1." },
+{ id:"cs15", d:"cs", t:3, p:"Economist Marta Ibáñez set out to measure how much a city’s new tram line raised nearby property values. The obvious comparison—prices near the line versus prices elsewhere—was unusable, because the tram had been routed through neighborhoods that were already growing. Ibáñez instead compared neighborhoods along the finished route with neighborhoods along a second route that had been fully planned and then canceled for budget reasons. The two sets of neighborhoods had been selected by the same planners, using the same criteria.", q:"Which choice best describes the function of the last sentence?",
+  c:["It explains why the canceled route provides a fair basis for comparison.","It reveals that the tram’s effect on property values was smaller than expected.","It criticizes the planners for canceling the second route.","It introduces a second, unrelated study by Ibáñez."], a:0, e:"Because both sets of neighborhoods were chosen the same way, the canceled route is a fair comparison group, which is the problem the earlier sentences raised." },
+{ id:"cs16", d:"cs", t:3, p:"The committee’s report was praised for its ______: rather than burying its recommendations in qualifications, it stated in plain terms which policies had failed and why.", q:WIC,
+  c:["candor","ambivalence","discretion","nuance"], a:0, e:"Stating plainly what failed, without hedging, is frankness, or “candor”; “nuance” and “discretion” would describe a more qualified report." },
+
+/* ---------------- Information & Ideas ---------------- */
+{ id:"ii1", d:"ii", t:1, p:"Sea otters spend much of their day floating on their backs, and they often wrap themselves in strands of kelp before sleeping. The kelp acts as an anchor, keeping the otters from drifting out to sea on the current while they rest.", q:"Which choice best states the main idea of the text?",
+  c:["Sea otters use kelp to keep themselves in place while they sleep.","Sea otters are unable to swim against strong currents.","Kelp forests are shrinking because of sea otter activity.","Sea otters spend most of their lives asleep."], a:0, e:"Both sentences build to one point: the kelp anchors resting otters so they do not drift away." },
+{ id:"ii2", d:"ii", t:1, p:"In 1893, New Zealand became the first self-governing country to grant women the right to vote in national elections. The change followed a petition campaign led by Kate Sheppard, whose final petition carried nearly 32,000 signatures—about a quarter of the adult women in the country at the time.", q:"According to the text, what was notable about Sheppard’s final petition?",
+  c:["It was signed by roughly one in four adult women in New Zealand.","It was the first petition ever presented to New Zealand’s legislature.","It was rejected by lawmakers in 1893.","It was signed mostly by women living outside New Zealand."], a:0, e:"The text says the signatures represented “about a quarter of the adult women in the country,” which is one in four." },
+{ id:"ii3", d:"ii", t:1, table:{cap:"Average Daily Visitors to Four City Library Branches, 2023", head:["Branch","Average daily visitors"], rows:[["Riverside","410"],["Northgate","285"],["Old Town","620"],["Hillcrest","190"]]}, p:"A city council report noted that the busiest library branch served more than twice as many daily visitors as the least busy branch.", q:"Which choice best uses data from the table to support the report’s claim?",
+  c:["Old Town averaged 620 daily visitors, while Hillcrest averaged 190.","Riverside averaged 410 daily visitors, while Northgate averaged 285.","Northgate averaged 285 daily visitors, while Hillcrest averaged 190.","Old Town averaged 620 daily visitors, while Riverside averaged 410."], a:0, e:"The claim compares the busiest (Old Town, 620) with the least busy (Hillcrest, 190), and 620 is more than twice 190." },
+{ id:"ii4", d:"ii", t:1, p:"Bats that hunt insects rely on echolocation, emitting calls and listening for the echoes. Some moths, however, have evolved ears tuned to the frequencies of bat calls. When such a moth hears an approaching bat, it typically drops abruptly toward the ground. This suggests that ______", q:"Which choice most logically completes the text?",
+  c:["the moth’s sudden drop is a defensive response to the threat of being caught.","bats cannot detect moths that are resting on the ground.","moths use echolocation to locate flowers at night.","bats prefer to hunt moths over other insects."], a:0, e:"The moth’s ears detect bat calls and trigger the drop, so the drop is best explained as an escape behavior." },
+{ id:"ii5", d:"ii", t:1, p:"The Antikythera mechanism, recovered from a shipwreck in 1901, is a bronze device of interlocking gears built in ancient Greece around 100 BCE. Researchers using X-ray imaging have determined that it modeled the movements of the sun and moon and could predict eclipses decades in advance.", q:"According to the text, how did researchers learn what the mechanism could do?",
+  c:["By studying it with X-ray imaging","By reading instructions recovered with the device","By recreating the shipwreck in a laboratory","By comparing it with modern clocks"], a:0, e:"The text states directly that “researchers using X-ray imaging” determined what the device modeled." },
+{ id:"ii6", d:"ii", t:2, p:"Some literary scholars argue that the anonymous fourteenth-century poem “Pearl” was written by the same poet who wrote “Sir Gawain and the Green Knight.” They note that both poems survive in a single manuscript, copied by the same hand, and that they share an unusual dialect. A skeptic, however, might respond that a shared manuscript and dialect show only where the poems were copied, not who composed them.", q:"Which finding, if true, would most directly support the scholars’ argument against the skeptic’s response?",
+  c:["The two poems use the same rare vocabulary and the same intricate stanza-linking technique, features not found in other poems from the region.","The manuscript containing the poems was copied about fifty years after they were composed.","Many poems from the same region were written in the same dialect.","The manuscript also contains a third poem written in a different dialect."], a:0, e:"Shared rare features of composition (not just copying or dialect) point to a single author, which answers the skeptic’s objection." },
+{ id:"ii7", d:"ii", t:2, table:{cap:"Households with Broadband Internet Access, by County Type", head:["Year","Urban counties","Rural counties"], rows:[["2015","78%","55%"],["2023","91%","74%"]]}, p:"A researcher claims that although the gap in broadband access between urban and rural households narrowed between 2015 and 2023, a substantial gap remained.", q:"Which choice best describes data from the table that support the researcher’s claim?",
+  c:["The gap fell from 23 percentage points in 2015 to 17 percentage points in 2023.","Rural access rose by 19 percentage points, more than urban access rose.","Urban access exceeded 90% in 2023.","Rural access was below 60% in 2015."], a:0, e:"78 − 55 = 23 and 91 − 74 = 17: the gap narrowed but a 17-point gap remained, matching both parts of the claim." },
+{ id:"ii8", d:"ii", t:2, p:"Zebra finches learn their songs by imitating adult males during a sensitive period early in life, and finches raised in isolation produce abnormal songs. Yet when researchers allowed isolated finches to tutor their own offspring, and those offspring to tutor the next generation, the songs drifted over several generations toward the normal wild-type song. This suggests that ______", q:"Which choice most logically completes the text?",
+  c:["the species’ typical song is shaped not only by learning but also by innate preferences that guide learning across generations.","zebra finches cannot learn songs after the sensitive period ends.","isolated finches learn songs more quickly than finches raised in groups.","the wild-type song is less complex than the songs of isolated finches."], a:0, e:"If songs converge on the wild type even without a normal tutor, something built in must be steering the learning." },
+{ id:"ii9", d:"ii", t:2, p:"When the city of Curitiba, Brazil, could not afford a subway in the 1970s, planners designed a bus system that borrowed the subway’s key features: dedicated lanes, raised platforms where riders paid before boarding, and buses arriving every few minutes. The system moved riders nearly as quickly as a subway at a small fraction of the cost, and it has since been copied by more than 150 cities.", q:"Which choice best states the main idea of the text?",
+  c:["Curitiba created an inexpensive bus system that achieved much of a subway’s effectiveness and became a widely imitated model.","Subways are too expensive for most cities to build.","Curitiba’s bus system was eventually replaced by a subway.","Riders in Curitiba preferred buses to subways."], a:0, e:"The text describes the system’s design, its subway-like performance at low cost, and its wide adoption; choice A captures all three." },
+{ id:"ii10", d:"ii", t:2, p:"In the novel “Salt Roads,” author Imani Cole tells the story of a lighthouse keeper’s daughter through letters the daughter never sends. A student claims that the unsent letters allow Cole to reveal the daughter’s private feelings while also showing her isolation.", q:"Which quotation from “Salt Roads” most effectively illustrates the student’s claim?",
+  c:["“I write to you every night, Mother, and every morning I fold the page into the tin under my bed, where no one will read it, least of all you.”","“The lamp must be lit at dusk, whatever the weather, and Father says the ships depend on it.”","“The supply boat comes on Thursdays, bringing flour, oil, and the newspaper from the mainland.”","“I have counted the steps to the top of the tower so many times that I could climb them asleep.”"], a:0, e:"Only choice A shows both parts of the claim: an intimate address to her mother and the fact that no one, “least of all you,” will read it." },
+{ id:"ii11", d:"ii", t:2, table:{cap:"Preferred Study Location, Survey of 200 Students", head:["Location","Students"], rows:[["Library","84"],["Home","62"],["Café","34"],["Outdoors","20"]]}, p:"The school newspaper reported that the library was the most popular study location but that fewer than half of the students surveyed chose it.", q:"Which choice best uses data from the table to support the newspaper’s report?",
+  c:["84 of the 200 students chose the library, more than any other location but fewer than 100.","62 students chose home, which was the second most popular location.","Only 20 students chose to study outdoors.","Together, the library and home were chosen by 146 students."], a:0, e:"The report has two parts, most popular and under half; 84 is the largest count and is less than 100 (half of 200)." },
+{ id:"ii12", d:"ii", t:3, p:"Researchers studying a hospital found that patients recovering from surgery in rooms with windows facing a courtyard garden were discharged, on average, a day earlier than patients in rooms facing a brick wall. The researchers proposed that the view of greenery itself sped recovery.", q:"Which finding, if true, would most directly weaken the researchers’ proposal?",
+  c:["The garden-facing rooms were on a quieter side of the building and received more natural light, and both quiet and light are known to improve recovery.","Patients in the garden-facing rooms reported enjoying the view.","The hospital later planted additional trees in the courtyard.","Patients in both types of rooms received the same medications."], a:0, e:"Choice A offers other differences (quiet, light) that could explain the faster recovery, so the greenery “itself” may not be the cause." },
+{ id:"ii13", d:"ii", t:3, p:"Historians once assumed that the printing press quickly displaced hand-copied manuscripts in fifteenth-century Europe. But inventories from the period show that wealthy buyers continued to commission handwritten books for decades after printing arrived, often paying far more for them than a printed copy would cost. Because these buyers could easily have obtained printed versions of the same texts, it seems likely that ______", q:"Which choice most logically completes the text?",
+  c:["manuscripts continued to carry a prestige that printed books did not, making them desirable apart from their content.","printed books were unavailable in the regions where these buyers lived.","the printing press produced books of higher quality than scribes could.","handwritten books were cheaper to produce than printed ones."], a:0, e:"If the same text was available cheaply in print, paying more for a manuscript must have been about something other than the text, such as prestige." },
+{ id:"ii14", d:"ii", t:3, table:{cap:"Forest Area Occupied by Overwintering Monarch Butterflies (hectares)", head:["Year","2012","2014","2016","2018","2020","2022"], rows:[["Hectares","1.19","0.67","4.01","6.05","2.10","2.84"]]}, p:"A conservation biologist argues that year-to-year figures can be misleading and that no single year should be used to judge whether the monarch population is recovering.", q:"Which choice best uses data from the table to support the biologist’s argument?",
+  c:["The area rose from 0.67 hectares in 2014 to 6.05 in 2018, then fell to 2.10 in 2020, showing large swings in both directions within a few years.","The area occupied in 2022 was 2.84 hectares.","The area occupied in 2012 was greater than in 2014.","The area more than doubled between 2014 and 2016."], a:0, e:"Large swings up and then down show why one year’s figure could mislead; the other choices cite single values or one direction only." },
+{ id:"ii15", d:"ii", t:3, p:"Linguist Omar Haddad studied speakers of a language with no words for “left” and “right,” who instead use compass directions even at small scales (“the cup to your north”). When asked to reproduce an arrangement of objects after being turned to face the opposite direction, these speakers tended to preserve the objects’ compass orientation, whereas English speakers preserved the arrangement relative to their own bodies. Haddad argues that habitual language use trains attention: speakers must constantly track compass directions in order to speak at all, and so they do.", q:"According to the text, why does Haddad believe the speakers he studied track compass directions so consistently?",
+  c:["Because their language requires them to know those directions in order to describe ordinary scenes","Because they have an innate sense of direction that English speakers lack","Because they were trained to do so during the experiment","Because their environment lacks landmarks that could be used instead"], a:0, e:"Haddad’s explanation is that speakers “must constantly track compass directions in order to speak at all”: the language demands it." },
+{ id:"ii16", d:"ii", t:3, p:"In her poem “Inventory,” Lucía Vergara catalogs the contents of her grandmother’s kitchen after the grandmother’s death. A critic argues that the poem’s power comes from its refusal to state grief directly, allowing ordinary objects to carry the emotion instead.", q:"Which quotation from “Inventory” most effectively illustrates the critic’s claim?",
+  c:["“Three spoons, worn thin on one side / from stirring the same pot, in the same direction, for fifty years.”","“I miss her more than I can say, / and saying it does not make it less.”","“The kitchen is small and faces east, / and in the mornings it is full of light.”","“She taught me to cook when I was nine, / standing on a chair to reach the stove.”"], a:0, e:"Choice A never names grief; the worn spoons carry it. Choice B states grief directly, which is what the critic says the poem avoids." },
+
+/* ---------------- Standard English Conventions ---------------- */
+{ id:"sec1", d:"sec", t:1, p:"The collection of maps, which includes several hand-drawn charts from the 1700s, ______ housed in the library’s climate-controlled basement.", q:CONV,
+  c:["is","are","were","have been"], a:0, e:"The subject is the singular “collection,” not “maps,” so the verb must be singular: “is.”" },
+{ id:"sec2", d:"sec", t:1, p:"Glassblowing requires steady hands and constant attention. The molten glass cools within ______ the artisan must shape it quickly.", q:CONV,
+  c:["seconds, so","seconds so","seconds,","seconds. So that"], a:0, e:"Two independent clauses are joined correctly by a comma plus the coordinating conjunction “so.” A comma alone would be a comma splice." },
+{ id:"sec3", d:"sec", t:1, p:"By the time the rescue team reached the stranded hikers, the storm ______ for nearly six hours.", q:CONV,
+  c:["had been raging","is raging","will have raged","rages"], a:0, e:"“By the time” plus the past-tense “reached” calls for the past perfect to show the storm began earlier and continued: “had been raging.”" },
+{ id:"sec4", d:"sec", t:1, p:"The ______ new exhibit features photographs taken by students from three local high schools.", q:CONV,
+  c:["museum’s","museums","museums’","museum"], a:0, e:"One museum possesses the exhibit, so the singular possessive “museum’s” is needed." },
+{ id:"sec5", d:"sec", t:1, p:"Amelia Earhart’s 1932 solo flight across the Atlantic ______ she completed it in just under fifteen hours, landing in a pasture in Northern Ireland.", q:CONV,
+  c:["was record-setting:","was record-setting,","was record-setting","being record-setting;"], a:0, e:"A colon can join two independent clauses when the second explains the first. A comma creates a comma splice, and no punctuation creates a run-on." },
+{ id:"sec6", d:"sec", t:2, p:"The rhythms of the traditional drumming style, which originated in coastal villages and later spread inland, ______ notoriously difficult for newcomers to master.", q:CONV,
+  c:["are","is","was","has been"], a:0, e:"The subject is the plural “rhythms”; the phrase “of the traditional drumming style” and the clause between commas do not change that." },
+{ id:"sec7", d:"sec", t:2, p:"The poet Gwendolyn ______ the first Black author to win the Pulitzer Prize, grew up in Chicago.", q:CONV,
+  c:["Brooks,","Brooks","Brooks;","Brooks:"], a:0, e:"The appositive “the first Black author to win the Pulitzer Prize” is nonessential and must be set off by a pair of commas." },
+{ id:"sec8", d:"sec", t:2, p:"The engineers tested the bridge design by simulating heavy traffic, applying lateral wind loads, and ______ the effects of a moderate earthquake.", q:CONV,
+  c:["modeling","to model","they modeled","having modeled"], a:0, e:"Items in a list must be parallel; “simulating” and “applying” call for a third gerund, “modeling.”" },
+{ id:"sec9", d:"sec", t:2, p:"The expedition’s team included a geologist from Lima, ______ a botanist from Nairobi, Kenya; and two graduate students from Montreal, Canada.", q:CONV,
+  c:["Peru;","Peru,","Peru:","Peru"], a:0, e:"When list items contain commas, semicolons separate the items, as they do later in the sentence." },
+{ id:"sec10", d:"sec", t:2, p:"The researcher ______ findings prompted the recall had spent three years studying the alloy’s behavior under stress.", q:CONV,
+  c:["whose","who’s","which","that’s"], a:0, e:"The possessive relative pronoun “whose” shows the findings belong to the researcher; “who’s” means “who is.”" },
+{ id:"sec11", d:"sec", t:2, p:"Three ingredients—flour, water, and ______ are all that a traditional loaf requires.", q:CONV,
+  c:["salt—","salt,","salt;","salt:"], a:0, e:"An interrupting list opened with a dash must be closed with a dash; mixing a dash with a comma is incorrect." },
+{ id:"sec12", d:"sec", t:3, p:"Had the surveyors measured the ridge more carefully in 1887, the boundary between the two counties ______ several miles farther east today.", q:CONV,
+  c:["would lie","will lie","would have lain","lies"], a:0, e:"An unreal past condition with a present result (“today”) takes “would” plus the base verb: “would lie.” “Would have lain” would describe a past result." },
+{ id:"sec13", d:"sec", t:3, p:"Among the artifacts recovered from the wreck ______ a set of navigational instruments that had survived two centuries underwater.", q:CONV,
+  c:["was","were","have been","are"], a:0, e:"The sentence is inverted; its subject is the singular “a set,” so the verb must be singular." },
+{ id:"sec14", d:"sec", t:3, p:"The only building on the block ______ is the small brick firehouse on the corner.", q:CONV,
+  c:["that survived the 1906 fire","that survived the 1906 fire,",", which survived the 1906 fire,",", that survived the 1906 fire,"], a:0, e:"The clause identifies which building is meant, so it is essential and takes no commas; “that” introduces essential clauses." },
+{ id:"sec15", d:"sec", t:3, p:"Neither the two assistants nor the lead curator ______ aware that the painting had been reattributed.", q:CONV,
+  c:["was","were","have been","are"], a:0, e:"With “neither … nor,” the verb agrees with the nearer subject, the singular “curator,” so “was” is correct." },
+{ id:"sec16", d:"sec", t:3, p:"Migrating monarch butterflies navigate using the sun’s position, ______ an internal clock that compensates for the sun’s movement across the sky.", q:CONV,
+  c:["relying on","they rely on","and rely","which relying on"], a:0, e:"The participial phrase “relying on…” correctly modifies the butterflies. Choice B creates a comma splice, and C and D are ungrammatical." },
+
+/* ---------------- Expression of Ideas ---------------- */
+{ id:"eoi1", d:"eoi", t:1, p:"The first bicycles had no pedals; riders pushed themselves along with their feet. ______ in the 1860s, French inventors attached cranks to the front wheel, creating the first pedal-driven bicycle.", q:TRANS,
+  c:["Then,","For example,","In other words,","Nevertheless,"], a:0, e:"The second sentence describes the next step in a sequence of events, so a time transition such as “Then” fits." },
+{ id:"eoi2", d:"eoi", t:1, p:"Octopuses are remarkably intelligent: they solve puzzles, use tools, and recognize individual humans. ______ their nervous systems are organized very differently from those of vertebrates, with most of their neurons located in their arms rather than in a central brain.", q:TRANS,
+  c:["However,","Therefore,","Similarly,","Consequently,"], a:0, e:"The text shifts from octopus intelligence to a surprising difference in their nervous systems, so a contrast transition is needed." },
+{ id:"eoi3", d:"eoi", t:1, notes:["Wangari Maathai was a Kenyan environmental activist.","In 1977, she founded the Green Belt Movement.","The movement paid rural women to plant trees.","By 2004, the movement had planted more than 30 million trees.","In 2004, Maathai became the first African woman to win the Nobel Peace Prize."], q:NOTES_Q("emphasize the scale of the Green Belt Movement’s impact"),
+  c:["By 2004, the Green Belt Movement, founded by Wangari Maathai in 1977, had planted more than 30 million trees.","Wangari Maathai was a Kenyan environmental activist who founded the Green Belt Movement.","The Green Belt Movement paid rural women to plant trees.","In 2004, Wangari Maathai won the Nobel Peace Prize."], a:0, e:"Only choice A gives a figure that conveys scale: more than 30 million trees." },
+{ id:"eoi4", d:"eoi", t:1, p:"Many people assume that lightning never strikes the same place twice. ______ tall structures such as the Empire State Building are struck dozens of times each year.", q:TRANS,
+  c:["In fact,","As a result,","Likewise,","Finally,"], a:0, e:"The second sentence corrects a common assumption with a surprising truth, which “In fact” signals." },
+{ id:"eoi5", d:"eoi", t:1, notes:["The Great Barrier Reef is off the coast of Queensland, Australia.","It is the largest coral reef system in the world.","It stretches about 2,300 kilometers.","It is made up of nearly 3,000 individual reefs.","It can be seen from space."], q:NOTES_Q("introduce the Great Barrier Reef to an audience unfamiliar with it"),
+  c:["The Great Barrier Reef, located off the coast of Queensland, Australia, is the largest coral reef system in the world.","Nearly 3,000 individual reefs stretch about 2,300 kilometers.","Because it can be seen from space, the reef is very large.","Queensland, Australia, has a coast."], a:0, e:"An introduction for an unfamiliar audience should name the reef, say where it is, and say what it is; only choice A does all three." },
+{ id:"eoi6", d:"eoi", t:2, p:"The city’s plan to replace its aging streetlights with LEDs was expected to cut electricity costs by 40 percent. ______ the savings turned out to be closer to 60 percent, because the new lights also required far less maintenance.", q:TRANS,
+  c:["In the end,","For instance,","By contrast,","Specifically,"], a:0, e:"The second sentence reports the eventual outcome of the plan, so “In the end” is the logical transition." },
+{ id:"eoi7", d:"eoi", t:2, notes:["Ada Lovelace (1815–1852) was an English mathematician.","She worked with Charles Babbage on his proposed Analytical Engine.","In 1843, she published notes describing how the engine could compute Bernoulli numbers.","Her notes are considered by many to contain the first computer program.","The Analytical Engine was never built during her lifetime."], q:NOTES_Q("emphasize a surprising aspect of Lovelace’s achievement"),
+  c:["Lovelace wrote what many consider the first computer program in 1843, for a machine that was never built during her lifetime.","Ada Lovelace was an English mathematician who lived from 1815 to 1852.","Charles Babbage proposed a machine called the Analytical Engine.","Lovelace’s 1843 notes described how to compute Bernoulli numbers."], a:0, e:"Writing the first program for a machine that never existed is the surprising element; choice A pairs the two facts." },
+{ id:"eoi8", d:"eoi", t:2, p:"Some historians credit the invention of the stirrup with transforming medieval warfare by making mounted combat far more effective. Others are skeptical, noting that cavalry dominated battlefields in several regions long before stirrups arrived. ______ the stirrup’s precise role remains a matter of debate.", q:TRANS,
+  c:["Thus,","Moreover,","For example,","Instead,"], a:0, e:"The last sentence draws a conclusion from the disagreement just described, so “Thus” fits." },
+{ id:"eoi9", d:"eoi", t:2, notes:["A student is comparing two methods of desalination (removing salt from seawater).","Thermal distillation heats seawater until it evaporates, then condenses the fresh water.","Reverse osmosis pushes seawater through a membrane that blocks salt.","Thermal distillation typically uses two to three times as much energy per liter as reverse osmosis.","Reverse osmosis membranes must be replaced every few years."], q:NOTES_Q("present a disadvantage of each method"),
+  c:["Thermal distillation uses two to three times as much energy as reverse osmosis, while reverse osmosis requires membranes that must be replaced every few years.","Both thermal distillation and reverse osmosis remove salt from seawater.","Reverse osmosis pushes seawater through a membrane that blocks salt.","Thermal distillation heats seawater until it evaporates and then condenses the fresh water."], a:0, e:"Choice A names one drawback for each method (energy use; membrane replacement); the others describe how the methods work." },
+{ id:"eoi10", d:"eoi", t:2, p:"Early weather forecasts relied on telegraph reports from distant stations, which took hours to collect. ______ forecasters could rarely warn of a storm more than a day in advance.", q:TRANS,
+  c:["As a result,","On the other hand,","In addition,","Meanwhile,"], a:0, e:"Slow data collection caused short warning times, so a cause-and-effect transition is needed." },
+{ id:"eoi11", d:"eoi", t:2, notes:["The Voyager 1 spacecraft launched in 1977.","Its original mission was to study Jupiter and Saturn.","In 2012, it became the first human-made object to enter interstellar space.","It carries a golden record with sounds and images from Earth.","It is now more than 24 billion kilometers from Earth."], q:NOTES_Q("emphasize how far the spacecraft has traveled beyond its original goals"),
+  c:["Launched in 1977 to study Jupiter and Saturn, Voyager 1 has since become the first human-made object to enter interstellar space and is now more than 24 billion kilometers from Earth.","Voyager 1 carries a golden record with sounds and images from Earth.","Voyager 1 launched in 1977.","The original mission of Voyager 1 was to study Jupiter and Saturn."], a:0, e:"Choice A states the original goal and then how far beyond it the craft has gone, which is exactly the contrast the student wants." },
+{ id:"eoi12", d:"eoi", t:3, p:"Antibiotic resistance is often blamed on the overuse of antibiotics in medicine. Agriculture, ______, accounts for a majority of antibiotic use in many countries, since livestock are routinely given the drugs to promote growth.", q:TRANS,
+  c:["however","for example","as a result","in short"], a:0, e:"The text contrasts the usual explanation (medicine) with a larger source (agriculture), so “however” fits." },
+{ id:"eoi13", d:"eoi", t:3, notes:["Two types of volcanoes are shield volcanoes and stratovolcanoes.","Shield volcanoes have gentle slopes and are built from fluid, low-silica lava.","Mauna Loa in Hawaii is a shield volcano.","Stratovolcanoes have steep slopes and are built from sticky, high-silica lava and ash.","Mount Fuji in Japan is a stratovolcano.","Stratovolcano eruptions tend to be more explosive."], q:NOTES_Q("explain why the two volcano types differ in shape"),
+  c:["Shield volcanoes have gentle slopes because they are built from fluid, low-silica lava, whereas stratovolcanoes are steep because they are built from sticky, high-silica lava and ash.","Mauna Loa is a shield volcano, and Mount Fuji is a stratovolcano.","Stratovolcano eruptions tend to be more explosive than shield volcano eruptions.","Shield volcanoes and stratovolcanoes are two types of volcanoes with different shapes."], a:0, e:"The goal is a cause-and-effect explanation of shape; only choice A links each shape to the kind of lava that builds it." },
+{ id:"eoi14", d:"eoi", t:3, p:"The museum’s decision to return the sculptures was praised by many as long overdue. The praise was not universal, ______: several curators argued that the sculptures would be at risk in a region with limited conservation facilities.", q:TRANS,
+  c:["though","for instance","therefore","likewise"], a:0, e:"The second sentence qualifies the first by noting dissent, so the concessive “though” is correct." },
+{ id:"eoi15", d:"eoi", t:3, notes:["Hedy Lamarr (1914–2000) was a Hollywood film actress.","During World War II, she co-invented a “frequency hopping” system with composer George Antheil.","The system was designed to keep radio-guided torpedoes from being jammed.","The idea was not adopted by the U.S. Navy until the 1960s.","Frequency-hopping principles underlie modern Bluetooth and Wi-Fi technologies."], q:NOTES_Q("emphasize the long-term significance of Lamarr’s invention"),
+  c:["Although the Navy did not adopt it until the 1960s, the frequency-hopping system Lamarr co-invented during World War II underlies modern Bluetooth and Wi-Fi technologies.","Hedy Lamarr was a Hollywood film actress who lived from 1914 to 2000.","Lamarr co-invented a frequency-hopping system with composer George Antheil.","The frequency-hopping system was designed to keep radio-guided torpedoes from being jammed."], a:0, e:"Long-term significance means today’s technology; choice A connects the wartime invention to modern Bluetooth and Wi-Fi." },
+{ id:"eoi16", d:"eoi", t:3, p:"Researchers had assumed that deep-sea vent communities depended on sunlight-driven food chains near the surface. The discovery of bacteria that draw energy directly from chemicals in the vent water overturned that assumption. ______ it raised the possibility that life could exist on worlds with no sunlight at all.", q:TRANS,
+  c:["Moreover,","Nonetheless,","Instead,","For example,"], a:0, e:"The last sentence adds a second, larger consequence of the discovery, so an additive transition such as “Moreover” fits." },
+
+/* ---------------- Algebra ---------------- */
+{ id:"alg1", d:"alg", t:1, q:"If 3x + 7 = 22, what is the value of x?", c:["3","5","7","15"], a:1, e:"Subtract 7 from both sides to get 3x = 15, then divide by 3: x = 5." },
+{ id:"alg2", d:"alg", t:1, q:"What value of y satisfies the equation 4y − 9 = 19?", spr:true, a:7, e:"Add 9 to both sides: 4y = 28, so y = 7." },
+{ id:"alg3", d:"alg", t:1, q:"The function f is defined by f(x) = 6x − 4. What is the value of f(5)?", c:["7","26","30","34"], a:1, e:"Substitute 5 for x: 6(5) − 4 = 30 − 4 = 26." },
+{ id:"alg4", d:"alg", t:1, q:"Line k in the xy-plane has a slope of 2 and passes through the point (0, −3). Which equation represents line k?", c:["y = 2x − 3","y = −3x + 2","y = 2x + 3","y = 3x − 2"], a:0, e:"In y = mx + b, m is the slope (2) and b is the y-intercept (−3), giving y = 2x − 3." },
+{ id:"alg5", d:"alg", t:1, q:"A gym charges a one-time sign-up fee of $25 plus $15 per month. A member has paid a total of $160, including the sign-up fee. For how many months has the member paid?", spr:true, a:9, e:"Solve 25 + 15m = 160: 15m = 135, so m = 9." },
+{ id:"alg6", d:"alg", t:2, q:"2x + y = 11\nx − y = 1\n\nWhich ordered pair (x, y) is the solution to the system of equations above?", c:["(4, 3)","(3, 4)","(5, 1)","(2, 7)"], a:0, e:"Adding the equations eliminates y: 3x = 12, so x = 4. Then 4 − y = 1 gives y = 3." },
+{ id:"alg7", d:"alg", t:2, q:"If 5(x − 2) = 3x + 8, what is the value of x?", spr:true, a:9, e:"Distribute: 5x − 10 = 3x + 8. Then 2x = 18, so x = 9." },
+{ id:"alg8", d:"alg", t:2, q:"A line in the xy-plane passes through the points (2, 5) and (6, 13). Which of the following points also lies on the line?", c:["(0, 1)","(1, 2)","(4, 8)","(3, 6)"], a:0, e:"The slope is (13 − 5)/(6 − 2) = 2, so y = 2x + b; using (2, 5) gives b = 1. The point (0, 1) satisfies y = 2x + 1." },
+{ id:"alg9", d:"alg", t:2, q:"Which inequality has the same solution set as 3 − 2x > 11?", c:["x < −4","x > −4","x < 4","x > −7"], a:0, e:"Subtract 3: −2x > 8. Dividing by −2 reverses the inequality: x < −4." },
+{ id:"alg10", d:"alg", t:2, q:"A landscaper charges a flat fee of $40 plus $18 per hour of work. Which function gives the total charge C(h), in dollars, for h hours of work?", c:["C(h) = 18h + 40","C(h) = 40h + 18","C(h) = 58h","C(h) = 18(h + 40)"], a:0, e:"The hourly rate multiplies the hours (18h), and the flat fee is added once (+ 40)." },
+{ id:"alg11", d:"alg", t:2, q:"3x + 2y = 16\nx = 2y\n\nIf (x, y) is the solution to the system above, what is the value of x + y?", spr:true, a:6, e:"Substitute x = 2y: 6y + 2y = 16, so y = 2 and x = 4. Then x + y = 6." },
+{ id:"alg12", d:"alg", t:3, q:"2x − 3y = 7\nkx − 9y = 5\n\nIn the system above, k is a constant. For what value of k does the system have no solution?", c:["6","−6","3","2/3"], a:0, e:"No solution means the lines are parallel: the coefficients must be proportional. Since −9 is 3 times −3, k must be 3 times 2, or 6 (and 5 ≠ 3·7, so the lines are distinct)." },
+{ id:"alg13", d:"alg", t:3, q:"y = 4x − 7\ny = −2x + 11\n\nIf (a, b) is the solution to the system above, what is the value of a?", spr:true, a:3, e:"Set the expressions equal: 4x − 7 = −2x + 11, so 6x = 18 and x = 3." },
+{ id:"alg14", d:"alg", t:3, q:"The graph of y = mx + b in the xy-plane passes through the points (−2, 9) and (4, −3), where m and b are constants. What is the value of b?", c:["5","1","−2","7"], a:0, e:"Slope m = (−3 − 9)/(4 − (−2)) = −2. Then 9 = −2(−2) + b, so b = 5." },
+{ id:"alg15", d:"alg", t:3, q:"A store sells notebooks for $3 each and pens for $2 each. Malik bought 14 items from the store for a total of $36. How many notebooks did Malik buy?", spr:true, a:8, e:"With n notebooks and 14 − n pens: 3n + 2(14 − n) = 36, so n + 28 = 36 and n = 8." },
+{ id:"alg16", d:"alg", t:3, q:"The line with equation ax + by = 12, where a and b are constants, has an x-intercept of (3, 0) and a y-intercept of (0, −4). What is the value of a + b?", c:["1","7","−1","12"], a:0, e:"At (3, 0): 3a = 12, so a = 4. At (0, −4): −4b = 12, so b = −3. Then a + b = 1." },
+
+/* ---------------- Advanced Math ---------------- */
+{ id:"adv1", d:"adv", t:1, q:"Which expression is equivalent to (x + 3)(x − 5)?", c:["x² − 2x − 15","x² + 2x − 15","x² − 15","x² − 8x − 15"], a:0, e:"FOIL: x² − 5x + 3x − 15 = x² − 2x − 15." },
+{ id:"adv2", d:"adv", t:1, q:"If x² = 49 and x > 0, what is the value of x?", spr:true, a:7, e:"The positive square root of 49 is 7." },
+{ id:"adv3", d:"adv", t:1, q:"What are the solutions to the equation x² − 7x + 12 = 0?", c:["3 and 4","−3 and −4","2 and 6","−2 and −6"], a:0, e:"Factor: (x − 3)(x − 4) = 0, so x = 3 or x = 4." },
+{ id:"adv4", d:"adv", t:1, q:"The function g is defined by g(x) = 2ˣ. What is the value of g(5)?", c:["10","25","32","64"], a:2, e:"2⁵ = 2·2·2·2·2 = 32." },
+{ id:"adv5", d:"adv", t:1, q:"The graph of y = x² − 6x + 8 in the xy-plane crosses the y-axis at the point (0, c). What is the value of c?", spr:true, a:8, e:"On the y-axis, x = 0, so y = 0 − 0 + 8 = 8." },
+{ id:"adv6", d:"adv", t:2, q:"Which expression is equivalent to (3x²y³)²?", c:["9x⁴y⁶","6x⁴y⁶","9x⁴y⁵","3x⁴y⁶"], a:0, e:"Square each factor: 3² = 9, (x²)² = x⁴, and (y³)² = y⁶." },
+{ id:"adv7", d:"adv", t:2, q:"The function f is defined by f(x) = x² − 4x + 1. For what value of x does f reach its minimum value?", spr:true, a:2, e:"The vertex of ax² + bx + c is at x = −b/(2a) = 4/2 = 2." },
+{ id:"adv8", d:"adv", t:2, q:"A bacteria population doubles every 3 hours. There are 500 bacteria at the start. Which function gives the population P(t) after t hours?", c:["P(t) = 500(2)^(t/3)","P(t) = 500(2)^(3t)","P(t) = 500 + 2t/3","P(t) = 500(3)^(t/2)"], a:0, e:"Doubling every 3 hours means the exponent counts 3-hour periods: t/3. So P(t) = 500·2^(t/3)." },
+{ id:"adv9", d:"adv", t:2, q:"What is the sum of the solutions to the equation x² + 5x − 24 = 0?", c:["−5","5","−24","11"], a:0, e:"Factor: (x + 8)(x − 3) = 0, so the solutions are −8 and 3, whose sum is −5. (For x² + bx + c, the sum is always −b.)" },
+{ id:"adv10", d:"adv", t:2, q:"If √(x + 7) = 5, what is the value of x?", spr:true, a:18, e:"Square both sides: x + 7 = 25, so x = 18." },
+{ id:"adv11", d:"adv", t:2, q:"For x ≠ −3, which expression is equivalent to (x² − 9)/(x + 3)?", c:["x − 3","x + 3","x − 9","x² − 3"], a:0, e:"x² − 9 factors as (x + 3)(x − 3); the (x + 3) factors cancel, leaving x − 3." },
+{ id:"adv12", d:"adv", t:3, q:"The equation x² + bx + 16 = 0, where b is a positive constant, has exactly one real solution. What is the value of b?", c:["8","4","16","32"], a:0, e:"Exactly one real solution means the discriminant is zero: b² − 4(1)(16) = 0, so b² = 64 and b = 8." },
+{ id:"adv13", d:"adv", t:3, q:"The function h is defined by h(x) = ax² + 12x + c, where a and c are constants. In the xy-plane, the graph of y = h(x) has its vertex at (−2, 3). What is the value of c?", spr:true, a:15, e:"The vertex x-coordinate is −12/(2a) = −2, so a = 3. Then h(−2) = 3(4) − 24 + c = 3, giving c = 15." },
+{ id:"adv14", d:"adv", t:3, q:"For x ≠ −4, which expression is equivalent to (2x − 1)/(x + 4)?", c:["2 − 9/(x + 4)","2 + 7/(x + 4)","2 − 1/(x + 4)","2x − 1/4"], a:0, e:"Rewrite the numerator: 2x − 1 = 2(x + 4) − 9. Dividing by (x + 4) gives 2 − 9/(x + 4)." },
+{ id:"adv15", d:"adv", t:3, q:"The function f is defined by f(x) = (x − 4)(x + 2). What is the minimum value of f?", c:["−9","−8","−6","1"], a:0, e:"The zeros are 4 and −2, so the vertex is at their midpoint, x = 1. f(1) = (−3)(3) = −9." },
+{ id:"adv16", d:"adv", t:3, q:"In the xy-plane, the line y = 2x + k intersects the parabola y = x² at exactly one point. What is the value of k?", spr:true, a:-1, e:"Set x² = 2x + k, or x² − 2x − k = 0. One intersection means the discriminant is zero: 4 + 4k = 0, so k = −1." },
+
+/* ---------------- Problem-Solving & Data Analysis ---------------- */
+{ id:"psd1", d:"psd", t:1, q:"A recipe uses 3 cups of flour for every 2 cups of sugar. How many cups of flour are needed for 8 cups of sugar?", c:["12","10","16","5"], a:0, e:"8 cups of sugar is 4 times 2 cups, so multiply the flour by 4: 3 × 4 = 12." },
+{ id:"psd2", d:"psd", t:1, q:"What is 15% of 260?", spr:true, a:39, e:"0.15 × 260 = 39." },
+{ id:"psd3", d:"psd", t:1, q:"What is the mean of the data set 4, 7, 7, 9, 13?", c:["7","8","9","40"], a:1, e:"The sum is 40 and there are 5 values, so the mean is 40 ÷ 5 = 8." },
+{ id:"psd4", d:"psd", t:1, q:"A car travels 210 miles using 6 gallons of gasoline. At this rate, how many miles does the car travel per gallon?", spr:true, a:35, e:"210 ÷ 6 = 35 miles per gallon." },
+{ id:"psd5", d:"psd", t:1, q:"A bag contains 5 red, 3 blue, and 2 green marbles. If one marble is selected at random, what is the probability that it is blue?", c:["3/10","3/7","1/3","3/5"], a:0, e:"There are 10 marbles in total and 3 are blue, so the probability is 3/10." },
+{ id:"psd6", d:"psd", t:2, q:"A jacket with an original price of $80 is on sale for 25% off. A 5% sales tax is then applied to the sale price. What is the total cost of the jacket?", c:["$63.00","$64.00","$60.00","$66.00"], a:0, e:"The sale price is 80 × 0.75 = $60, and with tax it is 60 × 1.05 = $63." },
+{ id:"psd7", d:"psd", t:2, q:"What is the median of the data set 12, 5, 9, 20, 7, 15?", spr:true, a:10.5, e:"Order the values: 5, 7, 9, 12, 15, 20. With six values the median is the mean of the middle two: (9 + 12)/2 = 10.5." },
+{ id:"psd8", d:"psd", t:2, table:{cap:"Survey of 120 Students", head:["","Plays an instrument","Does not play","Total"], rows:[["Grade 9","28","32","60"],["Grade 10","36","24","60"],["Total","64","56","120"]]}, q:"If a grade 10 student from the survey is selected at random, what is the probability that the student plays an instrument?", c:["3/5","3/10","9/16","8/15"], a:0, e:"Restrict to grade 10: 36 of the 60 grade 10 students play, and 36/60 = 3/5." },
+{ id:"psd9", d:"psd", t:2, q:"A town’s population grew from 8,000 to 10,000 over five years. By what percent did the population increase?", c:["25%","20%","2%","5%"], a:0, e:"The increase is 2,000, and 2,000/8,000 = 0.25 = 25%. (Dividing by the new value, 10,000, would incorrectly give 20%.)" },
+{ id:"psd10", d:"psd", t:2, q:"A runner’s pace is 8 minutes per mile. At this pace, how many miles will the runner cover in 1 hour?", spr:true, a:7.5, e:"60 minutes ÷ 8 minutes per mile = 7.5 miles." },
+{ id:"psd11", d:"psd", t:2, q:"A line of best fit for a scatterplot of a plant’s height y, in centimeters, versus x, the number of days since planting, is y = 0.8x + 3. Which of the following is the best interpretation of the slope of the line?", c:["The plant’s height increases by about 0.8 centimeter per day.","The plant was about 0.8 centimeter tall when planted.","The plant’s height increases by about 3 centimeters per day.","The plant reaches 0.8 centimeter after 3 days."], a:0, e:"The slope is the change in y per one-unit change in x: about 0.8 cm of height per day. The 3 is the starting height." },
+{ id:"psd12", d:"psd", t:3, q:"The mean of five numbers is 18. When a sixth number is added to the set, the mean of the six numbers is 20. What is the sixth number?", c:["30","20","22","28"], a:0, e:"The five numbers sum to 5 × 18 = 90; the six numbers sum to 6 × 20 = 120. The sixth number is 120 − 90 = 30." },
+{ id:"psd13", d:"psd", t:3, q:"A 40-liter solution is 15% acid. How many liters of pure acid must be added so that the resulting solution is 32% acid?", spr:true, a:10, e:"The solution has 6 liters of acid. Solve (6 + a)/(40 + a) = 0.32: 6 + a = 12.8 + 0.32a, so 0.68a = 6.8 and a = 10." },
+{ id:"psd14", d:"psd", t:3, q:"Data set A: 10, 12, 14, 16, 18\nData set B: 2, 8, 14, 20, 26\n\nWhich statement about the two data sets is true?", c:["The means are equal, and the standard deviation of set B is greater than that of set A.","The means are equal, and the standard deviation of set A is greater than that of set B.","The mean of set A is greater than the mean of set B.","The standard deviations of the two sets are equal."], a:0, e:"Both sets have mean 14, but set B’s values are spread farther from 14, so its standard deviation is larger." },
+{ id:"psd15", d:"psd", t:3, q:"The ratio of adults to children at a picnic was 3 to 5. After 12 more adults arrived, the ratio of adults to children was 1 to 1. How many children were at the picnic?", spr:true, a:30, e:"Let the counts be 3k adults and 5k children. Then 3k + 12 = 5k, so k = 6 and there were 5(6) = 30 children." },
+{ id:"psd16", d:"psd", t:3, q:"A researcher randomly selected 300 registered voters in a city and found that 54% of them support a park bond, with a margin of error of 4 percentage points. Which conclusion is most appropriate?", c:["It is plausible that between 50% and 58% of the city’s registered voters support the bond.","Exactly 54% of the city’s registered voters support the bond.","The bond will pass with 54% of the vote.","Between 50% and 58% of all residents of the city support the bond."], a:0, e:"The margin of error gives a plausible range (54 ± 4) for the population that was sampled: registered voters, not all residents." },
+
+/* ---------------- Geometry & Trigonometry ---------------- */
+{ id:"geo1", d:"geo", t:1, q:"A rectangle has a length of 12 and a width of 5. What is the perimeter of the rectangle?", c:["34","60","17","24"], a:0, e:"Perimeter = 2(12) + 2(5) = 24 + 10 = 34. (60 is the area.)" },
+{ id:"geo2", d:"geo", t:1, q:"A right triangle has legs of length 6 and 8. What is the length of the hypotenuse?", spr:true, a:10, e:"By the Pythagorean theorem, 6² + 8² = 36 + 64 = 100, and √100 = 10." },
+{ id:"geo3", d:"geo", t:1, q:"Two angles of a triangle measure 35° and 65°. What is the measure of the third angle?", c:["80°","100°","90°","70°"], a:0, e:"The angles of a triangle sum to 180°: 180 − 35 − 65 = 80." },
+{ id:"geo4", d:"geo", t:1, q:"The area of a circle with radius 3 is kπ. What is the value of k?", spr:true, a:9, e:"Area = πr² = π(3²) = 9π, so k = 9." },
+{ id:"geo5", d:"geo", t:1, q:"Two parallel lines are cut by a transversal. One of the angles formed measures 112°. What is the measure of its corresponding angle?", c:["112°","68°","78°","22°"], a:0, e:"Corresponding angles formed by parallel lines and a transversal are congruent, so the angle also measures 112°." },
+{ id:"geo6", d:"geo", t:2, q:"A right circular cylinder has a radius of 4 and a height of 10. What is the volume of the cylinder?", c:["160π","80π","40π","400π"], a:0, e:"Volume = πr²h = π(16)(10) = 160π." },
+{ id:"geo7", d:"geo", t:2, q:"In right triangle ABC, angle C is the right angle, AC = 5, and BC = 12. What is the value of sin A?", spr:true, a:[12/13], e:"AB = √(5² + 12²) = 13. sin A = opposite/hypotenuse = BC/AB = 12/13 (about 0.923)." , hint:"Enter a fraction like 12/13 or a decimal." },
+{ id:"geo8", d:"geo", t:2, q:"A circle in the xy-plane has the equation (x − 3)² + (y + 2)² = 25. What are the center and radius of the circle?", c:["Center (3, −2), radius 5","Center (−3, 2), radius 5","Center (3, −2), radius 25","Center (−3, 2), radius 25"], a:0, e:"The form (x − h)² + (y − k)² = r² gives center (h, k) = (3, −2) and r = √25 = 5." },
+{ id:"geo9", d:"geo", t:2, q:"Triangle PQR is similar to triangle XYZ, with P, Q, and R corresponding to X, Y, and Z. If PQ = 6, XY = 9, and QR = 8, what is the length of YZ?", spr:true, a:12, e:"The scale factor from PQR to XYZ is 9/6 = 1.5, so YZ = 8 × 1.5 = 12." },
+{ id:"geo10", d:"geo", t:2, q:"A square has a diagonal of length 10. What is the area of the square?", c:["50","100","25","20"], a:0, e:"If the side is s, then s² + s² = 10², so 2s² = 100 and the area s² = 50." },
+{ id:"geo11", d:"geo", t:2, q:"An angle measures 3π/4 radians. What is the measure of the angle in degrees?", c:["135°","45°","270°","120°"], a:0, e:"Multiply by 180/π: (3π/4)(180/π) = 135°." },
+{ id:"geo12", d:"geo", t:3, q:"A circle has a radius of 12. A central angle of 60° intercepts an arc of length kπ. What is the value of k?", spr:true, a:4, e:"The arc is 60/360 = 1/6 of the circumference: (1/6)(2π·12) = 4π, so k = 4." },
+{ id:"geo13", d:"geo", t:3, q:"A sphere has a volume of 36π cubic units. What is the surface area of the sphere, in square units?", c:["36π","12π","27π","9π"], a:0, e:"(4/3)πr³ = 36π gives r³ = 27, so r = 3. Surface area = 4πr² = 4π(9) = 36π." },
+{ id:"geo14", d:"geo", t:3, q:"In triangle ABC, angle B is a right angle, AB = 8, and cos A = 8/17. What is the length of BC?", spr:true, a:15, e:"cos A = adjacent/hypotenuse = AB/AC, so AC = 17. Then BC = √(17² − 8²) = √225 = 15." },
+{ id:"geo15", d:"geo", t:3, q:"A regular hexagon has a side length of 6. What is the area of the hexagon?", c:["54√3","36√3","108","27√3"], a:0, e:"A regular hexagon is six equilateral triangles. Each has area (√3/4)(6²) = 9√3, so the total is 54√3." },
+{ id:"geo16", d:"geo", t:3, q:"Two similar triangles have areas of 20 and 45. If a side of the smaller triangle has length 4, what is the length of the corresponding side of the larger triangle?", spr:true, a:6, e:"The ratio of areas is 45/20 = 9/4, so the ratio of sides is √(9/4) = 3/2. The corresponding side is 4 × 3/2 = 6." },
+];
+
+/* ================================================================
+   Utilities
+   ================================================================ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const byId = (id) => document.getElementById(id);
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const lerp = (a, b, t) => a + (b - a) * t;
+const rnd = (a = 1, b) => (b === undefined ? Math.random() * a : a + Math.random() * (b - a));
+const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const nl = (s) => esc(s).replace(/\n/g, "<br>");
+function fmt(n) {
+  if (!isFinite(n)) return "∞";
+  const neg = n < 0; n = Math.abs(n);
+  let out;
+  if (n < 1000) out = n < 10 && n % 1 ? n.toFixed(1) : String(Math.floor(n));
+  else {
+    const u = ["K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp"]; let i = -1; let v = n;
+    while (v >= 1000 && i < u.length - 1) { v /= 1000; i++; }
+    out = v.toFixed(v < 10 ? 2 : v < 100 ? 1 : 0) + u[i];
+  }
+  return (neg ? "-" : "") + out;
+}
+const fmtRate = (n) => (n < 10 ? n.toFixed(1) : fmt(n));
+function fmtDur(s) {
+  s = Math.max(0, Math.floor(s));
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  if (h > 0) return `${h}h ${m}m`; if (m > 0) return `${m}m ${sec}s`; return `${sec}s`;
+}
+const fmtClock = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+function dayKey(d = new Date()) { return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; }
+function daysBetween(k1, k2) {
+  const p = (k) => { const [y, m, d] = k.split("-").map(Number); return Date.UTC(y, m - 1, d); };
+  return Math.round((p(k2) - p(k1)) / 86400000);
+}
+function weighted(weights) {
+  let t = 0; for (const w of weights) t += w;
+  let r = Math.random() * t;
+  for (let i = 0; i < weights.length; i++) { r -= weights[i]; if (r <= 0) return i; }
+  return weights.length - 1;
+}
+const BANK_BY_ID = Object.fromEntries(BANK.map((q) => [q.id, q]));
+
+/* ================================================================
+   Configuration
+   ================================================================ */
+const SAVE_KEY = "orbit1520.save.v1";
+const TIER_MULT = [1, 1.6, 2.5];
+const TIER_DIFF = [0.25, 0.55, 0.85];
+const TIER_NAME = ["Easy", "Medium", "Hard"];
+const PAR = { rw: 75, m: 70 };
+const SESSION_LEN = 10;
+const OFFLINE_BASE = 8 * 3600;
+const PUBLISH_REQ = 25000;
+const BUILD = {
+  sat:    { name: "Satellite",      base: 120,  growth: 1.17, max: 400, prod: 1.5, desc: "A relay satellite in low orbit. +1.5 Data/s each.", icon: "◇" },
+  solar:  { name: "Solar Array",    base: 500,  growth: 1.4,  max: 30,  desc: "Panels on the core. +15% to all production each.", icon: "▤" },
+  ring:   { name: "Relay Ring",     base: 3000, growth: 2.6,  max: 6,   desc: "A full orbital ring around the planet. ×1.5 all production.", icon: "◎" },
+  uplink: { name: "Uplink Antenna", base: 1500, growth: 2.2,  max: 8,   desc: "+2 hours to the offline earnings cap.", icon: "⌖" },
+};
+const RESEARCH = [
+  { id: "hint",    name: "Study Guide",      cost: 300,   desc: "Unlock “Eliminate one”: remove a wrong choice for a 30% smaller reward. Kept through Publish." },
+  { id: "lab1",    name: "Lab Notes I",      cost: 600,   desc: "+50% Data from correct answers." },
+  { id: "dilate",  name: "Time Dilation",    cost: 900,   desc: "The speed-bonus window is 50% longer." },
+  { id: "stream",  name: "Knowledge Stream", cost: 1500,  desc: "Each correct answer charges the stream: ×2 production for 30 s (stacks to 5 min)." },
+  { id: "wind",    name: "Second Wind",      cost: 2500,  desc: "At most once every 5 questions, a wrong answer does not break your combo." },
+  { id: "crew",    name: "Crew Quarters",    cost: 4000,  desc: "+8% production per day of your daily streak (up to +80%)." },
+  { id: "lab2",    name: "Lab Notes II",     cost: 6000,  req: "lab1", desc: "Another +50% Data from correct answers." },
+  { id: "scan",    name: "Deep Scan",        cost: 12000, desc: "Reviews of missed questions pay full mastery and Data." },
+  { id: "reactor", name: "Fusion Reactor",   cost: 40000, desc: "×2 all production." },
+  { id: "lab3",    name: "Lab Notes III",    cost: 60000, req: "lab2", desc: "+100% Data from correct answers." },
+];
+const PERKS = [
+  { id: "head",      name: "Head Start",   cost: 1, desc: "Begin each new run with 500 Data and 2 satellites." },
+  { id: "archive",   name: "Deep Archive", cost: 2, desc: "+6 hours to the offline earnings cap." },
+  { id: "momentum",  name: "Momentum",     cost: 2, desc: "Your combo never drops below 3." },
+  { id: "telemetry", name: "Telemetry",    cost: 3, desc: "×1.5 all production." },
+  { id: "insight",   name: "Insight",      cost: 4, desc: "+50% Data from correct answers." },
+];
+const ACH = [
+  { id: "first",   name: "First Light",     desc: "Answer a question correctly",        test: (s) => s.stats.correct >= 1 },
+  { id: "c25",     name: "Warming Up",      desc: "25 correct answers",                 test: (s) => s.stats.correct >= 25 },
+  { id: "c100",    name: "Scholar",         desc: "100 correct answers",                test: (s) => s.stats.correct >= 100 },
+  { id: "c500",    name: "Grinder",         desc: "500 correct answers",                test: (s) => s.stats.correct >= 500 },
+  { id: "hard1",   name: "Heavy Lifting",   desc: "Answer a hard question correctly",   test: (s) => s.stats.hard >= 1 },
+  { id: "combo5",  name: "On a Roll",       desc: "Reach a 5 combo",                    test: (s) => s.bestCombo >= 5 },
+  { id: "combo10", name: "Unstoppable",     desc: "Reach a 10 combo",                   test: (s) => s.bestCombo >= 10 },
+  { id: "combo20", name: "Perfect Orbit",   desc: "Reach a 20 combo",                   test: (s) => s.bestCombo >= 20 },
+  { id: "s800",    name: "Liftoff",         desc: "Estimated score 800",                test: () => score().total >= 800 },
+  { id: "s1000",   name: "Low Orbit",       desc: "Estimated score 1000",               test: () => score().total >= 1000 },
+  { id: "s1200",   name: "Escape Velocity", desc: "Estimated score 1200",               test: () => score().total >= 1200 },
+  { id: "s1400",   name: "Deep Space",      desc: "Estimated score 1400",               test: () => score().total >= 1400 },
+  { id: "s1520",   name: "ORBIT 1520",      desc: "Reach a perfect 1520",               test: () => score().total >= 1520 },
+  { id: "sat1",    name: "First Launch",    desc: "Launch a satellite",                 test: (s) => s.b.sat >= 1 },
+  { id: "sat25",   name: "Constellation",   desc: "Own 25 satellites",                  test: (s) => s.b.sat >= 25 },
+  { id: "ring1",   name: "Ringworld",       desc: "Build a relay ring",                 test: (s) => s.b.ring >= 1 },
+  { id: "half",    name: "Balanced Load",   desc: "Every domain at 50% mastery",        test: (s) => DOMAINS.every((d) => s.dom[d.id].r >= 0.5) },
+  { id: "pub1",    name: "Published",       desc: "Publish research once",              test: (s) => s.stats.publishes >= 1 },
+  { id: "streak7", name: "Seven Days",      desc: "A 7-day study streak",               test: (s) => s.streak.days >= 7 },
+  { id: "rev10",   name: "Second Look",     desc: "Clear 10 review questions",          test: (s) => s.stats.reviews >= 10 },
+  { id: "data1m",  name: "Data Hoarder",    desc: "Earn 1M Data in total",              test: (s) => s.totalEarned >= 1e6 },
+  { id: "mis10",   name: "Mission Control", desc: "Complete 10 missions",               test: (s) => s.missionsDone >= 10 },
+];
+
+/* ================================================================
+   State
+   ================================================================ */
+function defaultState() {
+  const dom = {};
+  for (const d of DOMAINS) dom[d.id] = { r: 0, n: 0, c: 0, lvl: 0, tiers: [[0, 0], [0, 0], [0, 0]] };
+  return {
+    v: 1, created: Date.now(), lastSave: Date.now(), lastTick: Date.now(),
+    data: 0, runEarned: 0, totalEarned: 0, stars: 0, starsSpent: 0,
+    dom, q: {}, review: [],
+    b: { sat: 0, solar: 0, ring: 0, uplink: 0 },
+    res: {}, perks: {},
+    combo: 0, bestCombo: 0, windAt: -99,
+    stats: { answered: 0, correct: 0, hard: 0, publishes: 0, played: 0, reviews: 0, buys: 0, sessions: 0 },
+    streak: { days: 1, last: dayKey() },
+    missions: [], missionsDone: 0,
+    ach: {}, boostUntil: 0,
+    settings: { muted: false, low: false, labels: true, fx: true },
+    welcomed: false, focus: "mix",
+  };
+}
+let S = defaultState();
+function mergeState(base, saved) {
+  for (const k in saved) {
+    if (saved[k] && typeof saved[k] === "object" && !Array.isArray(saved[k]) && base[k] && typeof base[k] === "object" && !Array.isArray(base[k])) mergeState(base[k], saved[k]);
+    else base[k] = saved[k];
+  }
+  return base;
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (!saved || typeof saved !== "object" || !saved.dom) return false;
+    S = mergeState(defaultState(), saved);
+    for (const d of DOMAINS) if (!S.dom[d.id]) S.dom[d.id] = defaultState().dom[d.id];
+    return true;
+  } catch (e) { console.warn("Load failed", e); return false; }
+}
+function save() {
+  if (window.__resetting) return false; // a hard reset is in progress: never write the old state back
+  try { S.lastSave = Date.now(); localStorage.setItem(SAVE_KEY, JSON.stringify(S)); return true; } catch (e) { return false; }
+}
+function exportSave() { save(); return btoa(unescape(encodeURIComponent(JSON.stringify(S)))); }
+function importSave(str) {
+  try {
+    const obj = JSON.parse(decodeURIComponent(escape(atob(str.trim()))));
+    if (!obj || typeof obj !== "object" || !obj.dom || !obj.stats) throw new Error("bad");
+    localStorage.setItem(SAVE_KEY, JSON.stringify(obj));
+    return true;
+  } catch (e) { return false; }
+}
+
+/* ================================================================
+   Economy
+   ================================================================ */
+const starMult = () => 1 + 0.1 * S.stars;
+const streakMult = () => (S.res.crew ? 1 + 0.08 * Math.min(10, S.streak.days) : 1);
+const boosted = () => Date.now() < S.boostUntil;
+const modProd = (id) => { const d = S.dom[id]; return d.lvl * 0.25 * (1 + 4 * d.r); };
+function prodMult(withBoost = true) {
+  let m = (1 + 0.15 * S.b.solar) * Math.pow(1.5, S.b.ring) * starMult() * streakMult();
+  if (S.res.reactor) m *= 2; if (S.perks.telemetry) m *= 1.5; if (withBoost && boosted()) m *= 2;
+  return m;
+}
+function baseProd() { let p = 0; for (const d of DOMAINS) p += modProd(d.id); return p + S.b.sat * BUILD.sat.prod; }
+const production = (withBoost = true) => baseProd() * prodMult(withBoost);
+function answerMult() {
+  let m = starMult(); if (S.res.lab1) m *= 1.5; if (S.res.lab2) m *= 1.5; if (S.res.lab3) m *= 2; if (S.perks.insight) m *= 1.5; return m;
+}
+const comboMult = () => 1 + 0.1 * Math.min(S.combo, 20);
+const offlineCap = () => OFFLINE_BASE + S.b.uplink * 7200 + (S.perks.archive ? 21600 : 0);
+const cost = (kind, n) => Math.ceil(BUILD[kind].base * Math.pow(BUILD[kind].growth, n));
+const modCost = (id) => Math.ceil(15 * Math.pow(1.15, S.dom[id].lvl));
+function bulkCost(base, g, lvl, n) { return Math.ceil(base * Math.pow(g, lvl) * (Math.pow(g, n) - 1) / (g - 1)); }
+function maxAffordable(base, g, lvl, data, cap) {
+  const first = base * Math.pow(g, lvl);
+  if (data < first) return 0;
+  const n = Math.floor(Math.log(data * (g - 1) / first + 1) / Math.log(g));
+  return Math.max(0, Math.min(cap, n));
+}
+function earn(amount, src) {
+  if (!(amount > 0)) return;
+  S.data += amount; S.runEarned += amount; S.totalEarned += amount;
+  if (src !== "offline") mission("earn", amount);
+}
+function score() {
+  const avg = (sec) => { const ds = DOMAINS.filter((d) => d.sec === sec); return ds.reduce((a, d) => a + S.dom[d.id].r, 0) / ds.length; };
+  const rw = 160 + Math.round(avg("rw") * 60) * 10, m = 160 + Math.round(avg("m") * 60) * 10;
+  return { rw, m, total: rw + m };
+}
+function tickEconomy() {
+  const now = Date.now();
+  let dt = (now - S.lastTick) / 1000;
+  S.lastTick = now;
+  if (dt <= 0) return;
+  if (dt > 5) dt = Math.min(dt, offlineCap()); // long gaps (hidden tab) are capped like offline time
+  earn(production() * dt, "tick");
+  S.stats.played += Math.min(dt, 5);
+}
+
+/* ================================================================
+   Audio (generated, no files)
+   ================================================================ */
+const AU = {
+  ctx: null, master: null,
+  init() {
+    if (this.ctx) { if (this.ctx.state === "suspended") this.ctx.resume(); return; }
+    try {
+      const C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+      this.ctx = new C(); this.master = this.ctx.createGain(); this.master.gain.value = S.settings.muted ? 0 : 0.5; this.master.connect(this.ctx.destination);
+    } catch (e) { /* no audio */ }
+  },
+  setMuted(m) { if (this.master) this.master.gain.setTargetAtTime(m ? 0 : 0.5, this.ctx.currentTime, 0.02); },
+  tone(f, dur = 0.3, type = "sine", vol = 0.25, when = 0, slide = null) {
+    if (!this.ctx || S.settings.muted) return;
+    const t = this.ctx.currentTime + when, o = this.ctx.createOscillator(), g = this.ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t); if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t + dur + 0.02);
+  },
+  noise(dur = 0.35, f1 = 300, f2 = 2400, vol = 0.18, when = 0) {
+    if (!this.ctx || S.settings.muted) return;
+    const t = this.ctx.currentTime + when, n = Math.floor(this.ctx.sampleRate * dur), buf = this.ctx.createBuffer(1, n, this.ctx.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+    const src = this.ctx.createBufferSource(); src.buffer = buf;
+    const bp = this.ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.2; bp.frequency.setValueAtTime(f1, t); bp.frequency.exponentialRampToValueAtTime(f2, t + dur);
+    const g = this.ctx.createGain(); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(bp); bp.connect(g); g.connect(this.master); src.start(t);
+  },
+  correct(combo) {
+    const step = Math.min(combo, 12); const base = 523.25 * Math.pow(2, step / 12);
+    this.tone(base, 0.28, "sine", 0.22); this.tone(base * 1.5, 0.34, "sine", 0.16, 0.06); this.tone(base * 2, 0.4, "triangle", 0.08, 0.12);
+  },
+  wrong() { this.tone(180, 0.32, "sawtooth", 0.12, 0, 110); this.tone(120, 0.3, "square", 0.05, 0.02, 80); },
+  whoosh() { this.noise(0.4, 250, 2600, 0.16); },
+  buy() { this.noise(0.18, 800, 3000, 0.08); this.tone(880, 0.12, "triangle", 0.1, 0.02); this.tone(1320, 0.18, "triangle", 0.09, 0.09); },
+  chime() { [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => this.tone(f, 0.5, "sine", 0.14, i * 0.09)); },
+  milestone() { this.noise(0.5, 200, 3500, 0.2); [659.25, 783.99, 987.77, 1318.5].forEach((f, i) => this.tone(f, 0.55, "triangle", 0.14, i * 0.07)); },
+  publish() { this.noise(1.2, 120, 4000, 0.22); [392, 523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => this.tone(f, 0.9, "sine", 0.14, i * 0.12)); },
+};
+
+/* ================================================================
+   Questions, mastery, sessions
+   ================================================================ */
+let cur = null;                       // current question {q, review, start, done, hinted, gone}
+let session = { n: 0, c: 0, earned: 0, results: [], snap: null, recent: [] };
+const qstat = (id) => S.q[id] || { n: 0, c: 0, last: 0 };
+const dueReview = (dom) => S.review.find((r) => r.due <= S.stats.answered && (!dom || r.d === dom));
+function pickDomain() {
+  if (S.focus !== "mix" && DOM[S.focus]) return S.focus;
+  const w = DOMAINS.map((d) => {
+    let x = 1.25 - S.dom[d.id].r;
+    if (dueReview(d.id)) x *= 1.6;
+    if (session.recent.includes(d.id)) x *= 0.3;
+    return Math.max(0.05, x);
+  });
+  return DOMAINS[weighted(w)].id;
+}
+function pickTier(r, n) {
+  if (n < 3) return 1; // the first questions in a domain are always easy
+  const w = r < 0.3 ? [0.65, 0.3, 0.05] : r < 0.55 ? [0.3, 0.5, 0.2] : r < 0.75 ? [0.12, 0.43, 0.45] : [0.06, 0.3, 0.64];
+  return weighted(w) + 1;
+}
+function pickQuestion() {
+  const dom = pickDomain();
+  const rev = dueReview(dom);
+  if (rev && BANK_BY_ID[rev.id] && (!cur || cur.q.id !== rev.id)) return { q: BANK_BY_ID[rev.id], review: true };
+  const tier = pickTier(S.dom[dom].r, S.dom[dom].n);
+  let pool = BANK.filter((q) => q.d === dom && q.t === tier && !(cur && cur.q.id === q.id));
+  if (!pool.length) pool = BANK.filter((q) => q.d === dom);
+  pool.sort((a, b) => qstat(a.id).n - qstat(b.id).n || qstat(a.id).last - qstat(b.id).last);
+  const minSeen = qstat(pool[0].id).n;
+  const cands = pool.filter((q) => qstat(q.id).n === minSeen);
+  return { q: pick(cands), review: false };
+}
+function nextQuestion() {
+  const p = pickQuestion();
+  cur = { q: p.q, review: p.review, start: performance.now(), done: false, hinted: false, gone: -1, correct: null, chosen: null };
+  session.recent.push(p.q.d); if (session.recent.length > 2) session.recent.shift();
+}
+function parseNum(s) {
+  s = String(s).trim().replace(/\s+/g, "").replace(/[−–]/g, "-").replace(/,/g, "");
+  if (!s) return null;
+  let m = s.match(/^(-?)(\d+)\/(\d+)$/);
+  if (m) { const den = +m[3]; if (!den) return null; return (m[1] ? -1 : 1) * (+m[2] / den); }
+  if (/^-?(\d+\.?\d*|\.\d+)$/.test(s)) return parseFloat(s);
+  return null;
+}
+function sprMatch(q, val) {
+  const answers = Array.isArray(q.a) ? q.a : [q.a];
+  return answers.some((a) => Math.abs(val - a) <= 0.00051 + Math.abs(a) * 0.0006);
+}
+function answerCurrent(choiceIdx, sprVal) {
+  if (!cur || cur.done) return;
+  const q = cur.q, d = S.dom[q.d];
+  const correct = q.spr ? sprMatch(q, sprVal) : choiceIdx === q.a;
+  const elapsed = (performance.now() - cur.start) / 1000;
+  const st = qstat(q.id); const repeat = st.n > 0;
+  const fullReview = cur.review && S.res.scan;
+  // mastery (Elo-style update on a 0..1 scale)
+  const diff = TIER_DIFF[q.t - 1];
+  const p = 1 / (1 + Math.exp(-(d.r - diff) * 6));
+  const K = Math.max(0.04, 0.14 / (1 + d.n / 12));
+  let gain = correct ? K * (1 - p) : -K * p * 0.9;
+  if (correct && repeat && !fullReview) gain *= 0.6;
+  if (correct && cur.hinted) gain *= 0.7;
+  const before = d.r; d.r = clamp(d.r + gain, 0, 1);
+  d.n++; d.tiers[q.t - 1][0]++; if (correct) { d.c++; d.tiers[q.t - 1][1]++; }
+  S.q[q.id] = { n: st.n + 1, c: st.c + (correct ? 1 : 0), last: S.stats.answered + 1 };
+  S.stats.answered++;
+  const par = PAR[DOM[q.d].sec] * (S.res.dilate ? 0.75 : 0.5);
+  const fast = elapsed <= par;
+  let reward = 0, parts = [];
+  if (correct) {
+    S.stats.correct++; if (q.t === 3) S.stats.hard++;
+    S.combo++; if (S.combo > S.bestCombo) S.bestCombo = S.combo;
+    let base = 10 * TIER_MULT[q.t - 1];
+    parts.push(`${TIER_NAME[q.t - 1]} ×${TIER_MULT[q.t - 1]}`);
+    base *= comboMult(); if (S.combo > 1) parts.push(`Combo ×${comboMult().toFixed(1)}`);
+    const am = answerMult(); base *= am; if (am > 1) parts.push(`Research ×${am.toFixed(1)}`);
+    if (repeat && !fullReview) { base *= 0.6; parts.push("Seen before ×0.6"); }
+    if (cur.hinted) { base *= 0.7; parts.push("Hint ×0.7"); }
+    if (fast) { base *= 1.25; parts.push("Quick ×1.25"); }
+    const stream = production(false) * 20;
+    reward = base + stream;
+    if (stream > 0) parts.push(`+${fmt(stream)} stream (20 s of production)`);
+    earn(reward, "answer");
+    session.earned += reward;
+    if (S.res.stream) S.boostUntil = Math.min(Math.max(Date.now(), S.boostUntil) + 30000, Date.now() + 300000);
+    if (cur.review) { S.review = S.review.filter((r) => r.id !== q.id); S.stats.reviews++; mission("review", 1); }
+    mission("correct", { dom: q.d, tier: q.t });
+    mission("combo", S.combo);
+    AU.correct(S.combo);
+    if (S.combo >= 5 && S.combo % 5 === 0) milestone(S.combo);
+  } else {
+    if (S.res.wind && S.stats.answered - S.windAt >= 5 && S.combo > 0) { S.windAt = S.stats.answered; cur.wind = true; }
+    else S.combo = S.perks.momentum ? Math.min(S.combo, 3) : 0;
+    const existing = S.review.find((r) => r.id === q.id);
+    if (existing) existing.due = S.stats.answered + 6; else S.review.push({ id: q.id, d: q.d, due: S.stats.answered + 4 });
+    AU.wrong();
+  }
+  cur.done = true; cur.correct = correct; cur.chosen = choiceIdx; cur.reward = reward; cur.parts = parts; cur.delta = d.r - before; cur.elapsed = elapsed;
+  session.n++; if (correct) session.c++; session.results.push(correct);
+  scene3d && scene3d.onAnswer(q.d, correct, reward);
+  checkAchievements();
+  save();
+}
+function milestone(c) {
+  if (S.settings.fx) { document.body.classList.remove("shake"); void document.body.offsetWidth; document.body.classList.add("shake"); const f = byId("flash"); f.classList.remove("go"); void f.offsetWidth; f.classList.add("go"); }
+  scene3d && scene3d.shake(0.35 + Math.min(c, 30) / 60);
+  popText(`COMBO ×${c}!`, "big");
+  AU.milestone();
+}
+function startSession() {
+  session = { n: 0, c: 0, earned: 0, results: [], snap: Object.fromEntries(DOMAINS.map((d) => [d.id, S.dom[d.id].r])), recent: [] };
+  S.stats.sessions++;
+}
+
+/* ================================================================
+   Missions and achievements
+   ================================================================ */
+const MISSION_TYPES = {
+  correct: { gen: () => ({ dom: pick(DOMAINS).id, target: 3 + Math.floor(Math.random() * 3) }), text: (m) => `Answer ${m.target} ${DOM[m.dom].name} questions correctly` },
+  combo:   { gen: () => ({ target: pick([4, 6, 8, 10]) }), text: (m) => `Reach a ${m.target} combo` },
+  hard:    { gen: () => ({ target: 2 + Math.floor(Math.random() * 2) }), text: (m) => `Answer ${m.target} hard questions correctly` },
+  buy:     { gen: () => ({ target: 3 + Math.floor(Math.random() * 5) }), text: (m) => `Buy ${m.target} station upgrades` },
+  review:  { gen: () => ({ target: 1 + Math.floor(Math.random() * 2) }), text: (m) => `Clear ${m.target} review question${m.target > 1 ? "s" : ""}` },
+  earn:    { gen: () => ({ target: Math.max(200, Math.round((production(false) * 240 + 200) / 10) * 10) }), text: (m) => `Earn ${fmt(m.target)} Data` },
+  mixed:   { gen: () => ({ target: 4 + Math.floor(Math.random() * 3) }), text: (m) => `Answer ${m.target} questions correctly in Mixed focus` },
+};
+function newMission(exclude) {
+  const keys = Object.keys(MISSION_TYPES).filter((k) => !exclude.includes(k));
+  const type = pick(keys); const m = MISSION_TYPES[type].gen();
+  m.type = type; m.prog = 0;
+  m.reward = Math.round((120 + production(false) * 40 + 6 * Math.min(S.stats.answered, 300)) * (1 + Math.min(S.missionsDone, 40) * 0.04));
+  return m;
+}
+function ensureMissions() {
+  while (S.missions.length < 3) S.missions.push(newMission(S.missions.map((m) => m.type)));
+}
+function mission(ev, val) {
+  let changed = false;
+  for (const m of S.missions) {
+    if (m.done) continue;
+    switch (m.type) {
+      case "correct": if (ev === "correct" && val.dom === m.dom) m.prog++; break;
+      case "mixed": if (ev === "correct" && S.focus === "mix") m.prog++; break;
+      case "hard": if (ev === "correct" && val.tier === 3) m.prog++; break;
+      case "combo": if (ev === "combo") m.prog = Math.max(m.prog, val); break;
+      case "buy": if (ev === "buy") m.prog += val; break;
+      case "review": if (ev === "review") m.prog += val; break;
+      case "earn": if (ev === "earn") m.prog += val; break;
+    }
+    if (m.prog >= m.target) { m.done = true; changed = true; }
+  }
+  if (changed) {
+    const done = S.missions.filter((m) => m.done);
+    for (const m of done) {
+      earn(m.reward, "mission"); S.missionsDone++;
+      toast("Mission complete", `${MISSION_TYPES[m.type].text(m)} · +${fmt(m.reward)} Data`);
+      popText(`+${fmt(m.reward)} mission`, "txt");
+    }
+    S.missions = S.missions.filter((m) => !m.done);
+    ensureMissions(); AU.chime();
+    byId("dotMissions").hidden = false;
+    if (ui.view === "missions") render();
+  }
+}
+function checkAchievements() {
+  for (const a of ACH) {
+    if (S.ach[a.id]) continue;
+    let ok = false; try { ok = a.test(S); } catch (e) { ok = false; }
+    if (ok) {
+      S.ach[a.id] = Date.now();
+      const bonus = Math.round(50 + production(false) * 60);
+      earn(bonus, "ach");
+      toast("Achievement", `${a.name} — ${a.desc} · +${fmt(bonus)} Data`);
+      AU.chime();
+    }
+  }
+}
+
+/* ================================================================
+   Purchases and prestige
+   ================================================================ */
+function buyModule(id, qty) {
+  const d = S.dom[id]; let n = qty === "max" ? maxAffordable(15, 1.15, d.lvl, S.data, 9999) : qty;
+  if (n < 1) return false;
+  const c = bulkCost(15, 1.15, d.lvl, n); if (S.data < c) return false;
+  S.data -= c; d.lvl += n; S.stats.buys += n; mission("buy", n); AU.buy();
+  scene3d && scene3d.pulse(id);
+  popText(`${DOM[id].short} module → Lv ${d.lvl}`, "txt", id);
+  afterBuy(); return true;
+}
+function buyBuilding(kind, qty) {
+  const b = BUILD[kind], have = S.b[kind]; const room = b.max - have; if (room <= 0) return false;
+  let n = qty === "max" ? maxAffordable(b.base, b.growth, have, S.data, room) : Math.min(qty, room);
+  if (n < 1) return false;
+  const c = bulkCost(b.base, b.growth, have, n); if (S.data < c) return false;
+  S.data -= c; S.b[kind] += n; S.stats.buys += n; mission("buy", n);
+  if (kind === "ring") AU.whoosh(); else AU.buy();
+  popText(`+${n} ${b.name}${n > 1 ? "s" : ""}`, "txt");
+  scene3d && scene3d.pulse("core");
+  afterBuy(); return true;
+}
+function buyResearch(id) {
+  const r = RESEARCH.find((x) => x.id === id); if (!r || S.res[id] || S.data < r.cost || (r.req && !S.res[r.req])) return false;
+  S.data -= r.cost; S.res[id] = true; S.stats.buys++; mission("buy", 1); AU.buy(); toast("Research complete", r.name, "info");
+  afterBuy(); return true;
+}
+function buyPerk(id) {
+  const p = PERKS.find((x) => x.id === id); const avail = S.stars - S.starsSpent;
+  if (!p || S.perks[id] || avail < p.cost) return false;
+  S.starsSpent += p.cost; S.perks[id] = true; AU.chime(); toast("Star perk", p.name, "info");
+  afterBuy(); return true;
+}
+function afterBuy() { checkAchievements(); save(); render(); scene3d && scene3d.sync(); }
+const starsForPublish = () => Math.floor(Math.sqrt(S.runEarned / PUBLISH_REQ));
+function publish() {
+  const gain = starsForPublish(); if (gain < 1) return;
+  S.stars += gain; S.stats.publishes++;
+  const keepHint = !!S.res.hint;
+  S.data = S.perks.head ? 500 : 0; S.runEarned = 0; S.combo = 0; S.boostUntil = 0;
+  S.b = { sat: S.perks.head ? 2 : 0, solar: 0, ring: 0, uplink: 0 };
+  for (const d of DOMAINS) S.dom[d.id].lvl = 0;
+  S.res = keepHint ? { hint: true } : {};
+  S.missions = []; ensureMissions();
+  AU.publish(); scene3d && (scene3d.sync(), scene3d.shake(0.8));
+  checkAchievements(); save();
+  showModal(`<h2><small>Research published</small>+${gain} Star${gain > 1 ? "s" : ""} ★</h2>
+    <p>Your findings are out. The station is dismantled for parts, but every star is permanent: <b class="starc">×${starMult().toFixed(1)}</b> to all Data from now on.</p>
+    <p class="small dim">Mastery, review queue, achievements, and your streak are untouched. Learning is never reset.</p>`,
+    [{ label: "Rebuild", cls: "primary", act: "close" }]);
+  render();
+}
+
+/* ================================================================
+   UI plumbing
+   ================================================================ */
+const ui = { view: null, arg: null, open: false, qty: 1, modalAct: null };
+const panel = byId("panel"), pbody = byId("pbody"), panelTitle = byId("panelTitle");
+function openPanel(view, arg) {
+  ui.view = view; ui.arg = arg; ui.open = true; panel.classList.add("open");
+  $$("#dock button").forEach((b) => b.classList.toggle("on", b.dataset.view === view && view !== "practice"));
+  if (view === "missions") byId("dotMissions").hidden = true;
+  render();
+  pbody.scrollTop = 0;
+}
+function closePanel() { ui.open = false; panel.classList.remove("open"); $$("#dock button").forEach((b) => b.classList.remove("on")); }
+function render() {
+  if (!ui.open) return;
+  const v = ui.view;
+  if (v === "practice") { panelTitle.textContent = "Practice"; pbody.innerHTML = viewPractice(); }
+  else if (v === "domain") { panelTitle.textContent = DOM[ui.arg].name; pbody.innerHTML = viewDomain(ui.arg); }
+  else if (v === "station") { panelTitle.textContent = "Station"; pbody.innerHTML = viewStation(); }
+  else if (v === "missions") { panelTitle.textContent = "Missions & Progress"; pbody.innerHTML = viewMissions(); }
+  else if (v === "settings") { panelTitle.textContent = "Settings"; pbody.innerHTML = viewSettings(); }
+  if (v === "practice" && cur && !cur.done && cur.q.spr) { const i = byId("sprIn"); if (i && window.innerWidth > 760) i.focus(); }
+  if (v === "practice" && cur && cur.done) { const b = byId("nextBtn"); if (b) b.focus({ preventScroll: true }); const f = $(".feedback", pbody); if (f) f.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+}
+function refreshCosts() {
+  $$("[data-cost]", pbody).forEach((b) => { const c = +b.dataset.cost; const can = S.data >= c; b.classList.toggle("cant", !can); b.disabled = !can; });
+  const t = byId("qtimer"); if (t && cur && !cur.done) t.textContent = fmtClock((performance.now() - cur.start) / 1000);
+  const pr = byId("prodLine"); if (pr) pr.textContent = `${fmtRate(production())} Data/s`;
+  const pub = byId("pubBtn"); if (pub) { const g = starsForPublish(); pub.disabled = g < 1; pub.textContent = g < 1 ? "Publish (not yet)" : `Publish for +${g} ★`; }
+  const pb = byId("pubBar"); if (pb) pb.style.width = `${clamp(S.runEarned / PUBLISH_REQ * 100, 0, 100)}%`;
+}
+function toast(kicker, text, cls = "") {
+  const t = document.createElement("div"); t.className = "toast " + cls; t.innerHTML = `<b>${esc(kicker)}</b>${esc(text)}`;
+  const box = byId("toasts"); box.appendChild(t); while (box.children.length > 4) box.firstChild.remove();
+  setTimeout(() => t.remove(), 4800);
+}
+function showModal(html, actions, onAct) {
+  const m = byId("modal"); ui.modalAct = onAct || null;
+  m.innerHTML = `<div class="mbox" role="dialog" aria-modal="true">${html}<div class="actions">${(actions || []).map((a) => `<button class="btn ${a.cls || "ghost"}" data-act="modal" data-modal="${a.act}">${esc(a.label)}</button>`).join("")}</div></div>`;
+  m.hidden = false;
+}
+function hideModal() { byId("modal").hidden = true; byId("modal").innerHTML = ""; ui.modalAct = null; }
+const popLayer = byId("popups");
+function popAt(x, y, text, cls = "") {
+  const p = document.createElement("div"); p.className = "pop " + cls; p.textContent = text;
+  p.style.left = x + "px"; p.style.top = y + "px"; popLayer.appendChild(p);
+  while (popLayer.children.length > 24) popLayer.firstChild.remove();
+  setTimeout(() => p.remove(), 1150);
+}
+function popText(text, cls = "", domId) {
+  let x = window.innerWidth * (ui.open && window.innerWidth > 760 ? 0.35 : 0.5), y = window.innerHeight * 0.42;
+  if (scene3d) { const s = scene3d.screenPos(domId || "core"); if (s) { x = s.x; y = s.y; } }
+  popAt(x + rnd(-20, 20), y + rnd(-10, 10), text, cls);
+}
+
+/* ---------- views ---------- */
+function domChip(d, on, act = "focus") {
+  return `<button class="chip ${on ? "on" : ""}" style="--c:${d.css}" data-act="${act}" data-dom="${d.id}"><span class="sw"></span>${esc(d.short)}</button>`;
+}
+function passageHTML(q) {
+  const d = DOM[q.d]; let inner = "";
+  if (q.notes) inner += `<p class="small muted">While researching a topic, a student has taken the following notes:</p><ul>${q.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>`;
+  if (q.table) inner += `<table>${q.table.cap ? `<caption>${esc(q.table.cap)}</caption>` : ""}<thead><tr>${q.table.head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${q.table.rows.map((r) => `<tr>${r.map((c, i) => `<td class="${i > 0 && /^[\d.%$,]+$/.test(c) ? "n" : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  if (q.p) inner += q.p.split(/\n\n+/).map((para) => /^Text \d$/.test(para.trim()) ? `<p class="tx">${esc(para)}</p>` : `<p>${nl(para)}</p>`).join("");
+  return inner ? `<div class="passage" style="--c:${d.css}">${inner}</div>` : "";
+}
+function viewPractice() {
+  if (!cur) nextQuestion();
+  const q = cur.q, d = DOM[q.d];
+  const focusChips = `<button class="chip ${S.focus === "mix" ? "on" : ""}" data-act="focus" data-dom="mix">Mixed · adaptive</button>` + DOMAINS.map((x) => domChip(x, S.focus === x.id)).join("");
+  const bar = Array.from({ length: SESSION_LEN }, (_, i) => `<i class="${session.results[i] === true ? "ok" : session.results[i] === false ? "bad" : ""}"></i>`).join("");
+  let body;
+  if (session.n >= SESSION_LEN && cur.done) body = sessionSummary();
+  else {
+    const letters = "ABCD";
+    let answerArea;
+    if (q.spr) {
+      const cls = cur.done ? (cur.correct ? "right" : "wrong") : "";
+      answerArea = `<div class="spr"><input id="sprIn" class="${cls}" inputmode="text" autocomplete="off" spellcheck="false" placeholder="Your answer" ${cur.done ? "disabled" : ""} value="${cur.done && cur.typed != null ? esc(cur.typed) : ""}" aria-label="Your answer">
+        ${cur.done ? "" : `<button class="btn primary" data-act="submitSpr">Submit</button>`}
+        <small>${esc(q.hint || "Type a number. Fractions like 3/4 and decimals like 0.75 are both accepted.")}</small></div>`;
+    } else {
+      answerArea = `<ol class="choices">${q.c.map((c, i) => {
+        let cls = ""; if (cur.done) { if (i === q.a) cls = "right"; else if (i === cur.chosen) cls = "wrong"; } if (cur.gone === i) cls += " gone";
+        return `<li><button class="${cls}" data-act="choose" data-i="${i}" ${cur.done || cur.gone === i ? "disabled" : ""}><span class="L">${letters[i]}</span><span>${esc(c)}</span></button></li>`;
+      }).join("")}</ol>`;
+    }
+    let feedback = "";
+    if (cur.done) {
+      const ans = q.spr ? (Array.isArray(q.a) ? q.a.map(fmtAns).join(" or ") : fmtAns(q.a)) : `${letters[q.a]}`;
+      const delta = cur.delta >= 0 ? `+${(cur.delta * 100).toFixed(1)}` : (cur.delta * 100).toFixed(1);
+      feedback = `<div class="feedback ${cur.correct ? "ok" : "bad"}">
+        <h4>${cur.correct ? "Correct" : `Not quite — the answer is ${esc(ans)}`}${cur.wind ? " · Second Wind saved your combo" : ""}</h4>
+        <p>${esc(q.e)}</p>
+        <div class="reward">${cur.correct ? `<span>+${fmt(cur.reward)} Data</span>` : `<span class="m">No Data · combo reset</span>`}<span class="m">${esc(d.short)} mastery ${delta}%</span>${cur.parts.map((p) => `<span>${esc(p)}</span>`).join("")}</div>
+      </div>`;
+    }
+    const hintBtn = !cur.done && !q.spr && S.res.hint && cur.gone < 0 ? `<button class="btn ghost sm" data-act="hint">Eliminate one <span class="cost">−30%</span></button>` : "";
+    body = `<div class="qmeta">
+        <span class="chip on" style="--c:${d.css}"><span class="sw"></span>${esc(d.name)}</span>
+        <span class="chip t${q.t}">${TIER_NAME[q.t - 1]}</span>
+        ${cur.review ? `<span class="chip rev">Review</span>` : ""}
+        ${qstat(q.id).n > 1 || (qstat(q.id).n === 1 && !cur.done) ? `<span class="chip">Seen before</span>` : ""}
+        <span class="timer num" id="qtimer">${cur.done ? fmtClock(cur.elapsed) : "0:00"}</span>
+      </div>
+      ${passageHTML(q)}
+      <div class="stem">${nl(q.q)}</div>
+      ${answerArea}
+      ${feedback}
+      <div class="qactions">${hintBtn}<span class="grow"></span>${cur.done ? `<button class="btn primary" id="nextBtn" data-act="next">Next question <kbd>↵</kbd></button>` : `<button class="btn ghost sm" data-act="endSession" title="End this set">End set</button>`}</div>`;
+  }
+  return `<div class="card">
+      <div class="row between" style="margin-bottom:8px"><span class="tiny dim" style="letter-spacing:.12em">FOCUS</span><span class="small dim">next question follows focus</span></div>
+      <div class="chips">${focusChips}</div>
+    </div>
+    <div class="card">
+      <div class="row between"><div><div class="tiny dim">SET</div><div class="num" style="font-weight:700">${Math.min(session.n + (cur.done ? 0 : 1), SESSION_LEN)} / ${SESSION_LEN}</div></div>
+        <div style="text-align:center"><div class="tiny dim">COMBO</div><div class="combo-big">×${S.combo}</div></div>
+        <div style="text-align:right"><div class="tiny dim">MULTIPLIER</div><div class="num" style="font-weight:700;color:var(--gold)">×${comboMult().toFixed(1)}</div></div></div>
+      <div class="sessionbar">${bar}</div>
+      ${body}
+    </div>`;
+}
+function fmtAns(a) { const s = Number.isInteger(a) ? String(a) : (Math.round(a * 10000) / 10000).toString(); return s.replace("-", "−"); }
+function sessionSummary() {
+  const acc = session.n ? Math.round(session.c / session.n * 100) : 0;
+  const rows = DOMAINS.map((d) => { const dl = S.dom[d.id].r - (session.snap ? session.snap[d.id] : S.dom[d.id].r); return dl ? `<div class="row between small"><span style="color:${d.css}">${esc(d.name)}</span><b class="num ${dl > 0 ? "ok" : "bad"}">${dl > 0 ? "+" : ""}${(dl * 100).toFixed(1)}%</b></div>` : ""; }).join("");
+  return `<div style="text-align:center;padding:8px 0 4px"><div class="tiny dim">SET COMPLETE</div><div class="num" style="font-size:40px;font-weight:900;color:${acc >= 80 ? "var(--ok)" : acc >= 50 ? "var(--gold)" : "var(--bad)"}">${acc}%</div><div class="muted">${session.c} of ${session.n} correct · <b class="gold">+${fmt(session.earned)}</b> Data</div></div>
+    <div style="margin:12px 0">${rows || `<div class="small dim" style="text-align:center">No mastery change this set.</div>`}</div>
+    <div class="row" style="gap:8px"><button class="btn primary grow" data-act="newSession">Next set</button><button class="btn ghost" data-act="view" data-view="station">Station</button></div>`;
+}
+function viewDomain(id) {
+  const d = DOM[id], s = S.dom[id], acc = s.n ? Math.round(s.c / s.n * 100) : 0;
+  const due = S.review.filter((r) => r.d === id);
+  const contrib = Math.round(s.r * 60) * 10 / 4;
+  return `<div class="card" style="border-color:${d.css}55">
+      <div class="row"><span class="chip on" style="--c:${d.css}"><span class="sw"></span>${d.sec === "rw" ? "Reading & Writing" : "Math"}</span></div>
+      <p class="muted small" style="margin:8px 0 10px">${esc(d.desc)}</p>
+      <div class="row between"><span class="tiny dim">MASTERY</span><b class="num" style="color:${d.css}">${(s.r * 100).toFixed(1)}%</b></div>
+      <div class="bar" style="--c:${d.css};margin:6px 0 10px"><span style="width:${s.r * 100}%"></span></div>
+      <div class="grid2">
+        <div class="stat"><div class="v num">${s.n}</div><div class="k">answered</div></div>
+        <div class="stat"><div class="v num">${acc}%</div><div class="k">accuracy</div></div>
+        <div class="stat"><div class="v num">+${contrib.toFixed(0)}</div><div class="k">score points</div></div>
+        <div class="stat"><div class="v num">Lv ${s.lvl}</div><div class="k">module · ${fmtRate(modProd(id) * prodMult())}/s</div></div>
+      </div>
+      <div class="kv" style="margin-top:10px">${[0, 1, 2].map((t) => `<span class="chip t${t + 1}" style="justify-self:start">${TIER_NAME[t]}</span><b>${s.tiers[t][1]} / ${s.tiers[t][0]} correct</b>`).join("")}</div>
+      <div class="row" style="margin-top:12px;gap:8px">
+        <button class="btn primary grow" data-act="practiceDom" data-dom="${id}">Practice ${esc(d.short)}</button>
+        <button class="btn ${S.data < modCost(id) ? "cant" : ""}" data-act="buyMod" data-dom="${id}" data-cost="${modCost(id)}" ${S.data < modCost(id) ? "disabled" : ""}>Level up <span class="cost">◈ ${fmt(modCost(id))}</span></button>
+      </div>
+      <p class="tiny dim" style="margin:8px 0 0">Module output = level × 0.25 × (1 + 4 × mastery) Data/s. Mastery is the multiplier you cannot buy.</p>
+    </div>
+    <div class="card"><h3>Review queue</h3>${due.length ? due.map((r) => `<div class="small muted" style="padding:4px 0;border-top:1px solid var(--line)">${esc((BANK_BY_ID[r.id] || {}).q || "").slice(0, 90)}… <span class="dim">· due ${r.due <= S.stats.answered ? "now" : `in ${r.due - S.stats.answered}`}</span></div>`).join("") : `<div class="small dim">Nothing to review. Missed questions come back here a few questions later.</div>`}</div>`;
+}
+function viewStation() {
+  const p = production(), mult = prodMult();
+  const qtyBar = `<div class="qtybar">${[1, 10, "max"].map((q) => `<button class="${ui.qty === q ? "on" : ""}" data-act="qty" data-q="${q}">${q === "max" ? "Max" : "×" + q}</button>`).join("")}</div>`;
+  const gain = starsForPublish(), nextReq = PUBLISH_REQ * Math.pow(gain + 1, 2);
+  const modRows = DOMAINS.map((d) => {
+    const s = S.dom[d.id]; const n = ui.qty === "max" ? Math.max(1, maxAffordable(15, 1.15, s.lvl, S.data, 9999)) : ui.qty; const c = bulkCost(15, 1.15, s.lvl, n);
+    return `<div class="brow mrow" style="--c:${d.css}">
+      <div class="ico" data-act="view" data-view="domain" data-arg="${d.id}"><span style="font-size:18px">◆</span></div>
+      <div class="grow" data-act="view" data-view="domain" data-arg="${d.id}"><div class="t">${esc(d.name)}</div><div class="d">Lv ${s.lvl} · ${fmtRate(modProd(d.id) * mult)}/s · mastery ${(s.r * 100).toFixed(0)}%</div><div class="mini"><span style="width:${s.r * 100}%"></span></div></div>
+      <button class="btn sm ${S.data < c ? "cant" : ""}" data-act="buyMod" data-dom="${d.id}" data-cost="${c}" ${S.data < c ? "disabled" : ""}>+${n} <span class="cost">◈ ${fmt(c)}</span></button>
+    </div>`;
+  }).join("");
+  const bRows = Object.entries(BUILD).map(([k, b]) => {
+    const have = S.b[k], room = b.max - have; const n = ui.qty === "max" ? Math.max(1, maxAffordable(b.base, b.growth, have, S.data, room)) : Math.min(ui.qty, Math.max(room, 1)); const c = bulkCost(b.base, b.growth, have, n);
+    const eff = k === "sat" ? `${fmtRate(have * b.prod * mult)}/s` : k === "solar" ? `+${have * 15}%` : k === "ring" ? `×${Math.pow(1.5, have).toFixed(2)}` : `${fmtDur(offlineCap())} cap`;
+    return `<div class="brow"><div class="ico"><span style="font-size:18px">${b.icon}</span></div>
+      <div class="grow"><div class="t">${esc(b.name)} <span class="lvl">${have}${b.max < 1000 ? " / " + b.max : ""}</span></div><div class="d">${esc(b.desc)} <span class="cyan">${eff}</span></div></div>
+      ${room > 0 ? `<button class="btn sm ${S.data < c ? "cant" : ""}" data-act="buyB" data-kind="${k}" data-cost="${c}" ${S.data < c ? "disabled" : ""}>+${n} <span class="cost">◈ ${fmt(c)}</span></button>` : `<span class="chip">Max</span>`}
+    </div>`;
+  }).join("");
+  const rRows = RESEARCH.map((r) => {
+    const owned = !!S.res[r.id], locked = r.req && !S.res[r.req];
+    return `<div class="brow"><div class="grow"><div class="t">${esc(r.name)} ${owned ? `<span class="chip" style="color:var(--ok);border-color:rgba(66,227,155,.4)">Owned</span>` : ""}</div><div class="d">${esc(r.desc)}${locked ? ` <span class="warn" style="color:var(--warn)">Requires ${esc(RESEARCH.find((x) => x.id === r.req).name)}</span>` : ""}</div></div>
+      ${owned ? "" : `<button class="btn sm ${S.data < r.cost || locked ? "cant" : ""}" data-act="buyR" data-id="${r.id}" ${locked ? "" : `data-cost="${r.cost}"`} ${S.data < r.cost || locked ? "disabled" : ""}><span class="cost">◈ ${fmt(r.cost)}</span></button>`}</div>`;
+  }).join("");
+  const avail = S.stars - S.starsSpent;
+  const perkRows = PERKS.map((p) => `<div class="brow"><div class="grow"><div class="t">${esc(p.name)} ${S.perks[p.id] ? `<span class="chip" style="color:var(--ok);border-color:rgba(66,227,155,.4)">Owned</span>` : ""}</div><div class="d">${esc(p.desc)}</div></div>
+      ${S.perks[p.id] ? "" : `<button class="btn sm ${avail < p.cost ? "cant" : ""}" data-act="buyP" data-id="${p.id}" ${avail < p.cost ? "disabled" : ""}><span class="cost starc">★ ${p.cost}</span></button>`}</div>`).join("");
+  const mults = [["Solar arrays", 1 + 0.15 * S.b.solar], ["Relay rings", Math.pow(1.5, S.b.ring)], ["Stars", starMult()], ["Streak crew", streakMult()], ["Reactor", S.res.reactor ? 2 : 1], ["Telemetry", S.perks.telemetry ? 1.5 : 1], ["Knowledge Stream", boosted() ? 2 : 1]].filter((m) => m[1] !== 1);
+  return `<div class="card">
+      <div class="row between"><div><div class="tiny dim">PRODUCTION</div><div class="num" style="font-size:22px;font-weight:800" id="prodLine">${fmtRate(p)} Data/s</div></div><div style="text-align:right"><div class="tiny dim">MULTIPLIER</div><div class="num" style="font-size:22px;font-weight:800;color:var(--gold)">×${mult.toFixed(2)}</div></div></div>
+      ${mults.length ? `<div class="chips" style="margin-top:8px">${mults.map((m) => `<span class="chip">${esc(m[0])} ×${m[1].toFixed(2)}</span>`).join("")}</div>` : `<p class="small dim" style="margin:6px 0 0">Level up modules to start passive production. Mastery multiplies module output up to ×5.</p>`}
+      ${boosted() ? `<div class="small cyan" style="margin-top:6px">Knowledge Stream active: ${fmtDur((S.boostUntil - Date.now()) / 1000)} left</div>` : ""}
+    </div>
+    <div class="card" style="border-color:rgba(201,166,255,.35)">
+      <h3 style="color:var(--star)">Publish research</h3>
+      <p class="small muted" style="margin:0 0 8px">Trade this run’s station for permanent Stars (+10% all Data each). Mastery is never reset. Earned this run: <b class="num gold">${fmt(S.runEarned)}</b> · next star at <b class="num">${fmt(nextReq)}</b></p>
+      <div class="bar" style="--c:var(--star);margin-bottom:10px"><span id="pubBar" style="width:${clamp(S.runEarned / PUBLISH_REQ * 100, 0, 100)}%"></span></div>
+      <div class="row"><button class="btn gold grow" id="pubBtn" data-act="publish" ${gain < 1 ? "disabled" : ""}>${gain < 1 ? "Publish (not yet)" : `Publish for +${gain} ★`}</button><span class="small dim">have ★ ${S.stars}</span></div>
+    </div>
+    <div class="card"><div class="row between" style="margin-bottom:4px"><h3 style="margin:0">Domain modules</h3>${qtyBar}</div>${modRows}</div>
+    <div class="card"><div class="row between" style="margin-bottom:4px"><h3 style="margin:0">Structures</h3></div>${bRows}</div>
+    <div class="card"><h3>Research</h3>${rRows}</div>
+    ${S.stars > 0 || S.stats.publishes > 0 ? `<div class="card" style="border-color:rgba(201,166,255,.35)"><h3 style="color:var(--star)">Star perks · ★ ${avail} available</h3>${perkRows}</div>` : ""}`;
+}
+function viewMissions() {
+  ensureMissions();
+  const sc = score();
+  const mis = S.missions.map((m) => `<div class="mis"><div class="row between"><div class="t">${esc(MISSION_TYPES[m.type].text(m))}</div><b class="num gold">+${fmt(m.reward)}</b></div>
+      <div class="bar" style="margin-top:6px"><span style="width:${clamp(m.prog / m.target * 100, 0, 100)}%"></span></div><div class="tiny dim num">${m.type === "earn" ? fmt(Math.min(m.prog, m.target)) : Math.min(m.prog, m.target)} / ${m.type === "earn" ? fmt(m.target) : m.target}</div></div>`).join("");
+  const doms = DOMAINS.map((d) => `<div class="row" style="padding:4px 0"><span class="small" style="width:150px;color:${d.css}">${esc(d.name)}</span><div class="bar grow" style="--c:${d.css}"><span style="width:${S.dom[d.id].r * 100}%"></span></div><b class="num small" style="width:44px;text-align:right">${Math.round(S.dom[d.id].r * 100)}%</b></div>`).join("");
+  const ach = ACH.map((a) => `<div class="${S.ach[a.id] ? "on" : ""}"><b>${esc(a.name)}</b>${esc(a.desc)}</div>`).join("");
+  const acc = S.stats.answered ? Math.round(S.stats.correct / S.stats.answered * 100) : 0;
+  return `<div class="card"><h3>Active missions</h3>${mis}</div>
+    <div class="card"><div class="row between"><h3 style="margin:0">Estimated score</h3><b class="num" style="font-size:20px">${sc.total} <span class="dim small">/ 1520</span></b></div>
+      <div class="row between small muted" style="margin:4px 0 8px"><span>Reading & Writing <b class="num">${sc.rw}</b></span><span>Math <b class="num">${sc.m}</b></span></div>${doms}
+      <p class="tiny dim" style="margin:8px 0 0">Each section runs 160–760. Mastery rises fastest on questions near your level; only hard questions push a domain to 100%.</p></div>
+    <div class="card"><h3>Stats</h3><div class="grid2">
+      <div class="stat"><div class="v num">${S.stats.answered}</div><div class="k">answered</div></div>
+      <div class="stat"><div class="v num">${acc}%</div><div class="k">accuracy</div></div>
+      <div class="stat"><div class="v num">${S.bestCombo}</div><div class="k">best combo</div></div>
+      <div class="stat"><div class="v num">${S.streak.days}</div><div class="k">day streak</div></div>
+      <div class="stat"><div class="v num">${fmt(S.totalEarned)}</div><div class="k">total Data</div></div>
+      <div class="stat"><div class="v num">${fmtDur(S.stats.played)}</div><div class="k">time played</div></div>
+    </div></div>
+    <div class="card"><h3>Achievements · ${Object.keys(S.ach).length} / ${ACH.length}</h3><div class="ach">${ach}</div></div>`;
+}
+function viewSettings() {
+  const sw = (k, label, desc) => `<div class="setrow"><div><div style="font-weight:700">${label}</div><div class="small dim">${desc}</div></div><button class="switch ${S.settings[k] ? "on" : ""}" role="switch" aria-checked="${!!S.settings[k]}" aria-label="${label}" data-act="setting" data-k="${k}"></button></div>`;
+  return `<div class="card">
+      ${sw("muted", "Mute sound", "All chimes and whooshes are generated in code.")}
+      ${sw("low", "Low graphics", "Fewer particles and stars, no clouds, 1× pixel ratio. Use on Chromebooks if the view stutters.")}
+      ${sw("labels", "Module labels", "Show domain names and mastery over the modules.")}
+      ${sw("fx", "Screen effects", "Shake and flash on combo milestones.")}
+    </div>
+    <div class="card"><h3>Save</h3>
+      <p class="small muted" style="margin:0 0 10px">Progress autosaves every 10 seconds and when you leave. Saves live in this browser only, so export before switching devices.</p>
+      <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" data-act="export">Export save</button><button class="btn" data-act="import">Import save</button><button class="btn danger" data-act="reset">Hard reset</button></div>
+    </div>
+    <div class="card"><h3>How it works</h3>
+      <div class="small muted">
+        <p style="margin:0 0 6px"><b>Answer questions</b> to earn Data and raise mastery. Mastery in each domain sets that module’s glow, size, and output (×1 to ×5).</p>
+        <p style="margin:0 0 6px"><b>Spend Data</b> on modules, satellites, solar arrays, rings, and research. The station keeps earning while you are away, up to ${fmtDur(offlineCap())}.</p>
+        <p style="margin:0 0 6px"><b>Publish research</b> once a run has earned ${fmt(PUBLISH_REQ)} Data to bank permanent Stars.</p>
+        <p style="margin:0"><b>Missed questions return</b> a few questions later. Every explanation is short on purpose: read it, then beat the question when it comes back.</p>
+      </div>
+    </div>
+    <div class="card"><h3>Keyboard</h3><div class="small muted" style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px">
+      <kbd>1</kbd><span>– <kbd>4</kbd> choose an answer</span><kbd>↵</kbd><span>submit / next question</span><kbd>H</kbd><span>eliminate a choice</span><kbd>P</kbd><span>practice</span><kbd>S</kbd><span>station</span><kbd>M</kbd><span>mute</span><kbd>Esc</kbd><span>close panel</span></div></div>
+    <div class="card"><h3>About</h3><p class="small dim" style="margin:0">ORBIT 1520 · ${BANK.length} original practice questions across all 8 Digital PSAT/NMSQT domains, written for this game. Not affiliated with College Board. Rendered with three.js. Drag to orbit, scroll or pinch to zoom, click a module to practice its domain.</p></div>`;
+}
+
+/* ---------- actions ---------- */
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-act]"); if (!t) return;
+  AU.init();
+  const act = t.dataset.act;
+  switch (act) {
+    case "view": {
+      const v = t.dataset.view; if (v === "practice" && !cur) { startSession(); nextQuestion(); }
+      if (ui.open && ui.view === v && (v !== "domain" || ui.arg === t.dataset.arg) && t.closest("#dock")) closePanel(); else openPanel(v, t.dataset.arg); break;
+    }
+    case "closePanel": closePanel(); break;
+    case "mute": S.settings.muted = !S.settings.muted; AU.setMuted(S.settings.muted); syncMute(); save(); break;
+    case "focus": {
+      const dm = t.dataset.dom; S.focus = dm;
+      if (cur && !cur.done && qstat(cur.q.id).n === 0 && (dm === "mix" || cur.q.d !== dm)) nextQuestion();
+      render(); save(); break;
+    }
+    case "choose": if (cur && !cur.done) { answerCurrent(+t.dataset.i); render(); } break;
+    case "submitSpr": submitSpr(); break;
+    case "hint": useHint(); break;
+    case "next": if (cur && cur.done) { if (session.n >= SESSION_LEN) { startSession(); } nextQuestion(); render(); } break;
+    case "newSession": startSession(); nextQuestion(); render(); break;
+    case "endSession": startSession(); nextQuestion(); render(); break;
+    case "practiceDom": S.focus = t.dataset.dom; if (!cur || cur.done || cur.q.d !== S.focus) { if (!cur) startSession(); nextQuestion(); } openPanel("practice"); save(); break;
+    case "qty": ui.qty = t.dataset.q === "max" ? "max" : +t.dataset.q; render(); break;
+    case "buyMod": buyModule(t.dataset.dom, ui.view === "domain" ? 1 : ui.qty); break;
+    case "buyB": buyBuilding(t.dataset.kind, ui.qty); break;
+    case "buyR": buyResearch(t.dataset.id); break;
+    case "buyP": buyPerk(t.dataset.id); break;
+    case "publish": confirmPublish(); break;
+    case "setting": {
+      const k = t.dataset.k; S.settings[k] = !S.settings[k]; save();
+      if (k === "muted") { AU.setMuted(S.settings.muted); syncMute(); }
+      if (k === "low") scene3d && scene3d.setLow(S.settings.low);
+      if (k === "labels") byId("labels").style.display = S.settings.labels ? "" : "none";
+      render(); break;
+    }
+    case "export": {
+      const code = exportSave();
+      showModal(`<h2><small>Export</small>Your save code</h2><p class="small">Copy this string somewhere safe. Paste it into Import on another device.</p><textarea id="expTa" readonly>${esc(code)}</textarea>`, [{ label: "Copy", cls: "primary", act: "copy" }, { label: "Close", act: "close" }], (a) => {
+        if (a === "copy") { const ta = byId("expTa"); ta.select(); try { navigator.clipboard && navigator.clipboard.writeText(ta.value); document.execCommand && document.execCommand("copy"); } catch (e) {} toast("Copied", "Save code copied to clipboard", "info"); }
+      }); break;
+    }
+    case "import": {
+      showModal(`<h2><small>Import</small>Paste a save code</h2><p class="small">This replaces the save in this browser.</p><textarea id="impTa" placeholder="Paste the code here"></textarea>`, [{ label: "Import", cls: "primary", act: "doImport" }, { label: "Cancel", act: "close" }], (a) => {
+        if (a === "doImport") { if (importSave(byId("impTa").value)) { hideModal(); window.__resetting = true; location.reload(); } else toast("Import failed", "That code is not a valid ORBIT 1520 save.", "info"); return true; }
+      }); break;
+    }
+    case "reset": {
+      showModal(`<h2><small>Hard reset</small>Erase everything?</h2><p>This deletes your station, mastery, stars, and achievements in this browser. There is no undo. Export a save first if you might want it back.</p>`, [{ label: "Erase everything", cls: "danger", act: "doReset" }, { label: "Keep my save", cls: "primary", act: "close" }], (a) => {
+        if (a === "doReset") { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} window.__resetting = true; location.reload(); }
+      }); break;
+    }
+    case "modal": {
+      const a = t.dataset.modal; if (a === "close") { hideModal(); break; }
+      const keep = ui.modalAct && ui.modalAct(a); if (!keep && a !== "copy") hideModal(); break;
+    }
+    case "label": openPanel("domain", t.dataset.dom); break;
+  }
+});
+function submitSpr() {
+  const i = byId("sprIn"); if (!i || !cur || cur.done) return;
+  const v = parseNum(i.value);
+  if (v === null) { i.classList.add("wrong"); i.setAttribute("aria-invalid", "true"); toast("Enter a number", "Use digits, a decimal like 2.5, or a fraction like 3/4.", "info"); setTimeout(() => i.classList.remove("wrong"), 600); return; }
+  cur.typed = i.value; answerCurrent(null, v); render();
+}
+function useHint() {
+  if (!cur || cur.done || cur.q.spr || !S.res.hint || cur.gone >= 0) return;
+  const wrong = cur.q.c.map((_, i) => i).filter((i) => i !== cur.q.a); cur.gone = pick(wrong); cur.hinted = true; AU.buy(); render();
+}
+function confirmPublish() {
+  const gain = starsForPublish(); if (gain < 1) return;
+  showModal(`<h2><small>Publish research</small>Bank +${gain} Star${gain > 1 ? "s" : ""}?</h2><p>Your Data, modules, structures, and research (except the Study Guide) reset. Stars are permanent: after this you will earn <b class="starc">×${(1 + 0.1 * (S.stars + gain)).toFixed(1)}</b> Data from everything.</p><p class="small dim">Mastery, reviews, streak, and achievements stay exactly as they are.</p>`,
+    [{ label: `Publish +${gain} ★`, cls: "gold", act: "doPublish" }, { label: "Not yet", act: "close" }], (a) => { if (a === "doPublish") publish(); });
+}
+function syncMute() { byId("muteOn").hidden = S.settings.muted; byId("muteOff").hidden = !S.settings.muted; byId("muteBtn").classList.toggle("off", S.settings.muted); }
+document.addEventListener("keydown", (e) => {
+  const tag = (e.target.tagName || "").toLowerCase();
+  if (e.key === "Escape") { if (!byId("modal").hidden) hideModal(); else if (ui.open) closePanel(); return; }
+  if (tag === "input" || tag === "textarea") { if (e.key === "Enter" && e.target.id === "sprIn") { e.preventDefault(); submitSpr(); } return; }
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key.toLowerCase();
+  if (ui.open && ui.view === "practice" && cur) {
+    if (!cur.done && !cur.q.spr && /^[1-4a-d]$/.test(k)) { const i = /\d/.test(k) ? +k - 1 : "abcd".indexOf(k); if (i !== cur.gone) { AU.init(); answerCurrent(i); render(); } return; }
+    if (cur.done && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); if (session.n >= SESSION_LEN) startSession(); nextQuestion(); render(); return; }
+    if (k === "h") { useHint(); return; }
+  }
+  if (k === "p") { if (!cur) { startSession(); nextQuestion(); } openPanel("practice"); }
+  else if (k === "s") openPanel("station");
+  else if (k === "m") { S.settings.muted = !S.settings.muted; AU.init(); AU.setMuted(S.settings.muted); syncMute(); save(); }
+});
+// Let the panel scroll without rotating the scene
+panel.addEventListener("pointerdown", (e) => e.stopPropagation());
+panel.addEventListener("wheel", (e) => e.stopPropagation());
+byId("hud").addEventListener("pointerdown", (e) => e.stopPropagation());
+byId("dock").addEventListener("pointerdown", (e) => e.stopPropagation());
+
+/* ---------- HUD ---------- */
+let hudLast = "";
+function updateHUD() {
+  const sc = score();
+  const key = `${Math.floor(S.data)}|${sc.total}|${S.stars}|${S.combo}|${Math.round(production() * 10)}`;
+  if (key === hudLast) return; hudLast = key;
+  byId("dataV").textContent = fmt(S.data);
+  byId("rateV").textContent = `+${fmtRate(production())} /s${boosted() ? " ⚡" : ""}`;
+  byId("scoreBig").textContent = sc.total; byId("scoreRW").textContent = `RW ${sc.rw}`; byId("scoreM").textContent = `Math ${sc.m}`;
+  byId("starPill").hidden = S.stars < 1; byId("starV").textContent = S.stars;
+  byId("comboPill").hidden = S.combo < 2; byId("comboV").textContent = `×${S.combo}`;
+  byId("dotStation").hidden = !canAffordSomething();
+}
+function canAffordSomething() {
+  for (const d of DOMAINS) if (S.data >= modCost(d.id)) return true;
+  for (const k in BUILD) if (S.b[k] < BUILD[k].max && S.data >= cost(k, S.b[k])) return true;
+  return false;
+}
+
+/* ================================================================
+   3D scene (three.js)
+   ================================================================ */
+let scene3d = null;
+async function initScene() {
+  let THREE;
+  try { THREE = await import("three"); } catch (e) { console.warn("three.js unavailable", e); return null; }
+  const canvas = byId("gl");
+  let low = S.settings.low;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !low, powerPreference: "high-performance", alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, low ? 1 : 1.5));
+  renderer.setSize(window.innerWidth, window.innerHeight, false);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
+  renderer.setClearColor(0x03050c, 1);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 500);
+  const orbit = { theta: 0.85, phi: 1.2, r: 16.5, tt: 0.85, tp: 1.2, tr: 16.5, idle: 0 };
+  scene.add(new THREE.HemisphereLight(0x9fb6ff, 0x0a0a1a, 0.55));
+  const sun = new THREE.DirectionalLight(0xfff2dd, 2.6); sun.position.set(14, 8, 10); scene.add(sun);
+  const rim = new THREE.DirectionalLight(0x4fd8ff, 0.5); rim.position.set(-10, -4, -8); scene.add(rim);
+
+  /* textures */
+  function glowTex(inner = 1, mid = 0.35) {
+    const c = document.createElement("canvas"); c.width = c.height = 128; const g = c.getContext("2d");
+    const grd = g.createRadialGradient(64, 64, 0, 64, 64, 64); grd.addColorStop(0, `rgba(255,255,255,${inner})`); grd.addColorStop(0.25, `rgba(255,255,255,${mid})`); grd.addColorStop(0.6, "rgba(255,255,255,0.06)"); grd.addColorStop(1, "rgba(255,255,255,0)");
+    g.fillStyle = grd; g.fillRect(0, 0, 128, 128); const t = new THREE.CanvasTexture(c); return t;
+  }
+  function haloTex() {
+    const c = document.createElement("canvas"); c.width = c.height = 256; const g = c.getContext("2d");
+    const grd = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+    grd.addColorStop(0, "rgba(90,160,255,0)"); grd.addColorStop(0.66, "rgba(90,160,255,0)"); grd.addColorStop(0.72, "rgba(110,180,255,0.55)"); grd.addColorStop(0.8, "rgba(70,130,255,0.22)"); grd.addColorStop(1, "rgba(40,90,255,0)");
+    g.fillStyle = grd; g.fillRect(0, 0, 256, 256); return new THREE.CanvasTexture(c);
+  }
+  function makeNoise(seed, period) {
+    const perm = new Uint8Array(512); for (let i = 0; i < 256; i++) perm[i] = i;
+    let s = seed; const rand = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+    for (let i = 255; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); const t = perm[i]; perm[i] = perm[j]; perm[j] = t; }
+    for (let i = 0; i < 256; i++) perm[i + 256] = perm[i];
+    const hash = (x, y) => perm[(perm[((x % period) + period) % period & 255] + (y & 255)) & 511] / 255;
+    const noise = (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf); return lerp(lerp(hash(xi, yi), hash(xi + 1, yi), u), lerp(hash(xi, yi + 1), hash(xi + 1, yi + 1), u), v); };
+    return (x, y, oct) => { let sum = 0, amp = 0.5, f = 1, n = 0, p = period; for (let i = 0; i < oct; i++) { sum += amp * noise(x * f, y * f); n += amp; amp *= 0.5; f *= 2; p *= 2; } return sum / n; };
+  }
+  function planetTex(w, h) {
+    const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d"); const img = g.createImageData(w, h); const d = img.data;
+    const fbm = makeNoise(1520, 8), fbm2 = makeNoise(77, 8);
+    for (let y = 0; y < h; y++) {
+      const lat = (y / h - 0.5) * 2;
+      for (let x = 0; x < w; x++) {
+        const u = x / w * 8, v = y / h * 4;
+        const n = fbm(u, v, 5) + 0.12 * (fbm2(u * 2, v * 2, 3) - 0.5);
+        const ice = Math.max(0, Math.abs(lat) - 0.78) / 0.22;
+        let r, gg, b;
+        if (n < 0.5) { const t = n / 0.5; r = lerp(8, 24, t); gg = lerp(36, 82, t); b = lerp(92, 150, t); }
+        else if (n < 0.53) { r = 196; gg = 178; b = 120; }
+        else if (n < 0.62) { const t = (n - 0.53) / 0.09; r = lerp(64, 40, t); gg = lerp(140, 96, t); b = lerp(58, 40, t); }
+        else if (n < 0.7) { const t = (n - 0.62) / 0.08; r = lerp(96, 128, t); gg = lerp(92, 122, t); b = lerp(70, 110, t); }
+        else { r = 226; gg = 232; b = 238; }
+        if (ice > 0) { const t = Math.min(1, ice); r = lerp(r, 236, t); gg = lerp(gg, 242, t); b = lerp(b, 248, t); }
+        const i = (y * w + x) * 4; d[i] = r; d[i + 1] = gg; d[i + 2] = b; d[i + 3] = 255;
+      }
+    }
+    g.putImageData(img, 0, 0); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+  }
+  function cloudTex(w, h) {
+    const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d"); const img = g.createImageData(w, h); const d = img.data; const fbm = makeNoise(9, 6);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const n = fbm(x / w * 6, y / h * 3, 4); const a = clamp((n - 0.5) * 3.2, 0, 1); const i = (y * w + x) * 4; d[i] = d[i + 1] = d[i + 2] = 255; d[i + 3] = Math.round(a * 220); }
+    g.putImageData(img, 0, 0); return new THREE.CanvasTexture(c);
+  }
+  const softTex = glowTex(1, 0.4);
+
+  /* planet */
+  const PR = 2.1;
+  const planet = new THREE.Mesh(new THREE.SphereGeometry(PR, low ? 40 : 64, low ? 28 : 44), new THREE.MeshStandardMaterial({ map: planetTex(low ? 256 : 512, low ? 128 : 256), roughness: 0.9, metalness: 0.05 }));
+  planet.rotation.z = 0.28; scene.add(planet);
+  let clouds = null;
+  if (!low) { clouds = new THREE.Mesh(new THREE.SphereGeometry(PR * 1.02, 48, 32), new THREE.MeshStandardMaterial({ color: 0xffffff, alphaMap: cloudTex(512, 256), transparent: true, opacity: 0.85, depthWrite: false, roughness: 1 })); clouds.rotation.z = 0.28; scene.add(clouds); }
+  const atmo = new THREE.Mesh(new THREE.SphereGeometry(PR * 1.06, 48, 32), new THREE.MeshBasicMaterial({ color: 0x3b7cff, transparent: true, opacity: 0.22, side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false })); scene.add(atmo);
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: haloTex(), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false })); halo.scale.setScalar(PR * 2 * 1.42); scene.add(halo);
+
+  /* stars */
+  function makeStars(n) {
+    const pos = new Float32Array(n * 3), col = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { const r = rnd(90, 160), th = rnd(Math.PI * 2), ph = Math.acos(rnd(-1, 1)); pos[i * 3] = r * Math.sin(ph) * Math.cos(th); pos[i * 3 + 1] = r * Math.cos(ph); pos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th); const k = Math.random(); const c = k < 0.7 ? [1, 1, 1] : k < 0.85 ? [0.7, 0.8, 1] : [1, 0.9, 0.7]; const b = rnd(0.35, 1); col[i * 3] = c[0] * b; col[i * 3 + 1] = c[1] * b; col[i * 3 + 2] = c[2] * b; }
+    const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(pos, 3)); geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+    return new THREE.Points(geo, new THREE.PointsMaterial({ size: 1.9, sizeAttenuation: false, vertexColors: true, transparent: true, opacity: 0.95, depthWrite: false }));
+  }
+  let stars = makeStars(low ? 700 : 2200); scene.add(stars);
+
+  /* station */
+  const station = new THREE.Group(); station.rotation.x = 0.32; station.rotation.z = -0.1; scene.add(station);
+  const orbitG = new THREE.Group(); station.add(orbitG);
+  const R = 5.4, SLOTS = 9;
+  const angleOf = (i) => (i * Math.PI * 2) / SLOTS; // slot 0 = core, 1..8 = modules
+  const trussMat = new THREE.MeshStandardMaterial({ color: 0x7d8fb5, emissive: 0x1a2a55, emissiveIntensity: 0.6, roughness: 0.5, metalness: 0.6, transparent: true, opacity: 0.55 });
+  const truss = new THREE.Mesh(new THREE.TorusGeometry(R, 0.028, 6, 160), trussMat); truss.rotation.x = Math.PI / 2; orbitG.add(truss);
+  // core
+  const core = new THREE.Group(); core.position.set(R, 0, 0); orbitG.add(core);
+  const coreMat = new THREE.MeshStandardMaterial({ color: 0x8fe8ff, emissive: 0x2fb8e6, emissiveIntensity: 1.4, roughness: 0.3, metalness: 0.4 });
+  const hullMat = new THREE.MeshStandardMaterial({ color: 0xb9c4dc, emissive: 0x1a2440, emissiveIntensity: 0.4, roughness: 0.45, metalness: 0.7 });
+  const coreBody = new THREE.Mesh(new THREE.SphereGeometry(0.46, 28, 20), coreMat); core.add(coreBody);
+  const coreRing = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.05, 8, 48), hullMat); coreRing.rotation.x = Math.PI / 2; core.add(coreRing);
+  const spineY = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.9, 10), hullMat); core.add(spineY);
+  const spineZ = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.9, 10), hullMat); spineZ.rotation.x = Math.PI / 2; core.add(spineZ);
+  const coreGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: softTex, color: 0x4fd8ff, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.85 })); coreGlow.scale.setScalar(2.6); core.add(coreGlow);
+  // antenna (uplink)
+  const antenna = new THREE.Group(); antenna.position.set(0.55, 0, 0); antenna.rotation.z = -Math.PI / 2; core.add(antenna);
+  const dish = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.42, 0.22, 20, 1, true), new THREE.MeshStandardMaterial({ color: 0xdde6ff, emissive: 0x334477, emissiveIntensity: 0.5, side: THREE.DoubleSide, roughness: 0.4, metalness: 0.6 })); dish.position.y = 0.3; antenna.add(dish);
+  const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.45, 8), hullMat); mast.position.y = 0.08; antenna.add(mast); antenna.visible = false;
+  // solar arrays (instanced) on 4 arms of the core
+  const SOLAR_MAX = BUILD.solar.max;
+  const solarMat = new THREE.MeshStandardMaterial({ color: 0x1d3fbf, emissive: 0x1030aa, emissiveIntensity: 0.8, roughness: 0.25, metalness: 0.8, side: THREE.DoubleSide });
+  const solar = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.36, 0.46), solarMat, SOLAR_MAX); solar.count = 0; core.add(solar);
+  const arms = [0, 1, 2, 3].map((k) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1, 6), hullMat); m.visible = false; core.add(m); return m; });
+  // domain modules
+  const modGeo = new THREE.IcosahedronGeometry(0.44, 1);
+  const capGeo = new THREE.TorusGeometry(0.5, 0.035, 8, 36);
+  const podGeo = new THREE.SphereGeometry(0.12, 12, 8);
+  const mods = DOMAINS.map((d, i) => {
+    const g = new THREE.Group(); const a = angleOf(i + 1); g.position.set(R * Math.cos(a), 0, R * Math.sin(a)); orbitG.add(g);
+    const mat = new THREE.MeshStandardMaterial({ color: d.color, emissive: d.color, emissiveIntensity: 0.25, roughness: 0.35, metalness: 0.3, flatShading: true });
+    const body = new THREE.Mesh(modGeo, mat); body.userData.dom = d.id; g.add(body);
+    const cap = new THREE.Mesh(capGeo, hullMat); cap.rotation.y = a; cap.userData.dom = d.id; g.add(cap);
+    const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: softTex, color: d.color, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.3 })); glow.scale.setScalar(1.4); g.add(glow);
+    const pods = [0, 1, 2].map((k) => { const p = new THREE.Mesh(podGeo, mat); const ang = k * 2.1 + 0.6; p.position.set(Math.cos(ang) * 0.62, Math.sin(ang) * 0.62, 0); p.visible = false; g.add(p); return p; });
+    return { id: d.id, g, body, cap, glow, pods, mat, pulse: 0, base: 0.5, a };
+  });
+  const clickables = [coreBody, coreRing, ...mods.flatMap((m) => [m.body, m.cap])]; coreBody.userData.dom = "core"; coreRing.userData.dom = "core";
+  // relay rings (around the planet)
+  const relayMat = new THREE.MeshStandardMaterial({ color: 0x9fd8ff, emissive: 0x3fa8ff, emissiveIntensity: 0.9, roughness: 0.3, metalness: 0.6, transparent: true, opacity: 0.8 });
+  const relays = Array.from({ length: BUILD.ring.max }, (_, i) => { const m = new THREE.Mesh(new THREE.TorusGeometry(3.35 + i * 0.34, 0.022, 6, 120), relayMat); m.rotation.set(1.1 + i * 0.45, i * 0.9, 0.3 * i); m.visible = false; scene.add(m); return m; });
+  // satellites (instanced)
+  const SAT_VIS = low ? 80 : 160;
+  const satBody = new THREE.InstancedMesh(new THREE.BoxGeometry(0.11, 0.09, 0.14), hullMat, SAT_VIS); satBody.count = 0; scene.add(satBody);
+  const satWing = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.5, 0.12), solarMat, SAT_VIS); satWing.count = 0; scene.add(satWing);
+  const satParams = Array.from({ length: SAT_VIS }, (_, i) => ({ r: 2.75 + ((i * 0.618) % 1) * 1.9, inc: ((i * 0.37) % 1.3) - 0.65, node: (i * 2.399) % (Math.PI * 2), ph: (i * 1.7) % (Math.PI * 2), sp: 0.22 + ((i * 0.31) % 0.35) }));
+  // knowledge stream (particles along the truss into the core)
+  const N = low ? 170 : 460;
+  const spos = new Float32Array(N * 3), scol = new Float32Array(N * 3);
+  const parts = Array.from({ length: N }, () => ({ m: 0, t: Math.random(), sp: rnd(0.18, 0.5), w: rnd(Math.PI * 2), off: rnd(-0.16, 0.16) }));
+  const sgeo = new THREE.BufferGeometry(); sgeo.setAttribute("position", new THREE.BufferAttribute(spos, 3)); sgeo.setAttribute("color", new THREE.BufferAttribute(scol, 3));
+  const stream = new THREE.Points(sgeo, new THREE.PointsMaterial({ size: low ? 0.13 : 0.15, map: softTex, vertexColors: true, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true }));
+  orbitG.add(stream);
+  const modColors = DOMAINS.map((d) => new THREE.Color(d.color));
+  let shares = DOMAINS.map(() => 1);
+  function assign(p, m) { p.m = m; p.t = 0; const c = modColors[m]; const i = parts.indexOf(p) * 3; scol[i] = c.r * 1.4; scol[i + 1] = c.g * 1.4; scol[i + 2] = c.b * 1.4; }
+  parts.forEach((p, i) => { assign(p, i % 8); p.t = Math.random(); });
+  const tmpV = new THREE.Vector3(), tmpM = new THREE.Matrix4(), tmpQ = new THREE.Quaternion(), tmpS = new THREE.Vector3(1, 1, 1), tmpE = new THREE.Euler();
+
+  /* labels */
+  const labelLayer = byId("labels");
+  const labels = DOMAINS.map((d) => { const e = document.createElement("div"); e.className = "lbl"; e.style.setProperty("--c", d.css); e.dataset.act = "label"; e.dataset.dom = d.id; e.innerHTML = `<b>${esc(d.short)}</b><i>0%</i><div class="bar"><span></span></div>`; labelLayer.appendChild(e); return { e, pct: e.querySelector("i"), bar: e.querySelector(".bar span"), last: -1 }; });
+
+  /* input: orbit controls */
+  const ptrs = new Map(); let downAt = null, moved = 0, pinch0 = 0;
+  canvas.addEventListener("pointerdown", (e) => { canvas.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); downAt = { x: e.clientX, y: e.clientY, t: performance.now() }; moved = 0; orbit.idle = 0; if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); } });
+  canvas.addEventListener("pointermove", (e) => {
+    if (!ptrs.has(e.pointerId)) return; const p = ptrs.get(e.pointerId); const dx = e.clientX - p.x, dy = e.clientY - p.y; p.x = e.clientX; p.y = e.clientY; orbit.idle = 0;
+    if (ptrs.size === 1) { moved += Math.abs(dx) + Math.abs(dy); orbit.tt -= dx * 0.0055; orbit.tp = clamp(orbit.tp - dy * 0.0055, 0.2, 2.75); }
+    else if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y); if (pinch0 > 0) orbit.tr = clamp(orbit.tr * (pinch0 / d), 6.5, 34); pinch0 = d; moved += 10; }
+  });
+  const up = (e) => {
+    ptrs.delete(e.pointerId);
+    if (downAt && moved < 8 && performance.now() - downAt.t < 500 && ptrs.size === 0) { const hit = raycast(e.clientX, e.clientY); if (hit) { AU.init(); if (hit === "core") openPanel("station"); else openPanel("domain", hit); } }
+    if (ptrs.size === 0) downAt = null;
+  };
+  canvas.addEventListener("pointerup", up); canvas.addEventListener("pointercancel", up);
+  canvas.addEventListener("wheel", (e) => { e.preventDefault(); orbit.tr = clamp(orbit.tr * (1 + Math.sign(e.deltaY) * 0.09), 6.5, 34); orbit.idle = 0; }, { passive: false });
+  const raycaster = new THREE.Raycaster(); const ndc = new THREE.Vector2();
+  function raycast(x, y) {
+    ndc.set((x / window.innerWidth) * 2 - 1, -(y / window.innerHeight) * 2 + 1); raycaster.setFromCamera(ndc, camera);
+    const hits = raycaster.intersectObjects(clickables, false); if (!hits.length) return null; return hits[0].object.userData.dom || null;
+  }
+  window.addEventListener("resize", () => { renderer.setSize(window.innerWidth, window.innerHeight, false); camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); });
+
+  /* per-frame */
+  let shake = 0, t0 = performance.now(), corePulse = 0, orbitAngle = 0, totalMastery = 0;
+  const worldPos = new THREE.Vector3();
+  function screenPos(id) {
+    const obj = id === "core" ? coreBody : (mods.find((m) => m.id === id) || {}).body; if (!obj) return null;
+    obj.getWorldPosition(worldPos); const dist = worldPos.distanceTo(camera.position);
+    // planet occlusion
+    tmpV.copy(worldPos).sub(camera.position).normalize(); const toC = camera.position.clone().negate(); const proj = toC.dot(tmpV); const closest = Math.sqrt(Math.max(0, toC.lengthSq() - proj * proj));
+    const occluded = proj > 0 && proj < dist && closest < PR;
+    worldPos.project(camera); if (worldPos.z > 1) return null;
+    return { x: (worldPos.x + 1) / 2 * window.innerWidth, y: (1 - worldPos.y) / 2 * window.innerHeight, occluded, dist };
+  }
+  function sync() {
+    for (const m of mods) { const s = S.dom[m.id]; m.base = 0.5 + 0.62 * s.r + Math.min(s.lvl, 60) / 60 * 0.22; m.mat.emissiveIntensity = 0.2 + 1.6 * s.r; m.glow.material.opacity = 0.18 + 0.82 * s.r; m.glow.scale.setScalar(1.3 + 2.2 * s.r); m.pods.forEach((p, k) => p.visible = s.lvl >= [5, 15, 40][k]); }
+    totalMastery = DOMAINS.reduce((a, d) => a + S.dom[d.id].r, 0) / 8;
+    trussMat.opacity = 0.35 + 0.6 * totalMastery; trussMat.emissiveIntensity = 0.4 + 1.6 * totalMastery;
+    const lv = DOMAINS.reduce((a, d) => a + S.dom[d.id].lvl, 0);
+    core.scale.setScalar(1 + 0.35 * Math.log10(1 + lv / 10) + 0.15 * Math.log10(1 + production(false)));
+    antenna.visible = S.b.uplink > 0; antenna.scale.setScalar(0.8 + 0.12 * S.b.uplink);
+    relays.forEach((r, i) => r.visible = i < S.b.ring);
+    // solar arrays on 4 arms
+    const n = Math.min(S.b.solar, SOLAR_MAX); solar.count = n;
+    const perArm = [0, 0, 0, 0];
+    for (let i = 0; i < n; i++) {
+      const arm = i % 4, k = Math.floor(i / 4); perArm[arm] = k + 1; const dist = 1.05 + 0.5 * k;
+      const dir = arm === 0 ? [0, 1, 0] : arm === 1 ? [0, -1, 0] : arm === 2 ? [0, 0, 1] : [0, 0, -1];
+      tmpV.set(dir[0] * dist, dir[1] * dist, dir[2] * dist); tmpE.set(0, arm >= 2 ? Math.PI / 2 : 0, 0); tmpQ.setFromEuler(tmpE); tmpM.compose(tmpV, tmpQ, tmpS); solar.setMatrixAt(i, tmpM);
+    }
+    solar.instanceMatrix.needsUpdate = true;
+    arms.forEach((a, k) => { const c = perArm[k]; a.visible = c > 0; if (c > 0) { const len = 0.8 + 0.5 * c; a.scale.set(1, len, 1); const dir = k === 0 ? [0, 1, 0] : k === 1 ? [0, -1, 0] : k === 2 ? [0, 0, 1] : [0, 0, -1]; a.position.set(dir[0] * len / 2, dir[1] * len / 2, dir[2] * len / 2); a.rotation.set(k >= 2 ? Math.PI / 2 : 0, 0, 0); } });
+    satBody.count = satWing.count = Math.min(S.b.sat, SAT_VIS);
+    const total = DOMAINS.reduce((a, d) => a + modProd(d.id), 0) || 1;
+    shares = DOMAINS.map((d) => 0.15 + modProd(d.id) / total);
+    stream.material.opacity = production(false) > 0 ? 0.95 : 0.35;
+  }
+  function frame(now) {
+    const dt = Math.min(0.1, (now - t0) / 1000); t0 = now;
+    orbit.idle += dt; if (orbit.idle > 4 && ptrs.size === 0) orbit.tt += dt * 0.05;
+    orbit.theta = lerp(orbit.theta, orbit.tt, 1 - Math.exp(-dt * 8)); orbit.phi = lerp(orbit.phi, orbit.tp, 1 - Math.exp(-dt * 8)); orbit.r = lerp(orbit.r, orbit.tr, 1 - Math.exp(-dt * 8));
+    camera.position.set(orbit.r * Math.sin(orbit.phi) * Math.cos(orbit.theta), orbit.r * Math.cos(orbit.phi), orbit.r * Math.sin(orbit.phi) * Math.sin(orbit.theta));
+    if (shake > 0.001) { camera.position.x += rnd(-1, 1) * shake; camera.position.y += rnd(-1, 1) * shake; camera.position.z += rnd(-1, 1) * shake; shake *= Math.exp(-dt * 5); }
+    camera.lookAt(0, 0, 0);
+    planet.rotation.y += dt * 0.03; if (clouds) clouds.rotation.y += dt * 0.045;
+    orbitAngle += dt * 0.06; orbitG.rotation.y = orbitAngle;
+    const boostK = boosted() ? 2 : 1;
+    corePulse *= Math.exp(-dt * 4);
+    coreBody.scale.setScalar(1 + 0.12 * Math.sin(now * 0.003) * 0.5 + corePulse * 0.35); coreGlow.material.opacity = 0.6 + 0.25 * Math.sin(now * 0.003) + corePulse * 0.5; coreGlow.scale.setScalar(2.4 + 0.4 * boostK + corePulse * 2);
+    for (const m of mods) { m.pulse *= Math.exp(-dt * 4); const s = m.base * (1 + 0.3 * m.pulse); m.g.scale.setScalar(s); m.body.rotation.y += dt * 0.4; m.body.rotation.x += dt * 0.15; m.mat.emissiveIntensity = 0.2 + 1.6 * S.dom[m.id].r + m.pulse * 2; }
+    relays.forEach((r, i) => { if (r.visible) r.rotation.y += dt * (0.1 + i * 0.03); });
+    // satellites
+    const sc = satBody.count;
+    for (let i = 0; i < sc; i++) {
+      const p = satParams[i]; const th = p.ph + now * 0.001 * p.sp; const x0 = p.r * Math.cos(th), z0 = p.r * Math.sin(th);
+      const y = -z0 * Math.sin(p.inc), z1 = z0 * Math.cos(p.inc); const x = x0 * Math.cos(p.node) + z1 * Math.sin(p.node), z = -x0 * Math.sin(p.node) + z1 * Math.cos(p.node);
+      tmpV.set(x, y, z); tmpE.set(p.inc, -th + p.node, 0); tmpQ.setFromEuler(tmpE); tmpM.compose(tmpV, tmpQ, tmpS); satBody.setMatrixAt(i, tmpM); satWing.setMatrixAt(i, tmpM);
+    }
+    if (sc) { satBody.instanceMatrix.needsUpdate = true; satWing.instanceMatrix.needsUpdate = true; }
+    // knowledge stream: particles travel along the truss from module to core (angle 0)
+    for (let i = 0; i < N; i++) {
+      const p = parts[i]; p.t += dt * p.sp * boostK;
+      if (p.t >= 1) { assign(p, weighted(shares)); p.sp = rnd(0.18, 0.5); p.off = rnd(-0.16, 0.16); }
+      const a0 = mods[p.m].a; const delta = a0 > Math.PI ? Math.PI * 2 - a0 : -a0; // shortest way to angle 0
+      const ang = a0 + delta * p.t; const rr = R + p.off + Math.sin(p.t * Math.PI * 3 + p.w) * 0.12 * (1 - p.t);
+      spos[i * 3] = rr * Math.cos(ang); spos[i * 3 + 1] = Math.sin(p.t * Math.PI * 2 + p.w) * 0.14 * (1 - p.t); spos[i * 3 + 2] = rr * Math.sin(ang);
+    }
+    sgeo.attributes.position.needsUpdate = true;
+    renderer.render(scene, camera);
+    // labels
+    if (S.settings.labels) {
+      for (let i = 0; i < mods.length; i++) {
+        const L = labels[i], sp = screenPos(mods[i].id); const s = S.dom[mods[i].id];
+        if (!sp || sp.occluded) { L.e.classList.remove("on"); continue; }
+        L.e.classList.add("on"); L.e.style.transform = `translate(${sp.x.toFixed(1)}px,${(sp.y + 34 + 14 * mods[i].base).toFixed(1)}px) translate(-50%,-50%)`;
+        const pct = Math.round(s.r * 100); if (pct !== L.last) { L.last = pct; L.pct.textContent = pct + "%"; L.bar.style.width = pct + "%"; }
+      }
+    }
+  }
+  function onAnswer(domId, correct, reward) {
+    const m = mods.find((x) => x.id === domId); if (!m) return;
+    const sp = screenPos(domId);
+    if (correct) {
+      m.pulse = 1; corePulse = Math.max(corePulse, 0.6);
+      let k = 0; for (let i = 0; i < N && k < (low ? 12 : 26); i++) { const p = parts[i]; if (p.t > 0.85) { assign(p, mods.indexOf(m)); p.sp = rnd(0.6, 1.1); k++; } }
+      if (sp) popAt(sp.x + rnd(-12, 12), sp.y - 10, `+${fmt(reward)}`, S.combo >= 5 ? "big" : "");
+    } else if (sp) popAt(sp.x, sp.y - 10, "miss", "bad");
+    sync();
+  }
+  function setLow(v) {
+    low = v; renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, low ? 1 : 1.5));
+    scene.remove(stars); stars.geometry.dispose(); stars = makeStars(low ? 700 : 2200); scene.add(stars);
+    if (clouds) clouds.visible = !low;
+    stream.material.size = low ? 0.13 : 0.15;
+  }
+  sync();
+  return { frame, sync, onAnswer, screenPos, setLow, shake: (v) => { if (S.settings.fx) shake = Math.max(shake, v); }, pulse: (id) => { if (id === "core") corePulse = 1; else { const m = mods.find((x) => x.id === id); if (m) m.pulse = 1; } sync(); } };
+}
+
+/* ================================================================
+   Main loop, offline progress, boot
+   ================================================================ */
+let raf = 0, running = false, frameCount = 0;
+function loop(now) {
+  if (!running) return;
+  raf = requestAnimationFrame(loop);
+  tickEconomy();
+  if (scene3d) scene3d.frame(now);
+  if ((++frameCount & 3) === 0) { updateHUD(); refreshCosts(); }
+  if ((frameCount & 255) === 0) checkAchievements();
+}
+function start() { if (running) return; running = true; raf = requestAnimationFrame(loop); }
+function stop() { running = false; cancelAnimationFrame(raf); }
+document.addEventListener("visibilitychange", () => { if (document.hidden) { stop(); save(); } else { S.lastTick = Math.max(S.lastTick, Date.now() - offlineCap() * 1000); start(); } });
+window.addEventListener("pagehide", save);
+window.addEventListener("beforeunload", save);
+
+function computeOffline() {
+  // Runs synchronously right after load, before anything can touch lastSave.
+  const away = (Date.now() - S.lastSave) / 1000;
+  const rate = production(false);
+  S.lastTick = Date.now();
+  if (away < 90 || rate <= 0) return null;
+  const counted = Math.min(away, offlineCap());
+  const earned = rate * counted; earn(earned, "offline");
+  return { away, rate, earned, capped: away > offlineCap() };
+}
+function showAway(o) {
+  showModal(`<h2><small>While you were away</small>The station kept working</h2>
+    <div class="away">
+      <div class="stat"><div class="v num">${fmtDur(o.away)}</div><div class="k">time away</div></div>
+      <div class="stat"><div class="v num">+${fmt(o.earned)}</div><div class="k">Data earned</div></div>
+      <div class="stat"><div class="v num">${fmtRate(o.rate)}/s</div><div class="k">rate while away</div></div>
+      <div class="stat"><div class="v num">${fmtDur(offlineCap())}</div><div class="k">offline cap</div></div>
+    </div>
+    ${o.capped ? `<p class="small" style="color:var(--warn)">You were away longer than the cap. Build Uplink Antennas in the Station to extend it.</p>` : ""}`,
+    [{ label: "Collect", cls: "gold", act: "close" }]);
+  AU.whoosh();
+}
+function applyStreak() {
+  const today = dayKey(); if (S.streak.last === today) return;
+  const gap = daysBetween(S.streak.last, today);
+  S.streak.days = gap === 1 ? S.streak.days + 1 : 1; S.streak.last = today;
+  if (gap === 1) toast("Daily streak", `${S.streak.days} day${S.streak.days > 1 ? "s" : ""} in a row${S.res.crew ? ` · production ×${streakMult().toFixed(2)}` : ""}`, "info");
+}
+function welcome() {
+  showModal(`<h2><small>Welcome aboard</small>ORBIT 1520</h2>
+    <p>You are building a research station in orbit, and it runs on what you know. Every correct PSAT question sends <b class="gold">Data</b> down the knowledge stream. Spend it on modules, satellites, and rings, and the station keeps earning while you are away.</p>
+    <p>The eight glowing modules are the eight PSAT domains. They grow and brighten as your mastery rises, so the station <i>is</i> your score. Click any module to practice it. Missed questions come back until you beat them.</p>
+    <p class="small dim">Drag to orbit the planet, scroll or pinch to zoom. Sound is on; press <kbd>M</kbd> to mute.</p>`,
+    [{ label: "Start practicing", cls: "primary", act: "go" }], (a) => { if (a === "go") { S.welcomed = true; save(); startSession(); nextQuestion(); openPanel("practice"); } });
+}
+(async function boot() {
+  const had = loadState();
+  const away = computeOffline();
+  applyStreak(); ensureMissions();
+  byId("labels").style.display = S.settings.labels ? "" : "none";
+  syncMute();
+  byId("bootMsg").textContent = "Loading three.js…";
+  scene3d = await initScene();
+  if (!scene3d) {
+    byId("bootMsg").textContent = "3D view unavailable (offline?). Playing in 2D mode.";
+    // 2D fallback labels arranged in a circle so modules stay clickable
+    const layer = byId("labels"); layer.style.pointerEvents = "auto";
+    DOMAINS.forEach((d, i) => { const e = document.createElement("div"); e.className = "lbl on"; e.style.setProperty("--c", d.css); e.dataset.act = "label"; e.dataset.dom = d.id; e.style.pointerEvents = "auto"; e.innerHTML = `<b>${esc(d.short)}</b><i>${Math.round(S.dom[d.id].r * 100)}%</i>`; const a = (i / 8) * Math.PI * 2; e.style.left = `calc(50% + ${Math.cos(a) * 34}vmin)`; e.style.top = `calc(50% + ${Math.sin(a) * 30}vmin)`; layer.appendChild(e); });
+    scene3d = null;
+    setTimeout(() => byId("boot").classList.add("gone"), 1200);
+  } else byId("boot").classList.add("gone");
+  if (away) showAway(away);
+  updateHUD(); start();
+  setInterval(save, 10000);
+  if (!had || !S.welcomed) { if (byId("modal").hidden) welcome(); else ui.modalAct = ((prev) => (a) => { const r = prev && prev(a); setTimeout(welcome, 50); return r; })(ui.modalAct); }
+  checkAchievements();
+  window.ORBIT = { get state() { return S; }, get cur() { return cur; }, save, BANK, DOMAINS, score, production, nextQuestion, answerCurrent, openPanel };
+})();
+</script>
+</body>
+</html>
